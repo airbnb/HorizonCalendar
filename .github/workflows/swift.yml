@@ -14,6 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: swift build -v -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
+      run: xcodebuild clean build -scheme HorizonCalendar
     - name: Run tests
-      run: swift test -v
+      run: xcodebuild clean test -project HorizonCalendar.xcodeproj -scheme HorizonCalendar -destination "name=iPhone 8,OS=13.5"
+
