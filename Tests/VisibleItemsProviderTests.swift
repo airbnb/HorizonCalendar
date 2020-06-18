@@ -652,7 +652,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items \n\nBOOKMARK\(Set(details.visibleItems.map { $0.description }).subtracting(expectedVisibleItemDescriptions))\n\n.")
 
     XCTAssert(
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-11-21)), frame: (1147.0, 238.5, 33.0, 33.0)]",
