@@ -13,7 +13,7 @@ let package = Package(
     targets: [
         .target(
             name: "HorizonCalendar",
-            path: "HorizonCalendar"
+            path: "Sources"
         ),
         .testTarget(
             name: "HorizonCalendarTests",
