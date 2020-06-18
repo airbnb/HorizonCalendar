@@ -1,6 +1,7 @@
 # HorizonCalendar
 A declarative, performant, calendar UI component that supports use cases ranging from simple date pickers all the way up to fully-featured calendar apps.
 
+[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/HorizonCalendar.svg)](https://cocoapods.org/pods/HorizonCalendar)
 [![License](https://img.shields.io/cocoapods/l/HorizonCalendar.svg)](https://cocoapods.org/pods/HorizonCalendar)
