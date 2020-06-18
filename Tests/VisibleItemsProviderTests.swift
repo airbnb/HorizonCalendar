@@ -505,7 +505,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 0.0, 320.0, 50.0)]",
       "[itemType: .layoutItemType(.day(2020-01-08)), frame: (142.0, 191.5, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-01-18)), frame: (279.5, 247.0, 35.5, 36.0)]",
-      "[itemType: .overlayItem(.day(1579420800.0)), frame: (0.0, -50.0, 320.0, 480.0)]",
+      "[itemType: .overlayItem(.day(2020-1-19)), frame: (0.0, -50.0, 320.0, 480.0)]",
       "[itemType: .layoutItemType(.day(2020-01-10)), frame: (233.5, 191.5, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-01-17)), frame: (233.5, 247.0, 36.0, 36.0)]",
       "[itemType: .layoutItemType(.day(2020-01-12)), frame: (5.0, 247.0, 35.5, 36.0)]",
@@ -564,7 +564,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .pinnedDayOfWeek(.last), frame: (279.5, 50.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-01-13)), frame: (50.5, 236.5, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 348.0, 35.5, 35.5)]",
-      "[itemType: .overlayItem(.day(1579420800.0)), frame: (0.0, 50.0, 320.0, 480.0)]",
+      "[itemType: .overlayItem(.day(2020-1-19)), frame: (0.0, 50.0, 320.0, 480.0)]",
       "[itemType: .layoutItemType(.day(2020-01-27)), frame: (50.5, 348.0, 36.0, 35.5)]",
       "[itemType: .pinnedDayOfWeek(.fourth), frame: (142.0, 50.0, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-01-18)), frame: (279.5, 236.5, 35.5, 35.5)]",
@@ -628,7 +628,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-11-26)), frame: (1061.5, 291.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-11-20)), frame: (1104.5, 238.5, 32.5, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-14)), frame: (1248.0, 238.5, 32.5, 33.0)]",
-      "[itemType: .overlayItem(.monthHeader(1604214000.0)), frame: (1000.0, 0.0, 300.0, 480.0)]",
+      "[itemType: .overlayItem(.monthHeader(2020-11)), frame: (1000.0, 0.0, 300.0, 480.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-11)), frame: (1147.0, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-13)), frame: (1205.0, 238.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-11-03)), frame: (975.5, 133.0, 33.0, 32.5)]",
@@ -652,7 +652,7 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items \n\nBOOKMARK\(Set(details.visibleItems.map { $0.description }).subtracting(expectedVisibleItemDescriptions))\n\n.")
+      "Unexpected visible items.")
 
     XCTAssert(
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-11-21)), frame: (1147.0, 238.5, 33.0, 33.0)]",
@@ -1231,12 +1231,18 @@ extension VisibleCalendarItem: CustomStringConvertible {
     case .dayRange(let dayRange):
       itemTypeText = ".dayRange(\(dayRange.lowerBound), \(dayRange.upperBound))"
     case .overlayItem(let overlaidItemLocation):
+      let calendar = Calendar(identifier: .gregorian)
       let itemLocationText: String
       switch overlaidItemLocation {
       case .day(let date):
-        itemLocationText = ".day(\(date.timeIntervalSince1970))"
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        itemLocationText = ".day(\(year)-\(month)-\(day))"
       case .monthHeader(let date):
-        itemLocationText = ".monthHeader(\(date.timeIntervalSince1970))"
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        itemLocationText = ".monthHeader(\(year)-\(month))"
       }
       itemTypeText = ".overlayItem(\(itemLocationText))"
     }
