@@ -95,6 +95,10 @@ The example app has several demo view controllers to try, with both vertical and
 - Xcode 10.2+
 
 ### Installation
+#### Swift Package Manager
+To install `HorizonCalendar` using [Swift Package Manager](https://swift.org/package-manager/), add
+`.package(name: "HorizonCalendar", url: "https://github.com/airbnb/HorizonCalendar.git", from: "1.0.0"),"` to your Package.swift, then follow the integration tutorial [here](https://swift.org/package-manager#importing-dependencies).
+
 #### Carthage
 To install `HorizonCalendar` using [Carthage](https://github.com/Carthage/Carthage), add
 `github "airbnb/HorizonCalendar"` to your Cartfile, then follow the integration tutorial [here](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos).
