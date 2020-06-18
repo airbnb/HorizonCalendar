@@ -139,7 +139,7 @@ At a minimum, `CalendarViewContent` must be initialized with a `Calendar`, a vis
 
 For this example, we're using a Gregorian calendar, a date range of 2020-01-01 to 2021-12-31, and a vertical months layout.
 
-Make sure to add  `calendarView` as a subview, then give it a valid frame either using Auto Layout or by manually setting its `frame` property. If you're using Auto Layout, note that `CalendarView` does not have an intrinsic content size.
+Make sure to add `calendarView` as a subview, then give it a valid frame either using Auto Layout or by manually setting its `frame` property. If you're using Auto Layout, note that `CalendarView` does not have an intrinsic content size.
 ```swift
 view.addSubview(calendarView)
 
