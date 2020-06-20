@@ -57,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		932A9A12249C6CF7000F34D2 /* TECHNICAL_DETAILS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TECHNICAL_DETAILS.md; sourceTree = "<group>"; };
 		9396F3C22483261B008AD306 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9396F3C62483261B008AD306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9396F3CB2483261B008AD306 /* HorizonCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HorizonCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				9396F3DC24832715008AD306 /* README.md */,
+				932A9A12249C6CF7000F34D2 /* TECHNICAL_DETAILS.md */,
 				9396F3DE248327C2008AD306 /* LICENSE */,
 				9396F3C62483261B008AD306 /* Info.plist */,
 				9396F3C42483261B008AD306 /* Sources */,
