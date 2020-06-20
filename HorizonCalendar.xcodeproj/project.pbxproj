@@ -40,6 +40,8 @@
 		939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */; };
 		939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E69492484B14400A8BCC7 /* MonthTests.swift */; };
 		93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */; };
+		93E24A70249D915900B856F7 /* CONTRIBUTING.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A56249D915900B856F7 /* CONTRIBUTING.md */; };
+		93E24A71249D915900B856F7 /* TECHNICAL_DETAILS.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */; };
 		93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */; };
 		93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */; };
 		93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */; };
@@ -57,7 +59,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		932A9A12249C6CF7000F34D2 /* TECHNICAL_DETAILS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TECHNICAL_DETAILS.md; sourceTree = "<group>"; };
 		9396F3C22483261B008AD306 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9396F3C62483261B008AD306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9396F3CB2483261B008AD306 /* HorizonCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HorizonCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +95,8 @@
 		939E694E2484B14500A8BCC7 /* ScrollMetricsMutatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollMetricsMutatorTests.swift; sourceTree = "<group>"; };
 		939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameProviderTests.swift; sourceTree = "<group>"; };
 		93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignment.swift; sourceTree = "<group>"; };
+		93E24A56249D915900B856F7 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TECHNICAL_DETAILS.md; sourceTree = "<group>"; };
 		93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHelperTests.swift; sourceTree = "<group>"; };
 		93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
 		93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
@@ -123,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				9396F3DC24832715008AD306 /* README.md */,
-				932A9A12249C6CF7000F34D2 /* TECHNICAL_DETAILS.md */,
+				93E24A3C249D915900B856F7 /* Docs */,
 				9396F3DE248327C2008AD306 /* LICENSE */,
 				9396F3C62483261B008AD306 /* Info.plist */,
 				9396F3C42483261B008AD306 /* Sources */,
@@ -204,6 +207,15 @@
 				939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */,
 			);
 			path = Internal;
+			sourceTree = "<group>";
+		};
+		93E24A3C249D915900B856F7 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				93E24A56249D915900B856F7 /* CONTRIBUTING.md */,
+				93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */,
+			);
+			path = Docs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -298,8 +310,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93E24A70249D915900B856F7 /* CONTRIBUTING.md in Resources */,
 				9396F3DF248327C2008AD306 /* LICENSE in Resources */,
 				9396F3DD24832715008AD306 /* README.md in Resources */,
+				93E24A71249D915900B856F7 /* TECHNICAL_DETAILS.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

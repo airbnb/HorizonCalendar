@@ -1,6 +1,6 @@
 # Contributing
 
-`HorizonCalendar` welcomes both fixes, improvements, and feature additions. If you'd like to contribute, open an issue or a Pull Request with a detailed description of your proposal and/or changes.
+`HorizonCalendar` welcomes both fixes, improvements, and feature additions. If you'd like to contribute, open an issue or a Pull Request with a detailed description of your proposal and/or changes. If you'd like some help getting started, take a look at the [Technical Details](Docs/TECHNICAL_DETAILS.md) document for an overview of `HorizonCalendar`'s architecture.
 
 ### One issue or bug per Pull Request
 
