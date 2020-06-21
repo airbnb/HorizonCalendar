@@ -52,13 +52,17 @@ final class ScrollToDayWithAnimationDemoViewController: UIViewController, DemoVi
       NSLayoutConstraint.activate([
         calendarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
         calendarView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
-        calendarView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-        calendarView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+        calendarView.leadingAnchor.constraint(
+          greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
+        calendarView.trailingAnchor.constraint(
+          lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
+        calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
       ])
     case .horizontal(let monthWidth):
       NSLayoutConstraint.activate([
-        calendarView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        calendarView.heightAnchor.constraint(equalToConstant: monthWidth * 1.5),
+        calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
+        calendarView.heightAnchor.constraint(equalToConstant: monthWidth * 1.1),
         calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       ])
@@ -90,6 +94,7 @@ final class ScrollToDayWithAnimationDemoViewController: UIViewController, DemoVi
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
+      .withInterMonthSpacing(24)
   }
 
 }
