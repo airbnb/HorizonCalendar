@@ -287,8 +287,7 @@ final class FrameProvider {
       assert(
         points > 0,
         """
-          Calendar metrics and bounds resulted in a negative or zero size of \( daySize.width) for
-          each day.
+          Calendar metrics and bounds resulted in a negative or zero size of \(points) for each day.
         """)
     }
   }
