@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import HorizonCalendar
 import UIKit
 
 // MARK: - DemoPickerViewController
@@ -107,7 +108,7 @@ extension DemoPickerViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let demoViewController = demoDestinations[indexPath.item].destinationType.init(
       monthsLayout: monthsLayoutPicker.selectedSegmentIndex == 0
-        ? .vertical(pinDaysOfWeekToTop: false)
+        ? .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: false))
         : .horizontal(monthWidth: min(min(view.bounds.width, view.bounds.height) - 64, 512)))
 
     navigationController?.pushViewController(demoViewController, animated: true)

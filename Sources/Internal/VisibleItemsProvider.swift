@@ -176,7 +176,7 @@ final class VisibleItemsProvider {
       })
 
     // Handle pinned day-of-week layout items
-    if case .vertical(pinDaysOfWeekToTop: true) = content.monthsLayout {
+    if case .vertical(let options) = content.monthsLayout, options.pinDaysOfWeekToTop {
       handlePinnedDaysOfWeekIfNeeded(
         yContentOffset: bounds.minY,
         calendarItemCache: &calendarItemCache,
@@ -641,13 +641,13 @@ final class VisibleItemsProvider {
     maximumScrollOffset: inout CGFloat?)
   {
     switch content.monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
+    case .vertical(let options):
       switch layoutItem.itemType {
       case .monthHeader(let monthAndYear):
         if monthAndYear == content.monthRange.lowerBound {
           // The month header of the first month will determine our minimum scroll offset
           minimumScrollOffset = layoutItem.frame.minY -
-            (pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+            (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
         }
       case .day(let day):
         // The last day of the last month will determine our maximum scroll offset
@@ -803,8 +803,8 @@ final class VisibleItemsProvider {
     -> CGRect
   {
     switch content.monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
-      let additionalOffset = (pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+    case .vertical(let options):
+      let additionalOffset = (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
       let minY = offset.y + additionalOffset
       let maxY = offset.y + size.height
       let firstFullyVisibleY = minY

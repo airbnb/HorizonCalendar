@@ -22,9 +22,8 @@ public enum MonthsLayout {
 
   /// Calendar months will be arranged in a single column, and scroll on the vertical axis.
   ///
-  /// - `pinDaysOfWeekToTop`: Whether the days of the week will appear once, pinned at the top, or separately for each
-  /// month.
-  case vertical(pinDaysOfWeekToTop: Bool)
+  /// - `options`: Additional options to adjust the layout of the vertically-scrolling calendar.
+  case vertical(options: VerticalMonthsLayoutOptions)
 
   /// Calendar months will be arranged in a single row, and scroll on the horizontal axis.
   ///
@@ -36,10 +35,28 @@ public enum MonthsLayout {
 
   var pinDaysOfWeekToTop: Bool {
     switch self {
-    case .vertical(let pinDaysOfWeekToTop): return pinDaysOfWeekToTop
+    case .vertical(let options): return options.pinDaysOfWeekToTop
     case .horizontal: return false
     }
   }
+}
+
+// MARK: Deprecated
+
+extension MonthsLayout {
+
+  /// Calendar months will be arranged in a single column, and scroll on the vertical axis.
+  ///
+  /// - `pinDaysOfWeekToTop`: Whether the days of the week will appear once, pinned at the top, or separately for each month.
+  @available(
+    *,
+    deprecated,
+    message: "Use .vertical(options: VerticalMonthsLayoutOptions) instead. This will be removed in a future major release.")
+  public static func vertical(pinDaysOfWeekToTop: Bool) -> Self {
+    let options = VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: pinDaysOfWeekToTop)
+    return .vertical(options: options)
+  }
+
 }
 
 // MARK: Equatable
@@ -48,10 +65,40 @@ extension MonthsLayout: Equatable {
 
   public static func == (lhs: MonthsLayout, rhs: MonthsLayout) -> Bool {
     switch (lhs, rhs)  {
+    case (.vertical(let lhsOptions), .vertical(let rhsOptions)): return lhsOptions == rhsOptions
     case (.horizontal, .horizontal): return true
-    case (.vertical(let l), .vertical(let r)): return l == r
     default: return false
     }
   }
+
+}
+
+// MARK: - VerticalMonthsLayoutOptions
+
+/// Layout options for a vertically-scrolling calendar.
+public struct VerticalMonthsLayoutOptions: Equatable {
+
+  // MARK: Lifecycle
+
+  /// Initialized a new instance of `VerticalMonthsLayoutOptions`.
+  ///
+  /// - Parameters:
+  ///   - pinDaysOfWeekToTop: Whether the days of the week will appear once, pinned at the top, or repeatedly in each month.
+  ///   The default value is `false`.
+  ///   - alwaysShowCompleteMonths: Whether the calendar will always show complete months, even if the visible date range
+  ///   does not start on the first date or end on the last date of a month. The default value is `true`.
+  public init(pinDaysOfWeekToTop: Bool = false, onlyShowCompleteMonths: Bool = true) {
+    self.pinDaysOfWeekToTop = pinDaysOfWeekToTop
+    self.alwaysShowCompleteMonths = onlyShowCompleteMonths
+  }
+
+  // MARK: Public
+
+  /// Whether the days of the week will appear once, pinned at the top, or repeatedly in each month.
+  public let pinDaysOfWeekToTop: Bool
+
+  /// Whether the calendar will always show complete months, even if the visible date range does not start on the first date or end on the
+  /// last date of a month.
+  public let alwaysShowCompleteMonths: Bool
 
 }
