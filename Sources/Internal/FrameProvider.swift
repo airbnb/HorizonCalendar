@@ -70,7 +70,7 @@ final class FrameProvider {
 
     case .day(let day):
       let position = calendar.dayOfWeekPosition(for: calendar.startDate(of: day))
-      let rowInMonth = calendar.rowInMonth(for: calendar.startDate(of: day))
+      let rowInMonth = adjustedRowInMonth(for: day)
 
       let x = minXOfMonth(containingItemWithFrame: layoutItem.frame, at: position)
       let y = minYOfMonth(containingDayItemWithFrame: layoutItem.frame, atRowInMonth: rowInMonth)
@@ -97,11 +97,7 @@ final class FrameProvider {
     }
   }
 
-  func originOfMonth(
-    _ month: Month,
-    afterMonthWithOrigin previousMonthOrigin: CGPoint)
-    -> CGPoint
-  {
+  func originOfMonth(_ month: Month, afterMonthWithOrigin previousMonthOrigin: CGPoint) -> CGPoint {
     switch monthsLayout {
     case .vertical:
       let previousMonth = calendar.month(byAddingMonths: -1, to: month)
@@ -117,11 +113,7 @@ final class FrameProvider {
     }
   }
 
-  func frameOfMonth(
-    _ month: Month,
-    withOrigin monthOrigin: CGPoint)
-    -> CGRect
-  {
+  func frameOfMonth(_ month: Month, withOrigin monthOrigin: CGPoint) -> CGRect {
     let monthHeight = heightOfMonth(month)
     return CGRect(origin: monthOrigin, size: CGSize(width: monthWidth, height: monthHeight))
   }
@@ -152,7 +144,7 @@ final class FrameProvider {
   func frameOfDay(_ day: Day, inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
     let date = calendar.startDate(of: day)
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
-    let rowInMonth = calendar.rowInMonth(for: date)
+    let rowInMonth = adjustedRowInMonth(for: day)
 
     let x = monthOrigin.x +
       content.monthDayInsets.left +
@@ -295,13 +287,51 @@ final class FrameProvider {
   }
 
   private func heightOfMonth(_ month: Month) -> CGFloat {
-    let numberOfRows = calendar.numberOfRows(in: month)
+    let numberOfRows = self.numberOfRows(in: month)
     return monthHeaderHeight +
       content.monthDayInsets.top +
       (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
       (CGFloat(numberOfRows) * daySize.height) +
       (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
       content.monthDayInsets.bottom
+  }
+
+  // Gets the row of a date in a particular month, taking into account whether the date is in a
+  // boundary month that's only showing some dates.
+  private func adjustedRowInMonth(for day: Day) -> Int {
+    let missingRows: Int
+    if
+      !content.monthsLayout.alwaysShowCompleteMonths,
+      day.month == content.monthRange.lowerBound
+    {
+      missingRows = calendar.rowInMonth(for: calendar.startDate(of: content.dayRange.lowerBound))
+    } else {
+      missingRows = 0
+    }
+
+    let rowInMonth = calendar.rowInMonth(for: calendar.startDate(of: day))
+    return rowInMonth - missingRows
+  }
+
+  // Gets the number of rows in a particular month, taking into account whether the month is a
+  // boundary month that's only showing some dates.
+  private func numberOfRows(in month: Month) -> Int {
+    let rowOfLastDateInMonth: Int
+    if month == content.monthRange.lowerBound {
+      let lastDateOfFirstMonth = calendar.lastDate(of: month)
+      let lastDayOfFirstMonth = calendar.day(containing: lastDateOfFirstMonth)
+      let rowOfLastDayOfFirstMonth = adjustedRowInMonth(for: lastDayOfFirstMonth)
+      rowOfLastDateInMonth = rowOfLastDayOfFirstMonth
+    } else if month == content.monthRange.upperBound {
+      let lastDayOfLastMonth = content.dayRange.upperBound
+      let rowOfLastDayOfLastMonth = adjustedRowInMonth(for: lastDayOfLastMonth)
+      rowOfLastDateInMonth = rowOfLastDayOfLastMonth
+    } else {
+      let lastDateOfMonth = calendar.lastDate(of: month)
+      rowOfLastDateInMonth = calendar.rowInMonth(for: lastDateOfMonth)
+    }
+
+    return rowOfLastDateInMonth + 1
   }
 
 }

@@ -39,6 +39,13 @@ public enum MonthsLayout {
     case .horizontal: return false
     }
   }
+
+  var alwaysShowCompleteMonths: Bool {
+    switch self {
+    case .vertical(let options): return options.alwaysShowCompleteMonths
+    case .horizontal: return true
+    }
+  }
 }
 
 // MARK: Deprecated

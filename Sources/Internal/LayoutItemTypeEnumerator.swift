@@ -24,10 +24,11 @@ final class LayoutItemTypeEnumerator {
 
   // MARK: Lifecycle
 
-  init(calendar: Calendar, monthsLayout: MonthsLayout, monthRange: MonthRange) {
+  init(calendar: Calendar, monthsLayout: MonthsLayout, monthRange: MonthRange, dayRange: DayRange) {
     self.calendar = calendar
     self.monthsLayout = monthsLayout
     self.monthRange = monthRange
+    self.dayRange = dayRange
   }
 
   // MARK: Internal
@@ -41,7 +42,7 @@ final class LayoutItemTypeEnumerator {
 
     var shouldStopLookingBackwards = false
     while !shouldStopLookingBackwards {
-      guard Self.isItemTypeInRange(currentItemType, for: monthRange) else { break }
+      guard isItemTypeInRange(currentItemType) else { break }
       itemTypeHandlerLookingBackwards(currentItemType, &shouldStopLookingBackwards)
       currentItemType = previousItemType(from: currentItemType)
     }
@@ -50,7 +51,7 @@ final class LayoutItemTypeEnumerator {
 
     var shouldStopLookingForwards = false
     while !shouldStopLookingForwards {
-      guard Self.isItemTypeInRange(currentItemType, for: monthRange) else { break }
+      guard isItemTypeInRange(currentItemType) else { break }
       itemTypeHandlerLookingForwards(currentItemType, &shouldStopLookingForwards)
       currentItemType = nextItemType(from: currentItemType)
     }
@@ -61,20 +62,16 @@ final class LayoutItemTypeEnumerator {
   private let calendar: Calendar
   private let monthsLayout: MonthsLayout
   private let monthRange: MonthRange
+  private let dayRange: DayRange
 
-  private static func isItemTypeInRange(
-    _ itemType: LayoutItem.ItemType,
-    for monthRange: MonthRange)
-    -> Bool
-  {
-
+  private func isItemTypeInRange(_ itemType: LayoutItem.ItemType) -> Bool {
     switch itemType {
     case .monthHeader(let month):
       return monthRange.contains(month)
     case .dayOfWeekInMonth(_, let month):
       return monthRange.contains(month)
     case .day(let day):
-      return monthRange.contains(day.month)
+      return dayRange.contains(day)
     }
   }
 
@@ -89,17 +86,14 @@ final class LayoutItemTypeEnumerator {
       if position == .first {
         return .monthHeader(month)
       } else {
-        guard
-          let previousPosition = DayOfWeekPosition(rawValue: position.rawValue - 1)
-        else
-        {
+        guard let previousPosition = DayOfWeekPosition(rawValue: position.rawValue - 1) else {
           preconditionFailure("Could not get the day-of-week position preceding \(position).")
         }
         return .dayOfWeekInMonth(position: previousPosition, month: month)
       }
 
     case .day(let day):
-      if day.day == 1 {
+      if day.day == 1 || day == dayRange.lowerBound {
         if case .vertical(let options) = monthsLayout, options.pinDaysOfWeekToTop {
           return .monthHeader(day.month)
         } else {
@@ -115,21 +109,16 @@ final class LayoutItemTypeEnumerator {
     switch itemType {
     case .monthHeader(let month):
       if case .vertical(let options) = monthsLayout, options.pinDaysOfWeekToTop {
-        let firstDate = calendar.firstDate(of: month)
-        return .day(calendar.day(containing: firstDate))
+        return .day(firstDayInRange(in: month))
       } else {
         return .dayOfWeekInMonth(position: .first, month: month)
       }
 
     case let .dayOfWeekInMonth(position, month):
       if position == .last {
-        let firstDate = calendar.firstDate(of: month)
-        return .day(calendar.day(containing: firstDate))
+        return .day(firstDayInRange(in: month))
       } else {
-        guard
-          let nextPosition = DayOfWeekPosition(rawValue: position.rawValue + 1)
-        else
-        {
+        guard let nextPosition = DayOfWeekPosition(rawValue: position.rawValue + 1) else {
           preconditionFailure("Could not get the day-of-week position succeeding \(position).")
         }
         return .dayOfWeekInMonth(position: nextPosition, month: month)
@@ -139,9 +128,23 @@ final class LayoutItemTypeEnumerator {
       let nextDay = calendar.day(byAddingDays: 1, to: day)
       if day.month != nextDay.month {
         return .monthHeader(nextDay.month)
+      } else if day == dayRange.upperBound {
+        let nextMonth = calendar.month(byAddingMonths: 1, to: nextDay.month)
+        return .monthHeader(nextMonth)
       } else {
         return .day(nextDay)
       }
+    }
+  }
+
+  private func firstDayInRange(in month: Month) -> Day {
+    let firstDate = calendar.firstDate(of: month)
+    let firstDay = calendar.day(containing: firstDate)
+
+    if month == dayRange.lowerBound.month {
+      return max(firstDay, dayRange.lowerBound)
+    } else {
+      return firstDay
     }
   }
 
