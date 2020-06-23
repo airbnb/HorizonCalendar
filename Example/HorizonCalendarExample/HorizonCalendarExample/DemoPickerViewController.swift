@@ -67,6 +67,7 @@ final class DemoPickerViewController: UIViewController {
     ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
+    ("Partial Month Visibility for Vertial Layout", PartialMonthVisibilityDemoViewController.self),
   ]
 
   private lazy var tableView: UITableView = {
@@ -108,7 +109,10 @@ extension DemoPickerViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let demoViewController = demoDestinations[indexPath.item].destinationType.init(
       monthsLayout: monthsLayoutPicker.selectedSegmentIndex == 0
-        ? .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: false))
+        ? .vertical(
+          options: VerticalMonthsLayoutOptions(
+            pinDaysOfWeekToTop: false,
+            onlyShowCompleteMonths: false))
         : .horizontal(monthWidth: min(min(view.bounds.width, view.bounds.height) - 64, 512)))
 
     navigationController?.pushViewController(demoViewController, animated: true)

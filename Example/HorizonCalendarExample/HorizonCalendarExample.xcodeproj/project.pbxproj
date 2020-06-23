@@ -20,6 +20,7 @@
 		939E69772484CD9000A8BCC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 939E69752484CD9000A8BCC7 /* LaunchScreen.storyboard */; };
 		939E69932484D55200A8BCC7 /* HorizonCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 939E69912484D11000A8BCC7 /* HorizonCalendar.framework */; };
 		939E69942484D55200A8BCC7 /* HorizonCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 939E69912484D11000A8BCC7 /* HorizonCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */; };
 		93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */; };
 		93AF5549248DCF0700BDB0FF /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF5548248DCF0700BDB0FF /* DayView.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		939E69762484CD9000A8BCC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		939E69782484CD9000A8BCC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		939E69912484D11000A8BCC7 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialMonthVisibilityDemoViewController.swift; sourceTree = "<group>"; };
 		93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeIndicatorView.swift; sourceTree = "<group>"; };
 		93AF5548248DCF0700BDB0FF /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,6 +80,7 @@
 				938176A2249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift */,
 				938176A4249B828600E18FA3 /* LargeDayRangeDemoViewController.swift */,
 				9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */,
+				93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */,
 			);
 			path = "Demo View Controllers";
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */,
 				939E696F2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift in Sources */,
 				938176A3249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift in Sources */,
 				938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */,
