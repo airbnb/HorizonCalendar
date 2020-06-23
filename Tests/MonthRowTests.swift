@@ -64,27 +64,6 @@ final class MonthRowTests: XCTestCase {
       "Expected March 31, 01 era 236 to be in the sixth row of the month.")
   }
 
-  func testNumberOfRowsInMonth() {
-    let month0 = Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)
-    XCTAssert(gregorianCalendar.numberOfRows(in: month0) == 6, "Expected 6 rows in May 2020.")
-
-    let month1 = Month(era: 1, year: 2020, month: 09, isInGregorianCalendar: true)
-    XCTAssert(gregorianCalendar.numberOfRows(in: month1) == 5, "Expected 5 rows in September 2020.")
-
-    let month2 = Month(era: 1, year: 2015, month: 02, isInGregorianCalendar: true)
-    XCTAssert(gregorianCalendar.numberOfRows(in: month2) == 4, "Expected 4 rows in February 2015.")
-
-    let month3 = Month(era: 236, year: 02, month: 12, isInGregorianCalendar: false)
-    XCTAssert(
-      japaneseCalendar.numberOfRows(in: month3) == 5,
-      "Expected 5 rows in December 2 era 236.")
-
-    let month4 = Month(era: 236, year: 03, month: 01, isInGregorianCalendar: false)
-    XCTAssert(
-      japaneseCalendar.numberOfRows(in: month4) == 6,
-      "Expected 6 rows in January 3 era 236.")
-  }
-
   // MARK: Private
 
   private lazy var gregorianCalendar = Calendar(identifier: .gregorian)
