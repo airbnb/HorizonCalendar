@@ -53,6 +53,7 @@ Features:
       - [Adding a day range indicator](#adding-a-day-range-indicator)
       - [Adding a tooltip](#adding-a-tooltip)
     - [Responding to day selection](#responding-to-day-selection)
+- [Technical Details](#technical-details)
 - [Contributions](#contributions)
 - [Authors](#authors)
 - [Maintainers](#maintainers)
@@ -504,10 +505,13 @@ After building and running the app, tapping days should cause them to turn blue:
 
 ![Day Selection](Docs/Images/tutorial6.png)
 
+## Technical Details
+If you'd like to learn about how `HorizonCalendar` was implemented, check out the [Technical Details](Docs/TECHNICAL_DETAILS.md) document. It provides an overview of `HorizonCalendar`'s architecture, along with information about why it's not implemented using `UICollectionView`. 
+
 ## Contributions
 `HorizonCalendar` welcomes fixes, improvements, and feature additions. If you'd like to contribute, open a pull request with a detailed description of your changes. 
 
-As a rule of thumb, if you're proposing an API-breaking change or a change to existing functionality, consider proposing it by opening an issue, rather than a pull request; we'll use the issue as a public forum for discussing whether the proposal makes sense or not.
+As a rule of thumb, if you're proposing an API-breaking change or a change to existing functionality, consider proposing it by opening an issue, rather than a pull request; we'll use the issue as a public forum for discussing whether the proposal makes sense or not. See [CONTRIBUTING](Docs/CONTRIBUTING.md) for more details.
 
 ## Authors
 Bryan Keller
