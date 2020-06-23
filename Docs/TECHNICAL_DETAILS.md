@@ -8,7 +8,7 @@ This document provides an overview of the technical implementation details of `H
 
 | UICollectionView Memory Usage | HorizonCalendar Memory Usage |
 | ---- | ---- |
-| [UICollectionView Memory Usage](Images/collection_view_memory_usage.gif) | [HorizonCalendar Memory Usage](Images/horizon_calendar_memory_usage.gif) |
+| ![UICollectionView Memory Usage](Images/collection_view_memory_usage.gif) | ![HorizonCalendar Memory Usage](Images/horizon_calendar_memory_usage.gif) |
 
 After 24 seconds of scrolling, the `UICollectionView` "calendar" resulted in memory usage skyrocketing to nearly 100 MB. The `HorizonCalendar` implementation never surpassed 30 MB, with its memory usage slope going flat after just a couple of seconds.
 
@@ -34,7 +34,7 @@ Achieving this requires a layout solution that can lazily render the calendar ju
 
 ### Architecture Diagram
 
-[Architecture Diagram](Images/architecture_overview.png)
+![Architecture Diagram](Images/architecture_overview.png)
 
 ### Architecture Walkthrough
 
