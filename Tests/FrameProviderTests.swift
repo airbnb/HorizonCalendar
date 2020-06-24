@@ -154,7 +154,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       beforeMonthWithOrigin: CGPoint(x: 0, y: 200))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedOrigin1 = CGPoint(x: 0, y: -209.1428571428571)
+    let expectedOrigin1 = CGPoint(x: 0, y: -189.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin1 == expectedOrigin1, "Incorrect origin for preceding month.")
 
@@ -162,7 +162,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       beforeMonthWithOrigin: CGPoint(x: 0, y: 400))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedOrigin2 = CGPoint(x: 0, y: 45.71428571428572).alignedToPixels(forScreenWithScale: 3)
+    let expectedOrigin2 = CGPoint(x: 0, y: 65.71428571428572).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin2 == expectedOrigin2, "Incorrect origin for preceding month.")
 
     let origin3 = horizontalFrameProvider.originOfMonth(
@@ -178,7 +178,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       afterMonthWithOrigin: CGPoint(x: 0, y: 200))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedOrigin1 = CGPoint(x: 0, y: 609.1428571428571)
+    let expectedOrigin1 = CGPoint(x: 0, y: 589.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin1 == expectedOrigin1, "Incorrect origin for succeeding month.")
 
@@ -186,7 +186,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       afterMonthWithOrigin: CGPoint(x: 0, y: 400))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedOrigin2 = CGPoint(x: 0, y: 754.2857142857142).alignedToPixels(forScreenWithScale: 3)
+    let expectedOrigin2 = CGPoint(x: 0, y: 734.2857142857142).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin2 == expectedOrigin2, "Incorrect origin for succeeding month.")
 
     let origin3 = horizontalFrameProvider.originOfMonth(
@@ -202,7 +202,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
       withOrigin: CGPoint(x: 0, y: 200))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame1 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 364.1428571428571)
+    let expectedFrame1 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 369.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for month.")
 
@@ -210,7 +210,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
       withOrigin: CGPoint(x: 0, y: 200))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame2 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 309.2857142857143)
+    let expectedFrame2 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 314.2857142857143)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame2 == expectedFrame2, "Incorrect frame for month.")
 
@@ -218,7 +218,7 @@ final class FrameProviderTests: XCTestCase {
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
       withOrigin: CGPoint(x: 500, y: 0))
       .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame3 = CGRect(x: 500.0, y: 0.0, width: 300.0, height: 347.0)
+    let expectedFrame3 = CGRect(x: 500.0, y: 0.0, width: 300.0, height: 352.0)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame3 == expectedFrame3, "Incorrect frame for month.")
   }

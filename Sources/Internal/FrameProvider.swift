@@ -73,12 +73,7 @@ final class FrameProvider {
       let rowInMonth = calendar.rowInMonth(for: calendar.startDate(of: day))
 
       let x = minXOfMonth(containingItemWithFrame: layoutItem.frame, at: position)
-      let y = layoutItem.frame.minY -
-        (CGFloat(rowInMonth) * (daySize.height + content.verticalDayMargin)) -
-        (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
-        content.monthDayInsets.top -
-        monthHeaderHeight
-
+      let y = minYOfMonth(containingDayItemWithFrame: layoutItem.frame, atRowInMonth: rowInMonth)
       return CGPoint(x: x, y: y)
     }
   }
@@ -89,13 +84,8 @@ final class FrameProvider {
     -> CGPoint
   {
     switch monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
-      let numberOfRows = calendar.numberOfRows(in: month)
-      let monthHeight = monthHeaderHeight +
-        content.monthDayInsets.top +
-        (pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
-        (CGFloat(numberOfRows) * (daySize.height + content.verticalDayMargin)) +
-        content.monthDayInsets.bottom
+    case .vertical:
+      let monthHeight = heightOfMonth(month)
       return CGPoint(
         x: subsequentMonthOrigin.x,
         y: subsequentMonthOrigin.y - content.interMonthSpacing - monthHeight)
@@ -113,14 +103,9 @@ final class FrameProvider {
     -> CGPoint
   {
     switch monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
+    case .vertical:
       let previousMonth = calendar.month(byAddingMonths: -1, to: month)
-      let numberOfRows = calendar.numberOfRows(in: previousMonth)
-      let previousMonthHeight = monthHeaderHeight +
-        content.monthDayInsets.top +
-        (pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
-        (CGFloat(numberOfRows) * (daySize.height + content.verticalDayMargin)) +
-        content.monthDayInsets.bottom
+      let previousMonthHeight = heightOfMonth(previousMonth)
       return CGPoint(
         x: previousMonthOrigin.x,
         y: previousMonthOrigin.y + previousMonthHeight + content.interMonthSpacing)
@@ -137,12 +122,7 @@ final class FrameProvider {
     withOrigin monthOrigin: CGPoint)
     -> CGRect
   {
-    let lastDate = calendar.lastDate(of: month)
-    let frameOfLastDayOfCurrentMonth = frameOfDay(
-      calendar.day(containing: lastDate),
-      inMonthWithOrigin: monthOrigin)
-    let monthHeight = frameOfLastDayOfCurrentMonth.maxY - monthOrigin.y
-
+    let monthHeight = heightOfMonth(month)
     return CGRect(origin: monthOrigin, size: CGSize(width: monthWidth, height: monthHeight))
   }
 
@@ -300,6 +280,28 @@ final class FrameProvider {
     itemFrame.minX -
       (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin)) -
       content.monthDayInsets.left
+  }
+
+  private func minYOfMonth(
+    containingDayItemWithFrame dayItemFrame: CGRect,
+    atRowInMonth rowInMonth: Int)
+    -> CGFloat
+  {
+    dayItemFrame.minY -
+      (CGFloat(rowInMonth) * (daySize.height + content.verticalDayMargin)) -
+      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
+      content.monthDayInsets.top -
+      monthHeaderHeight
+  }
+
+  private func heightOfMonth(_ month: Month) -> CGFloat {
+    let numberOfRows = calendar.numberOfRows(in: month)
+    return monthHeaderHeight +
+      content.monthDayInsets.top +
+      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
+      (CGFloat(numberOfRows) * daySize.height) +
+      (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
+      content.monthDayInsets.bottom
   }
 
 }
