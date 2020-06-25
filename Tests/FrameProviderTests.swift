@@ -58,7 +58,7 @@ final class FrameProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: lowerBoundDate...upperBoundDate,
         monthsLayout: .vertical(
-          options: VerticalMonthsLayoutOptions(onlyShowCompleteMonths: false)))
+          options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))
         .withMonthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
         .withInterMonthSpacing(20)
         .withVerticalDayMargin(20)

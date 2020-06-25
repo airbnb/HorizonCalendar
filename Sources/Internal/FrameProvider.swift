@@ -301,7 +301,7 @@ final class FrameProvider {
   private func adjustedRowInMonth(for day: Day) -> Int {
     let missingRows: Int
     if
-      !content.monthsLayout.alwaysShowCompleteMonths,
+      !content.monthsLayout.alwaysShowCompleteBoundaryMonths,
       day.month == content.monthRange.lowerBound
     {
       missingRows = calendar.rowInMonth(for: calendar.startDate(of: content.dayRange.lowerBound))

@@ -1512,7 +1512,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(
-          options: VerticalMonthsLayoutOptions(onlyShowCompleteMonths: false)))),
+          options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
     size: size,
     scale: 2,
     monthHeaderHeight: 50)

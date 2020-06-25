@@ -44,7 +44,7 @@ public final class CalendarViewContent {
     self.monthsLayout = monthsLayout
 
     let exactDayRange = DayRange(containing: visibleDateRange, in: calendar)
-    if monthsLayout.alwaysShowCompleteMonths {
+    if monthsLayout.alwaysShowCompleteBoundaryMonths {
       let firstDateOfLowerBoundMonth = calendar.firstDate(of: monthRange.lowerBound)
       let lastDateOfUpperBoundMonth = calendar.lastDate(of: monthRange.upperBound)
       dayRange = DayRange(

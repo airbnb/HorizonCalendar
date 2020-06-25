@@ -40,9 +40,9 @@ public enum MonthsLayout {
     }
   }
 
-  var alwaysShowCompleteMonths: Bool {
+  var alwaysShowCompleteBoundaryMonths: Bool {
     switch self {
-    case .vertical(let options): return options.alwaysShowCompleteMonths
+    case .vertical(let options): return options.alwaysShowCompleteBoundaryMonths
     case .horizontal: return true
     }
   }
@@ -92,11 +92,11 @@ public struct VerticalMonthsLayoutOptions: Equatable {
   /// - Parameters:
   ///   - pinDaysOfWeekToTop: Whether the days of the week will appear once, pinned at the top, or repeatedly in each month.
   ///   The default value is `false`.
-  ///   - alwaysShowCompleteMonths: Whether the calendar will always show complete months, even if the visible date range
-  ///   does not start on the first date or end on the last date of a month. The default value is `true`.
-  public init(pinDaysOfWeekToTop: Bool = false, onlyShowCompleteMonths: Bool = true) {
+  ///   - alwaysShowCompleteBoundaryMonths: Whether the calendar will always show complete months, even if the visible
+  ///   date range does not start on the first date or end on the last date of a month. The default value is `true`.
+  public init(pinDaysOfWeekToTop: Bool = false, alwaysShowCompleteBoundaryMonths: Bool = true) {
     self.pinDaysOfWeekToTop = pinDaysOfWeekToTop
-    self.alwaysShowCompleteMonths = onlyShowCompleteMonths
+    self.alwaysShowCompleteBoundaryMonths = alwaysShowCompleteBoundaryMonths
   }
 
   // MARK: Public
@@ -104,8 +104,8 @@ public struct VerticalMonthsLayoutOptions: Equatable {
   /// Whether the days of the week will appear once, pinned at the top, or repeatedly in each month.
   public let pinDaysOfWeekToTop: Bool
 
-  /// Whether the calendar will always show complete months, even if the visible date range does not start on the first date or end on the
-  /// last date of a month.
-  public let alwaysShowCompleteMonths: Bool
+  /// Whether the calendar will always show complete months at the calendar's boundaries, even if the visible date range does not start
+  /// on the first date or end on the last date of a month.
+  public let alwaysShowCompleteBoundaryMonths: Bool
 
 }
