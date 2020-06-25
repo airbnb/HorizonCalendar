@@ -61,13 +61,21 @@ final class DemoPickerViewController: UIViewController {
 
   // MARK: Private
 
-  private let demoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
+  private let verticalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
     ("Single Day Selection", SingleDaySelectionDemoViewController.self),
     ("Day Range Selection", DayRangeSelectionDemoViewController.self),
     ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
-    ("Partial Month Visibility for Vertial Layout", PartialMonthVisibilityDemoViewController.self),
+    ("Partial Month Visibility", PartialMonthVisibilityDemoViewController.self),
+  ]
+
+  private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
+    ("Single Day Selection", SingleDaySelectionDemoViewController.self),
+    ("Day Range Selection", DayRangeSelectionDemoViewController.self),
+    ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
+    ("Large Day Range", LargeDayRangeDemoViewController.self),
+    ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
   ]
 
   private lazy var tableView: UITableView = {
@@ -81,8 +89,17 @@ final class DemoPickerViewController: UIViewController {
   private lazy var monthsLayoutPicker: UISegmentedControl = {
     let segmentedControl = UISegmentedControl(items: ["Vertical", "Horizontal"])
     segmentedControl.selectedSegmentIndex = 0
+    segmentedControl.addTarget(
+      self,
+      action: #selector(monthsLayoutPickerValueChanged),
+      for: .valueChanged)
     return segmentedControl
   }()
+
+  @objc
+  private func monthsLayoutPickerValueChanged() {
+    tableView.reloadData()
+  }
 
 }
 
@@ -91,12 +108,19 @@ final class DemoPickerViewController: UIViewController {
 extension DemoPickerViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    demoDestinations.count
+    monthsLayoutPicker.selectedSegmentIndex == 0
+      ? verticalDemoDestinations.count
+      : horizontalDemoDestinations.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-    cell.textLabel?.text = demoDestinations[indexPath.item].name
+
+    let demoDestination = monthsLayoutPicker.selectedSegmentIndex == 0
+      ? verticalDemoDestinations[indexPath.item]
+      : horizontalDemoDestinations[indexPath.item]
+    cell.textLabel?.text = demoDestination.name
+
     return cell
   }
 
@@ -107,7 +131,11 @@ extension DemoPickerViewController: UITableViewDataSource {
 extension DemoPickerViewController: UITableViewDelegate {
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let demoViewController = demoDestinations[indexPath.item].destinationType.init(
+    let demoDestination = monthsLayoutPicker.selectedSegmentIndex == 0
+      ? verticalDemoDestinations[indexPath.item]
+      : horizontalDemoDestinations[indexPath.item]
+
+    let demoViewController = demoDestination.destinationType.init(
       monthsLayout: monthsLayoutPicker.selectedSegmentIndex == 0
         ? .vertical(
           options: VerticalMonthsLayoutOptions(

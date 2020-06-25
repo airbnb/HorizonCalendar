@@ -24,7 +24,7 @@ final class PartialMonthVisibilityDemoViewController: UIViewController, DemoView
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    title = "Partial Month Visibility for Vertical Months Layout"
+    title = "Partial Month Visibility"
 
     if #available(iOS 13.0, *) {
       view.backgroundColor = .systemBackground
