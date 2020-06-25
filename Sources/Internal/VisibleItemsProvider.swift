@@ -33,7 +33,8 @@ final class VisibleItemsProvider {
     layoutItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: content.monthsLayout,
-      monthRange: content.monthRange)
+      monthRange: content.monthRange,
+      dayRange: content.dayRange)
     frameProvider = FrameProvider(
       content: content,
       size: size,
@@ -176,7 +177,7 @@ final class VisibleItemsProvider {
       })
 
     // Handle pinned day-of-week layout items
-    if case .vertical(pinDaysOfWeekToTop: true) = content.monthsLayout {
+    if case .vertical(let options) = content.monthsLayout, options.pinDaysOfWeekToTop {
       handlePinnedDaysOfWeekIfNeeded(
         yContentOffset: bounds.minY,
         calendarItemCache: &calendarItemCache,
@@ -186,7 +187,7 @@ final class VisibleItemsProvider {
 
     let visibleDayRange: DayRange?
     if let firstVisibleDay = firstVisibleDay, let lastVisibleDay = lastVisibleDay {
-      visibleDayRange = DayRange(uncheckedBounds: (firstVisibleDay, lastVisibleDay))
+      visibleDayRange = firstVisibleDay...lastVisibleDay
     } else {
       visibleDayRange = nil
     }
@@ -218,10 +219,9 @@ final class VisibleItemsProvider {
   {
     var visibleItems = [VisibleCalendarItem]()
 
-    let monthRange = MonthRange(
-      uncheckedBounds: (
-        lower: calendar.month(byAddingMonths: -1, to: visibleMonthRange.lowerBound),
-        upper: calendar.month(byAddingMonths: 1, to: visibleMonthRange.upperBound)))
+    let lowerBoundMonth = calendar.month(byAddingMonths: -1, to: visibleMonthRange.lowerBound)
+    let upperBoundMonth = calendar.month(byAddingMonths: 1, to: visibleMonthRange.upperBound)
+    let monthRange = lowerBoundMonth...upperBoundMonth
 
     let handleItem: (LayoutItem, Bool, inout Bool) -> Void =
     { layoutItem, isLookingBackwards, shouldStop in
@@ -641,18 +641,17 @@ final class VisibleItemsProvider {
     maximumScrollOffset: inout CGFloat?)
   {
     switch content.monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
+    case .vertical(let options):
       switch layoutItem.itemType {
       case .monthHeader(let monthAndYear):
         if monthAndYear == content.monthRange.lowerBound {
           // The month header of the first month will determine our minimum scroll offset
           minimumScrollOffset = layoutItem.frame.minY -
-            (pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+            (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
         }
       case .day(let day):
-        // The last day of the last month will determine our maximum scroll offset
-        let lastDate = calendar.lastDate(of: content.monthRange.upperBound)
-        if day == calendar.day(containing: lastDate) {
+        if day == content.dayRange.upperBound {
+          // The last visible day will determine our maximum scroll offset
           maximumScrollOffset = layoutItem.frame.maxY + content.monthDayInsets.bottom
         }
       default:
@@ -803,8 +802,8 @@ final class VisibleItemsProvider {
     -> CGRect
   {
     switch content.monthsLayout {
-    case .vertical(let pinDaysOfWeekToTop):
-      let additionalOffset = (pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+    case .vertical(let options):
+      let additionalOffset = (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
       let minY = offset.y + additionalOffset
       let maxY = offset.y + size.height
       let firstFullyVisibleY = minY

@@ -23,23 +23,29 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
   // MARK: Internal
 
   override func setUp() {
-    let monthRange = MonthRange(
-      uncheckedBounds: (
-        lower: Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true),
-        upper: Month(era: 1, year: 2021, month: 1, isInGregorianCalendar: true)))
+    let lowerBoundMonth = Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true)
+    let upperBoundMonth = Month(era: 1, year: 2021, month: 1, isInGregorianCalendar: true)
+    let monthRange = lowerBoundMonth...upperBoundMonth
+
+    let lowerBoundDay = Day(month: lowerBoundMonth, day: 12)
+    let upperBoundDay = Day(month: upperBoundMonth, day: 20)
+    let dayRange = lowerBoundDay...upperBoundDay
 
     verticalItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
-      monthsLayout: .vertical(pinDaysOfWeekToTop: false),
-      monthRange: monthRange)
+      monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()),
+      monthRange: monthRange,
+      dayRange: dayRange)
     verticalPinnedDaysOfWeekItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
-      monthsLayout: .vertical(pinDaysOfWeekToTop: true),
-      monthRange: monthRange)
+      monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)),
+      monthRange: monthRange,
+      dayRange: dayRange)
     horizontalItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: .horizontal(monthWidth: 300),
-      monthRange: monthRange)
+      monthRange: monthRange,
+      dayRange: dayRange)
 
     expectedItemTypeStackBackwards = [
       .dayOfWeekInMonth(
@@ -82,17 +88,6 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       .day(calendar.day(byAddingDays: -17, to: startDay)),
       .day(calendar.day(byAddingDays: -18, to: startDay)),
       .day(calendar.day(byAddingDays: -19, to: startDay)),
-      .day(calendar.day(byAddingDays: -20, to: startDay)),
-      .day(calendar.day(byAddingDays: -21, to: startDay)),
-      .day(calendar.day(byAddingDays: -22, to: startDay)),
-      .day(calendar.day(byAddingDays: -23, to: startDay)),
-      .day(calendar.day(byAddingDays: -24, to: startDay)),
-      .day(calendar.day(byAddingDays: -25, to: startDay)),
-      .day(calendar.day(byAddingDays: -26, to: startDay)),
-      .day(calendar.day(byAddingDays: -27, to: startDay)),
-      .day(calendar.day(byAddingDays: -28, to: startDay)),
-      .day(calendar.day(byAddingDays: -29, to: startDay)),
-      .day(calendar.day(byAddingDays: -30, to: startDay)),
     ]
 
     expectedItemTypeStackForwards = [
@@ -169,17 +164,6 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       .day(calendar.day(byAddingDays: 48, to: startDay)),
       .day(calendar.day(byAddingDays: 49, to: startDay)),
       .day(calendar.day(byAddingDays: 50, to: startDay)),
-      .day(calendar.day(byAddingDays: 51, to: startDay)),
-      .day(calendar.day(byAddingDays: 52, to: startDay)),
-      .day(calendar.day(byAddingDays: 53, to: startDay)),
-      .day(calendar.day(byAddingDays: 54, to: startDay)),
-      .day(calendar.day(byAddingDays: 55, to: startDay)),
-      .day(calendar.day(byAddingDays: 56, to: startDay)),
-      .day(calendar.day(byAddingDays: 57, to: startDay)),
-      .day(calendar.day(byAddingDays: 58, to: startDay)),
-      .day(calendar.day(byAddingDays: 59, to: startDay)),
-      .day(calendar.day(byAddingDays: 60, to: startDay)),
-      .day(calendar.day(byAddingDays: 61, to: startDay)),
     ]
   }
 

@@ -166,9 +166,4 @@ extension Calendar {
     }
   }
 
-  func numberOfRows(in month: Month) -> Int {
-    let lastDateOfMonth = lastDate(of: month)
-    return rowInMonth(for: lastDateOfMonth) + 1
-  }
-
 }

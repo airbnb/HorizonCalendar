@@ -76,6 +76,32 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial month header item.")
   }
 
+  func testVerticalPartialMonthVisibleMonthHeader() {
+    let monthHeaderItem1 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
+      for: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
+      offset: CGPoint(x: 0, y: 100),
+      scrollPosition: .firstFullyVisiblePosition)
+    XCTAssert(
+      monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 100.0, 320.0, 50.0)]",
+      "Unexpected initial month header item.")
+
+    let monthHeaderItem2 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
+      for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
+      offset: CGPoint(x: 0, y: 250),
+      scrollPosition: .lastFullyVisiblePosition)
+    XCTAssert(
+      monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-03)), frame: (0.0, 335.5, 320.0, 50.0)]",
+      "Unexpected initial month header item.")
+
+    let monthHeaderItem3 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
+      for: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
+      offset: CGPoint(x: 0, y: 400),
+      scrollPosition: .centered)
+    XCTAssert(
+      monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 443.0, 320.0, 50.0)]",
+      "Unexpected initial month header item.")
+  }
+
   func testHorizontalInitialVisibleMonthHeader() {
     let monthHeaderItem1 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true),
@@ -155,6 +181,34 @@ final class VisibleItemsProviderTests: XCTestCase {
       scrollPosition: .centered)
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 1240.0, 36.0, 35.5)]",
+      "Unexpected initial day item.")
+  }
+
+  func testVerticalPartialMonthInitialVisibleDay() {
+    let day = Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 28)
+
+    let dayItem1 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
+      for: day,
+      offset: CGPoint(x: 0, y: 400),
+      scrollPosition: .firstFullyVisiblePosition)
+    XCTAssert(
+      dayItem1.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 400.0, 35.5, 35.5)]",
+      "Unexpected initial day item.")
+
+    let dayItem2 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
+      for: day,
+      offset: CGPoint(x: 0, y: 200),
+      scrollPosition: .lastFullyVisiblePosition)
+    XCTAssert(
+      dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 644.5, 35.5, 35.5)]",
+      "Unexpected initial day item.")
+
+    let dayItem3 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
+      for: day,
+      offset: CGPoint(x: 0, y: 600),
+      scrollPosition: .centered)
+    XCTAssert(
+      dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 822.0, 35.5, 36.0)]",
       "Unexpected initial day item.")
   }
 
@@ -320,6 +374,52 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected centermost layout item.")
 
     XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
+    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+  }
+
+  func testVerticalPartialMonthVisibleItemsContext() {
+    let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
+      surroundingPreviouslyVisibleLayoutItem: LayoutItem(
+        itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
+        frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
+      inBounds: CGRect(x: 0, y: 150, width: 320, height: 480))
+
+    let expectedVisibleItemDescriptions: Set<String> = [
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-01)), frame: (233.5, 280.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.second, 2020-02)), frame: (50.5, 522.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-02)), frame: (96.5, 522.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-02)), frame: (233.5, 522.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-25)), frame: (279.5, 335.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-27)), frame: (50.5, 391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.second, 2020-01)), frame: (50.5, 280.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-02)), frame: (0.0, 442.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-01)), frame: (5.0, 280.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-02)), frame: (188.0, 522.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-01)), frame: (96.5, 280.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-31)), frame: (233.5, 391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 200.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-02)), frame: (5.0, 522.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-26)), frame: (5.0, 391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-01)), frame: (142.0, 280.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-01)), frame: (188.0, 280.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-01)), frame: (279.5, 280.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-02)), frame: (142.0, 522.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-02)), frame: (279.5, 522.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-30)), frame: (188.0, 391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-01)), frame: (279.5, 578.0, 35.5, 35.5)]",
+    ]
+
+    XCTAssert(
+      Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
+      "Unexpected visible items.")
+
+    XCTAssert(
+      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 36.0, 35.5)]",
+      "Unexpected centermost layout item.")
+
+    XCTAssert(details.minimumScrollOffset == 200, "Unexpected minimum scroll offset.")
     XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
   }
 
@@ -589,6 +689,39 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.minimumScrollOffset?.alignedToPixel(forScreenWithScale: 2) == 9.5,
       "Unexpected minimum scroll offset.")
     XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+  }
+
+  func testBoundaryVerticalPartialMonthVisibleItemsContext() {
+    let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
+      surroundingPreviouslyVisibleLayoutItem: LayoutItem(
+        itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        frame: CGRect(x: 0, y: 690, width: 320, height: 50)),
+      inBounds: CGRect(x: 0, y: 690, width: 320, height: 480))
+
+    let expectedVisibleItemDescriptions: Set<String> = [
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-12)), frame: (142.0, 770.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-12)), frame: (279.5, 770.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-12)), frame: (5.0, 770.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-12)), frame: (96.5, 770.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-12)), frame: (0.0, 690.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-12)), frame: (188.0, 770.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.second, 2020-12)), frame: (50.5, 770.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-12)), frame: (233.5, 770.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 825.5, 35.5, 36.0)]",
+    ]
+
+    XCTAssert(
+      Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
+      "Unexpected visible items.")
+
+    XCTAssert(
+      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 825.5, 35.5, 36.0)]",
+      "Unexpected centermost layout item.")
+
+    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
+    XCTAssert(
+      details.maximumScrollOffset?.alignedToPixel(forScreenWithScale: 3) == CGFloat(861.4285714285713).alignedToPixel(forScreenWithScale: 3),
+      "Unexpected maximum scroll offset.")
   }
 
   func testBoundaryHorizontalVisibleItemsContext() {
@@ -978,6 +1111,220 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
   }
 
+  func testVerticalPartialMonthVisibleItemsForAccessibility() {
+    let visibleItems = verticalPartialMonthVisibleItemsProvider.visibleItemsForAccessibilityElements(
+      surroundingPreviouslyVisibleLayoutItem: LayoutItem(
+        itemType: .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true)),
+        frame: CGRect(x: 0, y: 1200, width: 320, height: 50)),
+      visibleMonthRange: .init(
+        uncheckedBounds: (
+          lower: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
+          upper: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true))))
+
+    let expectedVisibleItems = [
+      "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 958.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-25)), frame: (279.5, 1093.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-01-26)), frame: (5.0, 1149.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-27)), frame: (50.5, 1149.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 1149.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 1149.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-30)), frame: (188.0, 1149.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-01-31)), frame: (233.5, 1149.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-02)), frame: (0.0, 1200.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-01)), frame: (279.5, 1335.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-02)), frame: (5.0, 1391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-03)), frame: (50.5, 1391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-04)), frame: (96.5, 1391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-05)), frame: (142.0, 1391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-06)), frame: (188.0, 1391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-07)), frame: (233.5, 1391.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-08)), frame: (279.5, 1391.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-09)), frame: (5.0, 1447.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-10)), frame: (50.5, 1447.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-11)), frame: (96.5, 1447.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-12)), frame: (142.0, 1447.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-13)), frame: (188.0, 1447.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-14)), frame: (233.5, 1447.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-15)), frame: (279.5, 1447.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-16)), frame: (5.0, 1503.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-17)), frame: (50.5, 1503.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-18)), frame: (96.5, 1503.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-19)), frame: (142.0, 1503.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-20)), frame: (188.0, 1503.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-21)), frame: (233.5, 1503.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-22)), frame: (279.5, 1503.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-23)), frame: (5.0, 1558.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-24)), frame: (50.5, 1558.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-25)), frame: (96.5, 1558.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-26)), frame: (142.0, 1558.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-27)), frame: (188.0, 1558.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-28)), frame: (233.5, 1558.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-29)), frame: (279.5, 1558.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-03)), frame: (0.0, 1609.5, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-01)), frame: (5.0, 1745.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-02)), frame: (50.5, 1745.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-03)), frame: (96.5, 1745.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-04)), frame: (142.0, 1745.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-05)), frame: (188.0, 1745.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-06)), frame: (233.5, 1745.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-07)), frame: (279.5, 1745.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-08)), frame: (5.0, 1800.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-09)), frame: (50.5, 1800.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-10)), frame: (96.5, 1800.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 1800.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-12)), frame: (188.0, 1800.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-13)), frame: (233.5, 1800.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-14)), frame: (279.5, 1800.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-15)), frame: (5.0, 1856.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-16)), frame: (50.5, 1856.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-17)), frame: (96.5, 1856.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-18)), frame: (142.0, 1856.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-19)), frame: (188.0, 1856.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-20)), frame: (233.5, 1856.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-21)), frame: (279.5, 1856.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-22)), frame: (5.0, 1912.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-23)), frame: (50.5, 1912.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-24)), frame: (96.5, 1912.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-25)), frame: (142.0, 1912.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-26)), frame: (188.0, 1912.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-27)), frame: (233.5, 1912.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-28)), frame: (279.5, 1912.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-03-29)), frame: (5.0, 1968.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-30)), frame: (50.5, 1968.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-03-31)), frame: (96.5, 1968.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-04)), frame: (0.0, 2018.5, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-01)), frame: (142.0, 2154.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-02)), frame: (188.0, 2154.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-03)), frame: (233.5, 2154.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-04)), frame: (279.5, 2154.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-05)), frame: (5.0, 2210.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-06)), frame: (50.5, 2210.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-07)), frame: (96.5, 2210.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-08)), frame: (142.0, 2210.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-09)), frame: (188.0, 2210.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-10)), frame: (233.5, 2210.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-11)), frame: (279.5, 2210.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-12)), frame: (5.0, 2265.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-13)), frame: (50.5, 2265.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-14)), frame: (96.5, 2265.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-15)), frame: (142.0, 2265.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-16)), frame: (188.0, 2265.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-17)), frame: (233.5, 2265.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-18)), frame: (279.5, 2265.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-19)), frame: (5.0, 2321.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 2321.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-21)), frame: (96.5, 2321.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-22)), frame: (142.0, 2321.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-23)), frame: (188.0, 2321.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-24)), frame: (233.5, 2321.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-25)), frame: (279.5, 2321.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-04-26)), frame: (5.0, 2377.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-27)), frame: (50.5, 2377.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-28)), frame: (96.5, 2377.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-29)), frame: (142.0, 2377.0, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-04-30)), frame: (188.0, 2377.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-05)), frame: (0.0, 2428.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-01)), frame: (233.5, 2563.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-02)), frame: (279.5, 2563.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-03)), frame: (5.0, 2619.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-04)), frame: (50.5, 2619.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-05)), frame: (96.5, 2619.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-06)), frame: (142.0, 2619.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-07)), frame: (188.0, 2619.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-08)), frame: (233.5, 2619.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-09)), frame: (279.5, 2619.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-10)), frame: (5.0, 2675.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-11)), frame: (50.5, 2675.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-12)), frame: (96.5, 2675.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-13)), frame: (142.0, 2675.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-14)), frame: (188.0, 2675.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-15)), frame: (233.5, 2675.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-16)), frame: (279.5, 2675.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-17)), frame: (5.0, 2730.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-18)), frame: (50.5, 2730.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-19)), frame: (96.5, 2730.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-20)), frame: (142.0, 2730.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-21)), frame: (188.0, 2730.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-22)), frame: (233.5, 2730.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-23)), frame: (279.5, 2730.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-05-24)), frame: (5.0, 2786.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-25)), frame: (50.5, 2786.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-26)), frame: (96.5, 2786.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-27)), frame: (142.0, 2786.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-28)), frame: (188.0, 2786.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-29)), frame: (233.5, 2786.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-30)), frame: (279.5, 2786.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-05-31)), frame: (5.0, 2842.0, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 2893.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-01)), frame: (50.5, 3028.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-02)), frame: (96.5, 3028.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-03)), frame: (142.0, 3028.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-04)), frame: (188.0, 3028.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-05)), frame: (233.5, 3028.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-06)), frame: (279.5, 3028.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-07)), frame: (5.0, 3084.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-08)), frame: (50.5, 3084.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-09)), frame: (96.5, 3084.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-10)), frame: (142.0, 3084.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-11)), frame: (188.0, 3084.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-12)), frame: (233.5, 3084.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-13)), frame: (279.5, 3084.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-14)), frame: (5.0, 3140.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-15)), frame: (50.5, 3140.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-16)), frame: (96.5, 3140.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-17)), frame: (142.0, 3140.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-18)), frame: (188.0, 3140.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-19)), frame: (233.5, 3140.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-20)), frame: (279.5, 3140.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-21)), frame: (5.0, 3195.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-22)), frame: (50.5, 3195.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-23)), frame: (96.5, 3195.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-24)), frame: (142.0, 3195.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-25)), frame: (188.0, 3195.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-26)), frame: (233.5, 3195.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-27)), frame: (279.5, 3195.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-06-28)), frame: (5.0, 3251.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-29)), frame: (50.5, 3251.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-06-30)), frame: (96.5, 3251.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-07)), frame: (0.0, 3302.0, 320.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-01)), frame: (142.0, 3438.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-02)), frame: (188.0, 3438.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-03)), frame: (233.5, 3438.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-04)), frame: (279.5, 3438.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-05)), frame: (5.0, 3493.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-06)), frame: (50.5, 3493.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-07)), frame: (96.5, 3493.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-08)), frame: (142.0, 3493.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-09)), frame: (188.0, 3493.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-10)), frame: (233.5, 3493.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-11)), frame: (279.5, 3493.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-12)), frame: (5.0, 3549.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-13)), frame: (50.5, 3549.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-14)), frame: (96.5, 3549.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-15)), frame: (142.0, 3549.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-16)), frame: (188.0, 3549.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-17)), frame: (233.5, 3549.5, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-18)), frame: (279.5, 3549.5, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-19)), frame: (5.0, 3605.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-20)), frame: (50.5, 3605.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-21)), frame: (96.5, 3605.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-22)), frame: (142.0, 3605.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-23)), frame: (188.0, 3605.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-24)), frame: (233.5, 3605.0, 36.0, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-25)), frame: (279.5, 3605.0, 35.5, 35.5)]",
+      "[itemType: .layoutItemType(.day(2020-07-26)), frame: (5.0, 3660.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-27)), frame: (50.5, 3660.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-28)), frame: (96.5, 3660.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-29)), frame: (142.0, 3660.5, 36.0, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-30)), frame: (188.0, 3660.5, 35.5, 36.0)]",
+      "[itemType: .layoutItemType(.day(2020-07-31)), frame: (233.5, 3660.5, 36.0, 36.0)]",
+    ]
+
+    XCTAssert(
+      visibleItems.map { $0.description } == expectedVisibleItems,
+      "Unexpected visible items.")
+  }
+
   func testHorizontalVisibleItemsForAccessibility() {
     let visibleItems = horizontalVisibleItemsProvider.visibleItemsForAccessibilityElements(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
@@ -1128,11 +1475,11 @@ final class VisibleItemsProviderTests: XCTestCase {
   private static let dateRange = ClosedRange(
     uncheckedBounds: (
       lower: calendar.startDate(
-        of: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01)),
+        of: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 25)),
       upper: calendar.startDate(
         of: Day(
           month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
-          day: 15))))
+          day: 01))))
 
   private static let size = CGSize(width: 320, height: 480)
 
@@ -1142,7 +1489,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .vertical(pinDaysOfWeekToTop: false))),
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))),
     size: size,
     scale: 2,
     monthHeaderHeight: 50)
@@ -1153,7 +1500,19 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .vertical(pinDaysOfWeekToTop: true))),
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))),
+    size: size,
+    scale: 2,
+    monthHeaderHeight: 50)
+
+  private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
+    calendar: calendar,
+    content: makeContent(
+      fromBaseContent: CalendarViewContent(
+        calendar: calendar,
+        visibleDateRange: dateRange,
+        monthsLayout: .vertical(
+          options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
     size: size,
     scale: 2,
     monthHeaderHeight: 50)

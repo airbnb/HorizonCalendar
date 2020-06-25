@@ -22,6 +22,8 @@ Features:
 - Specify custom views to overlay parts of the calendar, enabling features like tooltips
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
+- Pinning days of the week to the top
+- Showing partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
 - Scrolling to arbitrary dates and months, with or without animation
 - Robust accessibility support
 
@@ -137,7 +139,7 @@ private func makeContent() -> CalendarViewContent {
   return CalendarViewContent(
     calendar: calendar,
     visibleDateRange: today...endDate,
-    monthsLayout: .vertical(pinDaysOfWeekToTop: false))
+    monthsLayout: .vertical(VerticalMonthsLayoutOptions()))
 }
 ```
 
@@ -175,7 +177,7 @@ private func makeContent() -> CalendarViewContent {
   return CalendarViewContent(
     calendar: calendar,
     visibleDateRange: today...endDate,
-    monthsLayout: .vertical(pinDaysOfWeekToTop: false))
+    monthsLayout: .vertical(VerticalMonthsLayoutOptions()))
     
     .withDayItemProvider { day in
       // Return a CalendarItem representing the view for each day
