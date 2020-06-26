@@ -79,7 +79,7 @@ final class VisibleItemsProvider {
 
   func detailsForVisibleItems(
     surroundingPreviouslyVisibleLayoutItem previouslyVisibleLayoutItem: LayoutItem,
-    inBounds bounds: CGRect)
+    offset: CGPoint)
     -> VisibleItemsDetails
   {
     var visibleItems = Set<VisibleCalendarItem>()
@@ -107,6 +107,7 @@ final class VisibleItemsProvider {
     //
     // One can think of `extendedBounds`'s purpose as increasing the layout region to compensate
     // for extremely fast scrolling / large per-frame bounds differences.
+    let bounds = CGRect(origin: offset, size: size)
     let minX = min(bounds.minX, previouslyVisibleLayoutItem.frame.minX)
     let minY = min(bounds.minY, previouslyVisibleLayoutItem.frame.minY)
     let maxX = max(bounds.maxX, previouslyVisibleLayoutItem.frame.maxX)
