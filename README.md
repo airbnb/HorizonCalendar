@@ -138,7 +138,7 @@ private func makeContent() -> CalendarViewContent {
 
   return CalendarViewContent(
     calendar: calendar,
-    visibleDateRange: today...endDate,
+    visibleDateRange: startDate...endDate,
     monthsLayout: .vertical(VerticalMonthsLayoutOptions()))
 }
 ```
