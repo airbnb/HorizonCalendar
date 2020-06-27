@@ -200,7 +200,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 0, y: 200),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
-      dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 644.5, 35.5, 35.5)]",
+      dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 391.5, 35.5, 35.5)]",
       "Unexpected initial day item.")
 
     let dayItem3 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
@@ -208,7 +208,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 0, y: 600),
       scrollPosition: .centered)
     XCTAssert(
-      dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 822.0, 35.5, 36.0)]",
+      dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 791.5, 35.5, 35.5)]",
       "Unexpected initial day item.")
   }
 
@@ -247,7 +247,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
-      inBounds: CGRect(x: 0, y: 150, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 150))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-03-23)), frame: (50.5, 503.0, 36.0, 35.5)]",
@@ -317,7 +317,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
-      inBounds: CGRect(x: 0, y: 450, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 450))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-06-18)), frame: (188.0, 641.5, 35.5, 35.5)]",
@@ -382,7 +382,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
-      inBounds: CGRect(x: 0, y: 150, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 150))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-01)), frame: (233.5, 280.0, 36.0, 35.5)]",
@@ -428,7 +428,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
         frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
-      inBounds: CGRect(x: 100, y: 0, width: 300, height: 480))
+      offset: CGPoint(x: 100, y: 0))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-05-06)), frame: (383.5, 185.5, 33.0, 33.0)]",
@@ -497,7 +497,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 3000, width: 320, height: 50)),
-      inBounds: CGRect(x: 0, y: 150, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 150))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-05-08)), frame: (233.5, 215.0, 36.0, 35.5)]",
@@ -567,7 +567,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      inBounds: CGRect(x: 0, y: -50, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: -50))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-01)), frame: (233.5, 80.0, 36.0, 35.5)]",
@@ -630,7 +630,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 45, width: 320, height: 40)),
-      inBounds: CGRect(x: 0, y: 50, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 50))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-01-14)), frame: (96.5, 236.5, 35.5, 35.5)]",
@@ -696,7 +696,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 690, width: 320, height: 50)),
-      inBounds: CGRect(x: 0, y: 690, width: 320, height: 480))
+      offset: CGPoint(x: 0, y: 690))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-12)), frame: (142.0, 770.0, 36.0, 35.5)]",
@@ -729,7 +729,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 1200, y: 0, width: 300, height: 50)),
-      inBounds: CGRect(x: 1000, y: 0, width: 300, height: 480))
+      offset: CGPoint(x: 1000, y: 0))
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-11-24)), frame: (975.5, 291.5, 33.0, 33.0)]",
@@ -756,7 +756,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-11-26)), frame: (1061.5, 291.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-11-20)), frame: (1104.5, 238.5, 32.5, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-14)), frame: (1248.0, 238.5, 32.5, 33.0)]",
-      "[itemType: .overlayItem(.monthHeader(2020-11)), frame: (1000.0, 0.0, 300.0, 480.0)]",
+      "[itemType: .overlayItem(.monthHeader(2020-11)), frame: (1000.0, 0.0, 320.0, 480.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-11)), frame: (1147.0, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-13)), frame: (1205.0, 238.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-11-03)), frame: (975.5, 133.0, 33.0, 32.5)]",

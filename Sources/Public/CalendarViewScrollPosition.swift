@@ -17,7 +17,7 @@ import CoreGraphics
 
 // MARK: - CalendarViewScrollPosition
 
-/// The scroll position for programatically scrolling to a day or month.
+/// The scroll position for programmatically scrolling to a day or month.
 public enum CalendarViewScrollPosition {
 
   /// The position that centers the day or month in the visible bounds of the calendar along its scrollable axis.

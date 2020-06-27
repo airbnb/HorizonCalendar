@@ -186,7 +186,7 @@ public final class CalendarView: UIView {
 
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
-      inBounds: scrollView.bounds)
+      offset: scrollView.contentOffset)
     self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
 
     updateVisibleViews(

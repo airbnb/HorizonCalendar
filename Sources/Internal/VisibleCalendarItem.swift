@@ -23,7 +23,7 @@ import CoreGraphics
 /// - Note: This is a reference type because it's heavily used in `Set`s, especially in the reuse manager. By making it a reference
 /// type, we avoid `VisibleCalendarItem` `initializeWithCopy` when mutating the `Set`s. This type also caches its hash
 /// value, which otherwise would be recomputed for every `Set` operation performed by the reuse manager. On an iPhone 6s, this
-/// reduces CPU usage by nearly 10% when programatically scrolling down at a rate of 500 points / frame.
+/// reduces CPU usage by nearly 10% when programmatically scrolling down at a rate of 500 points / frame.
 final class VisibleCalendarItem {
 
   // MARK: Lifecycle
