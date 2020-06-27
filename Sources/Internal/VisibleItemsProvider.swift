@@ -544,11 +544,6 @@ final class VisibleItemsProvider {
     if layoutItem.frame.intersects(extendedBounds) {
       numberOfConsecutiveNonIntersectingItems = 0
 
-      handleBoundaryItemsIfNeeded(
-        for: layoutItem,
-        minimumScrollOffset: &minimumScrollOffset,
-        maximumScrollOffset: &maximumScrollOffset)
-
       // Handle items that actually intersect the visible bounds
       if layoutItem.frame.intersects(bounds) {
         let itemType = VisibleCalendarItem.ItemType.layoutItemType(layoutItem.itemType)
@@ -601,6 +596,13 @@ final class VisibleItemsProvider {
             let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
             let monthFrame = frameProvider.frameOfMonth(day.month, withOrigin: monthOrigin)
             framesForVisibleMonths[day.month] = monthFrame
+
+            determineContentBoundariesIfNeeded(
+              for: day.month,
+              withFrame: monthFrame,
+              inBounds: bounds,
+              minimumScrollOffset: &minimumScrollOffset,
+              maximumScrollOffset: &maximumScrollOffset)
           }
 
           if framesForVisibleDays[day] == nil {
@@ -636,42 +638,29 @@ final class VisibleItemsProvider {
     }
   }
 
-  private func handleBoundaryItemsIfNeeded(
-    for layoutItem: LayoutItem,
+  private func determineContentBoundariesIfNeeded(
+    for month: Month,
+    withFrame monthFrame: CGRect,
+    inBounds bounds: CGRect,
     minimumScrollOffset: inout CGFloat?,
     maximumScrollOffset: inout CGFloat?)
   {
-    switch content.monthsLayout {
-    case .vertical(let options):
-      switch layoutItem.itemType {
-      case .monthHeader(let monthAndYear):
-        if monthAndYear == content.monthRange.lowerBound {
-          // The month header of the first month will determine our minimum scroll offset
-          minimumScrollOffset = layoutItem.frame.minY -
-            (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
-        }
-      case .day(let day):
-        if day == content.dayRange.upperBound {
-          // The last visible day will determine our maximum scroll offset
-          maximumScrollOffset = layoutItem.frame.maxY + content.monthDayInsets.bottom
-        }
-      default:
-        break
+    if month == content.dayRange.lowerBound.month, monthFrame.intersects(bounds) {
+      switch content.monthsLayout {
+      case .vertical(let options):
+        minimumScrollOffset = monthFrame.minY -
+          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+      case .horizontal:
+        minimumScrollOffset = monthFrame.minX
       }
+    }
 
-    case .horizontal:
-      switch layoutItem.itemType {
-      case .monthHeader(let monthAndYear):
-        if monthAndYear == content.monthRange.lowerBound {
-          // The month header of the first month will determine our minimum scroll offset
-          minimumScrollOffset = layoutItem.frame.minX
-        }
-        if monthAndYear == content.monthRange.upperBound {
-          // The month header of the last month will determine our minimum scroll offset
-          maximumScrollOffset = layoutItem.frame.maxX
-        }
-      default:
-        break
+    if month == content.dayRange.upperBound.month, monthFrame.intersects(bounds) {
+      switch content.monthsLayout {
+      case .vertical:
+        maximumScrollOffset = monthFrame.maxY
+      case .horizontal:
+        maximumScrollOffset = monthFrame.maxX
       }
     }
   }
