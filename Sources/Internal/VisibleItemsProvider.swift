@@ -849,6 +849,15 @@ final class VisibleItemsProvider {
     }
   }
 
+  /// This function takes a proposed frame for a target item toward which we're programmatically scrolling, and adjusts it such that it's a
+  /// valid frame when the calendar is at rest / not being overscrolled.
+  ///
+  /// A concrete example of when we'd need this correction is when we scroll to the first visible month with a scroll position of
+  /// `.centered` - the proposed frame would position the month in the middle of the bounds, even though that is not a valid resting
+  /// position for that month. Keep in mind that the first month in the calendar is going to be adjacent with the top / leading edge,
+  /// depending on whether the months layout is `.vertical` or `.horizontal`, respectively. This function recognizes that
+  /// situation by looking to see if we're close to the beginning / end of the calendar's content, and determines a correct final frame for
+  /// a programmatic scroll.
   private func correctedScrollToItemFrameForContentBoundaries(
     fromProposedFrame proposedFrame: CGRect,
     ofTargetInMonth month: Month,
