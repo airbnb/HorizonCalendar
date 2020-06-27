@@ -200,7 +200,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 0, y: 200),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
-      dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 644.5, 35.5, 35.5)]",
+      dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 391.5, 35.5, 35.5)]",
       "Unexpected initial day item.")
 
     let dayItem3 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
@@ -208,7 +208,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 0, y: 600),
       scrollPosition: .centered)
     XCTAssert(
-      dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 822.0, 35.5, 36.0)]",
+      dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 791.5, 35.5, 35.5)]",
       "Unexpected initial day item.")
   }
 

@@ -61,9 +61,18 @@ final class VisibleItemsProvider {
     -> LayoutItem
   {
     let baseMonthFrame = frameProvider.frameOfMonth(month, withOrigin: offset)
-    let finalMonthFrame = translatedFrame(baseMonthFrame, for: scrollPosition, offset: offset)
-    let finalFrame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: finalMonthFrame.origin)
-    return LayoutItem(itemType: .monthHeader(month), frame: finalFrame)
+    let proposedMonthFrame = proposedScrollToItemFrame(
+      fromBaseFrame: baseMonthFrame,
+      for: scrollPosition,
+      offset: offset)
+    let proposedMonthHeaderFrame = frameProvider.frameOfMonthHeader(
+      inMonthWithOrigin: proposedMonthFrame.origin)
+    let finalMonthHeaderFrame = correctedScrollToItemFrameForContentBoundaries(
+      fromProposedFrame: proposedMonthHeaderFrame,
+      ofTargetInMonth: month,
+      withFrame: proposedMonthFrame,
+      bounds: CGRect(origin: offset, size: size))
+    return LayoutItem(itemType: .monthHeader(month), frame: finalMonthHeaderFrame)
   }
 
   func anchorDayItem(
@@ -72,9 +81,20 @@ final class VisibleItemsProvider {
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
   {
-    let baseFrame = frameProvider.frameOfDay(day, inMonthWithOrigin: offset)
-    let finalFrame = translatedFrame(baseFrame, for: scrollPosition, offset: offset)
-    return LayoutItem(itemType: .day(day), frame: finalFrame)
+    let baseDayFrame = frameProvider.frameOfDay(day, inMonthWithOrigin: offset)
+    let proposedDayFrame = proposedScrollToItemFrame(
+      fromBaseFrame: baseDayFrame,
+      for: scrollPosition,
+      offset: offset)
+    let proposedMonthOrigin = frameProvider.originOfMonth(
+      containing: LayoutItem(itemType: .day(day), frame: proposedDayFrame))
+    let proposedMonthFrame = frameProvider.frameOfMonth(day.month, withOrigin: proposedMonthOrigin)
+    let finalDayFrame = correctedScrollToItemFrameForContentBoundaries(
+      fromProposedFrame: proposedDayFrame,
+      ofTargetInMonth: day.month,
+      withFrame: proposedMonthFrame,
+      bounds: CGRect(origin: offset, size: size))
+    return LayoutItem(itemType: .day(day), frame: finalDayFrame)
   }
 
   func detailsForVisibleItems(
@@ -785,8 +805,8 @@ final class VisibleItemsProvider {
     }
   }
 
-  private func translatedFrame(
-    _ frame: CGRect,
+  private func proposedScrollToItemFrame(
+    fromBaseFrame frame: CGRect,
     for scrollPosition: CalendarViewScrollPosition,
     offset: CGPoint)
     -> CGRect
@@ -826,6 +846,84 @@ final class VisibleItemsProvider {
       }
 
       return CGRect(x: x, y: frame.minY, width: frame.width, height: frame.height)
+    }
+  }
+
+  private func correctedScrollToItemFrameForContentBoundaries(
+    fromProposedFrame proposedFrame: CGRect,
+    ofTargetInMonth month: Month,
+    withFrame monthFrame: CGRect,
+    bounds: CGRect)
+    -> CGRect
+  {
+    var minimumScrollOffset: CGFloat?
+    var maximumScrollOffset: CGFloat?
+
+    var currentMonth = month
+    var currentMonthFrame = monthFrame
+
+    // Look backwards for boundary-determining months
+    while bounds.contains(currentMonthFrame.origin), minimumScrollOffset == nil {
+      determineContentBoundariesIfNeeded(
+        for: currentMonth,
+        withFrame: currentMonthFrame,
+        inBounds: bounds,
+        minimumScrollOffset: &minimumScrollOffset,
+        maximumScrollOffset: &maximumScrollOffset)
+
+      let previousMonth = calendar.month(byAddingMonths: -1, to: currentMonth)
+      let previousMonthOrigin = frameProvider.originOfMonth(
+        previousMonth,
+        beforeMonthWithOrigin: currentMonthFrame.origin)
+      let previousMonthFrame = frameProvider.frameOfMonth(
+        previousMonth,
+        withOrigin: previousMonthOrigin)
+
+      currentMonth = previousMonth
+      currentMonthFrame = previousMonthFrame
+    }
+
+    // Look forwards for boundary-determining months
+    currentMonth = month
+    currentMonthFrame = monthFrame
+    while
+      bounds.contains(CGPoint(x: currentMonthFrame.maxX, y: currentMonthFrame.maxY)),
+      maximumScrollOffset == nil
+    {
+      determineContentBoundariesIfNeeded(
+        for: currentMonth,
+        withFrame: currentMonthFrame,
+        inBounds: bounds,
+        minimumScrollOffset: &minimumScrollOffset,
+        maximumScrollOffset: &maximumScrollOffset)
+
+      let nextMonth = calendar.month(byAddingMonths: 1, to: currentMonth)
+      let nextMonthOrigin = frameProvider.originOfMonth(
+        nextMonth,
+        afterMonthWithOrigin: currentMonthFrame.origin)
+      let nextMonthFrame = frameProvider.frameOfMonth(nextMonth, withOrigin: nextMonthOrigin)
+
+      currentMonth = nextMonth
+      currentMonthFrame = nextMonthFrame
+    }
+
+    // Adjust the proposed frame if we're near a boundary so that the final frame is valid
+    if let minimumScrollOffset = minimumScrollOffset {
+      switch content.monthsLayout {
+      case .vertical:
+        return proposedFrame.applying(.init(translationX: 0, y: bounds.minY - minimumScrollOffset))
+      case .horizontal:
+        return proposedFrame.applying(.init(translationX: bounds.minX - minimumScrollOffset, y: 0))
+      }
+    } else if let maximumScrollOffset = maximumScrollOffset {
+      switch content.monthsLayout {
+      case .vertical:
+        return proposedFrame.applying(.init(translationX: 0, y: bounds.maxY - maximumScrollOffset))
+      case .horizontal:
+        return proposedFrame.applying(.init(translationX: bounds.maxX - maximumScrollOffset, y: 0))
+      }
+    } else {
+      return proposedFrame
     }
   }
 
