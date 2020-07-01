@@ -872,7 +872,10 @@ final class VisibleItemsProvider {
     var currentMonthFrame = monthFrame
 
     // Look backwards for boundary-determining months
-    while bounds.contains(currentMonthFrame.origin), minimumScrollOffset == nil {
+    while
+      bounds.contains(currentMonthFrame.origin.alignedToPixels(forScreenWithScale: scale)),
+      minimumScrollOffset == nil
+    {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
@@ -896,7 +899,9 @@ final class VisibleItemsProvider {
     currentMonth = month
     currentMonthFrame = monthFrame
     while
-      bounds.contains(CGPoint(x: currentMonthFrame.maxX, y: currentMonthFrame.maxY)),
+      bounds.contains(
+        CGPoint(x: currentMonthFrame.maxX - 1, y: currentMonthFrame.maxY - 1)
+          .alignedToPixels(forScreenWithScale: scale)),
       maximumScrollOffset == nil
     {
       determineContentBoundariesIfNeeded(
@@ -917,22 +922,24 @@ final class VisibleItemsProvider {
     }
 
     // Adjust the proposed frame if we're near a boundary so that the final frame is valid
-    if let minimumScrollOffset = minimumScrollOffset {
-      switch content.monthsLayout {
-      case .vertical:
+    switch content.monthsLayout {
+    case .vertical:
+      if let minimumScrollOffset = minimumScrollOffset, minimumScrollOffset > bounds.minY {
         return proposedFrame.applying(.init(translationX: 0, y: bounds.minY - minimumScrollOffset))
-      case .horizontal:
-        return proposedFrame.applying(.init(translationX: bounds.minX - minimumScrollOffset, y: 0))
-      }
-    } else if let maximumScrollOffset = maximumScrollOffset {
-      switch content.monthsLayout {
-      case .vertical:
+      } else if let maximumScrollOffset = maximumScrollOffset, maximumScrollOffset < bounds.maxY {
         return proposedFrame.applying(.init(translationX: 0, y: bounds.maxY - maximumScrollOffset))
-      case .horizontal:
-        return proposedFrame.applying(.init(translationX: bounds.maxX - maximumScrollOffset, y: 0))
+      } else {
+        return proposedFrame
       }
-    } else {
-      return proposedFrame
+
+    case .horizontal:
+      if let minimumScrollOffset = minimumScrollOffset, minimumScrollOffset > bounds.minX {
+        return proposedFrame.applying(.init(translationX: bounds.minX - minimumScrollOffset, y: 0))
+      } else if let maximumScrollOffset = maximumScrollOffset, maximumScrollOffset < bounds.maxX {
+        return proposedFrame.applying(.init(translationX: bounds.maxX - maximumScrollOffset, y: 0))
+      } else {
+        return proposedFrame
+      }
     }
   }
 
