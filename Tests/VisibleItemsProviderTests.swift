@@ -599,7 +599,9 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected centermost layout item.")
 
     XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(
+      details.maximumScrollOffset?.alignedToPixel(forScreenWithScale: 2) == 3394.5,
+      "Unexpected maximum scroll offset.")
   }
 
   // MARK: Scrolled to content boundary tests

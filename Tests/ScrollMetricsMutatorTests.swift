@@ -26,19 +26,21 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     verticalScrollMetricsProvider = MockScrollMetricsProvider()
     horizontalScrollMetricsProvider = MockScrollMetricsProvider()
 
-    let initialBounds = CGRect(x: 0, y: 0, width: 320, height: 480)
+    let initialSize = CGSize(width: 320, height: 480)
 
     verticalScrollMetricsMutator = ScrollMetricsMutator(
       scrollMetricsProvider: verticalScrollMetricsProvider,
-      bounds: initialBounds,
       scrollAxis: .vertical)
     verticalScrollMetricsMutator.setUpInitialMetricsIfNeeded()
+    verticalScrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
+      viewportSize: initialSize)
 
     horizontalScrollMetricsMutator = ScrollMetricsMutator(
       scrollMetricsProvider: horizontalScrollMetricsProvider,
-      bounds: initialBounds,
       scrollAxis: .horizontal)
     horizontalScrollMetricsMutator.setUpInitialMetricsIfNeeded()
+    horizontalScrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
+      viewportSize: initialSize)
   }
 
   // MARK: Initial setup
