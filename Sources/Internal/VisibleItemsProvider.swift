@@ -564,8 +564,33 @@ final class VisibleItemsProvider {
     if layoutItem.frame.intersects(extendedBounds) {
       numberOfConsecutiveNonIntersectingItems = 0
 
-      // Handle items that actually intersect the visible bounds
+      let month = layoutItem.itemType.month
+
+      // Calculate and the current month frame if it's not cached; it will be used in other
+      // calculations.
+      let monthFrame: CGRect
+      if let cachedMonthFrame = framesForVisibleMonths[month] {
+        monthFrame = cachedMonthFrame
+      } else {
+        let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
+        monthFrame = frameProvider.frameOfMonth(month, withOrigin: monthOrigin)
+      }
+
+      // Use the calculated month frame to determine content boundaries if needed.
+      determineContentBoundariesIfNeeded(
+        for: month,
+        withFrame: monthFrame,
+        minimumScrollOffset: &minimumScrollOffset,
+        maximumScrollOffset: &maximumScrollOffset)
+
+      // Handle items that actually intersect the visible bounds.
       if layoutItem.frame.intersects(bounds) {
+        // Store the month frame from above in the `framesForVisibleMonths` now that we've
+        // determined that it's visible.
+        if framesForVisibleMonths[month] == nil {
+          framesForVisibleMonths[month] = monthFrame
+        }
+
         let itemType = VisibleCalendarItem.ItemType.layoutItemType(layoutItem.itemType)
 
         let calendarItem: AnyCalendarItem
@@ -611,18 +636,6 @@ final class VisibleItemsProvider {
             firstVisibleDay = min(firstVisibleDay ?? day, day)
           }
           lastVisibleDay = max(lastVisibleDay ?? day, day)
-
-          if framesForVisibleMonths[day.month] == nil {
-            let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
-            let monthFrame = frameProvider.frameOfMonth(day.month, withOrigin: monthOrigin)
-            framesForVisibleMonths[day.month] = monthFrame
-
-            determineContentBoundariesIfNeeded(
-              for: day.month,
-              withFrame: monthFrame,
-              minimumScrollOffset: &minimumScrollOffset,
-              maximumScrollOffset: &maximumScrollOffset)
-          }
 
           if framesForVisibleDays[day] == nil {
             framesForVisibleDays[day] = layoutItem.frame
