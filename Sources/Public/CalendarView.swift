@@ -79,30 +79,19 @@ public final class CalendarView: UIView {
   /// Whether or not the calendar's scroll view is currently overscrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
   public var isOverscrolling: Bool {
-    let startOffset: CGFloat
-    let contentEndOffset: CGFloat
-    switch content.monthsLayout {
-    case .vertical:
-      startOffset = scrollView.contentOffset.y
-      contentEndOffset = scrollView.contentOffset.y + scrollView.bounds.height
-    case .horizontal:
-      startOffset = scrollView.contentOffset.x
-      contentEndOffset = scrollView.contentOffset.x + scrollView.bounds.width
-    }
-
     let isOverscrollingAtStart: Bool
     let isOverscrollingAtEnd: Bool
-
-    if let minimumScrollOffset = visibleItemsDetails?.minimumScrollOffset {
-      isOverscrollingAtStart = startOffset < minimumScrollOffset
-    } else {
-      isOverscrollingAtStart = false
-    }
-
-    if let maximumScrollOffset = visibleItemsDetails?.maximumScrollOffset {
-      isOverscrollingAtEnd = contentEndOffset > maximumScrollOffset
-    } else {
-      isOverscrollingAtEnd = false
+    switch content.monthsLayout {
+    case .vertical:
+      isOverscrollingAtStart = scrollView.contentOffset.y < -scrollView.contentInset.top
+      let contentBottom = scrollView.contentOffset.y + scrollView.bounds.height
+      let maxContentBottom = scrollView.contentSize.height + scrollView.contentInset.bottom
+      isOverscrollingAtEnd = contentBottom > maxContentBottom
+    case .horizontal:
+      isOverscrollingAtStart = scrollView.contentOffset.x < -scrollView.contentInset.left
+      let contentRight = scrollView.contentOffset.x + scrollView.bounds.width
+      let maxContentRight = scrollView.contentSize.width + scrollView.contentInset.right
+      isOverscrollingAtEnd = contentRight > maxContentRight
     }
 
     return isOverscrollingAtStart || isOverscrollingAtEnd
@@ -127,6 +116,7 @@ public final class CalendarView: UIView {
       guard
         newValue.size != bounds.size,
         scrollToItemContext == nil,
+        !scrollView.isDragging,
         let framesForVisibleMonths = visibleItemsDetails?.framesForVisibleMonths,
         let firstVisibleMonth = visibleMonthRange?.lowerBound,
         let frameOfFirstVisibleMonth = framesForVisibleMonths[firstVisibleMonth]
@@ -173,6 +163,8 @@ public final class CalendarView: UIView {
 
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.setUpInitialMetricsIfNeeded()
+      scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
+        viewportSize: scrollView.frame.size)
     }
 
     let anchorLayoutItem: LayoutItem
@@ -376,13 +368,9 @@ public final class CalendarView: UIView {
 
     let scrollMetricsMutator: ScrollMetricsMutator
     if let previousScrollMetricsMutator = _scrollMetricsMutator {
-      if
-        bounds != previousScrollMetricsMutator.bounds ||
-        scrollAxis != previousScrollMetricsMutator.scrollAxis
-      {
+      if scrollAxis != previousScrollMetricsMutator.scrollAxis {
         scrollMetricsMutator = ScrollMetricsMutator(
           scrollMetricsProvider: scrollView,
-          bounds: bounds,
           scrollAxis: scrollAxis)
       } else {
         scrollMetricsMutator = previousScrollMetricsMutator
@@ -390,7 +378,6 @@ public final class CalendarView: UIView {
     } else {
       scrollMetricsMutator = ScrollMetricsMutator(
         scrollMetricsProvider: scrollView,
-        bounds: bounds,
         scrollAxis: scrollAxis)
     }
 
