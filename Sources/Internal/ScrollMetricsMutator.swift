@@ -22,15 +22,13 @@ final class ScrollMetricsMutator {
 
   // MARK: Lifecycle
 
-  init(scrollMetricsProvider: ScrollMetricsProvider, bounds: CGRect, scrollAxis: ScrollAxis) {
+  init(scrollMetricsProvider: ScrollMetricsProvider, scrollAxis: ScrollAxis) {
     self.scrollMetricsProvider = scrollMetricsProvider
-    self.bounds = bounds
     self.scrollAxis = scrollAxis
   }
 
   // MARK: Internal
 
-  let bounds: CGRect
   let scrollAxis: ScrollAxis
 
   func setUpInitialMetricsIfNeeded() {
@@ -39,26 +37,27 @@ final class ScrollMetricsMutator {
     scrollMetricsProvider.setStartInset(to: 0, for: .horizontal)
     scrollMetricsProvider.setStartInset(to: 0, for: .vertical)
 
+    scrollMetricsProvider.setSize(to: Self.contentSize, for: scrollAxis)
+    scrollMetricsProvider.setOffset(to: Self.minimumContentOffset, for: scrollAxis)
+
     scrollMetricsProvider.setEndInset(to: 0, for: .horizontal)
     scrollMetricsProvider.setEndInset(to: 0, for: .vertical)
-
-    let size: CGFloat
-    switch scrollAxis {
-    case .vertical:
-      size = bounds.height
-      scrollMetricsProvider.setSize(to: bounds.width, for: .horizontal)
-    case .horizontal:
-      size = bounds.width
-      scrollMetricsProvider.setSize(to: bounds.height, for: .vertical)
-    }
-
-    scrollMetricsProvider.setSize(to: size * Self.contentSizeMultiplier, for: scrollAxis)
-    scrollMetricsProvider.setOffset(to: minimumContentOffset, for: scrollAxis)
 
     hasSetUpInitialScrollMetrics = true
   }
 
+  func updateContentSizePerpendicularToScrollAxis(viewportSize: CGSize) {
+    switch scrollAxis {
+    case .vertical:
+      scrollMetricsProvider.setSize(to: viewportSize.width, for: .horizontal)
+    case .horizontal:
+      scrollMetricsProvider.setSize(to: viewportSize.height, for: .vertical)
+    }
+  }
+
   func updateScrollBoundaries(minimumScrollOffset: CGFloat?, maximumScrollOffset: CGFloat?) {
+    let originalOffset = scrollMetricsProvider.offset(for: scrollAxis)
+
     if let minimumScrollOffset = minimumScrollOffset {
       scrollMetricsProvider.setStartInset(to: -minimumScrollOffset, for: scrollAxis)
     } else {
@@ -71,6 +70,11 @@ final class ScrollMetricsMutator {
     } else {
       scrollMetricsProvider.setEndInset(to: 0, for: scrollAxis)
     }
+
+    // If we don't backup and restore the offset, one-frame glitches / scroll position jumps can
+    // occur if both `minimumScrollOffset` and `maximumScrollOffset` go from both being set to only
+    // one being set.
+    scrollMetricsProvider.setOffset(to: originalOffset, for: scrollAxis)
   }
 
   func loopOffsetIfNeeded(updatingPositionOf layoutItem: LayoutItem) -> LayoutItem {
@@ -80,19 +84,19 @@ final class ScrollMetricsMutator {
     let startInset = scrollMetricsProvider.startInset(for: scrollAxis)
     let endInset = scrollMetricsProvider.endInset(for: scrollAxis)
 
-    if offset < minimumContentOffset && startInset == 0 {
-      scrollMetricsProvider.setOffset(to: maximumContentOffset, for: scrollAxis)
+    if offset < Self.minimumContentOffset && startInset == 0 {
+      scrollMetricsProvider.setOffset(to: Self.maximumContentOffset, for: scrollAxis)
 
       switch scrollAxis {
-      case .vertical: origin.y += loopingRegionSize
-      case .horizontal: origin.x += loopingRegionSize
+      case .vertical: origin.y += Self.loopingRegionSize
+      case .horizontal: origin.x += Self.loopingRegionSize
       }
-    } else if offset > maximumContentOffset && endInset == 0 {
-      scrollMetricsProvider.setOffset(to: minimumContentOffset, for: scrollAxis)
+    } else if offset > Self.maximumContentOffset && endInset == 0 {
+      scrollMetricsProvider.setOffset(to: Self.minimumContentOffset, for: scrollAxis)
 
       switch scrollAxis {
-      case .vertical: origin.y -= loopingRegionSize
-      case .horizontal: origin.x -= loopingRegionSize
+      case .vertical: origin.y -= Self.loopingRegionSize
+      case .horizontal: origin.x -= Self.loopingRegionSize
       }
     }
 
@@ -108,25 +112,14 @@ final class ScrollMetricsMutator {
 
   // MARK: Private
 
-  /// A content size multiplier of 15 is large enough to prevent a high-velocity scroll from causing us to bump into an edge prematurely.
-  private static let contentSizeMultiplier: CGFloat = 15
-  private static let loopingRegionSizeDeterminingMultiplier: CGFloat = 1 / 3
+  private static let contentSize: CGFloat = 30_000 // 10,000 padding from min and max offset
+  private static let minimumContentOffset: CGFloat = 10_000 // 1/3 of content size
+  private static let maximumContentOffset: CGFloat = 20_000 // 2/3 of content size
+  private static let loopingRegionSize: CGFloat = 10_000 // Distance between min and max offset
 
   private let scrollMetricsProvider: ScrollMetricsProvider
 
   private var hasSetUpInitialScrollMetrics = false
-
-  private var minimumContentOffset: CGFloat {
-    scrollMetricsProvider.size(for: scrollAxis) * Self.loopingRegionSizeDeterminingMultiplier
-  }
-
-  private var maximumContentOffset: CGFloat {
-    scrollMetricsProvider.size(for: scrollAxis) * 2 * Self.loopingRegionSizeDeterminingMultiplier
-  }
-
-  private var loopingRegionSize: CGFloat {
-    scrollMetricsProvider.size(for: scrollAxis) * Self.loopingRegionSizeDeterminingMultiplier
-  }
 
 }
 
