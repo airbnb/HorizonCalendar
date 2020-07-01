@@ -620,7 +620,6 @@ final class VisibleItemsProvider {
             determineContentBoundariesIfNeeded(
               for: day.month,
               withFrame: monthFrame,
-              inBounds: bounds,
               minimumScrollOffset: &minimumScrollOffset,
               maximumScrollOffset: &maximumScrollOffset)
           }
@@ -661,11 +660,10 @@ final class VisibleItemsProvider {
   private func determineContentBoundariesIfNeeded(
     for month: Month,
     withFrame monthFrame: CGRect,
-    inBounds bounds: CGRect,
     minimumScrollOffset: inout CGFloat?,
     maximumScrollOffset: inout CGFloat?)
   {
-    if month == content.dayRange.lowerBound.month, monthFrame.intersects(bounds) {
+    if month == content.dayRange.lowerBound.month {
       switch content.monthsLayout {
       case .vertical(let options):
         minimumScrollOffset = monthFrame.minY -
@@ -675,7 +673,7 @@ final class VisibleItemsProvider {
       }
     }
 
-    if month == content.dayRange.upperBound.month, monthFrame.intersects(bounds) {
+    if month == content.dayRange.upperBound.month {
       switch content.monthsLayout {
       case .vertical:
         maximumScrollOffset = monthFrame.maxY
@@ -879,7 +877,6 @@ final class VisibleItemsProvider {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        inBounds: bounds,
         minimumScrollOffset: &minimumScrollOffset,
         maximumScrollOffset: &maximumScrollOffset)
 
@@ -907,7 +904,6 @@ final class VisibleItemsProvider {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        inBounds: bounds,
         minimumScrollOffset: &minimumScrollOffset,
         maximumScrollOffset: &maximumScrollOffset)
 
