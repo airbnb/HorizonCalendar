@@ -156,6 +156,48 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected initial day item.")
   }
 
+  func testInitialVisiblePositionsNeedingCorrection() {
+    let dayItem1 = verticalVisibleItemsProvider.anchorDayItem(
+      for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
+      offset: CGPoint(x: 0, y: 400),
+      scrollPosition: .lastFullyVisiblePosition)
+    XCTAssert(
+      dayItem1.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (142.0, 535.5, 36.0, 36.0)]",
+      "Unexpected initial day item.")
+
+    let dayItem2 = verticalVisibleItemsProvider.anchorDayItem(
+      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
+      offset: CGPoint(x: 0, y: 200),
+      scrollPosition: .firstFullyVisiblePosition)
+    XCTAssert(
+      dayItem2.description == "[itemType: .layoutItemType(.day(2020-12-31)), frame: (188.0, 644.5, 35.5, 35.5)]",
+      "Unexpected initial day item.")
+
+    let dayItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
+      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
+      offset: CGPoint(x: 0, y: 200),
+      scrollPosition: .centered)
+    XCTAssert(
+      dayItem3.description == "[itemType: .layoutItemType(.day(2020-12-31)), frame: (188.0, 644.5, 35.5, 35.5)]",
+      "Unexpected initial day item.")
+
+    let dayItem4 = horizontalVisibleItemsProvider.anchorDayItem(
+      for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
+      offset: CGPoint(x: 600, y: 0),
+      scrollPosition: .lastFullyVisiblePosition)
+    XCTAssert(
+      dayItem4.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (733.5, 133.0, 33.0, 32.5)]",
+      "Unexpected initial day item.")
+
+    let dayItem5 = horizontalVisibleItemsProvider.anchorDayItem(
+      for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 28),
+      offset: CGPoint(x: 100, y: 0),
+      scrollPosition: .firstFullyVisiblePosition)
+    XCTAssert(
+      dayItem5.description == "[itemType: .layoutItemType(.day(2020-12-28)), frame: (168.0, 344.5, 32.5, 32.5)]",
+      "Unexpected initial day item.")
+  }
+
   func testVerticalPinnedDaysOfWeekInitialVisibleDay() {
     let day = Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20)
 
