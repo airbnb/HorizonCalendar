@@ -73,7 +73,7 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
   public var didEndDragging: ((_ visibleDayRange: DayRange) -> Void)?
 
-  /// A closure that is retained that is invoked inside `scrollViewDidEndDecelerating(_:)`.
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
 
   /// Whether or not the calendar's scroll view is currently overscrolling, i.e, whether the rubber-banding or bouncing effect is in
@@ -655,6 +655,10 @@ public final class CalendarView: UIView {
 
 extension CalendarView: UIScrollViewDelegate {
 
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if let anchorLayoutItem = anchorLayoutItem {
       scrollView.performWithoutNotifyingDelegate {
@@ -682,6 +686,10 @@ extension CalendarView: UIScrollViewDelegate {
     setNeedsLayout()
   }
 
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
   public func scrollViewDidEndDragging(
     _ scrollView: UIScrollView,
     willDecelerate decelerate: Bool)
@@ -690,6 +698,10 @@ extension CalendarView: UIScrollViewDelegate {
     didEndDecelerating?(visibleDayRange)
   }
 
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
   public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let visibleDayRange = visibleDayRange else { return }
     didEndDecelerating?(visibleDayRange)
