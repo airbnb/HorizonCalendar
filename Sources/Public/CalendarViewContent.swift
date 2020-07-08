@@ -94,18 +94,30 @@ public final class CalendarViewContent {
 
   /// Configures the background color of `CalendarView`. The default value is `.systemBackground` on iOS 13+, and
   /// `.white` on earlier iOS versions.
+  ///
+  /// - Parameters:
+  ///   - backgroundColor: The backround color of the calendar.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new background color.
   public func withBackgroundColor(_ backgroundColor: UIColor) -> CalendarViewContent {
     self.backgroundColor = backgroundColor
     return self
   }
 
   /// Configures the amount of spacing, in points, between months. The default value is `0`.
+  ///
+  /// - Parameters:
+  ///   - interMonthSpacing: The amount of spacing, in points, between months.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new inter-month-spacing value.
   public func withInterMonthSpacing(_ interMonthSpacing: CGFloat) -> CalendarViewContent {
     self.interMonthSpacing = interMonthSpacing
     return self
   }
 
   /// Configures the amount to inset days and day-of-week items from the edges of a month. The default value is `.zero`.
+  ///
+  /// - Parameters:
+  ///   - monthDayInsets: The amount to inset days and day-of-week items from the edges of a month.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new month-day-insets value.
   public func withMonthDayInsets(_ monthDayInsets: UIEdgeInsets) -> CalendarViewContent {
     self.monthDayInsets = monthDayInsets
     return self
@@ -114,8 +126,12 @@ public final class CalendarViewContent {
   /// Configures the amount of space between two day frames vertically.
   ///
   /// If `verticalDayMargin` and `horizontalDayMargin` are the same, then each day will appear to
-  /// have a 1:1 (square) aspect ratio. If `verticalDayMargin` and `horizontalDayMargin` are
-  //  different, then days can appear wider or taller.
+  /// have a 1:1 (square) aspect ratio. If `verticalDayMargin` and `horizontalDayMargin` are different, then days can
+  /// appear wider or taller.
+  ///
+  /// - Parameters:
+  ///   - verticalDayMargin: The amount of space between two day frames along the vertical axis.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new vertical day margin value.
   public func withVerticalDayMargin(_ verticalDayMargin: CGFloat) -> CalendarViewContent {
     self.verticalDayMargin = verticalDayMargin
     return self
@@ -126,6 +142,10 @@ public final class CalendarViewContent {
   /// If `verticalDayMargin` and `horizontalDayMargin` are the same, then each day will appear to
   /// have a 1:1 (square) aspect ratio. If `verticalDayMargin` and `horizontalDayMargin` are
   /// different, then days can appear wider or taller.
+  ///
+  /// - Parameters:
+  ///   - horizontalDayMargin: The amount of space between two day frames along the horizontal axis.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new horizontal day margin value.
   public func withHorizontalDayMargin(_ horizontalDayMargin: CGFloat) -> CalendarViewContent {
     self.horizontalDayMargin = horizontalDayMargin
     return self

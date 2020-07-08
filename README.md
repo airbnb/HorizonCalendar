@@ -14,7 +14,7 @@ A declarative, performant, calendar UI component that supports use cases ranging
 Features:
 
 - Supports all calendars from `Foundation.Calendar` (Gregorian, Japanese, Hebrew, etc.)
-- Displaying months in a vertically-scrolling or horizontally-scrolling layout
+- Display months in a vertically-scrolling or horizontally-scrolling layout
 - Declarative API that enables unidirectional data flow for updating the content of the calendar
 - A custom layout system that enables virtually infinite date ranges without increasing memory usage
 - Specify custom views for individual days, month headers, and days of the week
@@ -23,9 +23,10 @@ Features:
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
 - Pinning days of the week to the top
-- Showing partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
-- Scrolling to arbitrary dates and months, with or without animation
+- Show partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
+- Scroll to arbitrary dates and months, with or without animation
 - Robust accessibility support
+- Inset the content without affecting the scrollable region using `UIView` layout margins
 
 `HorizonCalendar` serves as the foundation for the date pickers and calendars used in Airbnb's highest trafficked flows.
 
