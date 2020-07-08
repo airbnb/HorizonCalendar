@@ -73,7 +73,7 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
   public var didEndDragging: ((_ visibleDayRange: DayRange) -> Void)?
 
-  /// A closure that is retained that is invoked inside `scrollViewDidEndDecelerating(_:)`.
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
 
   /// Whether or not the calendar's scroll view is currently overscrolling, i.e, whether the rubber-banding or bouncing effect is in
