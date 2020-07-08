@@ -242,24 +242,27 @@ final class FrameProvider {
     assert(
       daySize.width > 0,
       """
-        Calendar metrics and bounds resulted in a negative or zero size of \( daySize.width) for
-        each day.
+        Calendar metrics and size resulted in a negative-or-zero size of \(daySize.width) points for
+        each day. If ignored, this will cause very odd / incorrect layouts.
       """)
 
     if case .horizontal = monthsLayout {
       let maxNumberOfWeekRowsPerMonth = CGFloat(6)
 
-      let insetHeight = size.height - content.monthDayInsets.top - content.monthDayInsets.bottom
-      let availableHeight = insetHeight -
+      let availableHeight = size.height -
         monthHeaderHeight -
-        daySize.height -
-        ((daySize.height + content.verticalDayMargin) * maxNumberOfWeekRowsPerMonth)
-      let points = availableHeight / maxNumberOfWeekRowsPerMonth
+        content.monthDayInsets.top -
+        daySize.height - content.verticalDayMargin -
+        (maxNumberOfWeekRowsPerMonth * daySize.height) -
+        ((maxNumberOfWeekRowsPerMonth - 1) * content.verticalDayMargin) -
+        content.monthDayInsets.bottom
 
       assert(
-        points > 0,
+        availableHeight > 0,
         """
-          Calendar metrics and bounds resulted in a negative or zero size of \(points) for each day.
+          Calendar metrics and size resulted in a negative-or-zero amount of remaining height
+          (\(availableHeight) points) after allocating room for calendar elements. If ignored, this
+          will cause very odd / incorrect layouts.
         """)
     }
   }
