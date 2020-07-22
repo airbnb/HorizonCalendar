@@ -106,6 +106,8 @@ final class VisibleItemsProvider {
     var centermostLayoutItem = previouslyVisibleLayoutItem
     var firstVisibleDay: Day?
     var lastVisibleDay: Day?
+    var firstVisibleMonth: Month?
+    var lastVisibleMonth: Month?
     var framesForVisibleMonths = [Month: CGRect]()
     var framesForVisibleDays = [Day: CGRect]()
     var minimumScrollOffset: CGFloat?
@@ -160,6 +162,8 @@ final class VisibleItemsProvider {
           centermostLayoutItem: &centermostLayoutItem,
           firstVisibleDay: &firstVisibleDay,
           lastVisibleDay: &lastVisibleDay,
+          firstVisibleMonth: &firstVisibleMonth,
+          lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
           minimumScrollOffset: &minimumScrollOffset,
@@ -186,6 +190,8 @@ final class VisibleItemsProvider {
           centermostLayoutItem: &centermostLayoutItem,
           firstVisibleDay: &firstVisibleDay,
           lastVisibleDay: &lastVisibleDay,
+          firstVisibleMonth: &firstVisibleMonth,
+          lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
           minimumScrollOffset: &minimumScrollOffset,
@@ -213,6 +219,13 @@ final class VisibleItemsProvider {
       visibleDayRange = nil
     }
 
+    let visibleMonthRange: MonthRange?
+    if let firstVisibleMonth = firstVisibleMonth, let lastVisibleMonth = lastVisibleMonth {
+      visibleMonthRange = firstVisibleMonth...lastVisibleMonth
+    } else {
+      visibleMonthRange = nil
+    }
+
     // Handle overlay items
     handleOverlayItemsIfNeeded(
       bounds: bounds,
@@ -226,6 +239,7 @@ final class VisibleItemsProvider {
       visibleItems: visibleItems,
       centermostLayoutItem: centermostLayoutItem,
       visibleDayRange: visibleDayRange,
+      visibleMonthRange: visibleMonthRange,
       framesForVisibleMonths: framesForVisibleMonths,
       framesForVisibleDays: framesForVisibleDays,
       minimumScrollOffset: minimumScrollOffset,
@@ -240,6 +254,8 @@ final class VisibleItemsProvider {
   {
     var visibleItems = [VisibleCalendarItem]()
 
+    // Look behind / ahead by 1 month to ensure that users can navigate by heading, even if an
+    // adjacent month header is off-screen.
     let lowerBoundMonth = calendar.month(byAddingMonths: -1, to: visibleMonthRange.lowerBound)
     let upperBoundMonth = calendar.month(byAddingMonths: 1, to: visibleMonthRange.upperBound)
     let monthRange = lowerBoundMonth...upperBoundMonth
@@ -551,6 +567,8 @@ final class VisibleItemsProvider {
     centermostLayoutItem: inout LayoutItem,
     firstVisibleDay: inout Day?,
     lastVisibleDay: inout Day?,
+    firstVisibleMonth: inout Month?,
+    lastVisibleMonth: inout Month?,
     framesForVisibleMonths: inout [Month: CGRect],
     framesForVisibleDays: inout [Day: CGRect],
     minimumScrollOffset: inout CGFloat?,
@@ -565,6 +583,9 @@ final class VisibleItemsProvider {
       numberOfConsecutiveNonIntersectingItems = 0
 
       let month = layoutItem.itemType.month
+
+      firstVisibleMonth = min(firstVisibleMonth ?? month, month)
+      lastVisibleMonth = max(lastVisibleMonth ?? month, month)
 
       // Calculate and the current month frame if it's not cached; it will be used in other
       // calculations.
@@ -960,6 +981,7 @@ struct VisibleItemsDetails {
   let visibleItems: Set<VisibleCalendarItem>
   let centermostLayoutItem: LayoutItem
   let visibleDayRange: DayRange?
+  let visibleMonthRange: MonthRange?
   let framesForVisibleMonths: [Month: CGRect]
   let framesForVisibleDays: [Day: CGRect]
   let minimumScrollOffset: CGFloat?
