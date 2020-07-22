@@ -204,8 +204,6 @@ public final class CalendarView: UIView {
       UIAccessibility.post(
         notification: .layoutChanged,
         argument: visibleViewsForVisibleItems[element.correspondingItem])
-    } else {
-      UIAccessibility.post(notification: .layoutChanged, argument: focusedAccessibilityElement)
     }
   }
 
