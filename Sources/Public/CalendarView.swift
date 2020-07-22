@@ -99,7 +99,7 @@ public final class CalendarView: UIView {
 
   /// The range of months that are partially of fully visible.
   public var visibleMonthRange: MonthRange? {
-    visibleDayRange.map { $0.lowerBound.month...$0.upperBound.month }
+    visibleItemsDetails?.visibleMonthRange
   }
 
   /// The range of days that are partially or fully visible.
@@ -204,8 +204,6 @@ public final class CalendarView: UIView {
       UIAccessibility.post(
         notification: .layoutChanged,
         argument: visibleViewsForVisibleItems[element.correspondingItem])
-    } else {
-      UIAccessibility.post(notification: .layoutChanged, argument: focusedAccessibilityElement)
     }
   }
 
@@ -725,7 +723,7 @@ extension CalendarView {
       }
       guard
         let visibleItemsDetails = visibleItemsDetails,
-        let visibleDayRange = visibleItemsDetails.visibleDayRange
+        let visibleMonthRange = visibleMonthRange
       else
       {
         return nil
@@ -733,10 +731,7 @@ extension CalendarView {
 
       let visibleItems = visibleItemsProvider.visibleItemsForAccessibilityElements(
         surroundingPreviouslyVisibleLayoutItem: visibleItemsDetails.centermostLayoutItem,
-        visibleMonthRange: MonthRange(
-          uncheckedBounds: (
-            lower: visibleDayRange.lowerBound.month,
-            upper: visibleDayRange.upperBound.month)))
+        visibleMonthRange: visibleMonthRange)
 
       var elements = [Any]()
       for visibleCalendarItem in visibleItems {
