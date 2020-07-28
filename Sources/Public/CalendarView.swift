@@ -173,6 +173,7 @@ public final class CalendarView: UIView {
   }
 
   public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
     setNeedsLayout()
   }
 
