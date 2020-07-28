@@ -39,6 +39,7 @@ final class FrameProviderTests: XCTestCase {
         .withVerticalDayMargin(20)
         .withHorizontalDayMargin(10),
       size: size,
+      layoutMargins: .zero,
       scale: 3,
       monthHeaderHeight: monthHeaderHeight)
     verticalPinnedDaysOfWeekFrameProvider = FrameProvider(
@@ -51,6 +52,7 @@ final class FrameProviderTests: XCTestCase {
         .withVerticalDayMargin(20)
         .withHorizontalDayMargin(10),
       size: size,
+      layoutMargins: .zero,
       scale: 3,
       monthHeaderHeight: monthHeaderHeight)
     verticalPartialMonthFrameProvider = FrameProvider(
@@ -64,6 +66,7 @@ final class FrameProviderTests: XCTestCase {
         .withVerticalDayMargin(20)
         .withHorizontalDayMargin(10),
       size: size,
+      layoutMargins: .zero,
       scale: 3,
       monthHeaderHeight: monthHeaderHeight)
     horizontalFrameProvider = FrameProvider(
@@ -76,6 +79,7 @@ final class FrameProviderTests: XCTestCase {
         .withVerticalDayMargin(20)
         .withHorizontalDayMargin(10),
       size: size,
+      layoutMargins: .zero,
       scale: 3,
       monthHeaderHeight: monthHeaderHeight)
   }

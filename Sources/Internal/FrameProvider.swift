@@ -13,8 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import CoreGraphics
-import Foundation
+import UIKit
 
 /// Provides frame and size information about all core layout items. The calendar is laid out lazily, starting with an initial known layout
 /// frame (like the frame of an initially visible month header). All subsequent layout calculations are done by laying out items adjacent to
@@ -26,17 +25,19 @@ final class FrameProvider {
   init(
     content: CalendarViewContent,
     size: CGSize,
+    layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat)
   {
     self.content = content
     self.size = size
+    self.layoutMargins = layoutMargins
     self.scale = scale
     self.monthHeaderHeight = monthHeaderHeight
 
     switch content.monthsLayout {
     case .vertical:
-      monthWidth = size.width
+      monthWidth = size.width - layoutMargins.leading - layoutMargins.trailing
     case .horizontal(let _monthWidth):
       monthWidth = _monthWidth
     }
@@ -53,6 +54,7 @@ final class FrameProvider {
   // MARK: Internal
 
   let size: CGSize
+  let layoutMargins: NSDirectionalEdgeInsets
   let scale: CGFloat
   let daySize: CGSize
 
