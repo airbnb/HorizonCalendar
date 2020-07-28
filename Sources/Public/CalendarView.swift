@@ -142,12 +142,39 @@ public final class CalendarView: UIView {
     }
   }
 
+  /// `CalendarView` only supports positive values for `layoutMargins`. Negative values will be changed to `0`.
+  public override var layoutMargins: UIEdgeInsets {
+    didSet {
+      super.layoutMargins = UIEdgeInsets(
+        top: max(layoutMargins.top, 0),
+        left: max(layoutMargins.left, 0),
+        bottom: max(layoutMargins.bottom, 0),
+        right: max(layoutMargins.right, 0))
+    }
+  }
+
+  /// `CalendarView` only supports positive values for `directionalLayoutMargins`. Negative values will be changed to `0`.
+  public override var directionalLayoutMargins: NSDirectionalEdgeInsets {
+    didSet {
+      super.directionalLayoutMargins = NSDirectionalEdgeInsets(
+        top: max(directionalLayoutMargins.top, 0),
+        leading: max(directionalLayoutMargins.leading, 0),
+        bottom: max(directionalLayoutMargins.bottom, 0),
+        trailing: max(directionalLayoutMargins.trailing, 0))
+    }
+  }
+
   public override func didMoveToWindow() {
     super.didMoveToWindow()
 
     if window == nil {
       scrollToItemDisplayLink?.invalidate()
     }
+  }
+
+  public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    setNeedsLayout()
   }
 
   public override func layoutSubviews() {
@@ -388,6 +415,7 @@ public final class CalendarView: UIView {
     if
       let existingVisibleItemsProvider = _visibleItemsProvider,
       existingVisibleItemsProvider.size == bounds.size,
+      existingVisibleItemsProvider.layoutMargins == directionalLayoutMargins,
       existingVisibleItemsProvider.scale == scale
     {
       return existingVisibleItemsProvider
@@ -396,6 +424,7 @@ public final class CalendarView: UIView {
         calendar: calendar,
         content: content,
         size: bounds.size,
+        layoutMargins: directionalLayoutMargins,
         scale: scale,
         monthHeaderHeight: monthHeaderHeight())
       _visibleItemsProvider = visibleItemsProvider
@@ -404,9 +433,12 @@ public final class CalendarView: UIView {
   }
 
   private var initialMonthHeaderAnchorLayoutItem: LayoutItem {
-    visibleItemsProvider.anchorMonthHeaderItem(
+    let offset = CGPoint(
+      x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
+      y: scrollView.contentOffset.y + directionalLayoutMargins.top)
+    return visibleItemsProvider.anchorMonthHeaderItem(
       for: content.monthRange.lowerBound,
-      offset: scrollView.contentOffset,
+      offset: offset,
       scrollPosition: .firstFullyVisiblePosition)
   }
 

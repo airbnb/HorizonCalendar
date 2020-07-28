@@ -1535,6 +1535,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))),
     size: size,
+    layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50)
 
@@ -1546,6 +1547,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))),
     size: size,
+    layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50)
 
@@ -1558,6 +1560,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         monthsLayout: .vertical(
           options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
     size: size,
+    layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50)
 
@@ -1569,6 +1572,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .horizontal(monthWidth: 300))),
     size: size,
+    layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50)
 

@@ -26,6 +26,7 @@ final class VisibleItemsProvider {
     calendar: Calendar,
     content: CalendarViewContent,
     size: CGSize,
+    layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat)
   {
@@ -38,6 +39,7 @@ final class VisibleItemsProvider {
     frameProvider = FrameProvider(
       content: content,
       size: size,
+      layoutMargins: layoutMargins,
       scale: scale,
       monthHeaderHeight: monthHeaderHeight)
   }
@@ -48,6 +50,10 @@ final class VisibleItemsProvider {
 
   var size: CGSize {
     frameProvider.size
+  }
+
+  var layoutMargins: NSDirectionalEdgeInsets {
+    frameProvider.layoutMargins
   }
 
   var scale: CGFloat {
@@ -701,18 +707,19 @@ final class VisibleItemsProvider {
       switch content.monthsLayout {
       case .vertical(let options):
         minimumScrollOffset = monthFrame.minY -
-          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0) -
+          layoutMargins.top
       case .horizontal:
-        minimumScrollOffset = monthFrame.minX
+        minimumScrollOffset = monthFrame.minX - layoutMargins.leading
       }
     }
 
     if month == content.dayRange.upperBound.month {
       switch content.monthsLayout {
       case .vertical:
-        maximumScrollOffset = monthFrame.maxY
+        maximumScrollOffset = monthFrame.maxY + layoutMargins.bottom
       case .horizontal:
-        maximumScrollOffset = monthFrame.maxX
+        maximumScrollOffset = monthFrame.maxX + layoutMargins.trailing
       }
     }
   }
