@@ -506,7 +506,6 @@ public final class CalendarView: UIView {
 
     let firstMonthHeaderItem = content.monthHeaderItemProvider(content.monthRange.lowerBound)
     let firstMonthHeader = firstMonthHeaderItem.buildView()
-    configureHorizontalInsets(for: firstMonthHeader)
     firstMonthHeaderItem.updateViewModel(view: firstMonthHeader)
 
     let size = firstMonthHeader.systemLayoutSizeFitting(
@@ -573,16 +572,6 @@ public final class CalendarView: UIView {
     } else {
       view.isUserInteractionEnabled = false
     }
-
-    // Update the horizontal layout margins for month headers since they're displayed edge-to-edge.
-    if case .layoutItemType(.monthHeader) = visibleItem.itemType {
-      configureHorizontalInsets(for: view.contentView)
-    }
-  }
-
-  private func configureHorizontalInsets(for contentView: UIView) {
-    contentView.layoutMargins.left = content.monthDayInsets.left
-    contentView.layoutMargins.right = content.monthDayInsets.right
   }
 
   private func startScrollingTowardTargetItem() {
