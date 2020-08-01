@@ -80,6 +80,7 @@ extension VisibleCalendarItem {
   enum ItemType: Equatable, Hashable {
     case layoutItemType(LayoutItem.ItemType)
     case pinnedDayOfWeek(DayOfWeekPosition)
+    case pinnedDaysOfWeekRowBackground
     case dayRange(DayRange)
     case overlayItem(CalendarViewContent.OverlaidItemLocation)
 
@@ -87,6 +88,7 @@ extension VisibleCalendarItem {
       switch self {
       case .layoutItemType: return 500
       case .pinnedDayOfWeek: return 1000
+      case .pinnedDaysOfWeekRowBackground: return 999
       case .dayRange: return 250
       case .overlayItem: return 750
       }
