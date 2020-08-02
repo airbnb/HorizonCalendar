@@ -809,6 +809,22 @@ final class VisibleItemsProvider {
         hasUpdatesHeightOfPinnedContent = true
       }
     }
+
+    // The pinned days-of-the-week row needs a background view to prevent gaps between individual
+    // items as content is scrolled underneath.
+    visibleItems.insert(
+      VisibleCalendarItem(
+        calendarItem: CalendarItem<UIView, Int>.init(
+          viewModel: 0,
+          styleID: "PinnedDaysOfTheWeekRowBackground",
+          buildView: { [unowned self] in
+            let view = UIView()
+            view.backgroundColor = self.content.backgroundColor
+            return view
+          },
+          updateViewModel: { _, _ in }),
+        itemType: .pinnedDaysOfWeekRowBackground,
+        frame: frameProvider.frameOfPinnedDayOfWeekBackground(yContentOffset: yContentOffset)))
   }
 
   private func handleOverlayItemsIfNeeded(

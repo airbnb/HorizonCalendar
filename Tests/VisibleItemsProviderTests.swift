@@ -405,6 +405,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-06-04)), frame: (188.0, 530.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-06-13)), frame: (279.5, 585.5, 35.5, 36.0)]",
       "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 450.0, 320.0, 50.0)]",
+      "[itemType: .pinnedDaysOfWeekRowBackground, frame: (0.0, 450.0, 320.0, 35.5)]",
     ]
 
     XCTAssert(
@@ -719,6 +720,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-01-17)), frame: (233.5, 236.5, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 45.0, 320.0, 50.0)]",
       "[itemType: .layoutItemType(.day(2020-01-12)), frame: (5.0, 236.5, 35.5, 35.5)]",
+      "[itemType: .pinnedDaysOfWeekRowBackground, frame: (0.0, 50.0, 320.0, 35.5)]",
     ]
 
     XCTAssert(
@@ -1630,6 +1632,8 @@ extension VisibleCalendarItem: CustomStringConvertible {
       itemTypeText = layoutItemType.description
     case .pinnedDayOfWeek(let position):
       itemTypeText = ".pinnedDayOfWeek(\(position))"
+    case .pinnedDaysOfWeekRowBackground:
+      itemTypeText = ".pinnedDaysOfWeekRowBackground"
     case .dayRange(let dayRange):
       itemTypeText = ".dayRange(\(dayRange.lowerBound), \(dayRange.upperBound))"
     case .overlayItem(let overlaidItemLocation):

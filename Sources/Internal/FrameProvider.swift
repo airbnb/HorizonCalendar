@@ -217,13 +217,13 @@ final class FrameProvider {
     yContentOffset: CGFloat)
     -> CGRect
   {
-    let x = content.monthDayInsets.left +
+    let x = layoutMargins.leading + content.monthDayInsets.left +
       (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin))
     return CGRect(origin: CGPoint(x: x, y: yContentOffset), size: daySize)
   }
 
   func frameOfPinnedDayOfWeekBackground(yContentOffset: CGFloat) -> CGRect {
-    CGRect(x: 0, y: yContentOffset, width: monthWidth, height: daySize.height)
+    CGRect(x: layoutMargins.leading, y: yContentOffset, width: monthWidth, height: daySize.height)
   }
 
   // MARK: Private
