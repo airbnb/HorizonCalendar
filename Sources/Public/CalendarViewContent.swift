@@ -409,7 +409,7 @@ extension CalendarViewContent {
       self.color = color
     }
 
-    // MARK: public
+    // MARK: Public
 
     @available(iOS 13.0, *)
     public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
