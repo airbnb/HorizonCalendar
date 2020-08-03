@@ -618,6 +618,36 @@ final class VisibleItemsProvider {
                 ?? content.monthHeaderItemProvider(month)
             })
 
+          // Create a visible item for the separator view, if needed.
+          if
+            !content.monthsLayout.pinDaysOfWeekToTop,
+            let separatorOptions = content.daysOfTheWeekRowSeparatorOptions
+          {
+            let separatorItemType = VisibleCalendarItem.ItemType.daysOfWeekRowSeparator(month)
+            let separatorCalendarItem = calendarItemCache.value(
+              for: separatorItemType,
+              missingValueProvider: {
+                previousCalendarItemCache?[separatorItemType] ??
+                  CalendarItem<UIView, Month>(
+                    viewModel: month,
+                    styleID: "DaysOfTheWeekRowSeparator",
+                    buildView: {
+                      let view = UIView()
+                      view.backgroundColor = separatorOptions.color
+                      return view
+                    },
+                    updateViewModel: { _, _ in })
+              })
+
+            visibleItems.insert(
+              VisibleCalendarItem(
+                calendarItem: separatorCalendarItem,
+                itemType: separatorItemType,
+                frame: frameProvider.frameOfDaysOfWeekRowSeparator(
+                  inMonthWithOrigin: monthFrame.origin,
+                  separatorHeight: separatorOptions.height)))
+          }
+
         case let .dayOfWeekInMonth(dayOfWeekPosition, month):
           calendarItem = calendarItemCache.value(
             for: itemType,
@@ -800,7 +830,34 @@ final class VisibleItemsProvider {
           },
           updateViewModel: { _, _ in }),
         itemType: .pinnedDaysOfWeekRowBackground,
-        frame: frameProvider.frameOfPinnedDayOfWeekBackground(yContentOffset: yContentOffset)))
+        frame: frameProvider.frameOfPinnedDaysOfWeekRowBackground(yContentOffset: yContentOffset)))
+
+    // Create a visible item for the separator view, if needed.
+    if let separatorOptions = content.daysOfTheWeekRowSeparatorOptions {
+      let separatorItemType = VisibleCalendarItem.ItemType.pinnedDaysOfWeekRowSeparator
+      let separatorCalendarItem = calendarItemCache.value(
+        for: separatorItemType,
+        missingValueProvider: {
+          previousCalendarItemCache?[separatorItemType] ??
+            CalendarItem<UIView, Int>(
+              viewModel: 0,
+              styleID: "PinnedDaysOfTheWeekRowSeparator",
+              buildView: {
+                let view = UIView()
+                view.backgroundColor = separatorOptions.color
+                return view
+              },
+              updateViewModel: { _, _ in })
+        })
+
+      visibleItems.insert(
+        VisibleCalendarItem(
+          calendarItem: separatorCalendarItem,
+          itemType: separatorItemType,
+          frame: frameProvider.frameOfPinnedDaysOfWeekRowSeparator(
+            yContentOffset: yContentOffset,
+            separatorHeight: separatorOptions.height)))
+    }
   }
 
   private func handleOverlayItemsIfNeeded(

@@ -81,6 +81,8 @@ extension VisibleCalendarItem {
     case layoutItemType(LayoutItem.ItemType)
     case pinnedDayOfWeek(DayOfWeekPosition)
     case pinnedDaysOfWeekRowBackground
+    case pinnedDaysOfWeekRowSeparator
+    case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(CalendarViewContent.OverlaidItemLocation)
 
@@ -89,6 +91,8 @@ extension VisibleCalendarItem {
       case .layoutItemType: return 500
       case .pinnedDayOfWeek: return 1000
       case .pinnedDaysOfWeekRowBackground: return 999
+      case .pinnedDaysOfWeekRowSeparator: return 1001
+      case .daysOfWeekRowSeparator: return 501
       case .dayRange: return 250
       case .overlayItem: return 750
       }
