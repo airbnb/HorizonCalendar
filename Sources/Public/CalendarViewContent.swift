@@ -151,6 +151,19 @@ public final class CalendarViewContent {
     return self
   }
 
+  /// Configures the days-of-the-week row's separator options. The separator appears below the days-of-the-week row.
+  ///
+  /// - Parameters:
+  ///   - options: An instance that has properties to control various aspects of the separator's design.
+  /// - Returns: A mutated `CalendarViewContent` instance with a days-of-the-week row separator configured.
+  public func withDaysOfTheWeekRowSeparator(
+    options: DaysOfTheWeekRowSeparatorOptions)
+    -> CalendarViewContent
+  {
+    daysOfTheWeekRowSeparatorOptions = options
+    return self
+  }
+
   /// Configures the month header item provider.
   ///
   /// `CalendarView` invokes the provided `monthHeaderItemProvider` for each month in the range of months being
@@ -293,6 +306,7 @@ public final class CalendarViewContent {
   private(set) var monthDayInsets: UIEdgeInsets = .zero
   private(set) var verticalDayMargin: CGFloat = 0
   private(set) var horizontalDayMargin: CGFloat = 0
+  private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
   private(set) var monthHeaderItemProvider: (Month) -> AnyCalendarItem
   private(set) var dayOfWeekItemProvider: (_ month: Month?, _ weekdayIndex: Int) -> AnyCalendarItem
@@ -372,6 +386,41 @@ extension CalendarViewContent {
     /// available bounds.
     public let availableBounds: CGRect
 
+  }
+
+}
+
+// MARK: - CalendarViewContent.DaysOfTheWeekRowSeparatorOptions
+
+extension CalendarViewContent {
+
+  /// Used to configure the days-of-the-week row's separator.
+  public struct DaysOfTheWeekRowSeparatorOptions {
+
+    // MARK: Lifecycle
+
+    /// Initialized a new `DaysOfTheWeekRowSeparatorOptions`.
+    ///
+    /// - Parameters:
+    ///   - height: The height of the separator in points.
+    ///   - color: The color of the separator.
+    public init(height: CGFloat = 1, color: UIColor = .lightGray) {
+      self.height = height
+      self.color = color
+    }
+
+    // MARK: public
+
+    @available(iOS 13.0, *)
+    public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
+      height: 1,
+      color: .separator)
+
+    /// The height of the separator in points.
+    public var height: CGFloat
+
+    /// The color of the separator.
+    public var color: UIColor
   }
 
 }
