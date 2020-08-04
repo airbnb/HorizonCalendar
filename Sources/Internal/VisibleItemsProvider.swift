@@ -575,8 +575,7 @@ final class VisibleItemsProvider {
   {
     let month = layoutItem.itemType.month
 
-    // Calculate and the current month frame if it's not cached; it will be used in other
-    // calculations.
+    // Calculate the current month frame if it's not cached; it will be used in other calculations.
     let monthFrame: CGRect
     if let cachedMonthFrame = framesForVisibleMonths[month] {
       monthFrame = cachedMonthFrame
