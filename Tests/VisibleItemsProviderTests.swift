@@ -605,6 +605,59 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected maximum scroll offset.")
   }
 
+  func testHorizontalLeadingMonthPartiallyClipped() {
+    let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
+      surroundingPreviouslyVisibleLayoutItem: LayoutItem(
+        itemType: .monthHeader(Month(era: 1, year: 2020, month: 2, isInGregorianCalendar: true)),
+        frame: CGRect(x: 315, y: 0, width: 300, height: 50)),
+      offset: CGPoint(x: 295, y: 0))
+
+    let expectedVisibleItemDescriptions: Set<String> = [
+      "[itemType: .layoutItemType(.day(2020-02-18)), frame: (405.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-02)), frame: (577.0, 80.0, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-23)), frame: (320.0, 344.5, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-05)), frame: (448.5, 185.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-10)), frame: (363.0, 238.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-20)), frame: (491.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-22)), frame: (577.0, 291.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-02)), frame: (491.5, 80.0, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-02)), frame: (448.5, 80.0, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-15)), frame: (577.0, 238.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-03)), frame: (363.0, 185.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-27)), frame: (491.5, 344.5, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-01)), frame: (577.0, 133.0, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-29)), frame: (577.0, 344.5, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-26)), frame: (448.5, 344.5, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-09)), frame: (320.0, 238.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-16)), frame: (320.0, 291.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-13)), frame: (491.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-06)), frame: (491.5, 185.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.second, 2020-02)), frame: (363.0, 80.0, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-08)), frame: (577.0, 185.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-21)), frame: (534.5, 291.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-02)), frame: (320.0, 80.0, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-17)), frame: (363.0, 291.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-11)), frame: (405.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-14)), frame: (534.5, 238.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-02)), frame: (405.5, 80.0, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-04)), frame: (405.5, 185.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-12)), frame: (448.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-19)), frame: (448.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-24)), frame: (363.0, 344.5, 32.5, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-25)), frame: (405.5, 344.5, 33.0, 32.5)]",
+      "[itemType: .layoutItemType(.day(2020-02-02)), frame: (320.0, 185.5, 33.0, 33.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-28)), frame: (534.5, 344.5, 32.5, 32.5)]",
+      "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-02)), frame: (534.5, 80.0, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-02)), frame: (315.0, 0.0, 300.0, 50.0)]",
+      "[itemType: .layoutItemType(.day(2020-02-07)), frame: (534.5, 185.5, 32.5, 33.0)]",
+      "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 0.0, 300.0, 50.0)]",
+    ]
+
+    XCTAssert(
+      Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
+      "Unexpected visible items.")
+  }
+
   // MARK: Scrolled to content boundary tests
 
   func testBoundaryVerticalVisibleItemsContext() {
