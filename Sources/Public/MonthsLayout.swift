@@ -33,6 +33,13 @@ public enum MonthsLayout {
 
   // MARK: Internal
 
+  var isHorizontal: Bool {
+    switch self {
+    case .vertical: return false
+    case .horizontal: return true
+    }
+  }
+
   var pinDaysOfWeekToTop: Bool {
     switch self {
     case .vertical(let options): return options.pinDaysOfWeekToTop

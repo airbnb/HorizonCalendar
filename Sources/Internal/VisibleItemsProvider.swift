@@ -142,8 +142,6 @@ final class VisibleItemsProvider {
     let maxY = max(bounds.maxY, previouslyVisibleLayoutItem.frame.maxY)
     let extendedBounds = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
 
-    var numberOfConsecutiveNonIntersectingItems = 0
-
     var handledDayRanges = Set<DayRange>()
 
     var originsForMonths = [Month: CGPoint]()
@@ -164,7 +162,6 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: true,
-          numberOfConsecutiveNonIntersectingItems: &numberOfConsecutiveNonIntersectingItems,
           centermostLayoutItem: &centermostLayoutItem,
           firstVisibleDay: &firstVisibleDay,
           lastVisibleDay: &lastVisibleDay,
@@ -192,7 +189,6 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: false,
-          numberOfConsecutiveNonIntersectingItems: &numberOfConsecutiveNonIntersectingItems,
           centermostLayoutItem: &centermostLayoutItem,
           firstVisibleDay: &firstVisibleDay,
           lastVisibleDay: &lastVisibleDay,
@@ -326,13 +322,6 @@ final class VisibleItemsProvider {
   }
 
   // MARK: Private
-
-  // For horizontally laid out calendars, we will encounter off-screen items before once again
-  // encountering on-screen items. For example, when the edge of a month becomes visible on the
-  // trailing edge of the screen, only the first day of each week in that month will intersect the
-  // visible bounds. This constant is used to ensure that we don't stop looking for visible items
-  // too early.
-  private static let numberOfConsecutiveNonIntersectingItemsToConsider = 12
 
   private let layoutItemTypeEnumerator: LayoutItemTypeEnumerator
   private let frameProvider: FrameProvider
@@ -569,7 +558,6 @@ final class VisibleItemsProvider {
     inBounds bounds: CGRect,
     extendedBounds: CGRect,
     isLookingBackwards: Bool,
-    numberOfConsecutiveNonIntersectingItems: inout Int,
     centermostLayoutItem: inout LayoutItem,
     firstVisibleDay: inout Day?,
     lastVisibleDay: inout Day?,
@@ -585,23 +573,24 @@ final class VisibleItemsProvider {
     handledDayRanges: inout Set<DayRange>,
     shouldStop: inout Bool)
   {
-    if layoutItem.frame.intersects(extendedBounds) {
-      numberOfConsecutiveNonIntersectingItems = 0
+    let month = layoutItem.itemType.month
 
-      let month = layoutItem.itemType.month
+    // Calculate and the current month frame if it's not cached; it will be used in other
+    // calculations.
+    let monthFrame: CGRect
+    if let cachedMonthFrame = framesForVisibleMonths[month] {
+      monthFrame = cachedMonthFrame
+    } else {
+      let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
+      monthFrame = frameProvider.frameOfMonth(month, withOrigin: monthOrigin)
+    }
 
+    if
+      layoutItem.frame.intersects(extendedBounds) ||
+      (content.monthsLayout.isHorizontal && monthFrame.intersects(extendedBounds))
+    {
       firstVisibleMonth = min(firstVisibleMonth ?? month, month)
       lastVisibleMonth = max(lastVisibleMonth ?? month, month)
-
-      // Calculate and the current month frame if it's not cached; it will be used in other
-      // calculations.
-      let monthFrame: CGRect
-      if let cachedMonthFrame = framesForVisibleMonths[month] {
-        monthFrame = cachedMonthFrame
-      } else {
-        let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
-        monthFrame = frameProvider.frameOfMonth(month, withOrigin: monthOrigin)
-      }
 
       // Use the calculated month frame to determine content boundaries if needed.
       determineContentBoundariesIfNeeded(
@@ -681,19 +670,7 @@ final class VisibleItemsProvider {
           inBounds: bounds)
       }
     } else {
-      numberOfConsecutiveNonIntersectingItems += 1
-
-      switch content.monthsLayout {
-      case .vertical:
-        shouldStop = true
-      case .horizontal:
-        if
-          numberOfConsecutiveNonIntersectingItems >
-            Self.numberOfConsecutiveNonIntersectingItemsToConsider
-        {
-          shouldStop = true
-        }
-      }
+      shouldStop = true
     }
   }
 
