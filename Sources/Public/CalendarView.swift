@@ -168,7 +168,7 @@ public final class CalendarView: UIView {
     super.didMoveToWindow()
 
     if window == nil {
-      scrollToItemDisplayLink?.invalidate()
+      scrollToItemContext = nil
     }
   }
 
@@ -357,14 +357,15 @@ public final class CalendarView: UIView {
   private var _visibleItemsProvider: VisibleItemsProvider?
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleCalendarItem: CalendarItemView]()
-  private var scrollToItemContext: ScrollToItemContext?
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
   private var cachedAccessibilityElements: [Any]?
   private var focusedAccessibilityElement: Any?
 
-  private var calendar: Calendar {
-    content.calendar
+  private var scrollToItemContext: ScrollToItemContext? {
+    willSet {
+      scrollToItemDisplayLink?.invalidate()
+    }
   }
 
   private lazy var scrollView: NoContentInsetAdjustmentScrollView = {
@@ -375,6 +376,10 @@ public final class CalendarView: UIView {
     scrollView.delegate = self
     return scrollView
   }()
+
+  private var calendar: Calendar {
+    content.calendar
+  }
 
   private var isReadyForLayout: Bool {
     bounds.width > 0 && bounds.height > 0
@@ -575,19 +580,17 @@ public final class CalendarView: UIView {
   }
 
   private func startScrollingTowardTargetItem() {
-    scrollToItemDisplayLink?.invalidate()
-
-    scrollToItemAnimationStartTime = CACurrentMediaTime()
     let scrollToItemDisplayLink = CADisplayLink(
       target: self,
       selector: #selector(scrollToItemDisplayLinkFired))
+
+    scrollToItemAnimationStartTime = CACurrentMediaTime()
+
     scrollToItemDisplayLink.add(to: .main, forMode: .common)
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
   }
 
   private func finalizeScrollingTowardItem(for scrollToItemContext: ScrollToItemContext) {
-    scrollToItemDisplayLink?.invalidate()
-
     self.scrollToItemContext = ScrollToItemContext(
       targetItem: scrollToItemContext.targetItem,
       scrollPosition: scrollToItemContext.scrollPosition,
@@ -687,10 +690,6 @@ extension CalendarView: UIScrollViewDelegate {
     }
 
     let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
-
-    if isUserInitiatedScrolling, scrollToItemDisplayLink != nil {
-      scrollToItemDisplayLink?.invalidate()
-    }
 
     if let visibleDayRange = visibleDayRange {
       didScroll?(visibleDayRange, isUserInitiatedScrolling)
