@@ -347,29 +347,6 @@ final class FrameProviderTests: XCTestCase {
     XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day of week.")
   }
 
-  func testDayOfWeekBackgroundFrame() {
-    let frame1 = verticalFrameProvider.frameOfDayOfWeekBackground(
-      inMonthWithOrigin: CGPoint(x: 0, y: 200))
-      .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame1 = CGRect(x: 0, y: 255, width: 320, height: 34.857142857142854)
-      .alignedToPixels(forScreenWithScale: 3)
-    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for day of week background.")
-
-    let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfDayOfWeekBackground(
-      inMonthWithOrigin: CGPoint(x: 0, y: 150))
-      .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame2 = CGRect(x: 0, y: 205, width: 320, height: 34.857142857142854)
-      .alignedToPixels(forScreenWithScale: 3)
-    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for day of week background.")
-
-    let frame3 = horizontalFrameProvider.frameOfDayOfWeekBackground(
-      inMonthWithOrigin: CGPoint(x: 200, y: 0))
-      .alignedToPixels(forScreenWithScale: 3)
-    let expectedFrame3 = CGRect(x: 200, y: 55, width: 300, height: 32)
-      .alignedToPixels(forScreenWithScale: 3)
-    XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day of week background.")
-  }
-
   func testDayFrameInMonth() {
     let frame1 = verticalFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20),
@@ -539,13 +516,33 @@ final class FrameProviderTests: XCTestCase {
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned day of week.")
   }
 
-  func testPinnedDayOfWeekBackgroundFrame() {
-    let frame1 = verticalPinnedDaysOfWeekFrameProvider.frameOfPinnedDayOfWeekBackground(
+  func testPinnedDaysOfWeekBackgroundFrame() {
+    let frame1 = verticalPinnedDaysOfWeekFrameProvider.frameOfPinnedDaysOfWeekRowBackground(
       yContentOffset: 140)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(x: 0, y: 140, width: 320, height: 34.857142857142854)
       .alignedToPixels(forScreenWithScale: 3)
-    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned day of week background.")
+    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned days-of-week row background.")
+  }
+
+  func testPinnedDaysOfWeekSeparatorFrame() {
+    let frame1 = verticalPinnedDaysOfWeekFrameProvider.frameOfPinnedDaysOfWeekRowSeparator(
+      yContentOffset: 120,
+      separatorHeight: 2)
+    let expectedFrame1 = CGRect(x: 0, y: 152.85714285714286, width: 320, height: 2)
+    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned day-of-week row separator.")
+
+    let frame2 = verticalFrameProvider.frameOfDaysOfWeekRowSeparator(
+      inMonthWithOrigin: CGPoint(x: 0, y: 120),
+      separatorHeight: 1)
+    let expectedFrame2 = CGRect(x: 0, y: 208.85714285714286, width: 320, height: 1)
+    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for day-of-week row separator.")
+
+    let frame3 = horizontalFrameProvider.frameOfDaysOfWeekRowSeparator(
+      inMonthWithOrigin: CGPoint(x: 421, y: 0),
+      separatorHeight: 10)
+    let expectedFrame3 = CGRect(x: 421, y: 77, width: 300, height: 10)
+    XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day-of-week row separator.")
   }
 
   // MARK: Private

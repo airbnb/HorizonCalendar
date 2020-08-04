@@ -138,11 +138,6 @@ final class FrameProvider {
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
   }
 
-  func frameOfDayOfWeekBackground(inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
-    let y = monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top
-    return CGRect(x: monthOrigin.x, y: y, width: monthWidth, height: daySize.height)
-  }
-
   func frameOfDay(_ day: Day, inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
     let date = calendar.startDate(of: day)
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
@@ -222,8 +217,32 @@ final class FrameProvider {
     return CGRect(origin: CGPoint(x: x, y: yContentOffset), size: daySize)
   }
 
-  func frameOfPinnedDayOfWeekBackground(yContentOffset: CGFloat) -> CGRect {
+  func frameOfPinnedDaysOfWeekRowBackground(yContentOffset: CGFloat) -> CGRect {
     CGRect(x: layoutMargins.leading, y: yContentOffset, width: monthWidth, height: daySize.height)
+  }
+
+  func frameOfPinnedDaysOfWeekRowSeparator(
+    yContentOffset: CGFloat,
+    separatorHeight: CGFloat)
+    -> CGRect
+  {
+    CGRect(
+      x: layoutMargins.leading,
+      y: yContentOffset + daySize.height - separatorHeight,
+      width: monthWidth,
+      height: separatorHeight)
+  }
+
+  func frameOfDaysOfWeekRowSeparator(
+    inMonthWithOrigin monthOrigin: CGPoint,
+    separatorHeight: CGFloat) -> CGRect
+  {
+    CGRect(
+      x: monthOrigin.x,
+      y: monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top + daySize.height -
+        separatorHeight,
+      width: monthWidth,
+      height: separatorHeight)
   }
 
   // MARK: Private

@@ -22,11 +22,12 @@ Features:
 - Specify custom views to overlay parts of the calendar, enabling features like tooltips
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
-- Pinning days of the week to the top
+- Pin the days-of-the-week row to the top
 - Show partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
 - Scroll to arbitrary dates and months, with or without animation
 - Robust accessibility support
 - Inset the content without affecting the scrollable region using `UIView` layout margins
+- Separator below the days-of-the-week row
 
 `HorizonCalendar` serves as the foundation for the date pickers and calendars used in Airbnb's highest trafficked flows.
 
