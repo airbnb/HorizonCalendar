@@ -29,6 +29,10 @@ extension CalendarViewContent {
   ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItem` representing a month header.
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new month header item provider.
+  @available(
+    *,
+    deprecated,
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withMonthHeaderItemModelProvider` instead.")
   public func withMonthHeaderItemProvider(
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItem)
     -> CalendarViewContent
@@ -51,6 +55,10 @@ extension CalendarViewContent {
   ///   the top of the calendar, since in that scenario, they don't belong to any particular month.
   ///   - weekdayIndex: The weekday index for which to provide a `CalendarItem`.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day-of-week item provider.
+  @available(
+    *,
+    deprecated,
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayOfWeekItemModelProvider` instead.")
   public func withDayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (_ month: Month?, _ weekdayIndex: Int) -> AnyCalendarItem)
     -> CalendarViewContent
@@ -73,6 +81,10 @@ extension CalendarViewContent {
   ///   calendar.
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day item provider.
+  @available(
+    *,
+    deprecated,
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayItemModelProvider` instead.")
   public func withDayItemProvider(
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItem)
     -> CalendarViewContent
@@ -103,6 +115,10 @@ extension CalendarViewContent {
   ///   - dayRangeLayoutContext: The layout context for the day range containing information about the frames of days and
   ///   bounds in which your day range item will be displayed.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day range item provider.
+  @available(
+    *,
+    deprecated,
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayRangeItemModelProvider` instead.")
   public func withDayRangeItemProvider(
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
@@ -130,6 +146,10 @@ extension CalendarViewContent {
   ///   - overlayLayoutContext: The layout context for the overlaid item location containing information about that location's
   ///   frame and the bounds in which your overlay item will be displayed.
   /// - Returns: A mutated `CalendarViewContent` instance with a new overlay item provider.
+  @available(
+    *,
+    deprecated,
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withOverlayItemModelProvider` instead.")
   public func withOverlayItemProvider(
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
