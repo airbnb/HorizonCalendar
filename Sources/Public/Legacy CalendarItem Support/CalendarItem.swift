@@ -18,9 +18,13 @@ import UIKit
 // MARK: - CalendarItemViewModelEquatable
 
 /// Facilitates the comparison of type-earased `AnyCalendarItem`s based on their concrete types' `viewModel`s.
+///
+/// - Note: This is a legacy protocol and will be removed in a future major release.
 public protocol CalendarItemViewModelEquatable {
 
   /// Compares the view models of two `CalendarItem`s for equality.
+  ///
+  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   ///
   /// - Parameters:
   ///   - otherCalendarItem: The calendar item to compare to `self`.
@@ -35,13 +39,30 @@ public protocol CalendarItemViewModelEquatable {
 /// A type-erased calendar item.
 ///
 /// Useful for working with types conforming to `CalendarItem` without knowing the underlying concrete type.
+///
+/// - Note: This is a legacy protocol and will be removed in a future major release.
 public protocol AnyCalendarItem: CalendarItemViewModelEquatable {
 
   /// A reuse identifier used by `CalendarView` to differentiate between items based on their type and style.
+  ///
+  /// - Note: There is no reason to access this property from your feature code; it should only be invoked internally.
   var reuseIdentifier: String { get }
 
+  /// Builds an instance of `ViewType` by invoking the `buildView` closure from `CalendarItem`'s initializer.
+  ///
+  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   func buildView() -> UIView
+
+  /// Updates the view model on an instance of `ViewType` by invoking the `updateViewModel` closure from
+  /// `CalendarItem`'s initializer.
+  ///
+  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   func updateViewModel(view: UIView)
+
+  /// Updates the highlight state on an instance of `ViewType` by invoking the `updateHighlightState` closure from
+  /// `CalendarItem`'s initializer.
+  ///
+  /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   func updateHighlightState(view: UIView, isHighlighted: Bool)
 
 }
@@ -56,6 +77,8 @@ public protocol AnyCalendarItem: CalendarItemViewModelEquatable {
 /// `CalendarItem` is generic over a `ViewType` and a `ViewModel`.
 /// `ViewType` should be a `UIView` or `UIView` subclass, and is what will be displayed  by `CalendarView`.
 /// `ViewModel` should be a type that contains all of the data necessary to populate an instance of`ViewType` with data.
+///
+/// - Warning: This is a legacy type and will be removed in a future major release. Use `CalendarItemModel` instead.
 public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
   ViewType: UIView,
   ViewModel: Equatable
@@ -64,6 +87,8 @@ public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
   // MARK: Lifecycle
 
   /// Initializes a new `CalendarItem`.
+  ///
+  /// - Warning: This is a legacy type and will be removed in a future major release. Use `CalendarItemModel` instead.
   ///
   /// - Parameters:
   ///   - viewModel: The view model containing all of the data necessary to populate an instance of`ViewType`.
@@ -87,7 +112,7 @@ public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
     updateHighlightState: ((_ view: ViewType, _ isHighlighted: Bool) -> Void)? = nil)
   {
     self.viewModel = viewModel
-    reuseIdentifier = "ViewType: \(ViewType.self), styleID: \(styleID)"
+    reuseIdentifier = "ViewType: \(String(reflecting: ViewType.self)), styleID: \(styleID)"
     _buildView = buildView
     _updateViewModel = updateViewModel
     _updateHighlightState = updateHighlightState
@@ -101,16 +126,12 @@ public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
   /// `CalendarItem`s, even if those `CalendarItem`s render the same `ViewType`.
   public let viewModel: ViewModel
 
-  /// The reuse identifier used by `CalendarView` to differentiate between items based on their type and style.
   public let reuseIdentifier: String
 
-  /// Builds an instance of `ViewType` by invoking the `buildView` closure from `CalendarItem`'s initializer.
   public func buildView() -> UIView {
     _buildView()
   }
 
-  /// Updates the view model on an instance of `ViewType` by invoking the `updateViewModel` closure from
-  /// `CalendarItem`'s initializer.
   public func updateViewModel(view: UIView) {
     guard let view = view as? ViewType else {
       preconditionFailure("Failed to convert the UIView to the type-erased ViewType")
@@ -119,8 +140,6 @@ public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
     _updateViewModel(view, viewModel)
   }
 
-  /// Updates the highlight state on an instance of `ViewType` by invoking the `updateHighlightState` closure from
-  /// `CalendarItem`'s initializer.
   public func updateHighlightState(view: UIView, isHighlighted: Bool) {
     guard let view = view as? ViewType else {
       preconditionFailure("Failed to convert the UIView to the type-erased ViewType")
@@ -129,7 +148,6 @@ public struct CalendarItem<ViewType, ViewModel>: AnyCalendarItem where
     _updateHighlightState?(view, isHighlighted)
   }
 
-  /// Compares the view models of two `CalendarItem`s for equality.
   public func isViewModel(
     equalToViewModelOf otherCalendarItem: CalendarItemViewModelEquatable)
     -> Bool
