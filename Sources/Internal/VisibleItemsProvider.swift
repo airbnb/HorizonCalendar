@@ -826,7 +826,7 @@ final class VisibleItemsProvider {
     visibleItems.insert(
       VisibleCalendarItem(
         calendarItemModel: .legacy(
-          CalendarItem<UIView, Int>.init(
+          CalendarItem<UIView, Int>(
             viewModel: 0,
             styleID: "PinnedDaysOfTheWeekRowBackground",
             buildView: { [unowned self] in

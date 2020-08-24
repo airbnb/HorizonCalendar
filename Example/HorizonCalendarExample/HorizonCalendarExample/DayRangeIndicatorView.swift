@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import HorizonCalendar
 import UIKit
 
 // MARK: - DayRangeIndicatorView
@@ -21,8 +22,11 @@ final class DayRangeIndicatorView: UIView {
 
   // MARK: Lifecycle
 
-  init() {
+  init(indicatorColor: UIColor) {
+    self.indicatorColor = indicatorColor
+
     super.init(frame: .zero)
+
     backgroundColor = .clear
   }
 
@@ -41,7 +45,7 @@ final class DayRangeIndicatorView: UIView {
 
   override func draw(_ rect: CGRect) {
     let context = UIGraphicsGetCurrentContext()
-    context?.setFillColor(UIColor.blue.withAlphaComponent(0.15).cgColor)
+    context?.setFillColor(indicatorColor.cgColor)
 
     // Get frames of day rows in the range
     var dayRowFrames = [CGRect]()
@@ -63,6 +67,35 @@ final class DayRangeIndicatorView: UIView {
       context?.addPath(roundedRectanglePath.cgPath)
       context?.fillPath()
     }
+  }
+
+  // MARK: Private
+
+  private let indicatorColor: UIColor
+
+}
+
+// MARK: CalendarItemViewRepresentable
+
+extension DayRangeIndicatorView: CalendarItemViewRepresentable {
+
+  struct InvariantViewProperties: Hashable {
+    var indicatorColor = UIColor.blue.withAlphaComponent(0.15)
+  }
+
+  struct ViewModel: Equatable {
+    let framesOfDaysToHighlight: [CGRect]
+  }
+
+  static func makeView(
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+    -> DayRangeIndicatorView
+  {
+    DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
+  }
+
+  static func setViewModel(_ viewModel: ViewModel, on view: DayRangeIndicatorView) {
+    view.framesOfDaysToHighlight = viewModel.framesOfDaysToHighlight
   }
 
 }
