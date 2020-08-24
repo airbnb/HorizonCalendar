@@ -28,20 +28,20 @@ final class VisibleCalendarItem {
 
   // MARK: Lifecycle
 
-  init(calendarItem: AnyCalendarItem, itemType: ItemType, frame: CGRect) {
-    self.calendarItem = calendarItem
+  init(calendarItemModel: InternalAnyCalendarItemModel, itemType: ItemType, frame: CGRect) {
+    self.calendarItemModel = calendarItemModel
     self.itemType = itemType
     self.frame = frame
 
     var hasher = Hasher()
-    hasher.combine(calendarItem.reuseIdentifier)
+    hasher.combine(calendarItemModel.itemViewDifferentiator)
     hasher.combine(itemType)
     cachedHashValue = hasher.finalize()
   }
 
   // MARK: Internal
 
-  let calendarItem: AnyCalendarItem
+  let calendarItemModel: InternalAnyCalendarItemModel
   let itemType: ItemType
   let frame: CGRect
 
