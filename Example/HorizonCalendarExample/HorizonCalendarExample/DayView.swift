@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import HorizonCalendar
 import UIKit
 
 // MARK: - DayView
@@ -21,13 +22,18 @@ final class DayView: UIView {
 
   // MARK: Lifecycle
 
-  init(isSelectedStyle: Bool) {
+  init(invariantViewProperties: InvariantViewProperties) {
+    dayLabel = UILabel()
+    dayLabel.font = invariantViewProperties.font
+    dayLabel.textAlignment = invariantViewProperties.textAlignment
+    dayLabel.textColor = invariantViewProperties.textColor
+
     super.init(frame: .zero)
 
     addSubview(dayLabel)
 
-    layer.borderColor = UIColor.blue.cgColor
-    layer.borderWidth = isSelectedStyle ? 2 : 0
+    layer.borderColor = invariantViewProperties.selectedColor.cgColor
+    layer.borderWidth = invariantViewProperties.isSelectedStyle ? 2 : 0
   }
 
   required init?(coder: NSCoder) {
@@ -57,17 +63,7 @@ final class DayView: UIView {
 
   // MARK: Private
 
-  private lazy var dayLabel: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    label.font = UIFont.systemFont(ofSize: 18)
-    if #available(iOS 13.0, *) {
-      label.textColor = .label
-    } else {
-      label.textColor = .black
-    }
-    return label
-  }()
+  private let dayLabel: UILabel
 
   private func updateHighlightIndicator() {
     backgroundColor = isHighlighted ? UIColor.black.withAlphaComponent(0.1) : .clear
@@ -87,6 +83,37 @@ extension DayView {
   override var accessibilityLabel: String? {
     get { dayAccessibilityText ?? dayText }
     set { }
+  }
+
+}
+
+// MARK: CalendarItemViewRepresentable
+
+extension DayView: CalendarItemViewRepresentable {
+
+  struct InvariantViewProperties: Hashable {
+    var font = UIFont.systemFont(ofSize: 18)
+    var textAlignment = NSTextAlignment.center
+    var textColor: UIColor
+    var isSelectedStyle: Bool
+    var selectedColor = UIColor.blue
+  }
+
+  struct ViewModel: Equatable {
+    let dayText: String
+    let dayAccessibilityText: String?
+  }
+
+  static func makeView(
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+    -> DayView
+  {
+    DayView(invariantViewProperties: invariantViewProperties)
+  }
+
+  static func setViewModel(_ viewModel: ViewModel, on view: DayView) {
+    view.dayText = viewModel.dayText
+    view.dayAccessibilityText = viewModel.dayAccessibilityText
   }
 
 }

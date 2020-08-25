@@ -15,35 +15,39 @@
 
 import UIKit
 
-// MARK: - CalendarItemViewReuseManager
+// MARK: - ItemViewReuseManager
 
-/// Facilitates the reuse of `CalendarItemView`s to prevent new views being allocated when an existing view of the same type
+/// Facilitates the reuse of `ItemView`s to prevent new views being allocated when an existing view of the same type
 /// already exists and is off screen / available to be used in a different location.
-final class CalendarItemViewReuseManager {
+final class ItemViewReuseManager {
 
   // MARK: Internal
 
   func viewsForVisibleItems(
     _ visibleItems: Set<VisibleCalendarItem>,
     viewHandler: (
-      CalendarItemView,
+      ItemView,
       VisibleCalendarItem,
       _ previousBackingVisibleItem: VisibleCalendarItem?)
       -> Void)
   {
-    var visibleItemsDifferencesForReuseIDs = [String: Set<VisibleCalendarItem>]()
+    var visibleItemsDifferencesItemViewDifferentiators = [
+      _CalendarItemViewDifferentiator: Set<VisibleCalendarItem>
+    ]()
 
     // For each reuse ID, track the difference between the new set of visible items and the previous
     // set of visible items. The remaining previous visible items after subtracting the current
     // visible items are the previously visible items that aren't currently visible, and are
     // therefore free to be reused.
     for visibleItem in visibleItems {
-      let reuseID = visibleItem.calendarItem.reuseIdentifier
+      let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
       var visibleItemsDifference: Set<VisibleCalendarItem>
-      if let difference = visibleItemsDifferencesForReuseIDs[reuseID] {
+      if let difference = visibleItemsDifferencesItemViewDifferentiators[differentiator] {
         visibleItemsDifference = difference
-      } else if let previouslyVisibleItems = visibleItemsForReuseIDs[reuseID] {
+      } else if
+        let previouslyVisibleItems = visibleItemsForItemViewDifferentiators[differentiator]
+      {
         visibleItemsDifference = previouslyVisibleItems.subtracting(visibleItems)
       } else {
         visibleItemsDifference = []
@@ -54,40 +58,42 @@ final class CalendarItemViewReuseManager {
         unusedPreviouslyVisibleItems: &visibleItemsDifference)
       viewHandler(context.view, visibleItem, context.previousBackingVisibleItem)
 
-      visibleItemsDifferencesForReuseIDs[reuseID] = visibleItemsDifference
+      visibleItemsDifferencesItemViewDifferentiators[differentiator] = visibleItemsDifference
     }
   }
 
   // MARK: Private
 
-  private var visibleItemsForReuseIDs = [String: Set<VisibleCalendarItem>]()
-  private var viewsForVisibleItems = [VisibleCalendarItem: CalendarItemView]()
+  private var visibleItemsForItemViewDifferentiators = [
+    _CalendarItemViewDifferentiator: Set<VisibleCalendarItem>
+  ]()
+  private var viewsForVisibleItems = [VisibleCalendarItem: ItemView]()
 
   private func reusedViewContext(
     for visibleItem: VisibleCalendarItem,
     unusedPreviouslyVisibleItems: inout Set<VisibleCalendarItem>)
     -> ReusedViewContext
   {
-    let reuseID = visibleItem.calendarItem.reuseIdentifier
+    let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
-    let view: CalendarItemView
+    let view: ItemView
     let previousBackingVisibleItem: VisibleCalendarItem?
 
-    if let previouslyVisibleItems = visibleItemsForReuseIDs[reuseID] {
+    if let previouslyVisibleItems = visibleItemsForItemViewDifferentiators[differentiator] {
       if previouslyVisibleItems.contains(visibleItem) {
         // New visible item was also an old visible item, so we can just use the same view again.
 
         guard let previousView = viewsForVisibleItems[visibleItem] else {
           preconditionFailure("""
             `viewsForVisibleItems` must have a key for every member in
-            `visibleItemsForReuseIDs`'s values.
+            `visibleItemsForItemViewDifferentiators`'s values.
           """)
         }
 
         view = previousView
         previousBackingVisibleItem = visibleItem
 
-        visibleItemsForReuseIDs[reuseID]?.remove(visibleItem)
+        visibleItemsForItemViewDifferentiators[differentiator]?.remove(visibleItem)
         viewsForVisibleItems.removeValue(forKey: visibleItem)
       } else {
         if let previouslyVisibleItem = unusedPreviouslyVisibleItems.first {
@@ -96,7 +102,7 @@ final class CalendarItemViewReuseManager {
           guard let previousView = viewsForVisibleItems[previouslyVisibleItem] else {
             preconditionFailure("""
               `viewsForVisibleItems` must have a key for every member in
-              `visibleItemsForReuseIDs`'s values.
+              `visibleItemsForItemViewDifferentiators`'s values.
             """)
           }
 
@@ -105,23 +111,24 @@ final class CalendarItemViewReuseManager {
 
           unusedPreviouslyVisibleItems.remove(previouslyVisibleItem)
 
-          visibleItemsForReuseIDs[reuseID]?.remove(previouslyVisibleItem)
+          visibleItemsForItemViewDifferentiators[differentiator]?.remove(previouslyVisibleItem)
           viewsForVisibleItems.removeValue(forKey: previouslyVisibleItem)
         } else {
           // No previously-visible item is available for reuse, so create a new view.
-          view = CalendarItemView(initialCalendarItem: visibleItem.calendarItem)
+          view = ItemView(initialCalendarItemModel: visibleItem.calendarItemModel)
           previousBackingVisibleItem = nil
         }
       }
     }
     else {
       // No previously-visible item is available for reuse, so create a new view.
-      view = CalendarItemView(initialCalendarItem: visibleItem.calendarItem)
+      view = ItemView(initialCalendarItemModel: visibleItem.calendarItemModel)
       previousBackingVisibleItem = nil
     }
 
-    visibleItemsForReuseIDs[reuseID] = visibleItemsForReuseIDs[reuseID] ?? []
-    visibleItemsForReuseIDs[reuseID]?.insert(visibleItem)
+    let newVisibleItems = visibleItemsForItemViewDifferentiators[differentiator] ?? []
+    visibleItemsForItemViewDifferentiators[differentiator] = newVisibleItems
+    visibleItemsForItemViewDifferentiators[differentiator]?.insert(visibleItem)
     viewsForVisibleItems[visibleItem] = view
 
     return ReusedViewContext(view: view, previousBackingVisibleItem: previousBackingVisibleItem)
@@ -132,6 +139,6 @@ final class CalendarItemViewReuseManager {
 // MARK: - ReusedViewContext
 
 private struct ReusedViewContext {
-  let view: CalendarItemView
+  let view: ItemView
   let previousBackingVisibleItem: VisibleCalendarItem?
 }

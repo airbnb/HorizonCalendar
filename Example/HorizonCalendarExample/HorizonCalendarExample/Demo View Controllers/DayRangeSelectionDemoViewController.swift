@@ -132,43 +132,41 @@ final class DayRangeSelectionDemoViewController: UIViewController, DemoViewContr
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
 
-      .withDayItemProvider { day in
-        let isSelected: Bool
-        switch calendarSelection {
-        case .singleDay(let selectedDay):
-          isSelected = day == selectedDay
-        case .dayRange(let selectedDayRange):
-          isSelected = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-        case .none:
-          isSelected = false
+      .withDayItemModelProvider { [weak self] day in
+        let textColor: UIColor
+        if #available(iOS 13.0, *) {
+          textColor = .label
+        } else {
+          textColor = .black
         }
 
-        return CalendarItem<DayView, Day>(
-          viewModel: day,
-          styleID: isSelected ? "Selected" : "Default",
-          buildView: { DayView(isSelectedStyle: isSelected) },
-          updateViewModel: { [weak self] dayView, day in
-            dayView.dayText = "\(day.day)"
+        let isSelectedStyle: Bool
+        switch calendarSelection {
+        case .singleDay(let selectedDay):
+          isSelectedStyle = day == selectedDay
+        case .dayRange(let selectedDayRange):
+          isSelectedStyle = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
+        case .none:
+          isSelectedStyle = false
+        }
 
-            if let date = self?.calendar.date(from: day.components) {
-              dayView.dayAccessibilityText = self?.dayDateFormatter.string(from: date)
-            } else {
-              dayView.dayAccessibilityText = nil
-            }
-          },
-          updateHighlightState: { dayView, isHighlighted in
-            dayView.isHighlighted = isHighlighted
-          })
+        let dayAccessibilityText: String?
+        if let date = self?.calendar.date(from: day.components) {
+          dayAccessibilityText = self?.dayDateFormatter.string(from: date)
+        } else {
+          dayAccessibilityText = nil
+        }
+
+        return CalendarItemModel<DayView>(
+          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: isSelectedStyle),
+          viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
       }
 
-      .withDayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
-        CalendarItem<DayRangeIndicatorView, [CGRect]>(
-          viewModel: dayRangeLayoutContext.daysAndFrames.map { $0.frame },
-          styleID: "Default",
-          buildView: { DayRangeIndicatorView() },
-          updateViewModel: { dayRangeIndicatorView, framesOfDaysToHighlight in
-            dayRangeIndicatorView.framesOfDaysToHighlight = framesOfDaysToHighlight
-          })
+      .withDayRangeItemModelProvider(for: dateRanges) { dayRangeLayoutContext in
+        CalendarItemModel<DayRangeIndicatorView>(
+          invariantViewProperties: .init(),
+          viewModel: .init(
+            framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
       }
   }
 

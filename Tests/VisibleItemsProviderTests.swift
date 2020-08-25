@@ -1647,12 +1647,18 @@ final class VisibleItemsProviderTests: XCTestCase {
     scale: 2,
     monthHeaderHeight: 50)
 
-  private static var mockCalendarItem: AnyCalendarItem {
-    CalendarItem<UIView, Int>(
-      viewModel: 0,
-      styleID: "",
-      buildView: { UIView(frame: .zero) },
-      updateViewModel: { _, _ in })
+  private static var mockCalendarItemModel: AnyCalendarItemModel {
+    final class MockView: UIView, CalendarItemViewRepresentable {
+      static func makeView(
+        withInvariantViewProperties invariantViewProperties: Int)
+        -> MockView
+      {
+        MockView()
+      }
+      static func setViewModel(_ viewModel: Int, on view: MockView) { }
+    }
+
+    return CalendarItemModel<MockView>(invariantViewProperties: 0, viewModel: 0)
   }
 
   private static func makeContent(
@@ -1665,10 +1671,10 @@ final class VisibleItemsProviderTests: XCTestCase {
       .withVerticalDayMargin(20)
       .withHorizontalDayMargin(10)
       .withDaysOfTheWeekRowSeparator(options: .init(height: 1, color: .gray))
-      .withMonthHeaderItemProvider  { _ in mockCalendarItem }
-      .withDayOfWeekItemProvider { _, _ in mockCalendarItem }
-      .withDayItemProvider { _ in mockCalendarItem }
-      .withDayRangeItemProvider(
+      .withMonthHeaderItemModelProvider  { _ in mockCalendarItemModel }
+      .withDayOfWeekItemModelProvider { _, _ in mockCalendarItemModel }
+      .withDayItemModelProvider { _ in mockCalendarItemModel }
+      .withDayRangeItemModelProvider(
         for: [
           calendar.date(from: DateComponents(year: 2020, month: 03, day: 11))!
             ...
@@ -1678,15 +1684,15 @@ final class VisibleItemsProviderTests: XCTestCase {
             ...
           calendar.date(from: DateComponents(year: 2020, month: 05, day: 14))!,
         ],
-        { _ in mockCalendarItem })
-      .withOverlayItemProvider(
+        { _ in mockCalendarItemModel })
+      .withOverlayItemModelProvider(
         for: [
           .day(
             containingDate: calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!),
           .monthHeader(
             monthContainingDate: calendar.date(from: DateComponents(year: 2020, month: 11))!),
         ],
-        { _ in mockCalendarItem })
+        { _ in mockCalendarItemModel })
   }
 
 }

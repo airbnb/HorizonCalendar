@@ -349,14 +349,14 @@ public final class CalendarView: UIView {
 
   // MARK: Private
 
-  private let reuseManager = CalendarItemViewReuseManager()
+  private let reuseManager = ItemViewReuseManager()
 
   private var content: CalendarViewContent
   private var anchorLayoutItem: LayoutItem?
   private var _scrollMetricsMutator: ScrollMetricsMutator?
   private var _visibleItemsProvider: VisibleItemsProvider?
   private var visibleItemsDetails: VisibleItemsDetails?
-  private var visibleViewsForVisibleItems = [VisibleCalendarItem: CalendarItemView]()
+  private var visibleViewsForVisibleItems = [VisibleCalendarItem: ItemView]()
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
   private var cachedAccessibilityElements: [Any]?
@@ -509,9 +509,10 @@ public final class CalendarView: UIView {
     case .horizontal(let _monthWidth): monthWidth = _monthWidth
     }
 
-    let firstMonthHeaderItem = content.monthHeaderItemProvider(content.monthRange.lowerBound)
-    let firstMonthHeader = firstMonthHeaderItem.buildView()
-    firstMonthHeaderItem.updateViewModel(view: firstMonthHeader)
+    let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
+      content.monthRange.lowerBound)
+    let firstMonthHeader = firstMonthHeaderItemModel.makeView()
+    firstMonthHeaderItemModel.setViewModelOnViewOfSameType(firstMonthHeader)
 
     let size = firstMonthHeader.systemLayoutSizeFitting(
       CGSize(width: monthWidth, height: 0),
@@ -551,9 +552,8 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func configureView(_ view: CalendarItemView, with visibleItem: VisibleCalendarItem) {
-    let calendarItem = visibleItem.calendarItem
-    view.calendarItem = calendarItem
+  private func configureView(_ view: ItemView, with visibleItem: VisibleCalendarItem) {
+    view.calendarItemModel = visibleItem.calendarItemModel
 
     // Update the visibility
     view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
