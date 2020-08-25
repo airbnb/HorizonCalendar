@@ -145,7 +145,7 @@ private func makeContent() -> CalendarViewContent {
 }
 ```
 
-At a minimum, `CalendarViewContent` must be initialized with a `Calendar`, a visible date range, and a months layout (either vertical or horizontal). The visible date range will be interpretted as a range of days using the `Calendar` instance passed in for the `calendar` parameter.
+At a minimum, `CalendarViewContent` must be initialized with a `Calendar`, a visible date range, and a months layout (either vertical or horizontal). The visible date range will be interpreted as a range of days using the `Calendar` instance passed in for the `calendar` parameter.
 
 For this example, we're using a Gregorian calendar, a date range of 2020-01-01 to 2021-12-31, and a vertical months layout.
 
@@ -218,8 +218,7 @@ struct DayLabel: CalendarItemViewRepresentable {
   }
 
   static func setViewModel(_ viewModel: ViewModel, on view: UILabel) {
-    let label = view
-    label.text = "\(day.day)"
+    view.text = "\(day.day)"
   }
 
 }
@@ -267,7 +266,7 @@ After building and running your app, you should see a much less cramped layout:
 #### Adding a day range indicator
 Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `withDayRangeItemModelProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
 
-First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpretted as `Day`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
+First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `Day`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
 ```swift
   let lowerDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 20))!
   let upperDate = calendar.date(from: DateComponents(year: 2020, month: 02, day: 07))!
