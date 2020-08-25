@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import HorizonCalendar
 import UIKit
 
 // MARK: - TooltipView
@@ -21,12 +22,22 @@ final class TooltipView: UIView {
 
   // MARK: Lifecycle
 
-  init(text: String) {
+  init(invariantViewProperties: InvariantViewProperties) {
+    backgroundView = UIView()
+    backgroundView.backgroundColor = invariantViewProperties.backgroundColor
+    backgroundView.layer.borderColor = invariantViewProperties.borderColor.cgColor
+    backgroundView.layer.borderWidth = 1
+    backgroundView.layer.cornerRadius = 6
+
+    label = UILabel()
+    label.font = invariantViewProperties.font
+    label.textAlignment = invariantViewProperties.textAlignment
+    label.lineBreakMode = .byTruncatingTail
+    label.textColor = invariantViewProperties.textColor
+
     super.init(frame: .zero)
 
     addSubview(backgroundView)
-
-    label.text = text
     addSubview(label)
   }
 
@@ -41,6 +52,11 @@ final class TooltipView: UIView {
       guard frameOfTooltippedItem != oldValue else { return }
       setNeedsLayout()
     }
+  }
+
+  var text: String {
+    get { label.text ?? "" }
+    set { label.text = newValue }
   }
 
   override func layoutSubviews() {
@@ -76,22 +92,38 @@ final class TooltipView: UIView {
 
   // MARK: Private
 
-  private lazy var backgroundView: UIView = {
-    let view = UIView()
-    view.backgroundColor = .white
-    view.layer.borderColor = UIColor.black.cgColor
-    view.layer.borderWidth = 1
-    view.layer.cornerRadius = 6
-    return view
-  }()
+  private let backgroundView: UIView
+  private let label: UILabel
 
-  private lazy var label: UILabel = {
-    let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 16)
-    label.textAlignment = .center
-    label.lineBreakMode = .byTruncatingTail
-    label.textColor = .black
-    return label
-  }()
+}
+
+// MARK: CalendarItemViewRepresentable
+
+extension TooltipView: CalendarItemViewRepresentable {
+
+  struct InvariantViewProperties: Hashable {
+    var backgroundColor = UIColor.white
+    var borderColor = UIColor.black
+    var font = UIFont.systemFont(ofSize: 16)
+    var textAlignment = NSTextAlignment.center
+    var textColor = UIColor.black
+  }
+
+  struct ViewModel: Equatable {
+    let frameOfTooltippedItem: CGRect?
+    let text: String
+  }
+
+  static func makeView(
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+    -> TooltipView
+  {
+    TooltipView(invariantViewProperties: invariantViewProperties)
+  }
+
+  static func setViewModel(_ viewModel: ViewModel, on view: TooltipView) {
+    view.frameOfTooltippedItem = viewModel.frameOfTooltippedItem
+    view.text = viewModel.text
+  }
 
 }
