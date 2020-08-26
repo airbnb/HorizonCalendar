@@ -199,6 +199,7 @@ struct DayLabel: CalendarItemViewRepresentable {
   struct InvariantViewProperties: Hashable {
     let font: UIFont
     let textColor: UIColor
+    let backgroundColor: UIColor
   }
 
   /// Properties that will vary depending on the particular date being displayed.
@@ -211,9 +212,15 @@ struct DayLabel: CalendarItemViewRepresentable {
     -> UILabel
   {
     let label = UILabel()
+
+    label.backgroundColor = invariantViewProperties.backgroundColor
     label.font = invariantViewProperties.font
     label.textColor = invariantViewProperties.textColor
+
     label.textAlignment = .center
+    label.clipsToBounds = true
+    label.layer.cornerRadius = 12
+    
     return label
   }
 
@@ -235,7 +242,10 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
 
     .withDayItemModelProvider { day in
       CalendarItemModel<DayLabel>(
-        invariantViewProperties: .init(font: UIFont.systemFont(ofSize: 18), textColor: .darkGray)
+        invariantViewProperties: .init(
+          font: UIFont.systemFont(ofSize: 18), 
+          textColor: .darkGray,
+          backgroundColor: .clear)
         viewModel: .init(day: day))
     }
 ```
@@ -555,39 +565,28 @@ calendarView.daySelectionHandler = { [weak self] day in
 private var selectedDay: Day?
 ```
 
-The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `Day` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item that looks different for the selected day:
+The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `Day` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item model that looks different for the selected day:
 ```swift
   let selectedDay = self.selectedDay
 
   return CalendarViewContent(...)
 
-    .withDayItemProvider { day in
-      let isSelectedDay = day == selectedDay
-    
-      CalendarItem<UILabel, Day>(
-        viewModel: day,
-        styleID: isSelectedDay ? "SelectedDayLabelStyle" : "DayLabelStyle",
-        buildView: {
-          let label = UILabel()
-          label.font = UIFont.systemFont(ofSize: 18)
-          label.textAlignment = .center
+    .withDayItemModelProvider { day in
+      var invariantViewProperties = DayLabel.InvariantViewProperties(
+        font: UIFont.systemFont(ofSize: 18), 
+        textColor: .darkGray,
+        backgroundColor: .clear)
 
-          label.textColor = isSelectedDay ? .white : .darkGray
-          label.backgroundColor = isSelectedDay ? .blue : .clear
-
-          label.clipsToBounds = true
-          label.layer.borderColor = UIColor.blue.cgColor
-          label.layer.borderWidth = 1
-          label.layer.cornerRadius = 12
-          return label
-        },
-        updateViewModel: { label, day in
-          label.text = "\(day.day)"
-        })
+      if day == selectedDay {
+        invariantViewProperties.textColor = .white
+        invariantViewProperties.backgroundColor = .blue
+      }
+      
+      return CalendarItemModel<DayLabel>(
+        invariantViewProperties: invariantViewProperties,
+        viewModel: .init(day: day))
   }
 ```
-
-Note that because our selected and unselected day both use the same backing view type (`UILabel`) and view model (an identical `Day` instance), we need to inform `CalendarView` that these two views have different appearences using the `styleID` parameter, otherwise we will experience view-reuse bugs similar to what you'd find in `UICollectionView` and `UITableView` if you have conflicting reuse identifiers.
 
 Last, we'll change our day selection handler so that it not only stores the selected day, but also sets an updated content instance on `calendarView`:
 ```swift
