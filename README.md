@@ -225,7 +225,7 @@ struct DayLabel: CalendarItemViewRepresentable {
   }
 
   static func setViewModel(_ viewModel: ViewModel, on view: UILabel) {
-    view.text = "\(day.day)"
+    view.text = "\(viewModel.day)"
   }
 
 }
