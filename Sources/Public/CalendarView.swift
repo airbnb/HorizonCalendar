@@ -567,16 +567,6 @@ public final class CalendarView: UIView {
     } else {
       view.selectionHandler = nil
     }
-
-    // Only enable user interaction for day items if a `daySelectionHandler` is set
-    if
-      case .layoutItemType(.day) = visibleItem.itemType,
-      daySelectionHandler != nil
-    {
-      view.isUserInteractionEnabled = true
-    } else {
-      view.isUserInteractionEnabled = false
-    }
   }
 
   private func startScrollingTowardTargetItem() {
