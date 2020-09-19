@@ -28,6 +28,7 @@ Features:
 - Robust accessibility support
 - Inset the content without affecting the scrollable region using `UIView` layout margins
 - Separator below the days-of-the-week row
+- Right-to-left layout support
 
 `HorizonCalendar` serves as the foundation for the date pickers and calendars used in Airbnb's highest trafficked flows.
 
