@@ -177,6 +177,11 @@ public final class CalendarView: UIView {
     setNeedsLayout()
   }
 
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    setNeedsLayout()
+  }
+
   public override func layoutSubviews() {
     super.layoutSubviews()
 
@@ -184,6 +189,12 @@ public final class CalendarView: UIView {
     // work around this by only setting the frame if it's changed.
     if scrollView.frame != bounds {
       scrollView.frame = bounds
+    }
+
+    if traitCollection.layoutDirection == .rightToLeft {
+      scrollView.transform = .init(scaleX: -1, y: 1)
+    } else {
+      scrollView.transform = .identity
     }
 
     guard isReadyForLayout else { return }
@@ -562,6 +573,12 @@ public final class CalendarView: UIView {
     // Update the visibility
     view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
     view.layer.zPosition = visibleItem.itemType.zPosition
+
+    if traitCollection.layoutDirection == .rightToLeft {
+      view.transform = .init(scaleX: -1, y: 1)
+    } else {
+      view.transform = .identity
+    }
 
     view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
 
