@@ -944,7 +944,7 @@ final class VisibleItemsProvider {
     }
   }
 
-  /// This function takes a proposed frame for a target item toward which we're programmatically scrolling, and adjusts it such that it's a
+  /// This function takes a proposed frame for a target item toward which we're programmatically scrolling, and adjusts it so that it's a
   /// valid frame when the calendar is at rest / not being overscrolled.
   ///
   /// A concrete example of when we'd need this correction is when we scroll to the first visible month with a scroll position of
