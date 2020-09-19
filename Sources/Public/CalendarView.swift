@@ -559,6 +559,8 @@ public final class CalendarView: UIView {
     view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
     view.layer.zPosition = visibleItem.itemType.zPosition
 
+    view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
+
     // Set up the selection handler
     if case .layoutItemType(.day(let day)) = visibleItem.itemType {
       view.selectionHandler = { [weak self] in
