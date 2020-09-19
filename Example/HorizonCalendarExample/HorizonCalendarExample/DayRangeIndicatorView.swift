@@ -47,6 +47,12 @@ final class DayRangeIndicatorView: UIView {
     let context = UIGraphicsGetCurrentContext()
     context?.setFillColor(indicatorColor.cgColor)
 
+    if traitCollection.layoutDirection == .rightToLeft {
+      transform = .init(scaleX: -1, y: 1)
+    } else {
+      transform = .identity
+    }
+
     // Get frames of day rows in the range
     var dayRowFrames = [CGRect]()
     var currentDayRowMinY: CGFloat?
