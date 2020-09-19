@@ -131,9 +131,7 @@ final class FrameProvider {
     inMonthWithOrigin monthOrigin: CGPoint)
     -> CGRect
   {
-    let x = monthOrigin.x +
-      content.monthDayInsets.left +
-      (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin))
+    let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
   }
@@ -143,9 +141,7 @@ final class FrameProvider {
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
     let rowInMonth = adjustedRowInMonth(for: day)
 
-    let x = monthOrigin.x +
-      content.monthDayInsets.left +
-      (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin))
+    let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y +
       monthHeaderHeight +
       content.monthDayInsets.top +
@@ -212,8 +208,7 @@ final class FrameProvider {
     yContentOffset: CGFloat)
     -> CGRect
   {
-    let x = layoutMargins.leading + content.monthDayInsets.left +
-      (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin))
+    let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: layoutMargins.leading)
     return CGRect(origin: CGPoint(x: x, y: yContentOffset), size: daySize)
   }
 
@@ -288,14 +283,23 @@ final class FrameProvider {
     }
   }
 
+  private func minXOfItem(
+    at dayOfWeekPosition: DayOfWeekPosition,
+    minXOfContainingRow: CGFloat)
+    -> CGFloat
+  {
+    let distanceFromMonthLeadingEdge = CGFloat(dayOfWeekPosition.rawValue - 1) *
+      (daySize.width + content.horizontalDayMargin)
+    return minXOfContainingRow + content.monthDayInsets.left + distanceFromMonthLeadingEdge
+  }
+
   private func minXOfMonth(
     containingItemWithFrame itemFrame: CGRect,
     at dayOfWeekPosition: DayOfWeekPosition)
     -> CGFloat
   {
-    itemFrame.minX -
-      (CGFloat(dayOfWeekPosition.rawValue - 1) * (daySize.width + content.horizontalDayMargin)) -
-      content.monthDayInsets.left
+    let distanceFromMinXOfMonth = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: 0)
+    return itemFrame.minX - distanceFromMinXOfMonth
   }
 
   private func minYOfMonth(
