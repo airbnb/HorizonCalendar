@@ -97,6 +97,18 @@ extension VisibleCalendarItem {
       case .overlayItem: return 750
       }
     }
+
+    var isUserInteractionEnabled: Bool {
+      switch self {
+      case .layoutItemType: return true
+      case .pinnedDayOfWeek: return true
+      case .pinnedDaysOfWeekRowBackground: return true
+      case .pinnedDaysOfWeekRowSeparator: return false
+      case .daysOfWeekRowSeparator: return false
+      case .dayRange: return false
+      case .overlayItem: return false
+      }
+    }
   }
 
 }
