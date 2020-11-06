@@ -28,9 +28,12 @@ final class VisibleItemsProvider {
     size: CGSize,
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
-    monthHeaderHeight: CGFloat)
+    monthHeaderHeight: CGFloat,
+    backgroundColor: UIColor?)
   {
     self.content = content
+    self.backgroundColor = backgroundColor
+
     layoutItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: content.monthsLayout,
@@ -47,6 +50,7 @@ final class VisibleItemsProvider {
   // MARK: Internal
 
   let content: CalendarViewContent
+  let backgroundColor: UIColor?
 
   var size: CGSize {
     frameProvider.size
@@ -831,7 +835,7 @@ final class VisibleItemsProvider {
             styleID: "PinnedDaysOfTheWeekRowBackground",
             buildView: { [unowned self] in
               let view = UIView()
-              view.backgroundColor = self.content.backgroundColor
+              view.backgroundColor = backgroundColor
               return view
             },
             updateViewModel: { _, _ in })),
