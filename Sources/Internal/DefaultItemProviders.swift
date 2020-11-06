@@ -95,13 +95,10 @@ extension CalendarViewContent {
     -> AnyCalendarItemModel
   {
     let textColor: UIColor
-    let backgroundColor: UIColor
     if #available(iOS 13.0, *) {
       textColor = .secondaryLabel
-      backgroundColor = .systemBackground
     } else {
       textColor = .black
-      backgroundColor = .white
     }
 
     let dayOfWeekText = dateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
@@ -111,7 +108,7 @@ extension CalendarViewContent {
         font: UIFont.systemFont(ofSize: 16),
         textAlignment: .center,
         textColor: textColor,
-        backgroundColor: backgroundColor,
+        backgroundColor: .clear,
         isAccessibilityElement: false,
         accessibilityTraits: []),
       viewModel: .init(text: dayOfWeekText, accessibilityLabel: nil))

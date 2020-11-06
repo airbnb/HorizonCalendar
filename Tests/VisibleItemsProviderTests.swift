@@ -1608,7 +1608,8 @@ final class VisibleItemsProviderTests: XCTestCase {
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50)
+    monthHeaderHeight: 50,
+    backgroundColor: nil)
 
   private var verticalPinnedDaysOfWeekVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1620,7 +1621,8 @@ final class VisibleItemsProviderTests: XCTestCase {
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50)
+    monthHeaderHeight: 50,
+    backgroundColor: nil)
 
   private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1633,7 +1635,8 @@ final class VisibleItemsProviderTests: XCTestCase {
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50)
+    monthHeaderHeight: 50,
+    backgroundColor: nil)
 
   private var horizontalVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1645,7 +1648,8 @@ final class VisibleItemsProviderTests: XCTestCase {
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50)
+    monthHeaderHeight: 50,
+    backgroundColor: nil)
 
   private static var mockCalendarItemModel: AnyCalendarItemModel {
     final class MockView: UIView, CalendarItemViewRepresentable {

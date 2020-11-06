@@ -47,6 +47,12 @@ public final class CalendarView: UIView {
 
     super.init(frame: .zero)
 
+    if #available(iOS 13.0, *) {
+      backgroundColor = .systemBackground
+    } else {
+      backgroundColor = .white
+    }
+
     addSubview(scrollView)
 
     setContent(initialContent)
@@ -252,7 +258,9 @@ public final class CalendarView: UIView {
   public func setContent(_ content: CalendarViewContent) {
     self.content = content
 
-    backgroundColor = content.backgroundColor
+    if let contentBackgroundColor = content.backgroundColor {
+      backgroundColor = contentBackgroundColor
+    }
 
     _visibleItemsProvider = nil
     scrollToItemContext = nil
@@ -432,7 +440,8 @@ public final class CalendarView: UIView {
       let existingVisibleItemsProvider = _visibleItemsProvider,
       existingVisibleItemsProvider.size == bounds.size,
       existingVisibleItemsProvider.layoutMargins == directionalLayoutMargins,
-      existingVisibleItemsProvider.scale == scale
+      existingVisibleItemsProvider.scale == scale,
+      existingVisibleItemsProvider.backgroundColor == backgroundColor
     {
       return existingVisibleItemsProvider
     } else {
@@ -442,7 +451,8 @@ public final class CalendarView: UIView {
         size: bounds.size,
         layoutMargins: directionalLayoutMargins,
         scale: scale,
-        monthHeaderHeight: monthHeaderHeight())
+        monthHeaderHeight: monthHeaderHeight(),
+        backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
     }

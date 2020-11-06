@@ -95,12 +95,16 @@ public final class CalendarViewContent {
 
   // MARK: Public
 
-  /// Configures the background color of `CalendarView`. The default value is `.systemBackground` on iOS 13+, and
-  /// `.white` on earlier iOS versions.
+  /// Configures the background color of `CalendarView`. If you do not invoke this function, the `backgroundColor` property on
+  /// `CalendarView` will be used instead.
   ///
   /// - Parameters:
   ///   - backgroundColor: The backround color of the calendar.
   /// - Returns: A mutated `CalendarViewContent` instance with a new background color.
+  @available(
+    *,
+    deprecated,
+    message: "Set the `backgroundColor` property on your `CalendarView` instance directly instead.")
   public func withBackgroundColor(_ backgroundColor: UIColor) -> CalendarViewContent {
     self.backgroundColor = backgroundColor
     return self
@@ -307,13 +311,8 @@ public final class CalendarViewContent {
   let monthRange: MonthRange
   let monthsLayout: MonthsLayout
 
-  private(set) var backgroundColor: UIColor = {
-    if #available(iOS 13.0, *) {
-      return UIColor.systemBackground
-    } else {
-      return UIColor.white
-    }
-  }()
+  // TODO(BK): Remove; the `withBackgroundColor` function is deprecated.
+  private(set) var backgroundColor: UIColor?
   private(set) var interMonthSpacing: CGFloat = 0
   private(set) var monthDayInsets: UIEdgeInsets = .zero
   private(set) var verticalDayMargin: CGFloat = 0
