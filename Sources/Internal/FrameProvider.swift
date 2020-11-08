@@ -38,8 +38,10 @@ final class FrameProvider {
     switch content.monthsLayout {
     case .vertical:
       monthWidth = size.width - layoutMargins.leading - layoutMargins.trailing
-    case .horizontal(let _monthWidth):
-      monthWidth = _monthWidth
+    case .horizontal(let options):
+      monthWidth = options.monthWidth(
+        calendarWidth: size.width,
+        interMonthSpacing: content.interMonthSpacing)
     }
 
     let insetWidth = monthWidth - content.monthDayInsets.left - content.monthDayInsets.right

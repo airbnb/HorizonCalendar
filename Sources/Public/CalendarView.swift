@@ -530,8 +530,12 @@ public final class CalendarView: UIView {
   private func monthHeaderHeight() -> CGFloat {
     let monthWidth: CGFloat
     switch content.monthsLayout {
-    case .vertical: monthWidth = bounds.width
-    case .horizontal(let _monthWidth): monthWidth = _monthWidth
+    case .vertical:
+      monthWidth = bounds.width
+    case .horizontal(let options):
+      monthWidth = options.monthWidth(
+        calendarWidth: bounds.width,
+        interMonthSpacing: content.interMonthSpacing)
     }
 
     let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
