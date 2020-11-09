@@ -19,7 +19,7 @@ import XCTest
 final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
   
   func testMonthWidthOneVisibleMonth() {
-    let options = HorizontalMonthsLayoutOptions(numberOfFullyVisibleMonths: 1)
+    let options = HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 1)
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 0) == 100,
@@ -30,8 +30,8 @@ final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
       "Incorrect month width")
   }
 
-  func testMonthWidthOneAndAHalfVisibleMonth() {
-    let options = HorizontalMonthsLayoutOptions(numberOfFullyVisibleMonths: 1.5)
+  func testMonthWidthOneAndAHalfVisibleMonths() {
+    let options = HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 1.5)
 
     XCTAssert(
       options.monthWidth(calendarWidth: 120, interMonthSpacing: 0) == 80,
@@ -42,8 +42,8 @@ final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
       "Incorrect month width")
   }
 
-  func testMonthWidthFourVisibleMonth() {
-    let options = HorizontalMonthsLayoutOptions(numberOfFullyVisibleMonths: 4)
+  func testMonthWidthFourVisibleMonths() {
+    let options = HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 4)
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 0) == 25,

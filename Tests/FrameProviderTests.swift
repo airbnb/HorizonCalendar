@@ -74,7 +74,7 @@ final class FrameProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: Date.distantPast...Date.distantFuture,
         monthsLayout: .horizontal(
-          options: HorizontalMonthsLayoutOptions(numberOfFullyVisibleMonths: 1)))
+          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 1)))
         .withMonthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
         .withInterMonthSpacing(20)
         .withVerticalDayMargin(20)

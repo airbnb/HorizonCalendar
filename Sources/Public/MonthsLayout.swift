@@ -139,17 +139,17 @@ public struct HorizontalMonthsLayoutOptions: Equatable {
   /// Initializes a new instance of `HorizontalMonthsLayoutOptions`.
   ///
   /// - Parameters:
-  ///   - numberOfFullyVisibleMonths: The maximum number off fully visible months for any scroll offset. The default value is
+  ///   - maximumFullyVisibleMonths: The maximum number of fully visible months for any scroll offset. The default value is
   ///   `1`.
-  public init(numberOfFullyVisibleMonths: Double = 1) {
-    assert(numberOfFullyVisibleMonths >= 1, "`numberOfFullyVisibleMonths` must be greater than 1.")
-    self.numberOfFullyVisibleMonths = numberOfFullyVisibleMonths
+  public init(maximumFullyVisibleMonths: Double = 1) {
+    assert(maximumFullyVisibleMonths >= 1, "`maximumFullyVisibleMonths` must be greater than 1.")
+    self.maximumFullyVisibleMonths = maximumFullyVisibleMonths
   }
 
   // MARK: Public
 
-  /// The maximum number off fully visible months for any scroll offset.
-  public let numberOfFullyVisibleMonths: Double
+  /// The maximum number of fully visible months for any scroll offset.
+  public let maximumFullyVisibleMonths: Double
 
   // MARK: Internal
 
@@ -161,8 +161,8 @@ public struct HorizontalMonthsLayoutOptions: Equatable {
       return monthWidth
     }
 
-    let visibleInterMonthSpacing = CGFloat(numberOfFullyVisibleMonths) * interMonthSpacing
-    return (calendarWidth - visibleInterMonthSpacing) / CGFloat(numberOfFullyVisibleMonths)
+    let visibleInterMonthSpacing = CGFloat(maximumFullyVisibleMonths) * interMonthSpacing
+    return (calendarWidth - visibleInterMonthSpacing) / CGFloat(maximumFullyVisibleMonths)
   }
 
 }
