@@ -1644,7 +1644,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .horizontal(monthWidth: 300))),
+        monthsLayout: .horizontal(
+          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64/63)))),
     size: size,
     layoutMargins: .zero,
     scale: 2,

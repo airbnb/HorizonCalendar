@@ -43,7 +43,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       dayRange: dayRange)
     horizontalItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
-      monthsLayout: .horizontal(monthWidth: 300),
+      monthsLayout: .horizontal(
+        options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 305/300)),
       monthRange: monthRange,
       dayRange: dayRange)
 
