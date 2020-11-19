@@ -454,6 +454,7 @@ public final class CalendarView: UIView {
         layoutMargins: directionalLayoutMargins,
         scale: scale,
         monthHeaderHeight: monthHeaderHeight(),
+        monthFooterHeight: 0.0,
         backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
