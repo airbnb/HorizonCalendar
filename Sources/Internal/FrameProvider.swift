@@ -79,6 +79,15 @@ final class FrameProvider {
       let x = minXOfMonth(containingItemWithFrame: layoutItem.frame, at: position)
       let y = minYOfMonth(containingDayItemWithFrame: layoutItem.frame, atRowInMonth: rowInMonth)
       return CGPoint(x: x, y: y)
+        
+    case .monthFooter(let month):
+      let x = layoutItem.frame.origin.x
+        let y = layoutItem.frame.minY -
+            monthHeaderHeight -
+            content.monthDayInsets.top -
+            (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
+            (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
+      return CGPoint(x: x, y: y)
     }
   }
 
@@ -150,6 +159,16 @@ final class FrameProvider {
       (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
       (CGFloat(rowInMonth) * (daySize.height + content.verticalDayMargin))
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
+  }
+
+  func frameOfMonthFooter(_ month: Month, inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
+    let x = monthOrigin.x
+    let y = monthOrigin.y +
+        monthHeaderHeight +
+        content.monthDayInsets.top +
+        (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
+        (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
+    return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthHeaderHeight))
   }
 
   // A faster alternative to `frameOfDay(_:inMonthWithOrigin:)`, which uses the known frame of a
@@ -323,6 +342,7 @@ final class FrameProvider {
       (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
       (CGFloat(numberOfRows) * daySize.height) +
       (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
+      monthHeaderHeight +
       content.monthDayInsets.bottom
   }
 

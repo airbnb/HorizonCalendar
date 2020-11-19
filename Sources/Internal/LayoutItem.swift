@@ -32,12 +32,14 @@ extension LayoutItem {
     case monthHeader(Month)
     case dayOfWeekInMonth(position: DayOfWeekPosition, month: Month)
     case day(Day)
+    case monthFooter(Month)
 
     var month: Month {
       switch self {
-      case .monthHeader(let month): return month
-      case .dayOfWeekInMonth(_, let month): return month
-      case .day(let day): return day.month
+      case let .monthHeader(month): return month
+      case let .dayOfWeekInMonth(_, month): return month
+      case let .day(day): return day.month
+      case let .monthFooter(month): return month
       }
     }
 
@@ -57,6 +59,8 @@ extension LayoutItem.ItemType: Comparable {
       return lhsMonth <= rhsMonth
     case let (.monthHeader(lhsMonth), .day(rhsDay)):
       return lhsMonth <= rhsDay.month
+    case let (.monthHeader(lhsMonth), .monthFooter(rhsMonth)):
+      return lhsMonth < rhsMonth
 
     case let (
       .dayOfWeekInMonth(lhsPosition, lhsMonth),
@@ -66,6 +70,8 @@ extension LayoutItem.ItemType: Comparable {
       return lhsMonth < rhsMonth
     case let (.dayOfWeekInMonth(_, lhsMonth), .day(rhsDay)):
       return lhsMonth <= rhsDay.month
+    case let (.dayOfWeekInMonth(_, lhsMonth), .monthFooter(rhsMonth)):
+      return lhsMonth < rhsMonth
 
     case let (.day(lhsDay), .day(rhsDay)):
       return lhsDay < rhsDay
@@ -73,6 +79,18 @@ extension LayoutItem.ItemType: Comparable {
       return lhsDay.month < rhsMonth
     case let (.day(lhsDay), .dayOfWeekInMonth(_, rhsMonth)):
       return lhsDay.month < rhsMonth
+    case let (.day(lhsDay), .monthFooter(rhsMonth)):
+      return lhsDay.month < rhsMonth
+
+        
+    case let (.monthFooter(lhsMonth), .monthHeader(rhsMonth)):
+      return lhsMonth <= rhsMonth
+    case let (.monthFooter(lhsMonth), .dayOfWeekInMonth(_, rhsMonth)):
+      return lhsMonth < rhsMonth
+    case let (.monthFooter(lhsMonth), .day(rhsDay)):
+      return lhsMonth <= rhsDay.month
+    case let (.monthFooter(lhsMonth), .monthFooter(rhsMonth)):
+      return lhsMonth < rhsMonth
     }
   }
 

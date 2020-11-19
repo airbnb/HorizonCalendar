@@ -277,8 +277,8 @@ final class VisibleItemsProvider {
       case .day(let day):
         month = day.month
         calendarItemModel = self.content.dayItemModelProvider(day)
-      case .dayOfWeekInMonth:
-        return
+      case .dayOfWeekInMonth: return
+      case .monthFooter: return
       }
 
       guard monthRange.contains(month) else {
@@ -442,6 +442,8 @@ final class VisibleItemsProvider {
       } else {
         frame = frameProvider.frameOfDay(day, inMonthWithOrigin: monthOrigin)
       }
+    case .monthFooter(let month):
+        frame = frameProvider.frameOfMonthFooter(month, inMonthWithOrigin: monthOrigin)
     }
 
     return LayoutItem(itemType: itemType, frame: frame)
@@ -691,6 +693,11 @@ final class VisibleItemsProvider {
           if framesForVisibleDays[day] == nil {
             framesForVisibleDays[day] = layoutItem.frame
           }
+            
+        case .monthFooter(let month):
+          calendarItemModel = calendarItemModelCache.value(for: itemType, missingValueProvider: {
+              previousCalendarItemModelCache?[itemType] ?? content.monthFooterItemModelProvider(month)
+          })
         }
 
         let visibleItem = VisibleCalendarItem(

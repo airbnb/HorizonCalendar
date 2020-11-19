@@ -273,6 +273,8 @@ public final class CalendarView: UIView {
       isAnchorLayoutItemValid = content.monthRange.contains(month)
     case .day(let day):
       isAnchorLayoutItemValid = content.dayRange.contains(day)
+    case .monthFooter(let month):
+      isAnchorLayoutItemValid = content.monthRange.contains(month)
     case .none:
       isAnchorLayoutItemValid = false
     }
