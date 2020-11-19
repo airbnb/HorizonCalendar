@@ -454,7 +454,7 @@ public final class CalendarView: UIView {
         layoutMargins: directionalLayoutMargins,
         scale: scale,
         monthHeaderHeight: monthHeaderHeight(),
-        monthFooterHeight: 0.0,
+        monthFooterHeight: monthFooterHeight(),
         backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
@@ -531,6 +531,29 @@ public final class CalendarView: UIView {
   }
 
   private func monthHeaderHeight() -> CGFloat {
+    let monthWidth: CGFloat
+    switch content.monthsLayout {
+    case .vertical:
+      monthWidth = bounds.width
+    case .horizontal(let options):
+      monthWidth = options.monthWidth(
+        calendarWidth: bounds.width,
+        interMonthSpacing: content.interMonthSpacing)
+    }
+
+    let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
+      content.monthRange.lowerBound)
+    let firstMonthHeader = firstMonthHeaderItemModel.makeView()
+    firstMonthHeaderItemModel.setViewModelOnViewOfSameType(firstMonthHeader)
+
+    let size = firstMonthHeader.systemLayoutSizeFitting(
+      CGSize(width: monthWidth, height: 0),
+      withHorizontalFittingPriority: .required,
+      verticalFittingPriority: .fittingSizeLevel)
+    return size.height
+  }
+    
+  private func monthFooterHeight() -> CGFloat {
     let monthWidth: CGFloat
     switch content.monthsLayout {
     case .vertical:

@@ -68,14 +68,6 @@ public final class CalendarViewContent {
         dateFormatter: monthHeaderDateFormatter)
       return .itemModel(itemModel)
     }
-    
-    monthFooterItemModelProvider = { month in
-      let itemModel = CalendarViewContent.defaultMonthHeaderItemModelProvider(
-        for: month,
-        calendar: calendar,
-        dateFormatter: monthHeaderDateFormatter)
-      return .itemModel(itemModel)
-    }
 
     dayOfWeekItemModelProvider = { _, weekdayIndex in
       let itemModel = CalendarViewContent.defaultDayOfWeekItemModelProvider(
@@ -99,6 +91,15 @@ public final class CalendarViewContent {
         dateFormatter: dayDateFormatter)
       return .itemModel(itemModel)
     }
+
+    monthFooterItemModelProvider = { month in
+      let itemModel = CalendarViewContent.defaultMonthFooterItemModelProvider(
+        for: month,
+        calendar: calendar,
+        dateFormatter: monthHeaderDateFormatter)
+      return .itemModel(itemModel)
+    }
+
   }
 
   // MARK: Public
