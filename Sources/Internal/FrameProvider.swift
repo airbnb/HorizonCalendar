@@ -27,13 +27,15 @@ final class FrameProvider {
     size: CGSize,
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
-    monthHeaderHeight: CGFloat)
+    monthHeaderHeight: CGFloat,
+    monthFooterHeight: CGFloat = 0.0)
   {
     self.content = content
     self.size = size
     self.layoutMargins = layoutMargins
     self.scale = scale
     self.monthHeaderHeight = monthHeaderHeight
+    self.monthFooterHeight = monthFooterHeight
 
     switch content.monthsLayout {
     case .vertical:
@@ -168,7 +170,7 @@ final class FrameProvider {
         content.monthDayInsets.top +
         (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
         (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
-    return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthHeaderHeight))
+    return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthFooterHeight))
   }
 
   // A faster alternative to `frameOfDay(_:inMonthWithOrigin:)`, which uses the known frame of a
@@ -266,6 +268,7 @@ final class FrameProvider {
   private let content: CalendarViewContent
   private let monthWidth: CGFloat
   private let monthHeaderHeight: CGFloat
+  private let monthFooterHeight: CGFloat
 
   private var calendar: Calendar {
     content.calendar
@@ -292,6 +295,7 @@ final class FrameProvider {
         daySize.height - content.verticalDayMargin -
         (maxNumberOfWeekRowsPerMonth * daySize.height) -
         ((maxNumberOfWeekRowsPerMonth - 1) * content.verticalDayMargin) -
+        monthFooterHeight -
         content.monthDayInsets.bottom
 
       assert(
@@ -342,7 +346,7 @@ final class FrameProvider {
       (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
       (CGFloat(numberOfRows) * daySize.height) +
       (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
-      monthHeaderHeight +
+      monthFooterHeight +
       content.monthDayInsets.bottom
   }
 
