@@ -68,6 +68,14 @@ public final class CalendarViewContent {
         dateFormatter: monthHeaderDateFormatter)
       return .itemModel(itemModel)
     }
+    
+    monthFooterItemModelProvider = { month in
+      let itemModel = CalendarViewContent.defaultMonthHeaderItemModelProvider(
+        for: month,
+        calendar: calendar,
+        dateFormatter: monthHeaderDateFormatter)
+      return .itemModel(itemModel)
+    }
 
     dayOfWeekItemModelProvider = { _, weekdayIndex in
       let itemModel = CalendarViewContent.defaultDayOfWeekItemModelProvider(
@@ -191,6 +199,28 @@ public final class CalendarViewContent {
   {
     self.monthHeaderItemModelProvider = { .itemModel(monthHeaderItemModelProvider($0)) }
     return self
+  }
+    
+  /// Configures the month footer item provider.
+  ///
+  /// `CalendarView` invokes the provided `monthFooterItemModelProvider` for each month in the range of months being
+  /// displayed. The `CalendarItemModel`s that you return will be used to create the views for each month footer in
+  /// `CalendarView`.
+  ///
+  /// If you don't configure your own month header item provider via this function, then a default month header item provider will be
+  /// used.
+  ///
+  /// - Parameters:
+  ///   - monthFooterItemModelProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
+  ///   month footer.
+  ///   - month: The `Month` for which to provide a month footer item.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new month footer item provider.
+  public func withMonthFooterItemModelProvider(
+      _ monthFooterItemModelProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
+      -> CalendarViewContent
+  {
+      self.monthFooterItemModelProvider = { .itemModel(monthFooterItemModelProvider($0)) }
+      return self
   }
 
   /// Configures the day-of-week item provider.
@@ -321,6 +351,7 @@ public final class CalendarViewContent {
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemModelProvider: (Month) -> InternalAnyCalendarItemModel
+  var monthFooterItemModelProvider: (Month) -> InternalAnyCalendarItemModel
   var dayOfWeekItemModelProvider: (
     _ month: Month?,
     _ weekdayIndex: Int)
