@@ -1609,6 +1609,7 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
+    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var verticalPinnedDaysOfWeekVisibleItemsProvider = VisibleItemsProvider(
@@ -1622,6 +1623,7 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
+    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
@@ -1636,6 +1638,7 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
+    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var horizontalVisibleItemsProvider = VisibleItemsProvider(
@@ -1650,6 +1653,7 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
+    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private static var mockCalendarItemModel: AnyCalendarItemModel {
@@ -1767,6 +1771,8 @@ extension LayoutItem.ItemType: CustomStringConvertible {
       return ".layoutItemType(.dayOfWeekInMonth(\(position.description), \(month.description)))"
     case .day(let day):
       return ".layoutItemType(.day(\(day)))"
+    case let .monthFooter(month):
+        return ".layoutItemType(.monthFooter(\(month.description)))"
     }
   }
 
