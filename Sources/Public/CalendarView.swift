@@ -564,12 +564,12 @@ public final class CalendarView: UIView {
         interMonthSpacing: content.interMonthSpacing)
     }
 
-    let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
+    let firstMonthFooterItemModel = content.monthFooterItemModelProvider(
       content.monthRange.lowerBound)
-    let firstMonthHeader = firstMonthHeaderItemModel.makeView()
-    firstMonthHeaderItemModel.setViewModelOnViewOfSameType(firstMonthHeader)
+    let firstMonthFooter = firstMonthFooterItemModel.makeView()
+    firstMonthFooterItemModel.setViewModelOnViewOfSameType(firstMonthFooter)
 
-    let size = firstMonthHeader.systemLayoutSizeFitting(
+    let size = firstMonthFooter.systemLayoutSizeFitting(
       CGSize(width: monthWidth, height: 0),
       withHorizontalFittingPriority: .required,
       verticalFittingPriority: .fittingSizeLevel)
