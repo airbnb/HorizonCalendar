@@ -156,7 +156,9 @@ extension CalendarViewContent {
       textColor = .black
     }
   
-    let monthText = "\(dateFormatter.string(from: calendar.firstDate(of: month))) Footer"
+    // By setting the text to an empty string, we basically set the height
+    // to be 0.0 for the default provider.
+    let monthText = ""
   
     return CalendarItemModel<DefaultLabelRepresenting>(
       invariantViewProperties: .init(
