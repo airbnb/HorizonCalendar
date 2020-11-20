@@ -61,7 +61,7 @@ class DemoViewController: UIViewController {
     case .horizontal:
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
-        calendarView.heightAnchor.constraint(equalToConstant: 275),
+        calendarView.heightAnchor.constraint(equalToConstant: 375),
         calendarView.leadingAnchor.constraint(
           greaterThanOrEqualTo: view.leadingAnchor),
         calendarView.trailingAnchor.constraint(
