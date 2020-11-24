@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		93061FFE24F1AE1700177ECC /* CalendarViewContent+CalendarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93061FFC24F1AE1700177ECC /* CalendarViewContent+CalendarItem.swift */; };
 		93061FFF24F1AE1700177ECC /* CalendarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93061FFD24F1AE1700177ECC /* CalendarItem.swift */; };
+		932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */; };
 		938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */; };
 		938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */; };
 		938DA41324BF0FFF008A3B47 /* DefaultItemProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41224BF0FFF008A3B47 /* DefaultItemProviders.swift */; };
@@ -68,6 +69,7 @@
 /* Begin PBXFileReference section */
 		93061FFC24F1AE1700177ECC /* CalendarViewContent+CalendarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CalendarViewContent+CalendarItem.swift"; sourceTree = "<group>"; };
 		93061FFD24F1AE1700177ECC /* CalendarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarItem.swift; sourceTree = "<group>"; };
+		932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
 		938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarItemViewRepresentable.swift; sourceTree = "<group>"; };
 		938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCalendarItemModel.swift; sourceTree = "<group>"; };
 		938DA41224BF0FFF008A3B47 /* DefaultItemProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultItemProviders.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */,
 				93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */,
 				939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */,
+				932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */,
 				93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */,
 				939E694C2484B14400A8BCC7 /* LayoutItemTypeEnumeratorTests.swift */,
 				93A0062824F2068000F667A3 /* LegacyItemViewReuseManagerTests.swift */,
@@ -408,6 +411,7 @@
 				93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */,
 				939E69592484B21700A8BCC7 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
 				93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */,
+				932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
