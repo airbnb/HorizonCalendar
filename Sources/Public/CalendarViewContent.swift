@@ -56,6 +56,7 @@ public final class CalendarViewContent {
 
     let monthHeaderDateFormatter = DateFormatter()
     monthHeaderDateFormatter.calendar = calendar
+    monthHeaderDateFormatter.locale = calendar.locale
     monthHeaderDateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "MMMM yyyy",
       options: 0,
@@ -79,6 +80,7 @@ public final class CalendarViewContent {
 
     let dayDateFormatter = DateFormatter()
     dayDateFormatter.calendar = calendar
+    dayDateFormatter.locale = calendar.locale
     dayDateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
