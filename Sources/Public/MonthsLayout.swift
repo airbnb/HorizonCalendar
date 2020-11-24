@@ -27,8 +27,8 @@ public enum MonthsLayout {
 
   /// Calendar months will be arranged in a single row, and scroll on the horizontal axis.
   ///
-  /// - `options`: Additional options to adjust the layout of the horizontally-scrolling calendar.
-  case horizontal(options: HorizontalMonthsLayoutOptions)
+  /// - `monthWidth`: The width of each month.
+  case horizontal(monthWidth: CGFloat)
 
   // MARK: Internal
 
@@ -70,19 +70,6 @@ extension MonthsLayout {
     return .vertical(options: options)
   }
 
-  /// Calendar months will be arranged in a single row, and scroll on the horizontal axis.
-  ///
-  /// - `monthWidth`: The width of each month.
-  @available(
-    *,
-    deprecated,
-    message: "Use .horizontal(options: HorizontalMonthsLayoutOptions) instead. This will be removed in a future major release.")
-  public static func horizontal(monthWidth: CGFloat) -> Self {
-    var options = HorizontalMonthsLayoutOptions()
-    options.monthWidth = monthWidth
-    return .horizontal(options: options)
-  }
-
 }
 
 // MARK: Equatable
@@ -92,7 +79,7 @@ extension MonthsLayout: Equatable {
   public static func == (lhs: MonthsLayout, rhs: MonthsLayout) -> Bool {
     switch (lhs, rhs)  {
     case (.vertical(let lhsOptions), .vertical(let rhsOptions)): return lhsOptions == rhsOptions
-    case (.horizontal(let lhsOptions), .horizontal(let rhsOptions)): return lhsOptions == rhsOptions
+    case (.horizontal, .horizontal): return true
     default: return false
     }
   }
@@ -126,43 +113,5 @@ public struct VerticalMonthsLayoutOptions: Equatable {
   /// Whether the calendar will always show complete months at the calendar's boundaries, even if the visible date range does not start
   /// on the first date or end on the last date of a month.
   public let alwaysShowCompleteBoundaryMonths: Bool
-
-}
-
-// MARK: - HorizontalMonthsLayoutOptions
-
-/// Layout options for a horizontally-scrolling calendar.
-public struct HorizontalMonthsLayoutOptions: Equatable {
-
-  // MARK: Lifecycle
-
-  /// Initializes a new instance of `HorizontalMonthsLayoutOptions`.
-  ///
-  /// - Parameters:
-  ///   - maximumFullyVisibleMonths: The maximum number of fully visible months for any scroll offset. The default value is
-  ///   `1`.
-  public init(maximumFullyVisibleMonths: Double = 1) {
-    assert(maximumFullyVisibleMonths >= 1, "`maximumFullyVisibleMonths` must be greater than 1.")
-    self.maximumFullyVisibleMonths = maximumFullyVisibleMonths
-  }
-
-  // MARK: Public
-
-  /// The maximum number of fully visible months for any scroll offset.
-  public let maximumFullyVisibleMonths: Double
-
-  // MARK: Internal
-
-  /// This property exists only to support `MonthsLayout.horizontal(monthWidth: CGFloat)`, which is deprecated.
-  var monthWidth: CGFloat?
-
-  func monthWidth(calendarWidth: CGFloat, interMonthSpacing: CGFloat) -> CGFloat {
-    if let monthWidth = monthWidth {
-      return monthWidth
-    }
-
-    let visibleInterMonthSpacing = CGFloat(maximumFullyVisibleMonths) * interMonthSpacing
-    return (calendarWidth - visibleInterMonthSpacing) / CGFloat(maximumFullyVisibleMonths)
-  }
 
 }
