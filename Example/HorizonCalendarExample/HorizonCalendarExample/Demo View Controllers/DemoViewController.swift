@@ -27,6 +27,7 @@ class DemoViewController: UIViewController {
   lazy var dayDateFormatter: DateFormatter = {
     let dateFormatter = DateFormatter()
     dateFormatter.calendar = calendar
+    dateFormatter.locale = calendar.locale
     dateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
