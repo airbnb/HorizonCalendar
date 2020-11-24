@@ -58,16 +58,12 @@ class DemoViewController: UIViewController {
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
       ])
-    case .horizontal:
+    case .horizontal(let monthWidth):
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
-        calendarView.heightAnchor.constraint(equalToConstant: 275),
-        calendarView.leadingAnchor.constraint(
-          greaterThanOrEqualTo: view.leadingAnchor),
-        calendarView.trailingAnchor.constraint(
-          lessThanOrEqualTo: view.trailingAnchor),
-        calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
+        calendarView.heightAnchor.constraint(equalToConstant: monthWidth * 1.1),
+        calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       ])
     }
   }
