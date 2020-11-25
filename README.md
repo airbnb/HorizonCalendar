@@ -134,7 +134,7 @@ let calendarView = CalendarView(initialContent: makeContent())
 
 ```swift
 private func makeContent() -> CalendarViewContent {
-  let calendar = Calendar(identifier: .gregorian)
+  let calendar = Calendar.current
 
   let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
   let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
