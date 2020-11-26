@@ -82,7 +82,6 @@ extension LayoutItem.ItemType: Comparable {
     case let (.day(lhsDay), .monthFooter(rhsMonth)):
       return lhsDay.month < rhsMonth
 
-        
     case let (.monthFooter(lhsMonth), .monthHeader(rhsMonth)):
       return lhsMonth <= rhsMonth
     case let (.monthFooter(lhsMonth), .dayOfWeekInMonth(_, rhsMonth)):
