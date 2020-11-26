@@ -301,7 +301,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-03)), frame: (233.5, 280.0, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-03-29)), frame: (5.0, 558.5, 35.5, 36.0)]",
       "[itemType: .layoutItemType(.day(2020-02-26)), frame: (142.0, 149.5, 36.0, 35.5)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-02)), frame: (0.0, 205.0, 320.0, 0.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-03)), frame: (142.0, 280.0, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-03-05)), frame: (188.0, 335.5, 35.5, 36.0)]",
       "[itemType: .layoutItemType(.day(2020-03-25)), frame: (142.0, 503.0, 36.0, 35.5)]",
@@ -367,7 +366,6 @@ final class VisibleItemsProviderTests: XCTestCase {
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .layoutItemType(.day(2020-06-18)), frame: (188.0, 641.5, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-06-19)), frame: (233.5, 641.5, 36.0, 35.5)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-05)), frame: (0.0, 455.0, 320.0, 0.0)]",
       "[itemType: .layoutItemType(.day(2020-06-30)), frame: (96.5, 753.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-06-10)), frame: (142.0, 585.5, 36.0, 36.0)]",
       "[itemType: .layoutItemType(.day(2020-06-29)), frame: (50.5, 753.0, 36.0, 35.5)]",
@@ -502,7 +500,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-05-03)), frame: (255.0, 185.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-04)), frame: (111.5, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-05-20)), frame: (383.5, 291.5, 33.0, 33.0)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-04)), frame: (-65.0, 397.0, 300.0, 0.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-05)), frame: (340.5, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-05)), frame: (255.0, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-05-19)), frame: (340.5, 291.5, 33.0, 33.0)]",
@@ -592,7 +589,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-06-04)), frame: (188.0, 624.5, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-05-31)), frame: (5.0, 438.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-05-13)), frame: (142.0, 270.5, 36.0, 36.0)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-05)), frame: (0.0, 493.5, 320.0, 0.0)]",
       "[itemType: .layoutItemType(.day(2020-05-01)), frame: (233.5, 159.5, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-06-06)), frame: (279.5, 624.5, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-05-20)), frame: (142.0, 326.5, 36.0, 35.5)]",
@@ -650,7 +646,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-02)), frame: (320.0, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-02-17)), frame: (363.0, 291.5, 32.5, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-02-11)), frame: (405.5, 238.5, 33.0, 33.0)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-01)), frame: (0.0, 397.0, 300.0, 0.0)]",
       "[itemType: .layoutItemType(.day(2020-02-14)), frame: (534.5, 238.5, 32.5, 33.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-02)), frame: (405.5, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-02-04)), frame: (405.5, 185.5, 33.0, 33.0)]",
@@ -820,7 +815,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.last, 2020-12)), frame: (279.5, 770.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-12)), frame: (5.0, 770.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.third, 2020-12)), frame: (96.5, 770.0, 35.5, 35.5)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-11)), frame: (0.0, 695.0, 320.0, 0.0)]",
       "[itemType: .layoutItemType(.monthHeader(2020-12)), frame: (0.0, 690.0, 320.0, 50.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-12)), frame: (188.0, 770.0, 35.5, 35.5)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.second, 2020-12)), frame: (50.5, 770.0, 36.0, 35.5)]",
@@ -862,7 +856,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-11-12)), frame: (1061.5, 185.5, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-11-05)), frame: (1061.5, 133.0, 33.0, 32.5)]",
       "[itemType: .layoutItemType(.day(2020-11-21)), frame: (1147.0, 238.5, 33.0, 33.0)]",
-      "[itemType: .layoutItemType(.monthFooter(2020-11)), frame: (885.0, 397.0, 300.0, 0.0)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.first, 2020-12)), frame: (1205.0, 80.0, 33.0, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-21)), frame: (1248.0, 291.5, 32.5, 33.0)]",
       "[itemType: .layoutItemType(.day(2020-12-28)), frame: (1248.0, 344.5, 32.5, 32.5)]",
@@ -1616,7 +1609,6 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
-    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var verticalPinnedDaysOfWeekVisibleItemsProvider = VisibleItemsProvider(
@@ -1630,7 +1622,6 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
-    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
@@ -1645,7 +1636,6 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
-    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private var horizontalVisibleItemsProvider = VisibleItemsProvider(
@@ -1659,7 +1649,6 @@ final class VisibleItemsProviderTests: XCTestCase {
     layoutMargins: .zero,
     scale: 2,
     monthHeaderHeight: 50,
-    monthFooterHeight: 0,
     backgroundColor: nil)
 
   private static var mockCalendarItemModel: AnyCalendarItemModel {
