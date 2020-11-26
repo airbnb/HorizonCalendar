@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706A954A2570341A003EBB82 /* SingleDaySelectionFooterDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A95492570341A003EBB82 /* SingleDaySelectionFooterDemoViewController.swift */; };
+		706A954C25703490003EBB82 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A954B25703490003EBB82 /* FooterView.swift */; };
 		9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */; };
 		9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */; };
 		938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		706A95492570341A003EBB82 /* SingleDaySelectionFooterDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleDaySelectionFooterDemoViewController.swift; sourceTree = "<group>"; };
+		706A954B25703490003EBB82 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPickerViewController.swift; sourceTree = "<group>"; };
 		9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToDayWithAnimationDemoViewController.swift; sourceTree = "<group>"; };
 		938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionDemoViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 			children = (
 				938176A6249B85CE00E18FA3 /* DemoViewController.swift */,
 				939E696E2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift */,
+				706A95492570341A003EBB82 /* SingleDaySelectionFooterDemoViewController.swift */,
 				938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */,
 				938176A2249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift */,
 				938176A4249B828600E18FA3 /* LargeDayRangeDemoViewController.swift */,
@@ -109,6 +114,7 @@
 				9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */,
 				9381769D249B79CB00E18FA3 /* Demo View Controllers */,
 				93AF5548248DCF0700BDB0FF /* DayView.swift */,
+				706A954B25703490003EBB82 /* FooterView.swift */,
 				93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */,
 				939853512498992E0022A3A1 /* TooltipView.swift */,
 				939E69732484CD9000A8BCC7 /* Assets.xcassets */,
@@ -198,8 +204,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */,
+				706A954C25703490003EBB82 /* FooterView.swift in Sources */,
 				939E696F2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift in Sources */,
 				938176A3249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift in Sources */,
+				706A954A2570341A003EBB82 /* SingleDaySelectionFooterDemoViewController.swift in Sources */,
 				938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */,
 				9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */,
 				939853522498992E0022A3A1 /* TooltipView.swift in Sources */,
