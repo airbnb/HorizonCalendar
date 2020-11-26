@@ -143,32 +143,4 @@ extension CalendarViewContent {
       viewModel: .init(text: dayText, accessibilityLabel: accessibilityLabel))
   }
   
-  static func defaultMonthFooterItemModelProvider(
-    for month: Month,
-    calendar: Calendar,
-    dateFormatter: DateFormatter)
-    -> AnyCalendarItemModel
-  {
-    let textColor: UIColor
-    if #available(iOS 13.0, *) {
-      textColor = .label
-    } else {
-      textColor = .black
-    }
-  
-    // By setting the text to an empty string, we basically set the height
-    // to be 0.0 for the default provider.
-    let monthText = ""
-  
-    return CalendarItemModel<DefaultLabelRepresenting>(
-      invariantViewProperties: .init(
-        font: UIFont.systemFont(ofSize: 16),
-        textAlignment: .natural,
-        textColor: textColor,
-        backgroundColor: .clear,
-        isAccessibilityElement: true,
-        accessibilityTraits: [.header]),
-      viewModel: .init(text: monthText, accessibilityLabel: monthText))
-  }
-  
 }

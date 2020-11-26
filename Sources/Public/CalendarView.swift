@@ -566,14 +566,18 @@ public final class CalendarView: UIView {
 
     let firstMonthFooterItemModel = content.monthFooterItemModelProvider(
       content.monthRange.lowerBound)
-    let firstMonthFooter = firstMonthFooterItemModel.makeView()
-    firstMonthFooterItemModel.setViewModelOnViewOfSameType(firstMonthFooter)
+    if let firstMonthFooter = firstMonthFooterItemModel?.makeView() {
+        firstMonthFooterItemModel?.setViewModelOnViewOfSameType(firstMonthFooter)
 
-    let size = firstMonthFooter.systemLayoutSizeFitting(
-      CGSize(width: monthWidth, height: 0),
-      withHorizontalFittingPriority: .required,
-      verticalFittingPriority: .fittingSizeLevel)
-    return size.height
+        let size = firstMonthFooter.systemLayoutSizeFitting(
+          CGSize(width: monthWidth, height: 0),
+          withHorizontalFittingPriority: .required,
+          verticalFittingPriority: .fittingSizeLevel)
+        return size.height
+        
+    }
+    
+    return 0.0
   }
 
   private func updateVisibleViews(

@@ -91,13 +91,9 @@ public final class CalendarViewContent {
         dateFormatter: dayDateFormatter)
       return .itemModel(itemModel)
     }
-
+    
     monthFooterItemModelProvider = { month in
-      let itemModel = CalendarViewContent.defaultMonthFooterItemModelProvider(
-        for: month,
-        calendar: calendar,
-        dateFormatter: monthHeaderDateFormatter)
-      return .itemModel(itemModel)
+        return nil
     }
 
   }
@@ -352,7 +348,7 @@ public final class CalendarViewContent {
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemModelProvider: (Month) -> InternalAnyCalendarItemModel
-  var monthFooterItemModelProvider: (Month) -> InternalAnyCalendarItemModel
+  var monthFooterItemModelProvider: (Month) -> InternalAnyCalendarItemModel?
   var dayOfWeekItemModelProvider: (
     _ month: Month?,
     _ weekdayIndex: Int)

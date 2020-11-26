@@ -28,7 +28,7 @@ final class FrameProvider {
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat,
-    monthFooterHeight: CGFloat = 0.0)
+    monthFooterHeight: CGFloat?)
   {
     self.content = content
     self.size = size
@@ -88,7 +88,8 @@ final class FrameProvider {
             monthHeaderHeight -
             content.monthDayInsets.top -
             (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
-            (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
+            (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin)) -
+            content.monthDayInsets.bottom
       return CGPoint(x: x, y: y)
     }
   }
@@ -170,7 +171,7 @@ final class FrameProvider {
         content.monthDayInsets.top +
         (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
         (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
-    return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthFooterHeight))
+    return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthFooterHeight ?? 0))
   }
 
   // A faster alternative to `frameOfDay(_:inMonthWithOrigin:)`, which uses the known frame of a
@@ -268,7 +269,7 @@ final class FrameProvider {
   private let content: CalendarViewContent
   private let monthWidth: CGFloat
   private let monthHeaderHeight: CGFloat
-  private let monthFooterHeight: CGFloat
+  private let monthFooterHeight: CGFloat?
 
   private var calendar: Calendar {
     content.calendar
@@ -295,8 +296,8 @@ final class FrameProvider {
         daySize.height - content.verticalDayMargin -
         (maxNumberOfWeekRowsPerMonth * daySize.height) -
         ((maxNumberOfWeekRowsPerMonth - 1) * content.verticalDayMargin) -
-        monthFooterHeight -
-        content.monthDayInsets.bottom
+        content.monthDayInsets.bottom -
+        (monthFooterHeight ?? 0.0)
 
       assert(
         availableHeight > 0,
@@ -346,8 +347,8 @@ final class FrameProvider {
       (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
       (CGFloat(numberOfRows) * daySize.height) +
       (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
-      monthFooterHeight +
-      content.monthDayInsets.bottom
+      content.monthDayInsets.bottom +
+      (monthFooterHeight ?? 0.0)
   }
 
   // Gets the row of a date in a particular month, taking into account whether the date is in a

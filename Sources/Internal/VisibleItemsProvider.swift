@@ -618,7 +618,7 @@ final class VisibleItemsProvider {
 
         let itemType = VisibleCalendarItem.ItemType.layoutItemType(layoutItem.itemType)
 
-        let calendarItemModel: InternalAnyCalendarItemModel
+        var calendarItemModel: InternalAnyCalendarItemModel? = nil
         switch layoutItem.itemType {
         case .monthHeader(let month):
           calendarItemModel = calendarItemModelCache.value(
@@ -697,16 +697,23 @@ final class VisibleItemsProvider {
           }
             
         case .monthFooter(let month):
-          calendarItemModel = calendarItemModelCache.value(for: itemType, missingValueProvider: {
-              previousCalendarItemModelCache?[itemType] ?? content.monthFooterItemModelProvider(month)
-          })
+            if let footerProvider = content.monthFooterItemModelProvider(month) {
+                calendarItemModel = calendarItemModelCache.value(for: itemType, missingValueProvider: {
+                    previousCalendarItemModelCache?[itemType] ?? footerProvider
+                })
+            }
         }
-
-        let visibleItem = VisibleCalendarItem(
-          calendarItemModel: calendarItemModel,
-          itemType: .layoutItemType(layoutItem.itemType),
-          frame: layoutItem.frame)
-        visibleItems.insert(visibleItem)
+        
+        // We only want to add the visible item if we have one.
+        // Footers are optional, so this check is now necessary.
+        
+        if let itemModel = calendarItemModel {
+            let visibleItem = VisibleCalendarItem(
+              calendarItemModel: itemModel,
+              itemType: .layoutItemType(layoutItem.itemType),
+              frame: layoutItem.frame)
+            visibleItems.insert(visibleItem)
+        }
 
         centermostLayoutItem = self.centermostLayoutItem(
           comparing: layoutItem,
