@@ -28,7 +28,7 @@ final class FrameProvider {
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat,
-    monthFooterHeight: CGFloat?)
+    monthFooterHeight: CGFloat? = 0.0)
   {
     self.content = content
     self.size = size
