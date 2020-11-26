@@ -554,10 +554,7 @@ public final class CalendarView: UIView {
     switch content.monthsLayout {
     case .vertical:
       monthWidth = bounds.width
-    case .horizontal(let options):
-      monthWidth = options.monthWidth(
-        calendarWidth: bounds.width,
-        interMonthSpacing: content.interMonthSpacing)
+    case .horizontal(let _monthWidth): monthWidth = _monthWidth
     }
 
     let firstMonthFooterItemModel = content.monthFooterItemModelProvider(
