@@ -132,7 +132,7 @@ final class LayoutItemTypeEnumerator {
     case .day(let day):
       let nextDay = calendar.day(byAddingDays: 1, to: day)
       if day.month != nextDay.month {
-        return .monthHeader(nextDay.month)
+        return .monthFooter(day.month)
       } else if day == dayRange.upperBound {
         let nextMonth = calendar.month(byAddingMonths: 1, to: nextDay.month)
         return .monthHeader(nextMonth)
