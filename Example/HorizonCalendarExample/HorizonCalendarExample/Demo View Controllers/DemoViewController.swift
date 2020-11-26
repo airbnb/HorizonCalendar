@@ -23,7 +23,7 @@ class DemoViewController: UIViewController {
   let monthsLayout: MonthsLayout
 
   lazy var calendarView = CalendarView(initialContent: makeContent())
-  lazy var calendar = Calendar(identifier: .gregorian)
+  lazy var calendar = Calendar.current
   lazy var dayDateFormatter: DateFormatter = {
     let dateFormatter = DateFormatter()
     dateFormatter.calendar = calendar
