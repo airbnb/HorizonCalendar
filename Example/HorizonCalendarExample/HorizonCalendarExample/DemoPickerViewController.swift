@@ -77,6 +77,7 @@ final class DemoPickerViewController: UIViewController {
     ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
+    ("Single Day Selection w/ Footer", SingleDaySelectionFooterDemoViewController.self)
   ]
 
   private lazy var tableView: UITableView = {
