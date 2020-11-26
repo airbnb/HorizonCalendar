@@ -88,7 +88,7 @@ final class FrameProvider {
             monthHeaderHeight -
             content.monthDayInsets.top -
             (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
-            (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin)) -
+            CGFloat((CGFloat(numberOfRows(in: month)) * daySize.height) + (CGFloat(numberOfRows(in: month) - 1) * content.verticalDayMargin)) -
             content.monthDayInsets.bottom
       return CGPoint(x: x, y: y)
     }
