@@ -27,6 +27,7 @@ class DemoViewController: UIViewController {
   lazy var dayDateFormatter: DateFormatter = {
     let dateFormatter = DateFormatter()
     dateFormatter.calendar = calendar
+    dateFormatter.locale = calendar.locale
     dateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
@@ -58,16 +59,12 @@ class DemoViewController: UIViewController {
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
       ])
-    case .horizontal:
+    case .horizontal(let monthWidth):
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
-        calendarView.heightAnchor.constraint(equalToConstant: 375),
-        calendarView.leadingAnchor.constraint(
-          greaterThanOrEqualTo: view.leadingAnchor),
-        calendarView.trailingAnchor.constraint(
-          lessThanOrEqualTo: view.trailingAnchor),
-        calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
+        calendarView.heightAnchor.constraint(equalToConstant: monthWidth * 1.1),
+        calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       ])
     }
   }
