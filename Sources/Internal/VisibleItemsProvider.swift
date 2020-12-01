@@ -29,7 +29,7 @@ final class VisibleItemsProvider {
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat,
-    monthFooterHeight: CGFloat? = 0.0,
+    monthFooterHeight: CGFloat?,
     backgroundColor: UIColor?)
   {
     self.content = content
