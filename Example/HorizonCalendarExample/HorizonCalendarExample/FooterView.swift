@@ -16,9 +16,9 @@
 import HorizonCalendar
 import UIKit
 
-// MARK: CalendarItemViewRepresentable
+// MARK: - FooterView
 
-class FooterView: CalendarItemViewRepresentable {
+final class FooterView: CalendarItemViewRepresentable {
 
   struct InvariantViewProperties: Hashable {
     var font = UIFont.systemFont(ofSize: 12)
