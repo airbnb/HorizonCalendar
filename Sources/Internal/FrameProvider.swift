@@ -140,13 +140,15 @@ final class FrameProvider {
     let date = calendar.startDate(of: day)
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
     let rowInMonth = adjustedRowInMonth(for: day)
+    let numberOfWeekRows = rowInMonth + 1
 
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y +
       monthHeaderHeight +
       content.monthDayInsets.top +
-      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
-      (CGFloat(rowInMonth) * (daySize.height + content.verticalDayMargin))
+      heightOfDaysOfTheWeekRowInMonth() +
+      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) -
+      daySize.height
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
   }
 
@@ -232,12 +234,12 @@ final class FrameProvider {
     inMonthWithOrigin monthOrigin: CGPoint,
     separatorHeight: CGFloat) -> CGRect
   {
-    CGRect(
-      x: monthOrigin.x,
-      y: monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top + daySize.height -
-        separatorHeight,
-      width: monthWidth,
-      height: separatorHeight)
+    let y = monthOrigin.y +
+      monthHeaderHeight +
+      content.monthDayInsets.top +
+      daySize.height -
+      separatorHeight
+    return CGRect(x: monthOrigin.x, y: y, width: monthWidth, height: separatorHeight)
   }
 
   // MARK: Private
@@ -263,14 +265,13 @@ final class FrameProvider {
       """)
 
     if case .horizontal = monthsLayout {
-      let maxNumberOfWeekRowsPerMonth = CGFloat(6)
+      let maxNumberOfWeekRowsPerMonth = 6
 
       let availableHeight = size.height -
         monthHeaderHeight -
         content.monthDayInsets.top -
-        daySize.height - content.verticalDayMargin -
-        (maxNumberOfWeekRowsPerMonth * daySize.height) -
-        ((maxNumberOfWeekRowsPerMonth - 1) * content.verticalDayMargin) -
+        heightOfDaysOfTheWeekRowInMonth() -
+        heightOfDayContent(forNumberOfWeekRows: maxNumberOfWeekRowsPerMonth) -
         content.monthDayInsets.bottom
 
       assert(
@@ -307,20 +308,20 @@ final class FrameProvider {
     atRowInMonth rowInMonth: Int)
     -> CGFloat
   {
-    dayItemFrame.minY -
-      (CGFloat(rowInMonth) * (daySize.height + content.verticalDayMargin)) -
-      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
+    let numberOfWeekRows = rowInMonth + 1
+    return dayItemFrame.maxY -
+      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) -
+      heightOfDaysOfTheWeekRowInMonth() -
       content.monthDayInsets.top -
       monthHeaderHeight
   }
 
   private func heightOfMonth(_ month: Month) -> CGFloat {
-    let numberOfRows = self.numberOfRows(in: month)
+    let numberOfWeekRows = self.numberOfWeekRows(in: month)
     return monthHeaderHeight +
       content.monthDayInsets.top +
-      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
-      (CGFloat(numberOfRows) * daySize.height) +
-      (CGFloat(numberOfRows - 1) * content.verticalDayMargin) +
+      heightOfDaysOfTheWeekRowInMonth() +
+      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) +
       content.monthDayInsets.bottom
   }
 
@@ -341,9 +342,9 @@ final class FrameProvider {
     return rowInMonth - missingRows
   }
 
-  // Gets the number of rows in a particular month, taking into account whether the month is a
-  // boundary month that's only showing some dates.
-  private func numberOfRows(in month: Month) -> Int {
+  // Gets the number of week rows in a particular month, taking into account whether the month is a
+  // boundary month that's only showing a subset of days.
+  private func numberOfWeekRows(in month: Month) -> Int {
     let rowOfLastDateInMonth: Int
     if month == content.monthRange.lowerBound {
       let lastDateOfFirstMonth = calendar.lastDate(of: month)
@@ -360,6 +361,22 @@ final class FrameProvider {
     }
 
     return rowOfLastDateInMonth + 1
+  }
+
+  // Gets the height of day content for a specified number of week rows, including the additional
+  // height for vertical day padding.
+  // For example, the returned height value for 5 week rows will be 5x the `daySize.height`, plus 4x
+  // the `content.verticalDayMargin`.
+  private func heightOfDayContent(forNumberOfWeekRows numberOfWeekRows: Int) -> CGFloat {
+    (CGFloat(numberOfWeekRows) * daySize.height) +
+      (CGFloat(numberOfWeekRows - 1) * content.verticalDayMargin)
+  }
+
+  // Gets the height of the days of the week row, plus the padding between it and the first row of
+  // days in each month. The returned value will be `0` if
+  // `monthsLayout.pinDaysOfWeekToTop == true`.
+  private func heightOfDaysOfTheWeekRowInMonth() -> CGFloat {
+    monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)
   }
 
 }
