@@ -68,7 +68,7 @@ final class DemoPickerViewController: UIViewController {
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
     ("Partial Month Visibility", PartialMonthVisibilityDemoViewController.self),
-    ("Single Day Selection w/ Footer", SingleDaySelectionFooterDemoViewController.self)
+    ("Month Footer Demo", MonthFootersDemoViewController.self)
   ]
 
   private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
@@ -77,7 +77,7 @@ final class DemoPickerViewController: UIViewController {
     ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
-    ("Single Day Selection w/ Footer", SingleDaySelectionFooterDemoViewController.self)
+    ("Month Footer Demo", MonthFootersDemoViewController.self)
   ]
 
   private lazy var tableView: UITableView = {
