@@ -95,7 +95,7 @@ public final class CalendarViewContent {
     }
     
     monthFooterItemModelProvider = { month in
-        return nil
+      return nil
     }
 
   }
