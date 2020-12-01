@@ -142,4 +142,5 @@ extension CalendarViewContent {
         accessibilityTraits: []),
       viewModel: .init(text: dayText, accessibilityLabel: accessibilityLabel))
   }
+
 }
