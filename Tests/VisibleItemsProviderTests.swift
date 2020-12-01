@@ -1767,7 +1767,7 @@ extension LayoutItem.ItemType: CustomStringConvertible {
     case .day(let day):
       return ".layoutItemType(.day(\(day)))"
     case let .monthFooter(month):
-        return ".layoutItemType(.monthFooter(\(month.description)))"
+      return ".layoutItemType(.monthFooter(\(month.description)))"
     }
   }
 
