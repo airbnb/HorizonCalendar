@@ -171,7 +171,7 @@ final class FrameProviderTests: XCTestCase {
         itemType: .dayOfWeekInMonth(
           position: .fourth,
           month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 130, y: 200, width: 40, height: 40))
+        frame: CGRect(origin: CGPoint(x: 130, y: 200), size: frameProvider.daySize))
       let origin2 = frameProvider.originOfMonth(containing: dayOfWeekLayoutItem)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(
@@ -181,7 +181,7 @@ final class FrameProviderTests: XCTestCase {
       let dayLayoutItem1 = LayoutItem(
         itemType: .day(
           Day(month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true), day: 10)),
-        frame: CGRect(x: 200, y: 300, width: 40, height: 40))
+        frame: CGRect(origin: CGPoint(x: 200, y: 300), size: frameProvider.daySize))
       let origin3 = frameProvider.originOfMonth(containing: dayLayoutItem1)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(origin3 == expectedOrigins3[index], "Incorrect month origin containing day.")
@@ -189,7 +189,7 @@ final class FrameProviderTests: XCTestCase {
       let dayLayoutItem2 = LayoutItem(
         itemType: .day(
           Day(month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true), day: 18)),
-        frame: CGRect(x: 200, y: 300, width: 40, height: 40))
+        frame: CGRect(origin: CGPoint(x: 200, y: 300), size: frameProvider.daySize))
       let origin4 = frameProvider.originOfMonth(containing: dayLayoutItem2)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(origin4 == expectedOrigins4[index], "Incorrect month origin containing day.")
