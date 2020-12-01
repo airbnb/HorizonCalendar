@@ -105,8 +105,8 @@ final class LayoutItemTypeEnumerator {
       }
     
     case .monthFooter(let month):
-        let day = calendar.day(containing: calendar.lastDate(of: month))
-        return .day(day)
+      let day = calendar.day(containing: calendar.lastDate(of: month))
+      return .day(day)
     }
   }
 
