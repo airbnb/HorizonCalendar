@@ -165,10 +165,11 @@ final class FrameProvider {
   func frameOfMonthFooter(_ month: Month, inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
     let x = monthOrigin.x
     let y = monthOrigin.y +
-        monthHeaderHeight +
-        content.monthDayInsets.top +
-        (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
-        (CGFloat(numberOfRows(in: month)) * (daySize.height + content.verticalDayMargin))
+      monthHeaderHeight +
+      content.monthDayInsets.top +
+      (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) +
+      ((CGFloat(numberOfRows(in: month)) * daySize.height) + (CGFloat(numberOfRows(in: month) - 1) * content.verticalDayMargin)) +
+      content.monthDayInsets.bottom
     return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: monthWidth, height: monthFooterHeight ?? 0))
   }
 
