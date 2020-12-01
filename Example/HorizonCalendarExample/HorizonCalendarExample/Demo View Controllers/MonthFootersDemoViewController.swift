@@ -47,6 +47,7 @@ class MonthFootersDemoViewController: DemoViewController {
       .withInterMonthSpacing(24)
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
+      .withMonthDayInsets(.init(top: 0, left: 0, bottom: 16, right: 0))
       
       .withDayItemModelProvider { [weak self] day in
         let textColor: UIColor

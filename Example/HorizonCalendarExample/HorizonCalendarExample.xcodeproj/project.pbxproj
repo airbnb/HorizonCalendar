@@ -80,12 +80,12 @@
 			children = (
 				938176A6249B85CE00E18FA3 /* DemoViewController.swift */,
 				939E696E2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift */,
-				706A95492570341A003EBB82 /* MonthFootersDemoViewController.swift */,
 				938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */,
 				938176A2249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift */,
 				938176A4249B828600E18FA3 /* LargeDayRangeDemoViewController.swift */,
 				9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */,
 				93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */,
+				706A95492570341A003EBB82 /* MonthFootersDemoViewController.swift */,
 			);
 			path = "Demo View Controllers";
 			sourceTree = "<group>";
