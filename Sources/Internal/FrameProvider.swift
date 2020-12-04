@@ -140,14 +140,14 @@ final class FrameProvider {
     let date = calendar.startDate(of: day)
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
     let rowInMonth = adjustedRowInMonth(for: day)
-    let numberOfWeekRows = rowInMonth + 1
+    let numberOfWeekRowsThroughDay = rowInMonth + 1
 
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y +
       monthHeaderHeight +
       content.monthDayInsets.top +
       heightOfDaysOfTheWeekRowInMonth() +
-      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) -
+      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRowsThroughDay) -
       daySize.height
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
   }
