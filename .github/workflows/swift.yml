@@ -13,12 +13,12 @@ jobs:
 
     strategy:
       matrix:
-        destination: ['platform=iOS Simulator,OS=11.0,name=iPhone 8', 'platform=iOS Simulator,OS=14.0,name=iPhone 12']
+        destination: ['platform=iOS Simulator,OS=11.0,name=iPhone 8', 'platform=iOS Simulator,OS=14.2,name=iPhone 12']
 
     steps:
     - uses: actions/checkout@v2
     - name: Build
       run: xcodebuild clean build -scheme HorizonCalendar
     - name: Run tests
-      run: xcodebuild clean test -project HorizonCalendar.xcodeproj -scheme HorizonCalendar -destination "name=iPhone 8,OS=14.0"
+      run: xcodebuild clean test -project HorizonCalendar.xcodeproj -scheme HorizonCalendar -destination "name=iPhone 8,OS=14.2"
 
