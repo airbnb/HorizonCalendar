@@ -81,13 +81,15 @@ final class FrameProvider {
       return CGPoint(x: x, y: y)
         
     case .monthFooter(let month):
+      let numberOfWeekRows = self.numberOfWeekRows(in: month)
+
       let x = layoutItem.frame.origin.x
       let y = layoutItem.frame.minY -
-        monthHeaderHeight -
+        content.monthDayInsets.bottom -
+        heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) -
+        heightOfDaysOfTheWeekRowInMonth() -
         content.monthDayInsets.top -
-        (monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)) -
-        CGFloat((CGFloat(numberOfRows(in: month)) * daySize.height) + (CGFloat(numberOfRows(in: month) - 1) * content.verticalDayMargin)) -
-        content.monthDayInsets.bottom
+        monthHeaderHeight
       return CGPoint(x: x, y: y)
     }
   }
