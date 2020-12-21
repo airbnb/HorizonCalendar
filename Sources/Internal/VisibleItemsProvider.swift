@@ -618,7 +618,7 @@ final class VisibleItemsProvider {
 
         let itemType = VisibleCalendarItem.ItemType.layoutItemType(layoutItem.itemType)
 
-        var calendarItemModel: InternalAnyCalendarItemModel? = nil
+        let calendarItemModel: InternalAnyCalendarItemModel?
         switch layoutItem.itemType {
         case .monthHeader(let month):
           calendarItemModel = calendarItemModelCache.value(
