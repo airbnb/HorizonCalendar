@@ -68,7 +68,7 @@ final class DemoPickerViewController: UIViewController {
     ("Large Day Range", LargeDayRangeDemoViewController.self),
     ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
     ("Partial Month Visibility", PartialMonthVisibilityDemoViewController.self),
-    ("Month Footer Demo", MonthFootersDemoViewController.self)
+    ("Month Footers", MonthFootersDemoViewController.self)
   ]
 
   private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
