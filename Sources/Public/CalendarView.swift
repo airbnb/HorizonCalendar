@@ -559,7 +559,9 @@ public final class CalendarView: UIView {
       visibleItems,
       viewHandler: { view, visibleItem, previousBackingVisibleItem in
         if view.superview == nil {
-          scrollView.addSubview(view)
+          UIView.performWithoutAnimation {
+            scrollView.addSubview(view)
+          }
         }
 
         configureView(view, with: visibleItem)
@@ -581,13 +583,15 @@ public final class CalendarView: UIView {
     view.calendarItemModel = visibleItem.calendarItemModel
 
     // Update the visibility
-    view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
-    view.layer.zPosition = visibleItem.itemType.zPosition
+    UIView.performWithoutAnimation {
+      view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
+      view.layer.zPosition = visibleItem.itemType.zPosition
 
-    if traitCollection.layoutDirection == .rightToLeft {
-      view.transform = .init(scaleX: -1, y: 1)
-    } else {
-      view.transform = .identity
+      if traitCollection.layoutDirection == .rightToLeft {
+        view.transform = .init(scaleX: -1, y: 1)
+      } else {
+        view.transform = .identity
+      }
     }
 
     view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
