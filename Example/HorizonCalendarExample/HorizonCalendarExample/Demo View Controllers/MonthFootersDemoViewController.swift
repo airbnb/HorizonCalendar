@@ -30,8 +30,6 @@ final class MonthFootersDemoViewController: DemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
     
-    let selectedDay = self.selectedDay
-    
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
