@@ -83,11 +83,11 @@ extension LayoutItem.ItemType: Comparable {
       return lhsDay.month <= rhsMonth
 
     case let (.monthFooter(lhsMonth), .monthHeader(rhsMonth)):
-      return lhsMonth <= rhsMonth
+      return lhsMonth < rhsMonth
     case let (.monthFooter(lhsMonth), .dayOfWeekInMonth(_, rhsMonth)):
       return lhsMonth < rhsMonth
     case let (.monthFooter(lhsMonth), .day(rhsDay)):
-      return lhsMonth <= rhsDay.month
+      return lhsMonth < rhsDay.month
     case let (.monthFooter(lhsMonth), .monthFooter(rhsMonth)):
       return lhsMonth < rhsMonth
     }
