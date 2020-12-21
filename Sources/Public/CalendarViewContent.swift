@@ -350,7 +350,7 @@ public final class CalendarViewContent {
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemModelProvider: (Month) -> InternalAnyCalendarItemModel
-  var monthFooterItemModelProvider: (Month) -> InternalAnyCalendarItemModel?
+  var monthFooterItemModelProvider: ((Month) -> InternalAnyCalendarItemModel?)?
   var dayOfWeekItemModelProvider: (
     _ month: Month?,
     _ weekdayIndex: Int)
