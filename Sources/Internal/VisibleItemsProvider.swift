@@ -697,15 +697,8 @@ final class VisibleItemsProvider {
           }
             
         case .monthFooter(let month):
-          if let footerProvider = content.monthFooterItemModelProvider(month) {
-            calendarItemModel = calendarItemModelCache.value(for: itemType, missingValueProvider: {
-              previousCalendarItemModelCache?[itemType] ?? footerProvider
-            })
-          }
+          calendarItemModel = content.monthFooterItemModelProvider?(month)
         }
-        
-        // We only want to add the visible item if we have one.
-        // Footers are optional, so this check is now necessary.
         
         if let itemModel = calendarItemModel {
           let visibleItem = VisibleCalendarItem(
