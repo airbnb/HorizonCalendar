@@ -121,5 +121,21 @@ final class ScreenPixelAlignmentTests: XCTestCase {
       rect.alignedToPixels(forScreenWithScale: 3) == expectedRect,
       "Incorrect screen pixel alignment")
   }
+  
+  // MARK: CGFloat Approximate Comparison Tests
+  
+  func testApproximateEquality() {
+    XCTAssert(CGFloat(1.48).isEqual(to: 1.52, threshhold: 0.05))
+    XCTAssert(!CGFloat(1.48).isEqual(to: 1.53, threshhold: 0.05))
+    
+    XCTAssert(CGFloat(1).isEqual(to: 10, threshhold: 9))
+    XCTAssert(!CGFloat(1).isEqual(to: 11, threshhold: 9))
+    
+    XCTAssert(CGFloat(1).isEqual(to: 10, threshhold: 9))
+    XCTAssert(!CGFloat(1).isEqual(to: 11, threshhold: 9))
+    
+    XCTAssert(CGFloat(1.333).isEqual(to: 1.666, threshhold: 1 / 3))
+    XCTAssert(!CGFloat(1.332).isEqual(to: 1.666, threshhold: 1 / 3))
+  }
 
 }

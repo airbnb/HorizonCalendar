@@ -499,6 +499,36 @@ final class FrameProviderTests: XCTestCase {
     XCTAssert(frameBeforeRightDay == expectedFrameBeforeRightDay, "Incorrect frame for day.")
     XCTAssert(frameAfterRightDay == expectedFrameAfterRightDay, "Incorrect frame for day.")
   }
+  
+  func testAdjacentDayFrameFloatingPointPrecisionEdgeCase() {
+    let frameProvider = FrameProvider(
+      content: CalendarViewContent(
+        calendar: calendar,
+        visibleDateRange: Date.distantPast...Date.distantFuture,
+        monthsLayout: .horizontal(monthWidth: 163.5))
+        .withInterMonthSpacing(24),
+      size: CGSize(width: 375, height: 275),
+      layoutMargins: .init(top: 8, leading: 8, bottom: 8, trailing: 8),
+      scale: 3,
+      monthHeaderHeight: 26.333333333333332)
+    
+    let adjacentDayFrame = CGRect(
+      x: 10218.857142857141,
+      y: 104.4047619047619,
+      width: 23.357142857142858,
+      height: 23.357142857142858)
+    let frameOfPreviousDay = frameProvider.frameOfDay(
+      Day(month: Month(era: 1, year: 1500, month: 2, isInGregorianCalendar: true), day: 9),
+      adjacentTo: Day(
+        month: Month(era: 1, year: 1500, month: 2, isInGregorianCalendar: true),
+        day: 10),
+      withFrame: adjacentDayFrame,
+      inMonthWithOrigin: CGPoint(x: 10195.5, y: 7.9999999999999964))
+    
+    XCTAssert(
+      frameOfPreviousDay.minY == adjacentDayFrame.minY,
+      "1500-02-09 and 1500-02-10 should have the same minY because they're in the same week.")
+  }
 
   // MARK: Misc item frame calculations
 
