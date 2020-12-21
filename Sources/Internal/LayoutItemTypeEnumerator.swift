@@ -141,7 +141,8 @@ final class LayoutItemTypeEnumerator {
       }
     
     case .monthFooter(let month):
-      return .monthHeader(calendar.month(byAddingMonths: 1, to: month))
+      let nextMonth = calendar.month(byAddingMonths: 1, to: month)
+      return .monthHeader(nextMonth)
     }
   }
 
