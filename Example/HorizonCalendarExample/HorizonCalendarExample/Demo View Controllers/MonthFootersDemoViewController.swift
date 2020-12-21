@@ -56,9 +56,4 @@ final class MonthFootersDemoViewController: DemoViewController {
         
       }
   }
-  
-  // MARK: Private
-  
-  private var selectedDay: Day?
-  
 }
