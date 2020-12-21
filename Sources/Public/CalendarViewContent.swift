@@ -199,7 +199,7 @@ public final class CalendarViewContent {
   ///
   /// `CalendarView` invokes the provided `monthFooterItemModelProvider` for each month in the range of months being
   /// displayed. The `CalendarItemModel`s that you return will be used to create the views for each month footer in
-  /// `CalendarView`.
+  /// `CalendarView`. If you return `nil` for a particular month, then that month will not contain a month footer.
   ///
   /// If you don't configure your own month header item provider via this function, then a default month header item provider will be
   /// used.
