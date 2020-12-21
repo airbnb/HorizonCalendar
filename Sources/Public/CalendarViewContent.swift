@@ -93,11 +93,6 @@ public final class CalendarViewContent {
         dateFormatter: dayDateFormatter)
       return .itemModel(itemModel)
     }
-    
-    monthFooterItemModelProvider = { month in
-      return nil
-    }
-
   }
 
   // MARK: Public
