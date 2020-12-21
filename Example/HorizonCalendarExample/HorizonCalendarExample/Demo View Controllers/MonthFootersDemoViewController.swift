@@ -24,13 +24,6 @@ final class MonthFootersDemoViewController: DemoViewController {
     super.viewDidLoad()
     
     title = "Month Footer Demo"
-    
-    calendarView.daySelectionHandler = { [weak self] day in
-      guard let self = self else { return }
-      
-      self.selectedDay = day
-      self.calendarView.setContent(self.makeContent())
-    }
   }
   
   override func makeContent() -> CalendarViewContent {
