@@ -23,7 +23,7 @@ final class MonthFootersDemoViewController: DemoViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    title = "Month Footer Demo"
+    title = "Month Footers"
   }
   
   override func makeContent() -> CalendarViewContent {
