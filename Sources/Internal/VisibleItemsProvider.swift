@@ -279,8 +279,15 @@ final class VisibleItemsProvider {
       case .day(let day):
         month = day.month
         calendarItemModel = self.content.dayItemModelProvider(day)
-      case .dayOfWeekInMonth: return
-      case .monthFooter: return
+      case .dayOfWeekInMonth:
+        return
+      case .monthFooter(let _month):
+        month = _month
+        if let monthFooterItemModelProvider = self.content.monthFooterItemModelProvider?(month) {
+          calendarItemModel = monthFooterItemModelProvider
+        } else {
+          return
+        }
       }
 
       guard monthRange.contains(month) else {
