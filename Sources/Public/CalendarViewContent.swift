@@ -335,6 +335,22 @@ public final class CalendarViewContent {
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemModelProvider: (OverlayLayoutContext) -> InternalAnyCalendarItemModel)?
 
+  lazy var numberOfMonths: Int = {
+    guard
+      let numberOfMonths = calendar.dateComponents(
+        [.month],
+        from: monthRange.lowerBound.components,
+        to: monthRange.upperBound.components)
+        .month
+    else
+    {
+      preconditionFailure(
+        "Failed to calculate the number of months in the current month range (\(monthRange)).")
+    }
+
+    return numberOfMonths
+  }()
+
 }
 
 // MARK: - CalendarViewContent.DayRangeLayoutContext

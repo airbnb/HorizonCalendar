@@ -25,11 +25,11 @@ final class LargeDayRangeDemoViewController: DemoViewController {
 
     title = "Large Day Range"
 
-    let january1500CE = calendar.date(from: DateComponents(era: 1, year: 1500, month: 01, day: 01))!
-    calendarView.scroll(
-      toMonthContaining: january1500CE,
-      scrollPosition: .firstFullyVisiblePosition,
-      animated: false)
+//    let january1500CE = calendar.date(from: DateComponents(era: 1, year: 1500, month: 01, day: 01))!
+//    calendarView.scroll(
+//      toMonthContaining: january1500CE,
+//      scrollPosition: .firstFullyVisiblePosition,
+//      animated: false)
   }
 
   override func makeContent() -> CalendarViewContent {
