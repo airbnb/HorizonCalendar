@@ -51,9 +51,7 @@ final class MonthFootersDemoViewController: DemoViewController {
         
         return CalendarItemModel<FooterView>(
           invariantViewProperties: .init(textColor: textColor),
-          viewModel: .init(monthText: "\(month.description)")
-        )
-        
+          viewModel: .init(monthText: "\(month.description)"))
       }
   }
 }
