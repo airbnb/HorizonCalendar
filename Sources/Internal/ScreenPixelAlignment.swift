@@ -17,9 +17,15 @@ import UIKit
 
 extension CGFloat {
 
-  /// Rounds a `CGFloat` so that it's aligned on a pixel boundary for a screen with the provided scale.
+  /// Rounds `self` so that it's aligned on a pixel boundary for a screen with the provided scale.
   func alignedToPixel(forScreenWithScale scale: CGFloat) -> CGFloat {
     (self * scale).rounded() / scale
+  }
+  
+  /// Tests `self` for approximate equality using the threshold value. For example, 1.48 equals 1.52 if the threshold is 0.05.
+  /// `threshold` will be treated as a postive value by taking its absolute value.
+  func isEqual(to rhs: CGFloat, threshhold: CGFloat) -> Bool {
+    abs(self - rhs) <= abs(threshhold)
   }
 
 }

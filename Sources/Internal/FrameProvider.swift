@@ -178,10 +178,7 @@ final class FrameProvider {
     let origin: CGPoint
     if distanceFromAdjacentDay < 0 {
       let proposedX = adjacentDayFrame.minX - content.horizontalDayMargin - daySize.width
-      if
-        proposedX.alignedToPixel(forScreenWithScale: scale) >=
-          minX.alignedToPixel(forScreenWithScale: scale)
-      {
+      if proposedX > minX || proposedX.isEqual(to: minX, threshhold: 1 / scale) {
         origin = CGPoint(x: proposedX, y: adjacentDayFrame.minY)
       } else {
         origin = CGPoint(
@@ -190,10 +187,7 @@ final class FrameProvider {
       }
     } else {
       let proposedX = adjacentDayFrame.maxX + content.horizontalDayMargin
-      if
-        proposedX.alignedToPixel(forScreenWithScale: scale) <=
-          maxX.alignedToPixel(forScreenWithScale: scale)
-      {
+      if proposedX < maxX || proposedX.isEqual(to: maxX, threshhold: 1 / scale) {
         origin = CGPoint(x: proposedX, y: adjacentDayFrame.minY)
       } else {
         origin = CGPoint(x: minX, y: adjacentDayFrame.maxY + content.verticalDayMargin)
