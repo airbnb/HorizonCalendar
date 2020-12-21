@@ -210,7 +210,7 @@ public final class CalendarViewContent {
   ///   - month: The `Month` for which to provide a month footer item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new month footer item provider.
   public func withMonthFooterItemModelProvider(
-    _ monthFooterItemModelProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
+    _ monthFooterItemModelProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
     self.monthFooterItemModelProvider = { .itemModel(monthFooterItemModelProvider($0)) }
