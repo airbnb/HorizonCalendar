@@ -16,7 +16,7 @@
 import UIKit
 import HorizonCalendar
 
-class MonthFootersDemoViewController: DemoViewController {
+final class MonthFootersDemoViewController: DemoViewController {
   
   // MARK: Internal
   
@@ -90,4 +90,3 @@ class MonthFootersDemoViewController: DemoViewController {
   private var selectedDay: Day?
   
 }
-
