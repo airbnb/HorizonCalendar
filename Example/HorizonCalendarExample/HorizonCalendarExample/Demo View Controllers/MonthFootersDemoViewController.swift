@@ -40,25 +40,6 @@ final class MonthFootersDemoViewController: DemoViewController {
       .withHorizontalDayMargin(8)
       .withMonthDayInsets(.init(top: 0, left: 0, bottom: 16, right: 0))
       
-      .withDayItemModelProvider { [weak self] day in
-        let textColor: UIColor
-        if #available(iOS 13.0, *) {
-          textColor = .label
-        } else {
-          textColor = .black
-        }
-        
-        let dayAccessibilityText: String?
-        if let date = self?.calendar.date(from: day.components) {
-          dayAccessibilityText = self?.dayDateFormatter.string(from: date)
-        } else {
-          dayAccessibilityText = nil
-        }
-        
-        return CalendarItemModel<DayView>(
-          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: day == selectedDay),
-          viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
-      }
       .withMonthFooterItemModelProvider { month in
         let textColor: UIColor
         
