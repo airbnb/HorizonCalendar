@@ -213,7 +213,10 @@ public final class CalendarViewContent {
     _ monthFooterItemModelProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.monthFooterItemModelProvider = { .itemModel(monthFooterItemModelProvider($0)) }
+    self.monthFooterItemModelProvider = {
+      guard let footerItemModel = monthFooterItemModelProvider($0) else { return nil }
+      return .itemModel(footerItemModel)
+    }
     return self
   }
 
