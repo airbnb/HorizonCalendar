@@ -740,7 +740,7 @@ extension CalendarView: UIScrollViewDelegate {
     willDecelerate decelerate: Bool)
   {
     guard let visibleDayRange = visibleDayRange else { return }
-    didEndDecelerating?(visibleDayRange)
+    didEndDragging?(visibleDayRange)
   }
 
   @available(
