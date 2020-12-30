@@ -273,6 +273,8 @@ public final class CalendarView: UIView {
       isAnchorLayoutItemValid = content.monthRange.contains(month)
     case .day(let day):
       isAnchorLayoutItemValid = content.dayRange.contains(day)
+    case .monthFooter(let month):
+      isAnchorLayoutItemValid = content.monthRange.contains(month)
     case .none:
       isAnchorLayoutItemValid = false
     }
@@ -452,6 +454,7 @@ public final class CalendarView: UIView {
         layoutMargins: directionalLayoutMargins,
         scale: scale,
         monthHeaderHeight: monthHeaderHeight(),
+        monthFooterHeight: monthFooterHeight(),
         backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
@@ -544,6 +547,30 @@ public final class CalendarView: UIView {
       withHorizontalFittingPriority: .required,
       verticalFittingPriority: .fittingSizeLevel)
     return size.height
+  }
+    
+  private func monthFooterHeight() -> CGFloat? {
+    guard 
+      let firstMonthFooterItemModel = content.monthFooterItemModelProvider?(
+        content.monthRange.lowerBound)
+    else
+    {
+      return nil
+    }
+
+    let monthWidth: CGFloat
+    switch content.monthsLayout {
+    case .vertical: monthWidth = bounds.width
+    case .horizontal(let _monthWidth): monthWidth = _monthWidth
+    }
+    
+    firstMonthFooterItemModel.setViewModelOnViewOfSameType(firstMonthFooter)
+      
+    let size = firstMonthFooter.systemLayoutSizeFitting(
+      CGSize(width: monthWidth, height: 0),
+      withHorizontalFittingPriority: .required,
+      verticalFittingPriority: .fittingSizeLevel)
+    return size
   }
 
   private func updateVisibleViews(

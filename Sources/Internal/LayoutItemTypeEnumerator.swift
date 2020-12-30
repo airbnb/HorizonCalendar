@@ -18,7 +18,7 @@ import UIKit
 // MARK: - LayoutItemTypeEnumerator
 
 /// Facilitates the enumeration of layout item types adjacent to a starting layout item type. For example, month header -> weekday
-/// header (x7) -> day (x31) -> month header (cont...). The core structure of the calendar (the ordering of it's core elements) is defined by
+/// header (x7) -> day (x31) -> month footer -> month header (cont...). The core structure of the calendar (the ordering of it's core elements) is defined by
 /// this class.
 final class LayoutItemTypeEnumerator {
 
@@ -72,6 +72,8 @@ final class LayoutItemTypeEnumerator {
       return monthRange.contains(month)
     case .day(let day):
       return dayRange.contains(day)
+    case .monthFooter(let month):
+      return monthRange.contains(month)
     }
   }
 
@@ -79,8 +81,7 @@ final class LayoutItemTypeEnumerator {
     switch itemType {
     case .monthHeader(let month):
       let previousMonth = calendar.month(byAddingMonths: -1, to: month)
-      let lastDateOfPreviousMonth = calendar.lastDate(of: previousMonth)
-      return .day(calendar.day(containing: lastDateOfPreviousMonth))
+      return .monthFooter(previousMonth)
 
     case let .dayOfWeekInMonth(position, month):
       if position == .first {
@@ -102,6 +103,10 @@ final class LayoutItemTypeEnumerator {
       } else {
         return .day(calendar.day(byAddingDays: -1, to: day))
       }
+    
+    case .monthFooter(let month):
+      let day = calendar.day(containing: calendar.lastDate(of: month))
+      return .day(day)
     }
   }
 
@@ -127,13 +132,17 @@ final class LayoutItemTypeEnumerator {
     case .day(let day):
       let nextDay = calendar.day(byAddingDays: 1, to: day)
       if day.month != nextDay.month {
-        return .monthHeader(nextDay.month)
+        return .monthFooter(day.month)
       } else if day == dayRange.upperBound {
         let nextMonth = calendar.month(byAddingMonths: 1, to: nextDay.month)
         return .monthHeader(nextMonth)
       } else {
         return .day(nextDay)
       }
+    
+    case .monthFooter(let month):
+      let nextMonth = calendar.month(byAddingMonths: 1, to: month)
+      return .monthHeader(nextMonth)
     }
   }
 

@@ -29,6 +29,7 @@ final class VisibleItemsProvider {
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
     monthHeaderHeight: CGFloat,
+    monthFooterHeight: CGFloat?,
     backgroundColor: UIColor?)
   {
     self.content = content
@@ -44,7 +45,8 @@ final class VisibleItemsProvider {
       size: size,
       layoutMargins: layoutMargins,
       scale: scale,
-      monthHeaderHeight: monthHeaderHeight)
+      monthHeaderHeight: monthHeaderHeight,
+      monthFooterHeight: monthFooterHeight)
   }
 
   // MARK: Internal
@@ -279,6 +281,13 @@ final class VisibleItemsProvider {
         calendarItemModel = self.content.dayItemModelProvider(day)
       case .dayOfWeekInMonth:
         return
+      case .monthFooter(let _month):
+        month = _month
+        if let monthFooterItemModelProvider = self.content.monthFooterItemModelProvider?(month) {
+          calendarItemModel = monthFooterItemModelProvider
+        } else {
+          return
+        }
       }
 
       guard monthRange.contains(month) else {
@@ -442,6 +451,8 @@ final class VisibleItemsProvider {
       } else {
         frame = frameProvider.frameOfDay(day, inMonthWithOrigin: monthOrigin)
       }
+    case .monthFooter(let month):
+      frame = frameProvider.frameOfMonthFooter(month, inMonthWithOrigin: monthOrigin)
     }
 
     return LayoutItem(itemType: itemType, frame: frame)
@@ -614,7 +625,7 @@ final class VisibleItemsProvider {
 
         let itemType = VisibleCalendarItem.ItemType.layoutItemType(layoutItem.itemType)
 
-        let calendarItemModel: InternalAnyCalendarItemModel
+        let calendarItemModel: InternalAnyCalendarItemModel?
         switch layoutItem.itemType {
         case .monthHeader(let month):
           calendarItemModel = calendarItemModelCache.value(
@@ -691,13 +702,18 @@ final class VisibleItemsProvider {
           if framesForVisibleDays[day] == nil {
             framesForVisibleDays[day] = layoutItem.frame
           }
+            
+        case .monthFooter(let month):
+          calendarItemModel = content.monthFooterItemModelProvider?(month)
         }
-
-        let visibleItem = VisibleCalendarItem(
-          calendarItemModel: calendarItemModel,
-          itemType: .layoutItemType(layoutItem.itemType),
-          frame: layoutItem.frame)
-        visibleItems.insert(visibleItem)
+        
+        if let itemModel = calendarItemModel {
+          let visibleItem = VisibleCalendarItem(
+            calendarItemModel: itemModel,
+            itemType: .layoutItemType(layoutItem.itemType),
+            frame: layoutItem.frame)
+          visibleItems.insert(visibleItem)
+        }
 
         centermostLayoutItem = self.centermostLayoutItem(
           comparing: layoutItem,
