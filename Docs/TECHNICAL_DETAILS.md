@@ -21,7 +21,7 @@ Aside from performance concerns, `UICollectionView` also felt like the wrong too
 - A layout and data source that are too decoupled for `HorizonCalendar`'s feature requirements, making it difficult to create calendar items that depend on parts of the layout being resolved when querying the data source (day range items need to know the frames of the items in their associated day range, for example)
 - Difficult to write unit tests to ensure layout and behavior correctness
 
-Having built and maintained `MagazineLayout` for the past several years, I'm also all too familiar with collection view's quirks. By writing a custom layout solution for `HorizonCalendar`, I've reduced the number of hacky `UIKit` workarounds to _zero_. We control our own destiny in this project :)
+Lastly, our experience building and maintaining `MagazineLayout` has made us all too familiar with collection view's quirks. By writing a custom layout solution for `HorizonCalendar`, we've avoided needing to implement workarounds for many unresolved UIKit bugs.
 
 
 ## Architecture Overview

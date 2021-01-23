@@ -386,7 +386,7 @@ public final class CalendarView: UIView {
   }()
   
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
-  // and `preventOverscrollIfNeeded` for more context.
+  // and `preventLargeOverscrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
     if #available(iOS 13.0, *) {
       if ProcessInfo.processInfo.isMacCatalystApp {
