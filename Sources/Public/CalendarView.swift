@@ -196,8 +196,7 @@ public final class CalendarView: UIView {
 
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.setUpInitialMetricsIfNeeded()
-      scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
-        viewportSize: scrollView.frame.size)
+      scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
     }
 
     let anchorLayoutItem: LayoutItem
@@ -770,13 +769,6 @@ extension CalendarView: UIScrollViewDelegate {
     message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     preventLargeOverscrollIfNeeded()
-    
-    if let anchorLayoutItem = anchorLayoutItem {
-      scrollView.performWithoutNotifyingDelegate {
-        self.anchorLayoutItem = scrollMetricsMutator.loopOffsetIfNeeded(
-          updatingPositionOf: anchorLayoutItem)
-      }
-    }
 
     let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
 
