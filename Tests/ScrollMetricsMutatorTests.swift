@@ -23,8 +23,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
   // MARK: Internal
 
   override func setUp() {
-    verticalScrollMetricsProvider = MockScrollMetricsProvider()
-    horizontalScrollMetricsProvider = MockScrollMetricsProvider()
+    verticalScrollMetricsProvider = Self.mockScrollMetricsProvider()
+    horizontalScrollMetricsProvider = Self.mockScrollMetricsProvider()
 
     let initialSize = CGSize(width: 320, height: 480)
 
@@ -442,83 +442,52 @@ final class ScrollMetricsMutatorTests: XCTestCase {
       initialOffset2 - 1000 == horizontalScrollMetricsProvider.offset(for: .horizontal),
       "Scroll offset does not equal the initial offset - 1000.")
   }
+  
+  // MARK: Scroll Boundary Offsets
+  
+  func testVerticalMinimumScrollOffset() {
+    verticalScrollMetricsProvider.setStartInset(to: 100, for: .vertical)
+    XCTAssert(
+      verticalScrollMetricsProvider.minimumOffset(for: .vertical) == -100,
+      "The minimum offset should equal the negated top inset.")
+  }
+  
+  func testHorizontalMinimumScrollOffset() {
+    horizontalScrollMetricsProvider.setStartInset(to: 300, for: .horizontal)
+    XCTAssert(
+      horizontalScrollMetricsProvider.minimumOffset(for: .horizontal) == -300,
+      "The minimum offset should equal the negated left inset.")
+  }
+  
+  func testVerticalMaximumScrollOffset() {
+    verticalScrollMetricsProvider.setEndInset(to: -50, for: .vertical)
+    XCTAssert(
+      verticalScrollMetricsProvider.maximumOffset(for: .vertical) == 29470,
+      "The maximum offset should equal the content height plus bottom inset minus bounds height.")
+  }
+  
+  func testHorizontalMaximumScrollOffset() {
+    horizontalScrollMetricsProvider.setEndInset(to: -80, for: .horizontal)
+    XCTAssert(
+      horizontalScrollMetricsProvider.maximumOffset(for: .horizontal) == 29600,
+      "The maximum offset should equal the content width plus right inset minus bounds width.")
+  }
 
   // MARK: Private
 
-  private var verticalScrollMetricsProvider: MockScrollMetricsProvider!
-  private var horizontalScrollMetricsProvider: MockScrollMetricsProvider!
+  private var verticalScrollMetricsProvider: ScrollMetricsProvider!
+  private var horizontalScrollMetricsProvider: ScrollMetricsProvider!
 
   private var verticalScrollMetricsMutator: ScrollMetricsMutator!
   private var horizontalScrollMetricsMutator: ScrollMetricsMutator!
-
-}
-
-// MARK: - MockScrollMetricsProvider
-
-private final class MockScrollMetricsProvider: ScrollMetricsProvider {
-
-  // MARK: Internal
-
-  func size(for scrollAxis: ScrollAxis) -> CGFloat {
-    switch scrollAxis {
-    case .vertical: return contentSize.height
-    case .horizontal: return contentSize.width
-    }
+  
+  private static func mockScrollMetricsProvider() -> ScrollMetricsProvider {
+    let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
+    scrollView.contentInsetAdjustmentBehavior = .never
+    scrollView.contentSize = CGSize(width: 10, height: 10)
+    scrollView.contentOffset = CGPoint(x: 1, y: -1)
+    scrollView.contentInset = UIEdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
+    return scrollView
   }
-
-  func setSize(to size: CGFloat, for scrollAxis: ScrollAxis) {
-    switch scrollAxis {
-    case .vertical: contentSize.height = size
-    case .horizontal: contentSize.width = size
-    }
-  }
-
-  func offset(for scrollAxis: ScrollAxis) -> CGFloat {
-    switch scrollAxis {
-    case .vertical: return contentOffset.y
-    case .horizontal: return contentOffset.x
-    }
-  }
-
-  func setOffset(to offset: CGFloat, for scrollAxis: ScrollAxis) {
-    switch scrollAxis {
-    case .vertical: contentOffset.y = offset
-    case .horizontal: contentOffset.x = offset
-    }
-  }
-
-  func startInset(for scrollAxis: ScrollAxis) -> CGFloat {
-    switch scrollAxis {
-    case .vertical: return contentInset.top
-    case .horizontal: return contentInset.left
-    }
-  }
-
-  func setStartInset(to inset: CGFloat, for scrollAxis: ScrollAxis) {
-    switch scrollAxis {
-    case .vertical: contentInset.top = inset
-    case .horizontal: contentInset.left = inset
-    }
-  }
-
-  func endInset(for scrollAxis: ScrollAxis) -> CGFloat {
-    switch scrollAxis {
-    case .vertical: return contentInset.bottom
-    case .horizontal: return contentInset.right
-    }
-  }
-
-  func setEndInset(to inset: CGFloat, for scrollAxis: ScrollAxis) {
-    switch scrollAxis {
-    case .vertical: contentInset.bottom = inset
-    case .horizontal: contentInset.right = inset
-    }
-  }
-
-  // MARK: Private
-
-  private var contentSize = CGSize(width: 100, height: 100)
-  private var contentOffset = CGPoint(x: 1, y: -1)
-  private var contentInset = UIEdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
 
 }
