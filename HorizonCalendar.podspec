@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "HorizonCalendar"
-  spec.version = "1.6.6"
+  spec.version = "1.6.7"
   spec.license = "Apache License, Version 2.0"
   spec.summary = "A declarative, performant, calendar UI component that supports use cases ranging from simple date pickers to fully-featured calendar apps."
 
