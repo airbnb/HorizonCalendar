@@ -17,7 +17,7 @@ import UIKit
 
 // MARK: - ScrollMetricsMutator
 
-/// Facilitates infinite scrolling by looping the scroll position until an edge is hit.
+/// Facilitates infinite scrolling by setting up a large scrollable region and updating insets to facilitate lazily creating scroll boundaries.
 final class ScrollMetricsMutator {
 
   // MARK: Lifecycle
@@ -34,14 +34,11 @@ final class ScrollMetricsMutator {
   func setUpInitialMetricsIfNeeded() {
     guard !hasSetUpInitialScrollMetrics else { return }
 
-    scrollMetricsProvider.setStartInset(to: 0, for: .horizontal)
-    scrollMetricsProvider.setStartInset(to: 0, for: .vertical)
+    scrollMetricsProvider.setSize(to: Self.ContentSize, for: scrollAxis)
+    scrollMetricsProvider.setStartInset(to: Self.BoundlessStartInset, for: scrollAxis)
+    scrollMetricsProvider.setEndInset(to: Self.BoundlessEndInset, for: scrollAxis)
 
-    scrollMetricsProvider.setSize(to: Self.contentSize, for: scrollAxis)
-    scrollMetricsProvider.setOffset(to: Self.minimumContentOffset, for: scrollAxis)
-
-    scrollMetricsProvider.setEndInset(to: 0, for: .horizontal)
-    scrollMetricsProvider.setEndInset(to: 0, for: .vertical)
+    scrollMetricsProvider.setOffset(to: 0, for: scrollAxis)
 
     hasSetUpInitialScrollMetrics = true
   }
@@ -61,14 +58,14 @@ final class ScrollMetricsMutator {
     if let minimumScrollOffset = minimumScrollOffset {
       scrollMetricsProvider.setStartInset(to: -minimumScrollOffset, for: scrollAxis)
     } else {
-      scrollMetricsProvider.setStartInset(to: 0, for: scrollAxis)
+      scrollMetricsProvider.setStartInset(to: Self.BoundlessStartInset, for: scrollAxis)
     }
 
     if let maximumScrollOffset = maximumScrollOffset {
       let size = scrollMetricsProvider.size(for: scrollAxis)
       scrollMetricsProvider.setEndInset(to: -(size - maximumScrollOffset), for: scrollAxis)
     } else {
-      scrollMetricsProvider.setEndInset(to: 0, for: scrollAxis)
+      scrollMetricsProvider.setEndInset(to: Self.BoundlessEndInset, for: scrollAxis)
     }
 
     // If we don't backup and restore the offset, one-frame glitches / scroll position jumps can
@@ -77,45 +74,21 @@ final class ScrollMetricsMutator {
     scrollMetricsProvider.setOffset(to: originalOffset, for: scrollAxis)
   }
 
-  func loopOffsetIfNeeded(updatingPositionOf layoutItem: LayoutItem) -> LayoutItem {
-    var origin = layoutItem.frame.origin
-
-    let offset = scrollMetricsProvider.offset(for: scrollAxis)
-    let startInset = scrollMetricsProvider.startInset(for: scrollAxis)
-    let endInset = scrollMetricsProvider.endInset(for: scrollAxis)
-
-    if offset < Self.minimumContentOffset && startInset == 0 {
-      scrollMetricsProvider.setOffset(to: Self.maximumContentOffset, for: scrollAxis)
-
-      switch scrollAxis {
-      case .vertical: origin.y += Self.loopingRegionSize
-      case .horizontal: origin.x += Self.loopingRegionSize
-      }
-    } else if offset > Self.maximumContentOffset && endInset == 0 {
-      scrollMetricsProvider.setOffset(to: Self.minimumContentOffset, for: scrollAxis)
-
-      switch scrollAxis {
-      case .vertical: origin.y -= Self.loopingRegionSize
-      case .horizontal: origin.x -= Self.loopingRegionSize
-      }
-    }
-
-    return LayoutItem(
-      itemType: layoutItem.itemType,
-      frame: CGRect(origin: origin, size: layoutItem.frame.size))
-  }
-
   func applyOffset(_ offset: CGFloat) {
     let currentOffset = scrollMetricsProvider.offset(for: scrollAxis)
     scrollMetricsProvider.setOffset(to: currentOffset + offset, for: scrollAxis)
   }
 
   // MARK: Private
-
-  private static let contentSize: CGFloat = 30_000 // 10,000 padding from min and max offset
-  private static let minimumContentOffset: CGFloat = 10_000 // 1/3 of content size
-  private static let maximumContentOffset: CGFloat = 20_000 // 2/3 of content size
-  private static let loopingRegionSize: CGFloat = 10_000 // Distance between min and max offset
+  
+  // The scrollable region is from (-ContentSize, +ContentSize), which is enough to scroll past over
+  // three-billion years in a vertically-scrolling calendar. Increasing this value by another order
+  // of magnitude will start to cause rounding in the 3rd digit after the decimal point, due to a
+  // loss of floating point precision.
+  // Scrolling past 3 billion dates ought to be enough for anybody.
+  private static let ContentSize: CGFloat = 10_000_000_000_000
+  private static let BoundlessStartInset = ContentSize
+  private static let BoundlessEndInset: CGFloat = 0
 
   private let scrollMetricsProvider: ScrollMetricsProvider
 

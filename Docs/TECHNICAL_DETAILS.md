@@ -42,7 +42,7 @@ Achieving this requires a layout solution that can lazily render the calendar ju
 
 1. Figure out what parts of the calendar are currently visible
 2. Create and reuse views for the set of currently visible items
-3. Mutate the scroll position to create an infinitely scrolling / looping scroll view
+3. Create a virtually infinite scroll region 
 
 The majority of the work is done in step 1, so let's start with that.
 
@@ -73,11 +73,6 @@ Once the reuse manager determines which views can be reused vs. made from scratc
 
 #### Manage the underlying scroll view
 
-The final step of layout is updating the internal `UIScrollView`'s metrics to either
+The final step of layout is managing the internal `UIScrollView`'s metrics to create a nearly-infinite scrolling region.
 
-- Create a scroll boundary if we're at the edge of the range of dates being shown
-- Loop the scroll position to provide the illusion of infinite scrolling
-
-Since `HorizonCalendar` supports showing infinitely large date ranges, looping the scroll position of the internal scroll view is necessary so that our offset doesn't increase toward infinity as we scroll past more and more dates. And since the calendar is laid our lazily, we don't know when we're about to hit a scroll boundary until right before the first or last date comes into view.
-
-To support creating native scroll view boundary behavior (overscroll bouncing) and virtually-infinite scroll when you're not at a boundary, `CalendarView` calls into the `ScrollMetricsMutator` to handle updating our scroll view's metrics in the right ways. Since the scroll metrics mutation is abstracted away in the `ScrollMetricsMutator`, we get the benefit of being able to unit test this unique scroll behavior.
+Supporting large date ranges means we can't calculate the total content size of the calendar upfront. Instead, we set the content size to a very large value, giving us plenty of room to fit our content. Since the calendar is laid our lazily, we don't know when we're about to hit a scroll boundary until right before the first or last date comes into view. When this occurs, we create scroll boundaries by setting the scroll view's content insets to be aligned with the boundary month.
