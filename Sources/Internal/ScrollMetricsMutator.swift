@@ -145,6 +145,9 @@ protocol ScrollMetricsProvider: class {
 
   func endInset(for scrollAxis: ScrollAxis) -> CGFloat
   func setEndInset(to inset: CGFloat, for scrollAxis: ScrollAxis)
+  
+  func minimumOffset(for scrollAxis: ScrollAxis) -> CGFloat
+  func maximumOffset(for scrollAxis: ScrollAxis) -> CGFloat
 
 }
 
@@ -205,6 +208,20 @@ extension UIScrollView: ScrollMetricsProvider {
     switch scrollAxis {
     case .vertical: contentInset.bottom = inset
     case .horizontal: contentInset.right = inset
+    }
+  }
+  
+  func minimumOffset(for scrollAxis: ScrollAxis) -> CGFloat {
+    switch scrollAxis {
+    case .vertical: return -contentInset.top
+    case .horizontal: return -contentInset.left
+    }
+  }
+
+  func maximumOffset(for scrollAxis: ScrollAxis) -> CGFloat {
+    switch scrollAxis {
+    case .vertical: return contentSize.height + contentInset.bottom - bounds.height
+    case .horizontal: return contentSize.width + contentInset.right - bounds.width
     }
   }
 

@@ -85,22 +85,11 @@ public final class CalendarView: UIView {
   /// Whether or not the calendar's scroll view is currently overscrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
   public var isOverscrolling: Bool {
-    let isOverscrollingAtStart: Bool
-    let isOverscrollingAtEnd: Bool
-    switch content.monthsLayout {
-    case .vertical:
-      isOverscrollingAtStart = scrollView.contentOffset.y < -scrollView.contentInset.top
-      let contentBottom = scrollView.contentOffset.y + scrollView.bounds.height
-      let maxContentBottom = scrollView.contentSize.height + scrollView.contentInset.bottom
-      isOverscrollingAtEnd = contentBottom > maxContentBottom
-    case .horizontal:
-      isOverscrollingAtStart = scrollView.contentOffset.x < -scrollView.contentInset.left
-      let contentRight = scrollView.contentOffset.x + scrollView.bounds.width
-      let maxContentRight = scrollView.contentSize.width + scrollView.contentInset.right
-      isOverscrollingAtEnd = contentRight > maxContentRight
-    }
+    let scrollAxis = scrollMetricsMutator.scrollAxis
+    let offset = scrollView.offset(for: scrollAxis)
 
-    return isOverscrollingAtStart || isOverscrollingAtEnd
+    return offset < scrollView.minimumOffset(for: scrollAxis) ||
+      offset > scrollView.maximumOffset(for: scrollAxis)
   }
 
   /// The range of months that are partially of fully visible.
@@ -394,6 +383,18 @@ public final class CalendarView: UIView {
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.delegate = self
     return scrollView
+  }()
+  
+  // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
+  // and `preventLargeOverscrollIfNeeded` for more context.
+  private lazy var isRunningOnMac: Bool = {
+    if #available(iOS 13.0, *) {
+      if ProcessInfo.processInfo.isMacCatalystApp {
+        return true
+      }
+    }
+    
+    return false
   }()
 
   private var calendar: Calendar {
@@ -697,6 +698,65 @@ public final class CalendarView: UIView {
       break
     }
   }
+  
+  // This hack is needed to prevent the scroll view from overscrolling far past the content. This
+  // occurs in 2 scenarios:
+  // - On macOS if you scroll quickly toward a boundary
+  // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
+  //
+  // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
+  private func preventLargeOverscrollIfNeeded() {
+    // TODO(BK): Change to `isRunningOnMac || content.isHorizontalPadingationEnabled` once
+    // horizontal pagination is implemented.
+    guard isRunningOnMac else { return }
+    
+    let scrollAxis = scrollMetricsMutator.scrollAxis
+    let offset = scrollView.offset(for: scrollAxis)
+    
+    let boundsSize: CGFloat
+    switch scrollAxis {
+    case .vertical: boundsSize = scrollView.bounds.height * 0.7
+    case .horizontal: boundsSize = scrollView.bounds.width * 0.7
+    }
+    
+    let newOffset: CGPoint?
+    if offset < scrollView.minimumOffset(for: scrollAxis) - boundsSize {
+      switch scrollAxis {
+      case .vertical:
+        newOffset = CGPoint(
+          x: scrollView.contentOffset.x,
+          y: scrollView.minimumOffset(for: scrollAxis))
+        
+      case .horizontal:
+        newOffset = CGPoint(
+          x: scrollView.minimumOffset(for: scrollAxis),
+          y: scrollView.contentOffset.y)
+      }
+    } else if offset > scrollView.maximumOffset(for: scrollAxis) + boundsSize {
+      switch scrollAxis {
+      case .vertical:
+        newOffset = CGPoint(
+          x: scrollView.contentOffset.x,
+          y: scrollView.maximumOffset(for: scrollAxis))
+        
+      case .horizontal:
+        newOffset = CGPoint(
+          x: scrollView.maximumOffset(for: scrollAxis),
+          y: scrollView.contentOffset.y)
+      }
+    } else {
+      newOffset = nil
+    }
+    
+    if let newOffset = newOffset {
+      scrollView.performWithoutNotifyingDelegate {
+        // Passing `false` for `animated` is necessary to stop the in-flight deceleration animation
+        UIView.animate(withDuration: 0.4, delay: 0, options: [.curveEaseOut], animations: {
+          self.scrollView.setContentOffset(newOffset, animated: false)
+        })
+      }
+    }
+  }
 
 }
 
@@ -709,6 +769,8 @@ extension CalendarView: UIScrollViewDelegate {
     deprecated,
     message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    preventLargeOverscrollIfNeeded()
+    
     if let anchorLayoutItem = anchorLayoutItem {
       scrollView.performWithoutNotifyingDelegate {
         self.anchorLayoutItem = scrollMetricsMutator.loopOffsetIfNeeded(
