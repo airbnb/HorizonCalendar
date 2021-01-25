@@ -294,14 +294,14 @@ final class ScrollMetricsMutatorTests: XCTestCase {
   func testVerticalMaximumScrollOffset() {
     verticalScrollMetricsProvider.setEndInset(to: -50, for: .vertical)
     XCTAssert(
-      verticalScrollMetricsProvider.maximumOffset(for: .vertical) == 29470,
+      verticalScrollMetricsProvider.maximumOffset(for: .vertical) == 9999999999470.0,
       "The maximum offset should equal the content height plus bottom inset minus bounds height.")
   }
   
   func testHorizontalMaximumScrollOffset() {
     horizontalScrollMetricsProvider.setEndInset(to: -80, for: .horizontal)
     XCTAssert(
-      horizontalScrollMetricsProvider.maximumOffset(for: .horizontal) == 29600,
+      horizontalScrollMetricsProvider.maximumOffset(for: .horizontal) == 9999999999600.0,
       "The maximum offset should equal the content width plus right inset minus bounds width.")
   }
 
