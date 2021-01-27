@@ -17,6 +17,7 @@ Features:
 - Display months in a vertically-scrolling or horizontally-scrolling layout
 - Declarative API that enables unidirectional data flow for updating the content of the calendar
 - A custom layout system that enables virtually infinite date ranges without increasing memory usage
+- Pagination for horizontally-scrolling calendars
 - Specify custom views for individual days, month headers, and days of the week
 - Specify custom views to highlight date ranges
 - Specify custom views to overlay parts of the calendar, enabling features like tooltips
