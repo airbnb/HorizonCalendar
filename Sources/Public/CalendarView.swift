@@ -269,6 +269,12 @@ public final class CalendarView: UIView {
       anchorLayoutItem = nil
     }
 
+    if content.monthsLayout.isPaginationEnabled {
+      scrollView.decelerationRate = .fast
+    } else {
+      scrollView.decelerationRate = .normal
+    }
+
     setNeedsLayout()
   }
 
@@ -359,13 +365,18 @@ public final class CalendarView: UIView {
   private let reuseManager = ItemViewReuseManager()
 
   private var content: CalendarViewContent
-  private var anchorLayoutItem: LayoutItem?
+
   private var _scrollMetricsMutator: ScrollMetricsMutator?
+  private var previousPageIndex: Int?
+
+  private var anchorLayoutItem: LayoutItem?
   private var _visibleItemsProvider: VisibleItemsProvider?
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleCalendarItem: ItemView]()
+
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
+
   private var cachedAccessibilityElements: [Any]?
   private var focusedAccessibilityElement: Any?
 
@@ -530,8 +541,12 @@ public final class CalendarView: UIView {
   private func monthHeaderHeight() -> CGFloat {
     let monthWidth: CGFloat
     switch content.monthsLayout {
-    case .vertical: monthWidth = bounds.width
-    case .horizontal(let _monthWidth): monthWidth = _monthWidth
+    case .vertical:
+      monthWidth = bounds.width
+    case .horizontal(let options):
+      monthWidth = options.monthWidth(
+        calendarWidth: bounds.width,
+        interMonthSpacing: content.interMonthSpacing)
     }
 
     let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
@@ -705,9 +720,7 @@ public final class CalendarView: UIView {
   //
   // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
   private func preventLargeOverscrollIfNeeded() {
-    // TODO(BK): Change to `isRunningOnMac || content.isHorizontalPadingationEnabled` once
-    // horizontal pagination is implemented.
-    guard isRunningOnMac else { return }
+    guard isRunningOnMac || content.monthsLayout.isPaginationEnabled else { return }
     
     let scrollAxis = scrollMetricsMutator.scrollAxis
     let offset = scrollView.offset(for: scrollAxis)
@@ -804,6 +817,70 @@ extension CalendarView: UIScrollViewDelegate {
   public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let visibleDayRange = visibleDayRange else { return }
     didEndDecelerating?(visibleDayRange)
+  }
+  
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    guard
+      case .horizontal(let options) = content.monthsLayout,
+      case .paginatedScrolling = options.scrollingBehavior
+    else
+    {
+      return
+    }
+
+    let pageSize = options.pageSize(
+      calendarWidth: bounds.width,
+      interMonthSpacing: content.interMonthSpacing)
+    previousPageIndex = PaginationHelpers.closestPageIndex(
+      forOffset: scrollView.contentOffset.x,
+      pageSize: pageSize)
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewWillEndDragging(
+    _ scrollView: UIScrollView,
+    withVelocity velocity: CGPoint,
+    targetContentOffset: UnsafeMutablePointer<CGPoint>)
+  {
+    guard
+      case .horizontal(let options) = content.monthsLayout,
+      case .paginatedScrolling(let paginationConfiguration) = options.scrollingBehavior
+    else
+    {
+      return
+    }
+    
+    let pageSize = options.pageSize(
+      calendarWidth: bounds.width,
+      interMonthSpacing: content.interMonthSpacing)
+    
+    switch paginationConfiguration.restingAffinity {
+    case .atPositionsAdjacentToPrevious:
+      guard let previousPageIndex = previousPageIndex else {
+        preconditionFailure("""
+          `previousPageIndex` was accessed before being set in `scrollViewWillBeginDragging`.
+        """)
+      }
+      targetContentOffset.pointee.x = PaginationHelpers.adjacentPageOffset(
+        toPreviousPageIndex: previousPageIndex,
+        targetOffset: targetContentOffset.pointee.x,
+        velocity: velocity.x,
+        pageSize: pageSize)
+      
+    case .atPositionsClosestToTargetOffset:
+      targetContentOffset.pointee.x = PaginationHelpers.closestPageOffset(
+        toTargetOffset: targetContentOffset.pointee.x,
+        touchUpOffset: scrollView.contentOffset.x,
+        velocity: velocity.x,
+        pageSize: pageSize)
+    }
   }
 
 }
