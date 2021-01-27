@@ -91,7 +91,7 @@ final class ScrollMetricsMutator {
   private static let BoundlessEndInset: CGFloat = 0
 
   private let scrollMetricsProvider: ScrollMetricsProvider
-  
+
   private var hasSetUpInitialScrollMetrics = false
 
 }
