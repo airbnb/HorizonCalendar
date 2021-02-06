@@ -487,9 +487,17 @@ public final class CalendarView: UIView {
   }
 
   private func targetAnchorLayoutItem(for scrollToItemContext: ScrollToItemContext) -> LayoutItem {
-    let offset = CGPoint(
-      x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
-      y: scrollView.contentOffset.y + directionalLayoutMargins.top)
+    let offset: CGPoint
+    switch scrollMetricsMutator.scrollAxis {
+    case .vertical:
+      offset = CGPoint(
+        x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
+        y: scrollView.contentOffset.y)
+    case .horizontal:
+      offset = CGPoint(
+        x: scrollView.contentOffset.x,
+        y: scrollView.contentOffset.y + directionalLayoutMargins.top)
+    }
 
     switch scrollToItemContext.targetItem {
     case .month(let month):
