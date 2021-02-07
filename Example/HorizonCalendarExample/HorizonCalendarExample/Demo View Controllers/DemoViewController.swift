@@ -50,8 +50,8 @@ class DemoViewController: UIViewController {
     switch monthsLayout {
     case .vertical:
       NSLayoutConstraint.activate([
-        calendarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-        calendarView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+        calendarView.topAnchor.constraint(equalTo: view.topAnchor),
+        calendarView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         calendarView.leadingAnchor.constraint(
           greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
         calendarView.trailingAnchor.constraint(
