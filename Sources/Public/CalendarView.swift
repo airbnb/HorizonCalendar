@@ -139,23 +139,26 @@ public final class CalendarView: UIView {
 
   /// `CalendarView` only supports positive values for `layoutMargins`. Negative values will be changed to `0`.
   public override var layoutMargins: UIEdgeInsets {
-    didSet {
+    get { super.layoutMargins }
+    set {
       super.layoutMargins = UIEdgeInsets(
-        top: max(layoutMargins.top, 0),
-        left: max(layoutMargins.left, 0),
-        bottom: max(layoutMargins.bottom, 0),
-        right: max(layoutMargins.right, 0))
+        top: max(newValue.top, 0),
+        left: max(newValue.left, 0),
+        bottom: max(newValue.bottom, 0),
+        right: max(newValue.right, 0))
     }
   }
 
-  /// `CalendarView` only supports positive values for `directionalLayoutMargins`. Negative values will be changed to `0`.
+  /// `CalendarView` only supports positive values for `directionalLayoutMargins`. Negative values will be changed to
+  /// `0`.
   public override var directionalLayoutMargins: NSDirectionalEdgeInsets {
-    didSet {
+    get { super.directionalLayoutMargins }
+    set {
       super.directionalLayoutMargins = NSDirectionalEdgeInsets(
-        top: max(directionalLayoutMargins.top, 0),
-        leading: max(directionalLayoutMargins.leading, 0),
-        bottom: max(directionalLayoutMargins.bottom, 0),
-        trailing: max(directionalLayoutMargins.trailing, 0))
+        top: max(newValue.top, 0),
+        leading: max(newValue.leading, 0),
+        bottom: max(newValue.bottom, 0),
+        trailing: max(newValue.trailing, 0))
     }
   }
 
