@@ -281,6 +281,29 @@ public final class CalendarView: UIView {
     setNeedsLayout()
   }
 
+  /// Returns the accessibility element associated with the specified visible date. If the date is not currently visible, then there will be no
+  /// associated accessibility element and this function will return `nil`.
+  ///
+  /// Use this function to programmatically change the currently-focused date via
+  /// `UIAccessibility.post(notification:argument:)`, passing the returned accessibility element as the parameter for
+  /// `argument`.
+  ///
+  /// - Parameters:
+  ///   - date: The date for which to obtain an accessibility element. If the date is not currently visible, then it will not have an
+  ///   associated accessibility element.
+  /// - Returns: An accessibility element associated with the specified `date`, or `nil` if one cannot be found.
+  public func accessibilityElementForVisibleDate(_ date: Date) -> Any? {
+    let day = calendar.day(containing: date)
+    guard let visibleDayRange = visibleDayRange, visibleDayRange.contains(day) else { return nil }
+
+    for (visibleItem, visibleView) in visibleViewsForVisibleItems {
+      guard case .layoutItemType(.day(day)) = visibleItem.itemType else { continue }
+      return visibleView
+    }
+
+    return nil
+  }
+
   /// Scrolls the calendar to the specified month with the specified position.
   ///
   /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
