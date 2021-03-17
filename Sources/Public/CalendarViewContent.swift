@@ -54,13 +54,15 @@ public final class CalendarViewContent {
       dayRange = exactDayRange
     }
 
+    let locale = calendar.locale ?? Locale.current
+
     let monthHeaderDateFormatter = DateFormatter()
     monthHeaderDateFormatter.calendar = calendar
-    monthHeaderDateFormatter.locale = calendar.locale
+    monthHeaderDateFormatter.locale = locale
     monthHeaderDateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "MMMM yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: locale)
 
     monthHeaderItemModelProvider = { month in
       let itemModel = CalendarViewContent.defaultMonthHeaderItemModelProvider(
@@ -80,11 +82,11 @@ public final class CalendarViewContent {
 
     let dayDateFormatter = DateFormatter()
     dayDateFormatter.calendar = calendar
-    dayDateFormatter.locale = calendar.locale
+    dayDateFormatter.locale = locale
     dayDateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: locale)
 
     dayItemModelProvider = { day in
       let itemModel = CalendarViewContent.defaultDayItemModelProvider(

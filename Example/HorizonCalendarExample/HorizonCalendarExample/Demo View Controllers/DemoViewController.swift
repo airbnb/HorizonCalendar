@@ -25,13 +25,14 @@ class DemoViewController: UIViewController {
   lazy var calendarView = CalendarView(initialContent: makeContent())
   lazy var calendar = Calendar.current
   lazy var dayDateFormatter: DateFormatter = {
+    let locale = calendar.locale ?? Locale.current
     let dateFormatter = DateFormatter()
     dateFormatter.calendar = calendar
-    dateFormatter.locale = calendar.locale
+    dateFormatter.locale = locale
     dateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: locale)
     return dateFormatter
   }()
 
