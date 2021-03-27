@@ -11,6 +11,8 @@
 		93061FFF24F1AE1700177ECC /* CalendarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93061FFD24F1AE1700177ECC /* CalendarItem.swift */; };
 		9325F43825C1054600E3BFB8 /* PaginationHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9325F43725C1054600E3BFB8 /* PaginationHelpersTests.swift */; };
 		932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */; };
+		932E27C925D0E1B400EEDD57 /* AnchorLayoutItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932E27C825D0E1B400EEDD57 /* AnchorLayoutItemsProvider.swift */; };
+		93614F7425CF36A9005425C2 /* CalendarViewScrollPosition+Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93614F7325CF36A9005425C2 /* CalendarViewScrollPosition+Padding.swift */; };
 		938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */; };
 		938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */; };
 		938DA41324BF0FFF008A3B47 /* DefaultItemProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41224BF0FFF008A3B47 /* DefaultItemProviders.swift */; };
@@ -73,6 +75,8 @@
 		93061FFD24F1AE1700177ECC /* CalendarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarItem.swift; sourceTree = "<group>"; };
 		9325F43725C1054600E3BFB8 /* PaginationHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationHelpersTests.swift; sourceTree = "<group>"; };
 		932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
+		932E27C825D0E1B400EEDD57 /* AnchorLayoutItemsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorLayoutItemsProvider.swift; sourceTree = "<group>"; };
+		93614F7325CF36A9005425C2 /* CalendarViewScrollPosition+Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewScrollPosition+Padding.swift"; sourceTree = "<group>"; };
 		938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarItemViewRepresentable.swift; sourceTree = "<group>"; };
 		938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCalendarItemModel.swift; sourceTree = "<group>"; };
 		938DA41224BF0FFF008A3B47 /* DefaultItemProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultItemProviders.swift; sourceTree = "<group>"; };
@@ -227,6 +231,8 @@
 		9396F3E12483285D008AD306 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
+				932E27C825D0E1B400EEDD57 /* AnchorLayoutItemsProvider.swift */,
+				93614F7325CF36A9005425C2 /* CalendarViewScrollPosition+Padding.swift */,
 				939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */,
 				938DA41224BF0FFF008A3B47 /* DefaultItemProviders.swift */,
 				939E691E24837E0200A8BCC7 /* Dictionary+MutatingValueForKey.swift */,
@@ -381,6 +387,7 @@
 				939E693C2483824600A8BCC7 /* MonthRange.swift in Sources */,
 				93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */,
 				93061FFE24F1AE1700177ECC /* CalendarViewContent+CalendarItem.swift in Sources */,
+				932E27C925D0E1B400EEDD57 /* AnchorLayoutItemsProvider.swift in Sources */,
 				939E693E24846A6600A8BCC7 /* Month.swift in Sources */,
 				939E692E24837E0300A8BCC7 /* ScrollToItemContext.swift in Sources */,
 				939E693824837E8700A8BCC7 /* CalendarViewScrollPosition.swift in Sources */,
@@ -396,6 +403,7 @@
 				939E694224846EB400A8BCC7 /* DayRange.swift in Sources */,
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
+				93614F7425CF36A9005425C2 /* CalendarViewScrollPosition+Padding.swift in Sources */,
 				9391F15625C097DF001D14A2 /* PaginationHelpers.swift in Sources */,
 				93B6D99E24F0C6220027A60C /* InternalAnyCalendarItemModel.swift in Sources */,
 				938DA41324BF0FFF008A3B47 /* DefaultItemProviders.swift in Sources */,

@@ -24,14 +24,16 @@ public enum CalendarViewScrollPosition {
   case centered
 
   /// The first position along the scrollable axis that makes the day or month fully visible in the visible bounds of the calendar, with
-  /// additional padding provided via `padding`.
+  /// additional padding provided via `padding`. `padding` values less than 0 will be ignored. `padding` values that result in an
+  /// offset beyond the midpoint of the calendar will be clamped.
   ///
   /// If the calendar scrolls its months vertically, then the "first position" is the top edge.
   /// If the calendar scrolls its months horizontally, then the "first position" is the left edge.
   case firstFullyVisiblePosition(padding: CGFloat)
 
   /// The last position along the scrollable axis that makes the day or month fully visible in the visible bounds of the calendar, with
-  /// additional padding provided via `padding`.
+  /// additional padding provided via `padding`. `padding` values less than 0 will be ignored. `padding` values that result in an
+  /// offset beyond the midpoint of the calendar will be clamped.
   ///
   /// If the calendar scrolls its months vertically, then the "last position" is the bottom edge.
   /// If the calendar scrolls its months horizontally, then the "last position" is the right edge.
