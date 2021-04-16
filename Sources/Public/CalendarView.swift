@@ -813,17 +813,7 @@ public final class CalendarView: UIView {
   /// This is needed to ensure that the `subviews` array is sorted according to each sublayer's `zPosition`. This prevents
   /// z-index-related rendering issues when a `CalendarView` is being snapshotted via `CALayer.render(in:)`.
   private func sortSubviewsByLayerZPositions() {
-    // Bubble Sort implementation, which makes doing in-place swaps (subview exchanges) easy.
-    for i in 0..<scrollView.subviews.count {
-      for j in 0..<(scrollView.subviews.count - i - 1) {
-        let lhsZPosition = scrollView.subviews[j].layer.zPosition
-        let rhsZPosition = scrollView.subviews[j + 1].layer.zPosition
-
-        if lhsZPosition > rhsZPosition {
-          scrollView.exchangeSubview(at: j, withSubviewAt: j + 1)
-        }
-      }
-    }
+    scrollView.layer.sublayers?.sort { $0.zPosition < $1.zPosition }
   }
 
 }
