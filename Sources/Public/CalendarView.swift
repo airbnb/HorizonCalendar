@@ -47,6 +47,10 @@ public final class CalendarView: UIView {
 
     super.init(frame: .zero)
 
+    (layer as! RenderInContextObservingLayer).willRenderInContext = { [weak self] in
+      self?.sortSubviewsByLayerZPositions()
+    }
+
     if #available(iOS 13.0, *) {
       backgroundColor = .systemBackground
     } else {
@@ -69,6 +73,8 @@ public final class CalendarView: UIView {
   }
 
   // MARK: Public
+
+  public override class var layerClass: AnyClass { RenderInContextObservingLayer.self }
 
   /// A closure (that is retained) that is invoked whenever a day is selected.
   public var daySelectionHandler: ((Day) -> Void)?
@@ -800,6 +806,22 @@ public final class CalendarView: UIView {
         UIView.animate(withDuration: 0.4, delay: 0, options: [.curveEaseOut], animations: {
           self.scrollView.setContentOffset(newOffset, animated: false)
         })
+      }
+    }
+  }
+
+  /// This is needed to ensure that the `subviews` array is sorted according to each sublayer's `zPosition`. This prevents
+  /// z-index-related rendering issues when a `CalendarView` is being snapshotted via `CALayer.render(in:)`.
+  private func sortSubviewsByLayerZPositions() {
+    // Bubble Sort implementation, which makes doing in-place swaps (subview exchanges) easy.
+    for i in 0..<scrollView.subviews.count {
+      for j in 0..<(scrollView.subviews.count - i - 1) {
+        let lhsZPosition = scrollView.subviews[j].layer.zPosition
+        let rhsZPosition = scrollView.subviews[j + 1].layer.zPosition
+
+        if lhsZPosition > rhsZPosition {
+          scrollView.exchangeSubview(at: j, withSubviewAt: j + 1)
+        }
       }
     }
   }
