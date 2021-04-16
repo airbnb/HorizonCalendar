@@ -48,7 +48,7 @@ public final class CalendarView: UIView {
     super.init(frame: .zero)
 
     (layer as! RenderInContextObservingLayer).willRenderInContext = { [weak self] in
-      self?.sortSubviewsByLayerZPositions()
+      self?.sortScrollViewSublayersByZPositions()
     }
 
     if #available(iOS 13.0, *) {
@@ -810,9 +810,9 @@ public final class CalendarView: UIView {
     }
   }
 
-  /// This is needed to ensure that the `subviews` array is sorted according to each sublayer's `zPosition`. This prevents
-  /// z-index-related rendering issues when a `CalendarView` is being snapshotted via `CALayer.render(in:)`.
-  private func sortSubviewsByLayerZPositions() {
+  /// This is needed to ensure that the `scrollView.sublayers` array is sorted according to each sublayer's `zPosition`.
+  /// This prevents z-index-related rendering issues when a `CalendarView` is being snapshotted via `CALayer.render(in:)`.
+  private func sortScrollViewSublayersByZPositions() {
     scrollView.layer.sublayers?.sort { $0.zPosition < $1.zPosition }
   }
 
