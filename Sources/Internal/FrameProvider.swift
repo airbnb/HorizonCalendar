@@ -329,6 +329,13 @@ final class FrameProvider {
   // Gets the row of a date in a particular month, taking into account whether the date is in a
   // boundary month that's only showing some dates.
   private func adjustedRowInMonth(for day: Day) -> Int {
+    guard day >= content.dayRange.lowerBound else {
+      preconditionFailure("""
+        Cannot get the adjusted row for \(day), which is lower than the first day in the visible day
+        range (\(content.dayRange)).
+      """)
+    }
+
     let missingRows: Int
     if
       !content.monthsLayout.alwaysShowCompleteBoundaryMonths,
@@ -347,7 +354,13 @@ final class FrameProvider {
   // boundary month that's only showing a subset of days.
   private func numberOfWeekRows(in month: Month) -> Int {
     let rowOfLastDateInMonth: Int
-    if month == content.monthRange.lowerBound {
+    if month == content.monthRange.lowerBound && month == content.monthRange.upperBound {
+      let firstDayOfOnlyMonth = content.dayRange.lowerBound
+      let lastDayOfOnlyMonth = content.dayRange.upperBound
+      let rowOfFirstDayOfOnlyMonth = adjustedRowInMonth(for: firstDayOfOnlyMonth)
+      let rowOfLastDayOfOnlyMonth = adjustedRowInMonth(for: lastDayOfOnlyMonth)
+      rowOfLastDateInMonth = rowOfLastDayOfOnlyMonth - rowOfFirstDayOfOnlyMonth
+    } else if month == content.monthRange.lowerBound {
       let lastDateOfFirstMonth = calendar.lastDate(of: month)
       let lastDayOfFirstMonth = calendar.day(containing: lastDateOfFirstMonth)
       let rowOfLastDayOfFirstMonth = adjustedRowInMonth(for: lastDayOfFirstMonth)
