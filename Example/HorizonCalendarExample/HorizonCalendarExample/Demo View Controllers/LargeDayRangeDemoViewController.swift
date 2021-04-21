@@ -24,12 +24,26 @@ final class LargeDayRangeDemoViewController: DemoViewController {
     super.viewDidLoad()
 
     title = "Large Day Range"
+  }
+
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+
+    guard !didScrollToInitialMonth else { return }
+
+    let padding: CGFloat
+    switch monthsLayout {
+    case .vertical: padding = calendarView.layoutMargins.top
+    case .horizontal: padding = calendarView.layoutMargins.left
+    }
 
     let january1500CE = calendar.date(from: DateComponents(era: 1, year: 1500, month: 01, day: 01))!
     calendarView.scroll(
       toMonthContaining: january1500CE,
-      scrollPosition: .firstFullyVisiblePosition,
+      scrollPosition: .firstFullyVisiblePosition(padding: padding),
       animated: false)
+
+    didScrollToInitialMonth = true
   }
 
   override func makeContent() -> CalendarViewContent {
@@ -42,5 +56,9 @@ final class LargeDayRangeDemoViewController: DemoViewController {
       monthsLayout: monthsLayout)
       .withInterMonthSpacing(24)
   }
+
+  // MARK: Private
+
+  private var didScrollToInitialMonth = false
 
 }
