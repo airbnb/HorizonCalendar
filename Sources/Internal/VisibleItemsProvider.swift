@@ -71,16 +71,16 @@ final class VisibleItemsProvider {
     -> LayoutItem
   {
     let baseMonthFrame = frameProvider.frameOfMonth(month, withOrigin: offset)
-    let proposedMonthFrame = proposedScrollToItemFrame(
-      fromBaseFrame: baseMonthFrame,
-      for: scrollPosition,
+    let proposedMonthFrame = frameProvider.frameOfItem(
+      withOriginalFrame: baseMonthFrame,
+      at: scrollPosition,
       offset: offset)
     let proposedMonthHeaderFrame = frameProvider.frameOfMonthHeader(
       inMonthWithOrigin: proposedMonthFrame.origin)
     let finalMonthHeaderFrame = correctedScrollToItemFrameForContentBoundaries(
       fromProposedFrame: proposedMonthHeaderFrame,
       ofTargetInMonth: month,
-      withFrame: proposedMonthFrame,
+      withMonthFrame: proposedMonthFrame,
       bounds: CGRect(origin: offset, size: size))
     return LayoutItem(itemType: .monthHeader(month), frame: finalMonthHeaderFrame)
   }
@@ -92,9 +92,9 @@ final class VisibleItemsProvider {
     -> LayoutItem
   {
     let baseDayFrame = frameProvider.frameOfDay(day, inMonthWithOrigin: offset)
-    let proposedDayFrame = proposedScrollToItemFrame(
-      fromBaseFrame: baseDayFrame,
-      for: scrollPosition,
+    let proposedDayFrame = frameProvider.frameOfItem(
+      withOriginalFrame: baseDayFrame,
+      at: scrollPosition,
       offset: offset)
     let proposedMonthOrigin = frameProvider.originOfMonth(
       containing: LayoutItem(itemType: .day(day), frame: proposedDayFrame))
@@ -102,7 +102,7 @@ final class VisibleItemsProvider {
     let finalDayFrame = correctedScrollToItemFrameForContentBoundaries(
       fromProposedFrame: proposedDayFrame,
       ofTargetInMonth: day.month,
-      withFrame: proposedMonthFrame,
+      withMonthFrame: proposedMonthFrame,
       bounds: CGRect(origin: offset, size: size))
     return LayoutItem(itemType: .day(day), frame: finalDayFrame)
   }
@@ -120,8 +120,8 @@ final class VisibleItemsProvider {
     var lastVisibleMonth: Month?
     var framesForVisibleMonths = [Month: CGRect]()
     var framesForVisibleDays = [Day: CGRect]()
-    var minimumScrollOffset: CGFloat?
-    var maximumScrollOffset: CGFloat?
+    var contentStartBoundary: CGFloat?
+    var contentEndBoundary: CGFloat?
     var heightOfPinnedContent = CGFloat(0)
 
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of
@@ -173,8 +173,8 @@ final class VisibleItemsProvider {
           lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
-          minimumScrollOffset: &minimumScrollOffset,
-          maximumScrollOffset: &maximumScrollOffset,
+          contentStartBoundary: &contentStartBoundary,
+          contentEndBoundary: &contentEndBoundary,
           visibleItems: &visibleItems,
           calendarItemModelCache: &calendarItemModelCache,
           originsForMonths: &originsForMonths,
@@ -200,8 +200,8 @@ final class VisibleItemsProvider {
           lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
-          minimumScrollOffset: &minimumScrollOffset,
-          maximumScrollOffset: &maximumScrollOffset,
+          contentStartBoundary: &contentStartBoundary,
+          contentEndBoundary: &contentEndBoundary,
           visibleItems: &visibleItems,
           calendarItemModelCache: &calendarItemModelCache,
           originsForMonths: &originsForMonths,
@@ -248,8 +248,8 @@ final class VisibleItemsProvider {
       visibleMonthRange: visibleMonthRange,
       framesForVisibleMonths: framesForVisibleMonths,
       framesForVisibleDays: framesForVisibleDays,
-      minimumScrollOffset: minimumScrollOffset,
-      maximumScrollOffset: maximumScrollOffset,
+      contentStartBoundary: contentStartBoundary,
+      contentEndBoundary: contentEndBoundary,
       heightOfPinnedContent: heightOfPinnedContent)
   }
 
@@ -571,8 +571,8 @@ final class VisibleItemsProvider {
     lastVisibleMonth: inout Month?,
     framesForVisibleMonths: inout [Month: CGRect],
     framesForVisibleDays: inout [Day: CGRect],
-    minimumScrollOffset: inout CGFloat?,
-    maximumScrollOffset: inout CGFloat?,
+    contentStartBoundary: inout CGFloat?,
+    contentEndBoundary: inout CGFloat?,
     visibleItems: inout Set<VisibleCalendarItem>,
     calendarItemModelCache: inout [VisibleCalendarItem.ItemType: InternalAnyCalendarItemModel],
     originsForMonths: inout [Month: CGPoint],
@@ -601,8 +601,8 @@ final class VisibleItemsProvider {
       determineContentBoundariesIfNeeded(
         for: month,
         withFrame: monthFrame,
-        minimumScrollOffset: &minimumScrollOffset,
-        maximumScrollOffset: &maximumScrollOffset)
+        contentStartBoundary: &contentStartBoundary,
+        contentEndBoundary: &contentEndBoundary)
 
       // Handle items that actually intersect the visible bounds.
       if layoutItem.frame.intersects(bounds) {
@@ -712,26 +712,25 @@ final class VisibleItemsProvider {
   private func determineContentBoundariesIfNeeded(
     for month: Month,
     withFrame monthFrame: CGRect,
-    minimumScrollOffset: inout CGFloat?,
-    maximumScrollOffset: inout CGFloat?)
+    contentStartBoundary: inout CGFloat?,
+    contentEndBoundary: inout CGFloat?)
   {
     if month == content.dayRange.lowerBound.month {
       switch content.monthsLayout {
       case .vertical(let options):
-        minimumScrollOffset = monthFrame.minY -
-          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0) -
-          layoutMargins.top
+        contentStartBoundary = monthFrame.minY -
+          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
       case .horizontal:
-        minimumScrollOffset = monthFrame.minX - layoutMargins.leading
+        contentStartBoundary = monthFrame.minX
       }
     }
 
     if month == content.dayRange.upperBound.month {
       switch content.monthsLayout {
       case .vertical:
-        maximumScrollOffset = monthFrame.maxY + layoutMargins.bottom
+        contentEndBoundary = monthFrame.maxY
       case .horizontal:
-        maximumScrollOffset = monthFrame.maxX + layoutMargins.trailing
+        contentEndBoundary = monthFrame.maxX
       }
     }
   }
@@ -904,50 +903,6 @@ final class VisibleItemsProvider {
     }
   }
 
-  private func proposedScrollToItemFrame(
-    fromBaseFrame frame: CGRect,
-    for scrollPosition: CalendarViewScrollPosition,
-    offset: CGPoint)
-    -> CGRect
-  {
-    switch content.monthsLayout {
-    case .vertical(let options):
-      let additionalOffset = (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
-      let minY = offset.y + additionalOffset
-      let maxY = offset.y + size.height
-      let firstFullyVisibleY = minY
-      let lastFullyVisibleY = maxY - frame.height
-      let y: CGFloat
-      switch scrollPosition {
-      case .centered:
-        y = minY + ((maxY - minY) / 2) - (frame.height / 2)
-      case .firstFullyVisiblePosition(let padding):
-        y = firstFullyVisibleY + padding
-      case .lastFullyVisiblePosition(let padding):
-        y = lastFullyVisibleY - padding
-      }
-
-      return CGRect(x: frame.minX, y: y, width: frame.width, height: frame.height)
-
-    case .horizontal:
-      let minX = offset.x
-      let maxX = offset.x + size.width
-      let firstFullyVisibleX = minX
-      let lastFullyVisibleX = maxX - frame.width
-      let x: CGFloat
-      switch scrollPosition {
-      case .centered:
-        x = minX + ((maxX - minX) / 2) - (frame.width / 2)
-      case .firstFullyVisiblePosition(let padding):
-        x = firstFullyVisibleX + padding
-      case .lastFullyVisiblePosition(let padding):
-        x = lastFullyVisibleX - padding
-      }
-
-      return CGRect(x: x, y: frame.minY, width: frame.width, height: frame.height)
-    }
-  }
-
   /// This function takes a proposed frame for a target item toward which we're programmatically scrolling, and adjusts it so that it's a
   /// valid frame when the calendar is at rest / not being overscrolled.
   ///
@@ -955,17 +910,16 @@ final class VisibleItemsProvider {
   /// `.centered` - the proposed frame would position the month in the middle of the bounds, even though that is not a valid resting
   /// position for that month. Keep in mind that the first month in the calendar is going to be adjacent with the top / leading edge,
   /// depending on whether the months layout is `.vertical` or `.horizontal`, respectively. This function recognizes that
-  /// situation by looking to see if we're close to the beginning / end of the calendar's content, and determines a correct final frame for
-  /// a programmatic scroll.
+  /// situation by looking to see if we're close to the beginning / end of the calendar's content, and determines a correct final frame.
   private func correctedScrollToItemFrameForContentBoundaries(
     fromProposedFrame proposedFrame: CGRect,
     ofTargetInMonth month: Month,
-    withFrame monthFrame: CGRect,
+    withMonthFrame monthFrame: CGRect,
     bounds: CGRect)
     -> CGRect
   {
-    var minimumScrollOffset: CGFloat?
-    var maximumScrollOffset: CGFloat?
+    var contentStartBoundary: CGFloat?
+    var contentEndBoundary: CGFloat?
 
     var currentMonth = month
     var currentMonthFrame = monthFrame
@@ -973,13 +927,13 @@ final class VisibleItemsProvider {
     // Look backwards for boundary-determining months
     while
       bounds.contains(currentMonthFrame.origin.alignedToPixels(forScreenWithScale: scale)),
-      minimumScrollOffset == nil
+      contentStartBoundary == nil
     {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        minimumScrollOffset: &minimumScrollOffset,
-        maximumScrollOffset: &maximumScrollOffset)
+        contentStartBoundary: &contentStartBoundary,
+        contentEndBoundary: &contentEndBoundary)
 
       let previousMonth = calendar.month(byAddingMonths: -1, to: currentMonth)
       let previousMonthOrigin = frameProvider.originOfMonth(
@@ -1000,13 +954,13 @@ final class VisibleItemsProvider {
       bounds.contains(
         CGPoint(x: currentMonthFrame.maxX - 1, y: currentMonthFrame.maxY - 1)
           .alignedToPixels(forScreenWithScale: scale)),
-      maximumScrollOffset == nil
+      contentEndBoundary == nil
     {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        minimumScrollOffset: &minimumScrollOffset,
-        maximumScrollOffset: &maximumScrollOffset)
+        contentStartBoundary: &contentStartBoundary,
+        contentEndBoundary: &contentEndBoundary)
 
       let nextMonth = calendar.month(byAddingMonths: 1, to: currentMonth)
       let nextMonthOrigin = frameProvider.originOfMonth(
@@ -1018,22 +972,36 @@ final class VisibleItemsProvider {
       currentMonthFrame = nextMonthFrame
     }
 
-    // Adjust the proposed frame if we're near a boundary so that the final frame is valid
+    // Adjust the proposed frame if we're near a boundary so that the final frame is valid.
     switch content.monthsLayout {
     case .vertical:
-      if let minimumScrollOffset = minimumScrollOffset, minimumScrollOffset > bounds.minY {
-        return proposedFrame.applying(.init(translationX: 0, y: bounds.minY - minimumScrollOffset))
-      } else if let maximumScrollOffset = maximumScrollOffset, maximumScrollOffset < bounds.maxY {
-        return proposedFrame.applying(.init(translationX: 0, y: bounds.maxY - maximumScrollOffset))
+      if
+        let contentStartBoundary = contentStartBoundary,
+        contentStartBoundary >= bounds.minY || contentEndBoundary != nil
+      {
+        // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
+        // `bounds.height` and can simply adjust based on the `minimumScrollOffset`.
+        return proposedFrame.applying(
+          .init(translationX: 0, y: bounds.minY - contentStartBoundary + layoutMargins.top))
+      } else if let contentEndBoundary = contentEndBoundary, contentEndBoundary <= bounds.maxY {
+        return proposedFrame.applying(
+          .init(translationX: 0, y: bounds.maxY - contentEndBoundary - layoutMargins.bottom))
       } else {
         return proposedFrame
       }
 
     case .horizontal:
-      if let minimumScrollOffset = minimumScrollOffset, minimumScrollOffset > bounds.minX {
-        return proposedFrame.applying(.init(translationX: bounds.minX - minimumScrollOffset, y: 0))
-      } else if let maximumScrollOffset = maximumScrollOffset, maximumScrollOffset < bounds.maxX {
-        return proposedFrame.applying(.init(translationX: bounds.maxX - maximumScrollOffset, y: 0))
+      if
+        let contentStartBoundary = contentStartBoundary,
+        contentStartBoundary >= bounds.minX || contentEndBoundary != nil
+      {
+        // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
+        // `bounds.width` and can simply adjust based on the `minimumScrollOffset`.
+        return proposedFrame.applying(
+          .init(translationX: bounds.minX - contentStartBoundary + layoutMargins.leading, y: 0))
+      } else if let contentEndBoundary = contentEndBoundary, contentEndBoundary <= bounds.maxX {
+        return proposedFrame.applying(
+          .init(translationX: bounds.maxX - contentEndBoundary - layoutMargins.trailing, y: 0))
       } else {
         return proposedFrame
       }
@@ -1051,8 +1019,8 @@ struct VisibleItemsDetails {
   let visibleMonthRange: MonthRange?
   let framesForVisibleMonths: [Month: CGRect]
   let framesForVisibleDays: [Day: CGRect]
-  let minimumScrollOffset: CGFloat?
-  let maximumScrollOffset: CGFloat?
+  let contentStartBoundary: CGFloat?
+  let contentEndBoundary: CGFloat?
   let heightOfPinnedContent: CGFloat
 }
 
