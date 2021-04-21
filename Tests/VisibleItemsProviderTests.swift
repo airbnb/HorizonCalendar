@@ -352,8 +352,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testVerticalPinnedDaysOfWeekVisibleItemsContext() {
@@ -419,8 +419,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-06-24)), frame: (142.0, 697.0, 36.0, 36.0)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testVerticalPartialMonthVisibleItemsContext() {
@@ -467,8 +467,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == 200, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == 200, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testHorizontalVisibleItemsContext() {
@@ -538,8 +538,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-05-10)), frame: (255.0, 238.5, 33.0, 33.0)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testLargeScrollOffsetSincePreviouslyVisibleItem() {
@@ -607,10 +607,10 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-05-27)), frame: (142.0, 382.0, 36.0, 36.0)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(
-      details.maximumScrollOffset?.alignedToPixel(forScreenWithScale: 2) == 3394.5,
-      "Unexpected maximum scroll offset.")
+      details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 2) == 3394.5,
+      "Unexpected content end offset.")
   }
 
   func testHorizontalLeadingMonthPartiallyClipped() {
@@ -731,8 +731,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-08)), frame: (142.0, 191.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == 0, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == 0, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testBoundaryVerticalPinnedDaysOfWeekVisibleItemsContext() {
@@ -798,9 +798,9 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected centermost layout item.")
 
     XCTAssert(
-      details.minimumScrollOffset?.alignedToPixel(forScreenWithScale: 2) == 9.5,
-      "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == nil, "Unexpected maximum scroll offset.")
+      details.contentStartBoundary?.alignedToPixel(forScreenWithScale: 2) == 9.5,
+      "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
   func testBoundaryVerticalPartialMonthVisibleItemsContext() {
@@ -831,10 +831,10 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 825.5, 35.5, 36.0)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(
-      details.maximumScrollOffset?.alignedToPixel(forScreenWithScale: 3) == CGFloat(861.4285714285713).alignedToPixel(forScreenWithScale: 3),
-      "Unexpected maximum scroll offset.")
+      details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 3) == CGFloat(861.4285714285713).alignedToPixel(forScreenWithScale: 3),
+      "Unexpected content end offset.")
   }
 
   func testBoundaryHorizontalVisibleItemsContext() {
@@ -901,8 +901,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-11-21)), frame: (1147.0, 238.5, 33.0, 33.0)]",
       "Unexpected centermost layout item.")
 
-    XCTAssert(details.minimumScrollOffset == nil, "Unexpected minimum scroll offset.")
-    XCTAssert(details.maximumScrollOffset == 1500, "Unexpected maximum scroll offset.")
+    XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
+    XCTAssert(details.contentEndBoundary == 1500, "Unexpected content end offset.")
   }
 
   // MARK: Accessibility tests

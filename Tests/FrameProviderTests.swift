@@ -138,10 +138,10 @@ final class FrameProviderTests: XCTestCase {
       CGPoint(x: -4, y: 145).alignedToPixels(forScreenWithScale: 3),
     ]
     let expectedOrigins3 = [
-      CGPoint(x: 147.14285714285714, y: 80.42857142857142).alignedToPixels(forScreenWithScale: 3),
-      CGPoint(x: 147.14285714285714, y: 135.28571428571428).alignedToPixels(forScreenWithScale: 3),
-      CGPoint(x: 147.14285714285714, y: 80.42857142857142).alignedToPixels(forScreenWithScale: 3),
-      CGPoint(x: 150, y: 89).alignedToPixels(forScreenWithScale: 3),
+      CGPoint(x: 17.666666666666668, y: 70.66666666666667).alignedToPixels(forScreenWithScale: 3),
+      CGPoint(x: 17.666666666666668, y: 125.66666666666667).alignedToPixels(forScreenWithScale: 3),
+      CGPoint(x: 17.666666666666668, y: 180.33333333333334).alignedToPixels(forScreenWithScale: 3),
+      CGPoint(x: 32, y: 85).alignedToPixels(forScreenWithScale: 3),
     ]
 
     let expectedOrigins4 = [
@@ -181,8 +181,8 @@ final class FrameProviderTests: XCTestCase {
 
       let dayLayoutItem1 = LayoutItem(
         itemType: .day(
-          Day(month: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true), day: 10)),
-        frame: CGRect(origin: CGPoint(x: 200, y: 300), size: frameProvider.daySize))
+          Day(month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true), day: 29)),
+        frame: CGRect(origin: CGPoint(x: 250, y: 400), size: frameProvider.daySize))
       let origin3 = frameProvider.originOfMonth(containing: dayLayoutItem1)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(origin3 == expectedOrigins3[index], "Incorrect month origin containing day.")
@@ -574,6 +574,118 @@ final class FrameProviderTests: XCTestCase {
       separatorHeight: 10)
     let expectedFrame3 = CGRect(x: 421, y: 77, width: 300, height: 10)
     XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day-of-week row separator.")
+  }
+
+  // MARK: Scroll-to-item Frame Calculations
+
+  func testScrollToItemFirstFullyVisiblePosition() {
+    let verticalItemFrame = CGRect(x: 50, y: 200, width: 100, height: 100)
+    let horizontalFrame = CGRect(x: 200, y: 50, width: 100, height: 100)
+
+    let frame1 = verticalFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .firstFullyVisiblePosition,
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame1 = CGRect(x: 50, y: 100, width: 100, height: 100)
+    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for scroll-to-item.")
+
+    let frame2 = verticalFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .firstFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame2 = CGRect(x: 50, y: 120, width: 100, height: 100)
+    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for scroll-to-item.")
+
+    let frame3 = verticalPinnedDaysOfWeekFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .firstFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame3 = CGRect(x: 50, y: 154.85714285714286, width: 100, height: 100)
+    XCTAssert(
+      frame3.alignedToPixels(forScreenWithScale: 3) == expectedFrame3.alignedToPixels(forScreenWithScale: 3),
+      "Incorrect frame for scroll-to-item.")
+
+    let frame4 = horizontalFrameProvider.frameOfItem(
+      withOriginalFrame: horizontalFrame,
+      at: .firstFullyVisiblePosition,
+      offset: CGPoint(x: 100, y: 0))
+    let expectedFrame4 = CGRect(x: 100, y: 50, width: 100, height: 100)
+    XCTAssert(frame4 == expectedFrame4, "Incorrect frame for scroll-to-item.")
+
+    let frame5 = horizontalFrameProvider.frameOfItem(
+      withOriginalFrame: horizontalFrame,
+      at: .firstFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 100, y: 0))
+    let expectedFrame5 = CGRect(x: 120, y: 50, width: 100, height: 100)
+    XCTAssert(frame5 == expectedFrame5, "Incorrect frame for scroll-to-item.")
+  }
+
+  func testScrollToItemCentered() {
+    let verticalItemFrame = CGRect(x: 50, y: 200, width: 100, height: 100)
+    let horizontalFrame = CGRect(x: 200, y: 50, width: 100, height: 100)
+
+    let frame1 = verticalFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .centered,
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame1 = CGRect(x: 50, y: 290, width: 100, height: 100)
+    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for scroll-to-item.")
+
+    let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .centered,
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame2 = CGRect(x: 50, y: 307.42857142857144, width: 100, height: 100)
+    XCTAssert(
+      frame2.alignedToPixels(forScreenWithScale: 3) == expectedFrame2.alignedToPixels(forScreenWithScale: 3),
+      "Incorrect frame for scroll-to-item.")
+
+    let frame3 = horizontalFrameProvider.frameOfItem(
+      withOriginalFrame: horizontalFrame,
+      at: .centered,
+      offset: CGPoint(x: 100, y: 0))
+    let expectedFrame3 = CGRect(x: 210, y: 50, width: 100, height: 100)
+    XCTAssert(frame3 == expectedFrame3, "Incorrect frame for scroll-to-item.")
+  }
+
+  func testScrollToItemLastFullyVisiblePosition() {
+    let verticalItemFrame = CGRect(x: 50, y: 200, width: 100, height: 100)
+    let horizontalFrame = CGRect(x: 200, y: 50, width: 100, height: 100)
+
+    let frame1 = verticalFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .lastFullyVisiblePosition,
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame1 = CGRect(x: 50, y: 480, width: 100, height: 100)
+    XCTAssert(frame1 == expectedFrame1, "Incorrect frame for scroll-to-item.")
+
+    let frame2 = verticalFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .lastFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame2 = CGRect(x: 50, y: 460, width: 100, height: 100)
+    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for scroll-to-item.")
+
+    let frame3 = verticalPinnedDaysOfWeekFrameProvider.frameOfItem(
+      withOriginalFrame: verticalItemFrame,
+      at: .lastFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 0, y: 100))
+    let expectedFrame3 = CGRect(x: 50, y: 460, width: 100, height: 100)
+    XCTAssert(frame3 == expectedFrame3, "Incorrect frame for scroll-to-item.")
+
+    let frame4 = horizontalFrameProvider.frameOfItem(
+      withOriginalFrame: horizontalFrame,
+      at: .lastFullyVisiblePosition,
+      offset: CGPoint(x: 100, y: 0))
+    let expectedFrame4 = CGRect(x: 320, y: 50, width: 100, height: 100)
+    XCTAssert(frame4 == expectedFrame4, "Incorrect frame for scroll-to-item.")
+
+    let frame5 = horizontalFrameProvider.frameOfItem(
+      withOriginalFrame: horizontalFrame,
+      at: .lastFullyVisiblePosition(padding: 20),
+      offset: CGPoint(x: 100, y: 0))
+    let expectedFrame5 = CGRect(x: 300, y: 50, width: 100, height: 100)
+    XCTAssert(frame5 == expectedFrame5, "Incorrect frame for scroll-to-item.")
   }
 
   // MARK: Private
