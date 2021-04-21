@@ -210,11 +210,15 @@ public final class CalendarView: UIView {
 
     let anchorLayoutItem: LayoutItem
     if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
-      anchorLayoutItem = targetAnchorLayoutItem(for: scrollToItemContext)
+      anchorLayoutItem = self.anchorLayoutItem(for: scrollToItemContext)
     } else if let previousAnchorLayoutItem = self.anchorLayoutItem {
       anchorLayoutItem = previousAnchorLayoutItem
     } else {
-      anchorLayoutItem = initialMonthHeaderAnchorLayoutItem
+      let initialScrollToItemContext = ScrollToItemContext(
+        targetItem: .month(content.monthRange.lowerBound),
+        scrollPosition: .firstFullyVisiblePosition,
+        animated: false)
+      anchorLayoutItem = self.anchorLayoutItem(for: initialScrollToItemContext)
     }
 
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
@@ -228,11 +232,11 @@ public final class CalendarView: UIView {
 
     visibleItemsDetails = currentVisibleItemsDetails
 
-    let minimumScrollOffset = visibleItemsDetails?.minimumScrollOffset.map {
-      $0.alignedToPixel(forScreenWithScale: scale)
+    let minimumScrollOffset = visibleItemsDetails?.contentStartBoundary.map {
+      ($0 - firstLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
     }
-    let maximumScrollOffset = visibleItemsDetails?.maximumScrollOffset.map {
-      $0.alignedToPixel(forScreenWithScale: scale)
+    let maximumScrollOffset = visibleItemsDetails?.contentEndBoundary.map {
+      ($0 + lastLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
     }
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.updateScrollBoundaries(
@@ -501,16 +505,6 @@ public final class CalendarView: UIView {
     }
   }
 
-  private var initialMonthHeaderAnchorLayoutItem: LayoutItem {
-    let offset = CGPoint(
-      x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
-      y: scrollView.contentOffset.y + directionalLayoutMargins.top)
-    return visibleItemsProvider.anchorMonthHeaderItem(
-      for: content.monthRange.lowerBound,
-      offset: offset,
-      scrollPosition: .firstFullyVisiblePosition)
-  }
-
   private var maximumPerAnimationTickOffset: CGFloat {
     switch content.monthsLayout {
     case .vertical: return bounds.height
@@ -518,7 +512,21 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func targetAnchorLayoutItem(for scrollToItemContext: ScrollToItemContext) -> LayoutItem {
+  private var firstLayoutMarginValue: CGFloat {
+    switch content.monthsLayout {
+    case .vertical: return directionalLayoutMargins.top
+    case .horizontal: return directionalLayoutMargins.leading
+    }
+  }
+
+  private var lastLayoutMarginValue: CGFloat {
+    switch content.monthsLayout {
+    case .vertical: return directionalLayoutMargins.bottom
+    case .horizontal: return directionalLayoutMargins.trailing
+    }
+  }
+
+  private func anchorLayoutItem(for scrollToItemContext: ScrollToItemContext) -> LayoutItem {
     let offset: CGPoint
     switch scrollMetricsMutator.scrollAxis {
     case .vertical:
@@ -715,10 +723,10 @@ public final class CalendarView: UIView {
       let currentPosition: CGFloat
       switch content.monthsLayout {
       case .vertical:
-        targetPosition = targetAnchorLayoutItem(for: scrollToItemContext).frame.minY
+        targetPosition = anchorLayoutItem(for: scrollToItemContext).frame.minY
         currentPosition = frame.minY
       case .horizontal:
-        targetPosition = targetAnchorLayoutItem(for: scrollToItemContext).frame.minX
+        targetPosition = anchorLayoutItem(for: scrollToItemContext).frame.minX
         currentPosition = frame.minX
       }
       let distanceToTargetPosition = currentPosition - targetPosition

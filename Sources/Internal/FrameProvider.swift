@@ -243,6 +243,64 @@ final class FrameProvider {
     return CGRect(x: monthOrigin.x, y: y, width: monthWidth, height: separatorHeight)
   }
 
+  // MARK: Scroll-to-item Frames
+
+  /// Returns translated item frames for the specified scroll offset and scroll position. Note that the returned frames may not be at valid
+  /// resting positions. For example, someone could try to scroll the last day in the calendar to be at a vertically-centered scroll
+  /// position, which would cause the calendar to be laid out in an overscrolled position. The `VisibleItemsProvider` will detect
+  /// this scenario and adjust the frame so it's at a valid resting position.
+  func frameOfItem(
+    withOriginalFrame originalFrame: CGRect,
+    at scrollPosition: CalendarViewScrollPosition,
+    offset: CGPoint)
+    -> CGRect
+  {
+    switch content.monthsLayout {
+    case .vertical(let options):
+      let additionalOffset = (options.pinDaysOfWeekToTop ? daySize.height : 0)
+      let minY = offset.y + additionalOffset
+      let maxY = offset.y + size.height
+      let firstFullyVisibleY = minY
+      let lastFullyVisibleY = maxY - originalFrame.height
+      let y: CGFloat
+      switch scrollPosition {
+      case .centered:
+        y = minY + ((maxY - minY) / 2) - (originalFrame.height / 2)
+      case .firstFullyVisiblePosition(let padding):
+        y = firstFullyVisibleY + padding
+      case .lastFullyVisiblePosition(let padding):
+        y = lastFullyVisibleY - padding
+      }
+
+      return CGRect(
+        x: originalFrame.minX,
+        y: y,
+        width: originalFrame.width,
+        height: originalFrame.height)
+
+    case .horizontal:
+      let minX = offset.x
+      let maxX = offset.x + size.width
+      let firstFullyVisibleX = minX
+      let lastFullyVisibleX = maxX - originalFrame.width
+      let x: CGFloat
+      switch scrollPosition {
+      case .centered:
+        x = minX + ((maxX - minX) / 2) - (originalFrame.width / 2)
+      case .firstFullyVisiblePosition(let padding):
+        x = firstFullyVisibleX + padding
+      case .lastFullyVisiblePosition(let padding):
+        x = lastFullyVisibleX - padding
+      }
+
+      return CGRect(
+        x: x,
+        y: originalFrame.minY,
+        width: originalFrame.width,
+        height: originalFrame.height)
+    }
+  }
+
   // MARK: Private
 
   private let content: CalendarViewContent
@@ -329,6 +387,13 @@ final class FrameProvider {
   // Gets the row of a date in a particular month, taking into account whether the date is in a
   // boundary month that's only showing some dates.
   private func adjustedRowInMonth(for day: Day) -> Int {
+    guard day >= content.dayRange.lowerBound else {
+      preconditionFailure("""
+        Cannot get the adjusted row for \(day), which is lower than the first day in the visible day
+        range (\(content.dayRange)).
+      """)
+    }
+
     let missingRows: Int
     if
       !content.monthsLayout.alwaysShowCompleteBoundaryMonths,
@@ -347,7 +412,13 @@ final class FrameProvider {
   // boundary month that's only showing a subset of days.
   private func numberOfWeekRows(in month: Month) -> Int {
     let rowOfLastDateInMonth: Int
-    if month == content.monthRange.lowerBound {
+    if month == content.monthRange.lowerBound && month == content.monthRange.upperBound {
+      let firstDayOfOnlyMonth = content.dayRange.lowerBound
+      let lastDayOfOnlyMonth = content.dayRange.upperBound
+      let rowOfFirstDayOfOnlyMonth = adjustedRowInMonth(for: firstDayOfOnlyMonth)
+      let rowOfLastDayOfOnlyMonth = adjustedRowInMonth(for: lastDayOfOnlyMonth)
+      rowOfLastDateInMonth = rowOfLastDayOfOnlyMonth - rowOfFirstDayOfOnlyMonth
+    } else if month == content.monthRange.lowerBound {
       let lastDateOfFirstMonth = calendar.lastDate(of: month)
       let lastDayOfFirstMonth = calendar.day(containing: lastDateOfFirstMonth)
       let rowOfLastDayOfFirstMonth = adjustedRowInMonth(for: lastDayOfFirstMonth)
