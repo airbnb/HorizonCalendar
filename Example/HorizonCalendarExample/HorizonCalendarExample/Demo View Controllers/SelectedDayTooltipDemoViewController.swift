@@ -28,7 +28,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self = self else { return }
 
-      self.selectedDay = day
+      self.selectedDate = self.calendar.date(from: day.components)
       self.calendarView.setContent(self.makeContent())
     }
   }
@@ -37,12 +37,11 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let selectedDay = self.selectedDay
+    let selectedDate = self.selectedDate
 
     let overlaidItemLocations: Set<CalendarViewContent.OverlaidItemLocation>
-    if let selectedDay = selectedDay {
-      let dateToOverlay = calendar.date(from: selectedDay.components)!
-      overlaidItemLocations = [.day(containingDate: dateToOverlay)]
+    if let selectedDate = selectedDate {
+      overlaidItemLocations = [.day(containingDate: selectedDate)]
     } else {
       overlaidItemLocations = []
     }
@@ -62,15 +61,18 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
           textColor = .black
         }
 
+        let isSelectedStyle: Bool
         let dayAccessibilityText: String?
         if let date = self?.calendar.date(from: day.components) {
+          isSelectedStyle = selectedDate == date
           dayAccessibilityText = self?.dayDateFormatter.string(from: date)
         } else {
+          isSelectedStyle = false
           dayAccessibilityText = nil
         }
 
         return CalendarItemModel<DayView>(
-          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: day == selectedDay),
+          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: isSelectedStyle),
           viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
       }
 
@@ -85,6 +87,6 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
 
   // MARK: Private
 
-  private var selectedDay: Day?
+  private var selectedDate: Date?
 
 }
