@@ -16,7 +16,7 @@ final class PartialMonthVisibilityDemoViewController: DemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self = self else { return }
 
-      self.selectedDay = day
+      self.selectedDate = self.calendar.date(from: day.components)
       self.calendarView.setContent(self.makeContent())
     }
   }
@@ -25,7 +25,7 @@ final class PartialMonthVisibilityDemoViewController: DemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 16))!
     let endDate = calendar.date(from: DateComponents(year: 2020, month: 12, day: 05))!
 
-    let selectedDay = self.selectedDay
+    let selectedDate = self.selectedDate
 
     return CalendarViewContent(
       calendar: calendar,
@@ -44,22 +44,25 @@ final class PartialMonthVisibilityDemoViewController: DemoViewController {
           textColor = .black
         }
 
+        let isSelectedStyle: Bool
         let dayAccessibilityText: String?
         if let date = self?.calendar.date(from: day.components) {
+          isSelectedStyle = selectedDate == date
           dayAccessibilityText = self?.dayDateFormatter.string(from: date)
         } else {
+          isSelectedStyle = false
           dayAccessibilityText = nil
         }
 
         return CalendarItemModel<DayView>(
-          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: day == selectedDay),
+          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: isSelectedStyle),
           viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
       }
   }
 
   // MARK: Private
 
-  private var selectedDay: Day?
+  private var selectedDate: Date?
 
 }
 
