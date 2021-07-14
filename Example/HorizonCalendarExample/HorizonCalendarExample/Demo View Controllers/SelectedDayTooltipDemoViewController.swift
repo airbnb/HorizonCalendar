@@ -52,6 +52,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
       monthsLayout: monthsLayout)
 
       .withInterMonthSpacing(24)
+      .withAccessibilityInitialFocusOverride(onDayContaining: selectedDate)
 
       .withDayItemModelProvider { [weak self] day in
         let textColor: UIColor

@@ -173,6 +173,24 @@ public final class CalendarViewContent {
     return self
   }
 
+  /// Configures the accessibility focus override to be on a particular day after `CalendarView`'s content is set. If you'd like
+  /// VoiceOver to focus on a particular day (e.g. a day that your feature code considers to be selected), then invoke this function with a
+  /// date representing the target day.
+  ///
+  /// - Parameters:
+  ///   - date: The day to be focused, specified with a `Date` instance which will be used to determine the associated day
+  /// using the `calendar` instance with which `CalendarViewContent` was instantiated.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new accessibility focus override.
+  public func withAccessibilityInitialFocusOverride(
+    onDayContaining date: Date?)
+    -> CalendarViewContent
+  {
+    if let date = date {
+      dayForAccessibilityInitialFocusOverride = calendar.day(containing: date)
+    }
+    return self
+  }
+
   /// Configures the month header item provider.
   ///
   /// `CalendarView` invokes the provided `monthHeaderItemModelProvider` for each month in the range of months being
@@ -320,6 +338,7 @@ public final class CalendarViewContent {
   private(set) var verticalDayMargin: CGFloat = 0
   private(set) var horizontalDayMargin: CGFloat = 0
   private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
+  private(set) var dayForAccessibilityInitialFocusOverride: Day?
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemModelProvider: (Month) -> InternalAnyCalendarItemModel

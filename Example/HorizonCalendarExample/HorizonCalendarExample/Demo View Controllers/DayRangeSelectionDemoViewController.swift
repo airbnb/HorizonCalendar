@@ -39,6 +39,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
         self.calendarSelection = .singleDay(day)
       }
 
+      self.dateForAccessibilityFocusOverride = self.calendar.date(from: day.components)
       self.calendarView.setContent(self.makeContent())
     }
   }
@@ -67,6 +68,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       .withInterMonthSpacing(24)
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
+      .withAccessibilityInitialFocusOverride(onDayContaining: dateForAccessibilityFocusOverride)
 
       .withDayItemModelProvider { [weak self] day in
         let textColor: UIColor
@@ -113,5 +115,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
     case dayRange(DayRange)
   }
   private var calendarSelection: CalendarSelection?
+
+  private var dateForAccessibilityFocusOverride: Date?
 
 }

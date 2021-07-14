@@ -247,7 +247,7 @@ public final class CalendarView: UIView {
     cachedAccessibilityElements = nil
     if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
       UIAccessibility.post(
-        notification: .layoutChanged,
+        notification: .screenChanged,
         argument: visibleViewsForVisibleItems[element.correspondingItem])
     }
   }
@@ -282,6 +282,8 @@ public final class CalendarView: UIView {
       anchorLayoutItem = nil
     }
 
+    UIAccessibility.post(notification: .screenChanged, argument: nil)
+
     if content.monthsLayout.isPaginationEnabled {
       scrollView.decelerationRate = .fast
     } else {
@@ -302,6 +304,10 @@ public final class CalendarView: UIView {
   ///   - date: The date for which to obtain an accessibility element. If the date is not currently visible, then it will not have an
   ///   associated accessibility element.
   /// - Returns: An accessibility element associated with the specified `date`, or `nil` if one cannot be found.
+  @available(
+    *,
+    deprecated,
+    message: "Use `CalendarViewContent.withAccessibilityFocusOverride(onDayContaining:)` instead.")
   public func accessibilityElementForVisibleDate(_ date: Date) -> Any? {
     let day = calendar.day(containing: date)
     guard let visibleDayRange = visibleDayRange, visibleDayRange.contains(day) else { return nil }
@@ -659,10 +665,19 @@ public final class CalendarView: UIView {
 
     view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
 
-    // Set up the selection handler
+    // Setup specific to day items
     if case .layoutItemType(.day(let day)) = visibleItem.itemType {
       view.selectionHandler = { [weak self] in
         self?.daySelectionHandler?(day)
+      }
+
+      if day == content.dayForAccessibilityInitialFocusOverride {
+        // Without this delay, VoiceOver won't respect the focused element change on first load.
+        // After first load, this delay is not needed.
+        let firstLoadFocusDelay: Double = focusedAccessibilityElement == nil ? 0.1 : 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + firstLoadFocusDelay, execute: {
+          UIAccessibility.post(notification: .screenChanged, argument: view)
+        })
       }
     } else {
       view.selectionHandler = nil

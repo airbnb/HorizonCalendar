@@ -58,6 +58,7 @@ final class SingleDaySelectionDemoViewController: DemoViewController {
       .withInterMonthSpacing(24)
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
+      .withAccessibilityInitialFocusOverride(onDayContaining: selectedDate)
 
       .withDayItemModelProvider { [weak self] day in
         let textColor: UIColor
