@@ -247,7 +247,7 @@ public final class CalendarView: UIView {
     cachedAccessibilityElements = nil
     if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
       UIAccessibility.post(
-        notification: .layoutChanged,
+        notification: .screenChanged,
         argument: visibleViewsForVisibleItems[element.correspondingItem])
     }
   }
