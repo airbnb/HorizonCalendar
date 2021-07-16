@@ -1006,44 +1006,51 @@ extension CalendarView {
   }
 
   public override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-    let contentOffset: CGPoint
-    switch (direction, content.monthsLayout) {
-    case (.up, .vertical):
-      contentOffset = CGPoint(
-        x: scrollView.contentOffset.x,
-        y: max(
-          scrollView.contentOffset.y - scrollView.bounds.height,
-          -scrollView.contentInset.top))
-    case (.down, .vertical):
-      contentOffset = CGPoint(
-        x: scrollView.contentOffset.x,
-        y: min(
-          scrollView.contentOffset.y + scrollView.bounds.height,
-          scrollView.contentSize.height +
-            scrollView.contentInset.bottom -
-            scrollView.bounds.height))
-    case (.left, .horizontal):
-      contentOffset = CGPoint(
-          x: max(
-            scrollView.contentOffset.x - scrollView.bounds.width,
-            -scrollView.contentInset.left),
-          y: scrollView.contentOffset.y)
-    case (.right, .horizontal):
-      contentOffset = CGPoint(
-        x: min(
-          scrollView.contentOffset.x + scrollView.bounds.width,
-          scrollView.contentSize.width + scrollView.contentInset.right - scrollView.bounds.width),
-        y: scrollView.contentOffset.y)
-    default:
-      contentOffset = scrollView.contentOffset
-    }
-
-    if contentOffset != scrollView.contentOffset {
-      scrollView.setContentOffset(contentOffset, animated: true)
-      return true
-    } else {
+    guard
+      let firstVisibleMonth = visibleMonthRange?.lowerBound,
+      let lastVisibleMonth = visibleMonthRange?.upperBound,
+      let firstVisibleMonthDate = calendar.date(from: firstVisibleMonth.components),
+      let lastVisibleMonthDate = calendar.date(from: lastVisibleMonth.components),
+      let numberOfVisibleMonths = calendar.dateComponents(
+        [.month],
+        from: firstVisibleMonthDate,
+        to: lastVisibleMonthDate)
+        .month
+    else
+    {
       return false
     }
+
+    let proposedTargetMonth: Month
+    let scrollPosition: CalendarViewScrollPosition
+    switch (direction, content.monthsLayout) {
+    case (.up, .vertical), (.right, .horizontal):
+      proposedTargetMonth = Month(
+        era: lastVisibleMonth.era,
+        year: lastVisibleMonth.year,
+        month: lastVisibleMonth.month - numberOfVisibleMonths,
+        isInGregorianCalendar: lastVisibleMonth.isInGregorianCalendar)
+      scrollPosition = .lastFullyVisiblePosition
+
+    case (.down, .vertical), (.left, .horizontal):
+      proposedTargetMonth = Month(
+        era: firstVisibleMonth.era,
+        year: firstVisibleMonth.year,
+        month: firstVisibleMonth.month + numberOfVisibleMonths,
+        isInGregorianCalendar: firstVisibleMonth.isInGregorianCalendar)
+      scrollPosition = .firstFullyVisiblePosition
+
+    default:
+      return false
+    }
+
+    let firstMonth = content.monthRange.lowerBound
+    let lastMonth = content.monthRange.upperBound
+    let targetMonth = max(firstMonth, min(lastMonth, proposedTargetMonth))
+    guard let targetMonthDate = calendar.date(from: targetMonth.components) else { return false }
+
+    scroll(toMonthContaining: targetMonthDate, scrollPosition: scrollPosition, animated: false)
+    return true
   }
 
   @objc
