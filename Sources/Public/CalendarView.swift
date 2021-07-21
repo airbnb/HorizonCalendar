@@ -1050,6 +1050,13 @@ extension CalendarView {
     guard let targetMonthDate = calendar.date(from: targetMonth.components) else { return false }
 
     scroll(toMonthContaining: targetMonthDate, scrollPosition: scrollPosition, animated: false)
+
+    let targetMonthItem = content.monthHeaderItemModelProvider(targetMonth)
+    let targetMonthView = targetMonthItem.makeView()
+    targetMonthItem.setViewModelOnViewOfSameType(targetMonthView)
+    let accessibilityScrollText = targetMonthView.accessibilityLabel
+    UIAccessibility.post(notification: .pageScrolled, argument: accessibilityScrollText)
+
     return true
   }
 
