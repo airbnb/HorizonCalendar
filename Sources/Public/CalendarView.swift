@@ -108,41 +108,6 @@ public final class CalendarView: UIView {
     visibleItemsDetails?.visibleDayRange
   }
 
-  public override var bounds: CGRect {
-    willSet {
-      // If the bounds' size changes (on rotation, for example), our existing anchor layout item
-      // will have a stale frame, which will result in incorrect layout calculations in
-      // `layoutSubviews`. To account for this, we programmatically scroll to the first visible
-      // month when the bounds' size changes.
-      guard
-        newValue.size != bounds.size,
-        scrollToItemContext == nil,
-        !scrollView.isDragging,
-        let framesForVisibleMonths = visibleItemsDetails?.framesForVisibleMonths,
-        let firstVisibleMonth = visibleMonthRange?.lowerBound,
-        let frameOfFirstVisibleMonth = framesForVisibleMonths[firstVisibleMonth]
-      else
-      {
-        return
-      }
-
-      let paddingFromFirstEdge: CGFloat
-      switch content.monthsLayout {
-      case .vertical:
-        paddingFromFirstEdge = frameOfFirstVisibleMonth.minY -
-          scrollView.contentOffset.y -
-          (visibleItemsDetails?.heightOfPinnedContent ?? 0)
-      case .horizontal:
-        paddingFromFirstEdge = frameOfFirstVisibleMonth.minX - scrollView.contentOffset.x
-      }
-
-      scrollToItemContext = ScrollToItemContext(
-        targetItem: .month(firstVisibleMonth),
-        scrollPosition: .firstFullyVisiblePosition(padding: paddingFromFirstEdge),
-        animated: false)
-    }
-  }
-
   /// `CalendarView` only supports positive values for `layoutMargins`. Negative values will be changed to `0`.
   public override var layoutMargins: UIEdgeInsets {
     get { super.layoutMargins }
@@ -199,6 +164,12 @@ public final class CalendarView: UIView {
       scrollView.transform = .init(scaleX: -1, y: 1)
     } else {
       scrollView.transform = .identity
+    }
+
+    if bounds != previousBounds || layoutMargins != previousLayoutMargins {
+      maintainScrollPositionAfterBoundsOrMarginsChange()
+      previousBounds = bounds
+      previousLayoutMargins = layoutMargins
     }
 
     guard isReadyForLayout else { return }
@@ -409,6 +380,9 @@ public final class CalendarView: UIView {
   private var _visibleItemsProvider: VisibleItemsProvider?
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleCalendarItem: ItemView]()
+
+  private var previousBounds = CGRect.zero
+  private var previousLayoutMargins = UIEdgeInsets.zero
 
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
@@ -822,6 +796,48 @@ public final class CalendarView: UIView {
   /// This prevents z-index-related rendering issues when a `CalendarView` is being snapshotted via `CALayer.render(in:)`.
   private func sortScrollViewSublayersByZPositions() {
     scrollView.layer.sublayers?.sort { $0.zPosition < $1.zPosition }
+  }
+
+  private func maintainScrollPositionAfterBoundsOrMarginsChange() {
+    guard
+      !scrollView.isDragging,
+      let framesForVisibleMonths = visibleItemsDetails?.framesForVisibleMonths,
+      let firstVisibleMonth = visibleMonthRange?.lowerBound,
+      let frameOfFirstVisibleMonth = framesForVisibleMonths[firstVisibleMonth]
+    else
+    {
+      return
+    }
+
+    let paddingFromFirstEdge: CGFloat
+    switch content.monthsLayout {
+    case .vertical:
+      paddingFromFirstEdge = frameOfFirstVisibleMonth.minY -
+        scrollView.contentOffset.y -
+        (visibleItemsDetails?.heightOfPinnedContent ?? 0)
+    case .horizontal:
+      paddingFromFirstEdge = frameOfFirstVisibleMonth.minX - scrollView.contentOffset.x
+    }
+
+    if let existingScrollToItemContext = scrollToItemContext {
+      let scrollPosition: CalendarViewScrollPosition
+      switch existingScrollToItemContext.scrollPosition {
+      case .firstFullyVisiblePosition:
+        scrollPosition = .firstFullyVisiblePosition(padding: paddingFromFirstEdge)
+      default:
+        scrollPosition = existingScrollToItemContext.scrollPosition
+      }
+
+      scrollToItemContext = ScrollToItemContext(
+        targetItem: existingScrollToItemContext.targetItem,
+        scrollPosition: scrollPosition,
+        animated: false)
+    } else {
+      scrollToItemContext = ScrollToItemContext(
+        targetItem: .month(firstVisibleMonth),
+        scrollPosition: .firstFullyVisiblePosition(padding: paddingFromFirstEdge),
+        animated: false)
+    }
   }
 
 }
