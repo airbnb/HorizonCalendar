@@ -83,7 +83,14 @@ public final class CalendarView: UIView {
   public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
+  @available(
+    *,
+    deprecated,
+    message: "Use `_didEndDragging` instead, since it includes a `Bool` to indicate whether the calendar will decelerate when dragging ends. In a future release, `_didEndDragging` will be renamed to `didEndDragging`, and this deprecated property will be removed.")
   public var didEndDragging: ((_ visibleDayRange: DayRange) -> Void)?
+
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
+  public var _didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
@@ -878,6 +885,7 @@ extension CalendarView: UIScrollViewDelegate {
   {
     guard let visibleDayRange = visibleDayRange else { return }
     didEndDragging?(visibleDayRange)
+    _didEndDragging?(visibleDayRange, decelerate)
   }
 
   @available(
