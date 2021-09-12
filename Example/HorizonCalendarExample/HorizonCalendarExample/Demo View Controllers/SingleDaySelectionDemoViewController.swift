@@ -66,27 +66,21 @@ final class SingleDaySelectionDemoViewController: DemoViewController {
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
 
-      .withDayItemModelProvider { [weak self] day in
-        let textColor: UIColor
-        if #available(iOS 13.0, *) {
-          textColor = .label
-        } else {
-          textColor = .black
-        }
+      .withDayItemModelProvider { [calendar, dayDateFormatter] day in
+        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
-        let isSelectedStyle: Bool
-        let dayAccessibilityText: String?
-        if let date = self?.calendar.date(from: day.components) {
-          isSelectedStyle = selectedDate == date
-          dayAccessibilityText = self?.dayDateFormatter.string(from: date)
-        } else {
-          isSelectedStyle = false
-          dayAccessibilityText = nil
+        let date = calendar.date(from: day.components)
+        if date == selectedDate {
+          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
         }
 
         return CalendarItemModel<DayView>(
-          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: isSelectedStyle),
-          viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
+          invariantViewProperties: invariantViewProperties,
+          viewModel: .init(
+            dayText: "\(day.day)",
+            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+            accessibilityHint: nil))
       }
   }
 
