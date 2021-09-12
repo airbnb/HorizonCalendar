@@ -31,7 +31,7 @@ public final class CalendarViewContent {
   /// - Parameters:
   ///   - calendar: The calendar on which all date operations will be performed. Defaults to `Calendar.current` (the system's
   ///   current calendar).
-  ///   - visibleDateRange: The date range that will be displayed. The dates in this range are interpretted using the provided
+  ///   - visibleDateRange: The date range that will be displayed. The dates in this range are interpreted using the provided
   ///   `calendar`.
   ///   - monthsLayout: The layout of months - either vertically or horizontally.
   public init(
@@ -63,18 +63,19 @@ public final class CalendarViewContent {
       locale: calendar.locale ?? Locale.current)
 
     monthHeaderItemModelProvider = { month in
-      let itemModel = CalendarViewContent.defaultMonthHeaderItemModelProvider(
-        for: month,
-        calendar: calendar,
-        dateFormatter: monthHeaderDateFormatter)
+      let firstDateInMonth = calendar.firstDate(of: month)
+      let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
+      let itemModel = CalendarItemModel<MonthHeaderView>(
+        invariantViewProperties: .base,
+        viewModel: .init(monthText: monthText, accessibilityLabel: monthText))
       return .itemModel(itemModel)
     }
 
     dayOfWeekItemModelProvider = { _, weekdayIndex in
-      let itemModel = CalendarViewContent.defaultDayOfWeekItemModelProvider(
-        forWeekdayIndex: weekdayIndex,
-        calendar: calendar,
-        dateFormatter: monthHeaderDateFormatter)
+      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+      let itemModel = CalendarItemModel<DayOfWeekView>(
+        invariantViewProperties: .base,
+        viewModel: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
       return .itemModel(itemModel)
     }
 
@@ -87,10 +88,13 @@ public final class CalendarViewContent {
       locale: calendar.locale ?? Locale.current)
 
     dayItemModelProvider = { day in
-      let itemModel = CalendarViewContent.defaultDayItemModelProvider(
-        for: day,
-        calendar: calendar,
-        dateFormatter: dayDateFormatter)
+      let date = calendar.startDate(of: day)
+      let itemModel = CalendarItemModel<DayView>(
+        invariantViewProperties: .baseNonInteractive,
+        viewModel: .init(
+          dayText: "\(day.day)",
+          accessibilityLabel: dayDateFormatter.string(from: date),
+          accessibilityHint: nil))
       return .itemModel(itemModel)
     }
   }
@@ -101,7 +105,7 @@ public final class CalendarViewContent {
   /// `CalendarView` will be used instead.
   ///
   /// - Parameters:
-  ///   - backgroundColor: The backround color of the calendar.
+  ///   - backgroundColor: The background color of the calendar.
   /// - Returns: A mutated `CalendarViewContent` instance with a new background color.
   @available(
     *,
