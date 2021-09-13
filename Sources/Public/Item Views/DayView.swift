@@ -99,7 +99,7 @@ public final class DayView: UIView {
           origin: CGPoint(x: edgeInsets.leading, y: edgeInsets.top),
           size: insetBounds.size)).cgPath
 
-    case .roundRect(let cornerRadius):
+    case .rectangle(let cornerRadius):
       path = UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath
     }
 

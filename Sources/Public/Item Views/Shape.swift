@@ -18,7 +18,5 @@ import CoreGraphics
 /// Represents a background or highlight layer shape; used by `DayView` and `DayOfWeekView`.
 public enum Shape: Hashable {
   case circle
-  case roundRect(cornerRadius: CGFloat)
-
-  public static let rectangle = Shape.roundRect(cornerRadius: 0)
+  case rectangle(cornerRadius: CGFloat = 0)
 }
