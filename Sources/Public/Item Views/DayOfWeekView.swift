@@ -44,7 +44,6 @@ public final class DayOfWeekView: UIView {
 
     layer.addSublayer(backgroundLayer)
 
-    label.translatesAutoresizingMaskIntoConstraints = true
     addSubview(label)
   }
 

@@ -64,10 +64,9 @@ public final class DayView: UIView {
     layer.addSublayer(backgroundLayer)
     highlightLayer.map { layer.addSublayer($0) }
 
-    label.translatesAutoresizingMaskIntoConstraints = true
     addSubview(label)
 
-    isHighlighted = false
+    setHighlightLayerVisibility(isHidden: true, animated: false)
 
     if #available(iOS 13.4, *), supportsPointerInteraction {
       addInteraction(UIPointerInteraction(delegate: self))
@@ -117,7 +116,7 @@ public final class DayView: UIView {
   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
 
-    isHighlighted = true
+    setHighlightLayerVisibility(isHidden: false, animated: true)
 
     if
       case let .enabled(playsHapticsOnTouchDown, _) = invariantViewProperties.interaction,
@@ -128,20 +127,10 @@ public final class DayView: UIView {
     }
   }
 
-  public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    super.touchesMoved(touches, with: event)
-
-    if let touchLocation = touches.first?.location(in: self), bounds.contains(touchLocation) {
-      isHighlighted = true
-    } else {
-      isHighlighted = false
-    }
-  }
-
   public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
 
-    isHighlighted = false
+    setHighlightLayerVisibility(isHidden: true, animated: true)
 
     feedbackGenerator?.selectionChanged()
     feedbackGenerator = nil
@@ -150,7 +139,7 @@ public final class DayView: UIView {
   public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
 
-    isHighlighted = false
+    setHighlightLayerVisibility(isHidden: true, animated: true)
     feedbackGenerator = nil
   }
 
@@ -172,9 +161,21 @@ public final class DayView: UIView {
 
   private var feedbackGenerator: UISelectionFeedbackGenerator?
 
-  private var isHighlighted: Bool {
-    get { !(highlightLayer?.isHidden ?? true) }
-    set { highlightLayer?.isHidden = !newValue }
+  private func setHighlightLayerVisibility(isHidden: Bool, animated: Bool) {
+    guard let highlightLayer = highlightLayer else { return }
+
+    let opacity: Float = isHidden ? 0 : 1
+
+    if animated {
+      let animation = CABasicAnimation(keyPath: #keyPath(CALayer.opacity))
+      animation.fromValue = highlightLayer.presentation()?.opacity ?? highlightLayer.opacity
+      animation.toValue = opacity
+      animation.duration = 0.1
+      animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+      highlightLayer.add(animation, forKey: "fade")
+    }
+
+    highlightLayer.opacity = opacity
   }
 
 }
