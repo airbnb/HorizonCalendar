@@ -78,13 +78,8 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       .withVerticalDayMargin(8)
       .withHorizontalDayMargin(8)
 
-      .withDayItemModelProvider { [weak self] day in
-        let textColor: UIColor
-        if #available(iOS 13.0, *) {
-          textColor = .label
-        } else {
-          textColor = .black
-        }
+      .withDayItemModelProvider { [calendar, dayDateFormatter] day in
+        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
         let isSelectedStyle: Bool
         switch calendarSelection {
@@ -96,16 +91,18 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
           isSelectedStyle = false
         }
 
-        let dayAccessibilityText: String?
-        if let date = self?.calendar.date(from: day.components) {
-          dayAccessibilityText = self?.dayDateFormatter.string(from: date)
-        } else {
-          dayAccessibilityText = nil
+        if isSelectedStyle {
+          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
         }
 
+        let date = calendar.date(from: day.components)
+
         return CalendarItemModel<DayView>(
-          invariantViewProperties: .init(textColor: textColor, isSelectedStyle: isSelectedStyle),
-          viewModel: .init(dayText: "\(day.day)", dayAccessibilityText: dayAccessibilityText))
+          invariantViewProperties: invariantViewProperties,
+          viewModel: .init(
+            dayText: "\(day.day)",
+            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+            accessibilityHint: nil))
       }
 
       .withDayRangeItemModelProvider(for: dateRanges) { dayRangeLayoutContext in
