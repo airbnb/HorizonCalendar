@@ -227,7 +227,7 @@ struct DayLabel: CalendarItemViewRepresentable {
   }
 
   static func setViewModel(_ viewModel: ViewModel, on view: UILabel) {
-    view.text = "\(viewModel.day)"
+    view.text = "\(viewModel.day.day)"
   }
 
 }
@@ -247,7 +247,7 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
         invariantViewProperties: .init(
           font: UIFont.systemFont(ofSize: 18), 
           textColor: .darkGray,
-          backgroundColor: .clear)
+          backgroundColor: .clear),
         viewModel: .init(day: day))
     }
 ```
