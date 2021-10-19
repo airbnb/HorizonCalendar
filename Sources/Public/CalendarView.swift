@@ -657,6 +657,15 @@ public final class CalendarView: UIView {
 
     scrollToItemAnimationStartTime = CACurrentMediaTime()
 
+    if #available(iOS 15.0, *) {
+      #if swift(>=5.5) // Allows us to still build using Xcode 12
+      scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
+        minimum: 80,
+        maximum: 120,
+        preferred: 120)
+      #endif
+    }
+
     scrollToItemDisplayLink.add(to: .main, forMode: .common)
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
   }
