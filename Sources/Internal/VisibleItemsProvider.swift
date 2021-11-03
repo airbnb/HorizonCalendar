@@ -250,7 +250,8 @@ final class VisibleItemsProvider {
       framesForVisibleDays: framesForVisibleDays,
       contentStartBoundary: contentStartBoundary,
       contentEndBoundary: contentEndBoundary,
-      heightOfPinnedContent: heightOfPinnedContent)
+      heightOfPinnedContent: heightOfPinnedContent,
+      maxMonthHeight: frameProvider.maxMonthHeight)
   }
 
   func visibleItemsForAccessibilityElements(
@@ -904,7 +905,7 @@ final class VisibleItemsProvider {
   }
 
   /// This function takes a proposed frame for a target item toward which we're programmatically scrolling, and adjusts it so that it's a
-  /// valid frame when the calendar is at rest / not being overscrolled.
+  /// valid frame when the calendar is at rest / not being over-scrolled.
   ///
   /// A concrete example of when we'd need this correction is when we scroll to the first visible month with a scroll position of
   /// `.centered` - the proposed frame would position the month in the middle of the bounds, even though that is not a valid resting
@@ -926,7 +927,7 @@ final class VisibleItemsProvider {
 
     // Look backwards for boundary-determining months
     while
-      bounds.contains(currentMonthFrame.origin.alignedToPixels(forScreenWithScale: scale)),
+      bounds.intersects(currentMonthFrame.alignedToPixels(forScreenWithScale: scale)),
       contentStartBoundary == nil
     {
       determineContentBoundariesIfNeeded(
@@ -951,9 +952,7 @@ final class VisibleItemsProvider {
     currentMonth = month
     currentMonthFrame = monthFrame
     while
-      bounds.contains(
-        CGPoint(x: currentMonthFrame.maxX - 1, y: currentMonthFrame.maxY - 1)
-          .alignedToPixels(forScreenWithScale: scale)),
+      bounds.intersects(currentMonthFrame.alignedToPixels(forScreenWithScale: scale)),
       contentEndBoundary == nil
     {
       determineContentBoundariesIfNeeded(
@@ -1022,6 +1021,7 @@ struct VisibleItemsDetails {
   let contentStartBoundary: CGFloat?
   let contentEndBoundary: CGFloat?
   let heightOfPinnedContent: CGFloat
+  let maxMonthHeight: CGFloat
 }
 
 // MARK: - DayRangeLayoutContext
