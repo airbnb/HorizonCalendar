@@ -35,12 +35,6 @@ class DemoViewController: UIViewController {
     return dateFormatter
   }()
 
-  // We use a placeholder height until `calendarView.maximumMonthHeightDidChange` is invoked. Once
-  // we know the maximum size that a month can be in the horizontally-scrolling calendar, we can
-  // adjust this constraint's constant so that it perfectly fits each month.
-  lazy var horizontalCalendarViewHeightConstraint = calendarView.heightAnchor.constraint(
-    equalToConstant: 0)
-
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -63,30 +57,34 @@ class DemoViewController: UIViewController {
         calendarView.trailingAnchor.constraint(
           lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
+        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375),
+        calendarView.widthAnchor.constraint(equalToConstant: 375).prioritize(at: .defaultLow),
       ])
     case .horizontal:
-      calendarView.maximumMonthHeightDidChange = { [weak self] maximumMonthHeight in
-        guard let self = self else { return }
-        let heightConstant = maximumMonthHeight +
-          self.calendarView.layoutMargins.top +
-          self.calendarView.layoutMargins.bottom
-        self.horizontalCalendarViewHeightConstraint.constant = heightConstant
-      }
-
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
         calendarView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
         calendarView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375),
-        horizontalCalendarViewHeightConstraint,
+        calendarView.widthAnchor.constraint(equalToConstant: 375).prioritize(at: .defaultLow),
       ])
     }
   }
 
   func makeContent() -> CalendarViewContent {
     fatalError("Must be implemented by a subclass.")
+  }
+
+}
+
+// MARK: NSLayoutConstraint + Priority Helper
+
+extension NSLayoutConstraint {
+
+  fileprivate func prioritize(at priority: UILayoutPriority) -> NSLayoutConstraint {
+    self.priority = priority
+    return self
   }
 
 }

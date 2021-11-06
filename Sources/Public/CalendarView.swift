@@ -57,6 +57,7 @@ public final class CalendarView: UIView {
       backgroundColor = .white
     }
 
+    installDoubleLayoutPassSizingLabel()
     addSubview(scrollView)
 
     setContent(initialContent)
@@ -94,21 +95,6 @@ public final class CalendarView: UIView {
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
-
-  /// A closure (that is retained) that is invoked whenever the maximum month height changes in response to layout metric changes.
-  /// The maximum month height is the maximum height that a month can be given the current `bounds.width` and other layout
-  /// metrics.
-  ///
-  /// You can use this closure to be notified about changes to the maximum month height, which is useful for adjusting the
-  /// `frame.height` of your `CalendarView` instance so that it perfectly fits each month in the available height, without any
-  /// clipping. For horizontally-scrolling calendars, be sure to add the `layoutMargins.top` and `layoutMargins.bottom` to
-  /// the `maximumMonthHeight` to get the total height needed for `CalendarView` to perfectly fit each month with no clipping.
-  ///
-  /// This closure can be invoked after changes to `bounds.width`, `layoutMargins`, and
-  /// `content.horizontalDayMargin`, to name a few. For horizontally-scrolling calendars, the
-  /// `maximumFullyVisibleMonths` property can also impact the maximum month height. You can also expect this to be invoked
-  /// after the initial layout pass.
-  public var maximumMonthHeightDidChange: ((_ maximumMonthHeight: CGFloat) -> Void)?
 
   /// Whether or not the calendar's scroll view is currently over-scrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
@@ -236,12 +222,6 @@ public final class CalendarView: UIView {
         minimumScrollOffset: minimumScrollOffset,
         maximumScrollOffset: maximumScrollOffset)
     }
-
-    let maxMonthHeight = currentVisibleItemsDetails.maxMonthHeight
-    if maxMonthHeight != previousMaxMonthHeight {
-      maximumMonthHeightDidChange?(maxMonthHeight)
-    }
-    previousMaxMonthHeight = maxMonthHeight
 
     cachedAccessibilityElements = nil
     if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
@@ -395,6 +375,10 @@ public final class CalendarView: UIView {
     }
   }
 
+  // MARK: Internal
+
+  lazy var doubleLayoutPassSizingLabel = DoubleLayoutPassSizingLabel(provider: self)
+
   // MARK: Private
 
   private let reuseManager = ItemViewReuseManager()
@@ -411,7 +395,6 @@ public final class CalendarView: UIView {
 
   private var previousBounds = CGRect.zero
   private var previousLayoutMargins = UIEdgeInsets.zero
-  private var previousMaxMonthHeight = CGFloat(0)
 
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
@@ -993,6 +976,27 @@ extension CalendarView: UIScrollViewDelegate {
         velocity: velocity.x,
         pageSize: pageSize)
     }
+  }
+
+}
+
+// MARK: WidthDependentIntrinsicContentHeightProviding
+
+extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
+
+  // This is where we perform our width-dependent height calculation. See `DoubleLayoutPassHelpers`
+  // for more details about why this is needed and how it works.
+  func intrinsicContentSize(forHorizontallyInsetWidth width: CGFloat) -> CGSize {
+    // Force layout so that `visibleItemsDetails.maxMonthHeight` is calculated.
+    setNeedsLayout()
+    layoutIfNeeded()
+
+    guard let visibleItemsDetails = visibleItemsDetails else {
+      return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+    }
+
+    let height = visibleItemsDetails.maxMonthHeight + visibleItemsDetails.heightOfPinnedContent
+    return CGSize(width: UIView.noIntrinsicMetric, height: height)
   }
 
 }
