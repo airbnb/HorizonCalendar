@@ -17,6 +17,7 @@
 		932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */; };
 		932FC00E26ED5191005E39A6 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FC00D26ED5191005E39A6 /* DayView.swift */; };
 		932FC01126ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */; };
+		933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */; };
 		938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */; };
 		938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */; };
 		9391E66926293A3F00A79C6E /* RenderInContextObservingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9391E66826293A3F00A79C6E /* RenderInContextObservingLayer.swift */; };
@@ -85,6 +86,7 @@
 		932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
 		932FC00D26ED5191005E39A6 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Hashable.swift"; sourceTree = "<group>"; };
+		933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleLayoutPassHelpers.swift; sourceTree = "<group>"; };
 		938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarItemViewRepresentable.swift; sourceTree = "<group>"; };
 		938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCalendarItemModel.swift; sourceTree = "<group>"; };
 		9391E66826293A3F00A79C6E /* RenderInContextObservingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderInContextObservingLayer.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				939E692124837E0300A8BCC7 /* ScrollToItemContext.swift */,
 				939E691C24837E0200A8BCC7 /* VisibleCalendarItem.swift */,
 				939E691A24837E0200A8BCC7 /* VisibleItemsProvider.swift */,
+				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				939E693A24837E8700A8BCC7 /* CalendarViewContent.swift in Sources */,
 				939E692F24837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
+				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
 				939E694024846A8C00A8BCC7 /* Day.swift in Sources */,
 				939E692424837E0300A8BCC7 /* CalendarView.swift in Sources */,
 				939E693924837E8700A8BCC7 /* MonthsLayout.swift in Sources */,
@@ -610,7 +614,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.10.1;
+				MARKETING_VERSION = 1.11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -644,7 +648,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.10.1;
+				MARKETING_VERSION = 1.11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

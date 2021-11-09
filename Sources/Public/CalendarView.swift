@@ -57,6 +57,7 @@ public final class CalendarView: UIView {
       backgroundColor = .white
     }
 
+    installDoubleLayoutPassSizingLabel()
     addSubview(scrollView)
 
     setContent(initialContent)
@@ -95,7 +96,7 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
 
-  /// Whether or not the calendar's scroll view is currently overscrolling, i.e, whether the rubber-banding or bouncing effect is in
+  /// Whether or not the calendar's scroll view is currently over-scrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
   public var isOverscrolling: Bool {
     let scrollAxis = scrollMetricsMutator.scrollAxis
@@ -161,7 +162,7 @@ public final class CalendarView: UIView {
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    // Setting the scroll view's frame in `layoutSubviews` causes overscrolling to not work. We
+    // Setting the scroll view's frame in `layoutSubviews` causes over-scrolling to not work. We
     // work around this by only setting the frame if it's changed.
     if scrollView.frame != bounds {
       scrollView.frame = bounds
@@ -374,6 +375,10 @@ public final class CalendarView: UIView {
     }
   }
 
+  // MARK: Internal
+
+  lazy var doubleLayoutPassSizingLabel = DoubleLayoutPassSizingLabel(provider: self)
+
   // MARK: Private
 
   private let reuseManager = ItemViewReuseManager()
@@ -429,7 +434,10 @@ public final class CalendarView: UIView {
   }
 
   private var isReadyForLayout: Bool {
-    bounds.width > 0 && bounds.height > 0
+    // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
+    // non-zero size once the `frame` is set to something non-zero, either manually or via the
+    // Auto Layout engine.
+    bounds.size != .zero
   }
 
   private var scale: CGFloat {
@@ -751,7 +759,7 @@ public final class CalendarView: UIView {
     }
   }
   
-  // This hack is needed to prevent the scroll view from overscrolling far past the content. This
+  // This hack is needed to prevent the scroll view from over-scrolling far past the content. This
   // occurs in 2 scenarios:
   // - On macOS if you scroll quickly toward a boundary
   // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
@@ -968,6 +976,27 @@ extension CalendarView: UIScrollViewDelegate {
         velocity: velocity.x,
         pageSize: pageSize)
     }
+  }
+
+}
+
+// MARK: WidthDependentIntrinsicContentHeightProviding
+
+extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
+
+  // This is where we perform our width-dependent height calculation. See `DoubleLayoutPassHelpers`
+  // for more details about why this is needed and how it works.
+  func intrinsicContentSize(forHorizontallyInsetWidth width: CGFloat) -> CGSize {
+    // Force layout so that `visibleItemsDetails.maxMonthHeight` is calculated.
+    setNeedsLayout()
+    layoutIfNeeded()
+
+    guard let visibleItemsDetails = visibleItemsDetails else {
+      return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+    }
+
+    let height = visibleItemsDetails.maxMonthHeight + visibleItemsDetails.heightOfPinnedContent
+    return CGSize(width: UIView.noIntrinsicMetric, height: height)
   }
 
 }

@@ -60,6 +60,15 @@ final class FrameProvider {
   let scale: CGFloat
   let daySize: CGSize
 
+  var maxMonthHeight: CGFloat {
+    let maxNumberOfWeekRowsPerMonth = 6
+    return monthHeaderHeight +
+      content.monthDayInsets.top +
+      heightOfDaysOfTheWeekRowInMonth() +
+      heightOfDayContent(forNumberOfWeekRows: maxNumberOfWeekRowsPerMonth) +
+      content.monthDayInsets.bottom
+  }
+
   // MARK: Month locations
 
   func originOfMonth(containing layoutItem: LayoutItem) -> CGPoint {
@@ -247,7 +256,7 @@ final class FrameProvider {
 
   /// Returns translated item frames for the specified scroll offset and scroll position. Note that the returned frames may not be at valid
   /// resting positions. For example, someone could try to scroll the last day in the calendar to be at a vertically-centered scroll
-  /// position, which would cause the calendar to be laid out in an overscrolled position. The `VisibleItemsProvider` will detect
+  /// position, which would cause the calendar to be laid out in an over-scrolled position. The `VisibleItemsProvider` will detect
   /// this scenario and adjust the frame so it's at a valid resting position.
   func frameOfItem(
     withOriginalFrame originalFrame: CGRect,
@@ -322,25 +331,6 @@ final class FrameProvider {
         Calendar metrics and size resulted in a negative-or-zero size of \(daySize.width) points for
         each day. If ignored, this will cause very odd / incorrect layouts.
       """)
-
-    if case .horizontal = monthsLayout {
-      let maxNumberOfWeekRowsPerMonth = 6
-
-      let availableHeight = size.height -
-        monthHeaderHeight -
-        content.monthDayInsets.top -
-        heightOfDaysOfTheWeekRowInMonth() -
-        heightOfDayContent(forNumberOfWeekRows: maxNumberOfWeekRowsPerMonth) -
-        content.monthDayInsets.bottom
-
-      assert(
-        availableHeight > 0,
-        """
-          Calendar metrics and size resulted in a negative-or-zero amount of remaining height
-          (\(availableHeight) points) after allocating room for calendar elements. If ignored, this
-          will cause very odd / incorrect layouts.
-        """)
-    }
   }
 
   private func minXOfItem(

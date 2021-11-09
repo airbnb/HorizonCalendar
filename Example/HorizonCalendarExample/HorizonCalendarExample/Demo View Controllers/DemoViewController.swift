@@ -57,24 +57,34 @@ class DemoViewController: UIViewController {
         calendarView.trailingAnchor.constraint(
           lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
+        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375),
+        calendarView.widthAnchor.constraint(equalToConstant: 375).prioritize(at: .defaultLow),
       ])
     case .horizontal:
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
-        calendarView.heightAnchor.constraint(equalToConstant: 275),
-        calendarView.leadingAnchor.constraint(
-          greaterThanOrEqualTo: view.leadingAnchor),
-        calendarView.trailingAnchor.constraint(
-          lessThanOrEqualTo: view.trailingAnchor),
+        calendarView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
+        calendarView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375)
+        calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375),
+        calendarView.widthAnchor.constraint(equalToConstant: 375).prioritize(at: .defaultLow),
       ])
     }
   }
 
   func makeContent() -> CalendarViewContent {
     fatalError("Must be implemented by a subclass.")
+  }
+
+}
+
+// MARK: NSLayoutConstraint + Priority Helper
+
+extension NSLayoutConstraint {
+
+  fileprivate func prioritize(at priority: UILayoutPriority) -> NSLayoutConstraint {
+    self.priority = priority
+    return self
   }
 
 }

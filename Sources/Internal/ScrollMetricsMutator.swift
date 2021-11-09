@@ -105,7 +105,7 @@ enum ScrollAxis {
 
 // MARK: - ScrollMetricsProvider
 
-protocol ScrollMetricsProvider: class {
+protocol ScrollMetricsProvider: AnyObject {
 
   func size(for scrollAxis: ScrollAxis) -> CGFloat
   func setSize(to size: CGFloat, for scrollAxis: ScrollAxis)

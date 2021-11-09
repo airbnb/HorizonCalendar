@@ -85,6 +85,26 @@ final class FrameProviderTests: XCTestCase {
       monthHeaderHeight: monthHeaderHeight)
   }
 
+  func testMaxMonthHeight() {
+    let maxHeight1 = verticalFrameProvider.maxMonthHeight.alignedToPixel(forScreenWithScale: 3)
+    let expectedMaxHeight1 = CGFloat(424).alignedToPixel(forScreenWithScale: 3)
+    XCTAssert(maxHeight1 == expectedMaxHeight1, "Incorrect max month height.")
+
+    let maxHeight2 = verticalPinnedDaysOfWeekFrameProvider.maxMonthHeight
+      .alignedToPixel(forScreenWithScale: 3)
+    let expectedMaxHeight2 = CGFloat(369.1428571428571).alignedToPixel(forScreenWithScale: 3)
+    XCTAssert(maxHeight2 == expectedMaxHeight2, "Incorrect max month height.")
+
+    let maxHeight3 = verticalPartialMonthFrameProvider.maxMonthHeight
+      .alignedToPixel(forScreenWithScale: 3)
+    let expectedMaxHeight3 = CGFloat(424).alignedToPixel(forScreenWithScale: 3)
+    XCTAssert(maxHeight3 == expectedMaxHeight3, "Incorrect max month height.")
+
+    let maxHeight4 = horizontalFrameProvider.maxMonthHeight.alignedToPixel(forScreenWithScale: 3)
+    let expectedMaxHeight4 = CGFloat(404.0).alignedToPixel(forScreenWithScale: 3)
+    XCTAssert(maxHeight4 == expectedMaxHeight4, "Incorrect max month height.")
+  }
+
   func testDaySize() {
     let size1 = verticalFrameProvider.daySize.alignedToPixels(forScreenWithScale: 3)
     let expectedSize1 = CGSize(width: 34.857142857142854, height: 34.857142857142854)
