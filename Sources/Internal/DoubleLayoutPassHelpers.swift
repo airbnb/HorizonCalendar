@@ -99,6 +99,7 @@ final class DoubleLayoutPassSizingLabel: UILabel {
     numberOfLines = 0
     isUserInteractionEnabled = false
     isAccessibilityElement = false
+    isHidden = true
   }
 
   @available(*, unavailable)
@@ -118,14 +119,6 @@ final class DoubleLayoutPassSizingLabel: UILabel {
     } else {
       return provider.intrinsicContentSize(forHorizontallyInsetWidth: preferredMaxLayoutWidth)
     }
-  }
-
-  override func draw(_: CGRect) {
-    // Do nothing, this view doesn't render any visual content.
-  }
-
-  override func drawText(in _: CGRect) {
-    // Do nothing, this view doesn't render any visual content.
   }
 
   // MARK: Private
