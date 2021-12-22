@@ -47,8 +47,9 @@ final class FrameProvider {
     let insetWidth = monthWidth - content.monthDayInsets.left - content.monthDayInsets.right
     let numberOfDaysPerWeek = CGFloat(7)
     let availableWidth = insetWidth - (content.horizontalDayMargin * (numberOfDaysPerWeek - 1))
-    let points = availableWidth / numberOfDaysPerWeek
-    daySize = CGSize(width: points, height: points)
+    let width = availableWidth / numberOfDaysPerWeek
+    let height = width * content.dayAspectRatio
+    daySize = CGSize(width: width, height: height)
 
     validateCalendarMetrics(size: size)
   }
@@ -189,7 +190,7 @@ final class FrameProvider {
     let origin: CGPoint
     if distanceFromAdjacentDay < 0 {
       let proposedX = adjacentDayFrame.minX - content.horizontalDayMargin - daySize.width
-      if proposedX > minX || proposedX.isEqual(to: minX, threshhold: 1 / scale) {
+      if proposedX > minX || proposedX.isEqual(to: minX, threshold: 1 / scale) {
         origin = CGPoint(x: proposedX, y: adjacentDayFrame.minY)
       } else {
         origin = CGPoint(
@@ -198,7 +199,7 @@ final class FrameProvider {
       }
     } else {
       let proposedX = adjacentDayFrame.maxX + content.horizontalDayMargin
-      if proposedX < maxX || proposedX.isEqual(to: maxX, threshhold: 1 / scale) {
+      if proposedX < maxX || proposedX.isEqual(to: maxX, threshold: 1 / scale) {
         origin = CGPoint(x: proposedX, y: adjacentDayFrame.minY)
       } else {
         origin = CGPoint(x: minX, y: adjacentDayFrame.maxY + content.verticalDayMargin)
