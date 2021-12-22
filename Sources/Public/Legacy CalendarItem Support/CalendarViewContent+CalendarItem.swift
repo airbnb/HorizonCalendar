@@ -32,12 +32,13 @@ extension CalendarViewContent {
   @available(
     *,
     deprecated,
-    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withMonthHeaderItemModelProvider` instead.")
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `monthHeaderItemProvider` instead.",
+     renamed: "monthHeaderItemProvider(_:)")
   public func withMonthHeaderItemProvider(
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItem)
     -> CalendarViewContent
   {
-    monthHeaderItemModelProvider = { .legacy(monthHeaderItemProvider($0)) }
+    self.monthHeaderItemProvider = { .legacy(monthHeaderItemProvider($0)) }
     return self
   }
 
@@ -58,12 +59,13 @@ extension CalendarViewContent {
   @available(
     *,
     deprecated,
-    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayOfWeekItemModelProvider` instead.")
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayOfWeekItemProvider` instead.",
+     renamed: "dayOfWeekItemProvider(_:)")
   public func withDayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (_ month: Month?, _ weekdayIndex: Int) -> AnyCalendarItem)
     -> CalendarViewContent
   {
-    dayOfWeekItemModelProvider = { .legacy(dayOfWeekItemProvider($0, $1)) }
+    self.dayOfWeekItemProvider = { .legacy(dayOfWeekItemProvider($0, $1)) }
     return self
   }
 
@@ -84,12 +86,13 @@ extension CalendarViewContent {
   @available(
     *,
     deprecated,
-    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayItemModelProvider` instead.")
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayItemProvider` instead.",
+     renamed: "dayItemProvider(_:)")
   public func withDayItemProvider(
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItem)
     -> CalendarViewContent
   {
-    dayItemModelProvider = { .legacy(dayItemProvider($0)) }
+    self.dayItemProvider = { .legacy(dayItemProvider($0)) }
     return self
   }
 
@@ -118,7 +121,8 @@ extension CalendarViewContent {
   @available(
     *,
     deprecated,
-    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayRangeItemModelProvider` instead.")
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withDayRangeItemProvider` instead.",
+     renamed: "dayRangeItemProvider(for:_:)")
   public func withDayRangeItemProvider(
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
@@ -127,7 +131,7 @@ extension CalendarViewContent {
     -> CalendarViewContent
   {
     let dayRanges = Set(dateRanges.map { DayRange(containing: $0, in: calendar) })
-    dayRangesAndItemModelProvider = (dayRanges, { .legacy(dayRangeItemProvider($0)) })
+    dayRangesAndItemProvider = (dayRanges, { .legacy(dayRangeItemProvider($0)) })
     return self
   }
 
@@ -149,7 +153,8 @@ extension CalendarViewContent {
   @available(
     *,
     deprecated,
-    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withOverlayItemModelProvider` instead.")
+    message: "`CalendarItem` has been replaced with `CalendarItemModel`, a type that simplifies the creation of views displayed in `CalendarView`. Use `withOverlayItemProvider` instead.",
+     renamed: "overlayItemProvider(for:_:)")
   public func withOverlayItemProvider(
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
@@ -157,7 +162,7 @@ extension CalendarViewContent {
       -> AnyCalendarItem)
     -> CalendarViewContent
   {
-    overlaidItemLocationsAndItemModelProvider = (
+    overlaidItemLocationsAndItemProvider = (
       overlaidItemLocations,
       { .legacy(overlayItemProvider($0)) })
     return self
