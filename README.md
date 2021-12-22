@@ -183,13 +183,13 @@ private func makeContent() -> CalendarViewContent {
     visibleDateRange: today...endDate,
     monthsLayout: .vertical(VerticalMonthsLayoutOptions()))
     
-    .withDayItemModelProvider { day in
+    .dayItemProvider { day in
       // Return a `CalendarItemModel` representing the view for each day
     }
 }
 ```
 
-The `withDayItemModelProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `Day`.
+The `withDayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `Day`.
 
 `CalendarItemModel` is a type that abstracts away the creation and configuration of a `UIView`. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view, we'll need to create a type that knows how to create and update that label. Here's a simple example:
 ```swift
@@ -242,7 +242,7 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
 ```swift
   return CalendarViewContent(...)
 
-    .withDayItemModelProvider { day in
+    .dayItemProvider { day in
       CalendarItemModel<DayLabel>(
         invariantViewProperties: .init(
           font: UIFont.systemFont(ofSize: 18), 
@@ -262,11 +262,11 @@ If you build and run your app, it should now look like this:
 We can also use `CalendarViewContent` to adjust layout metrics. We can improve the layout of our current `CalendarView` by adding some additional spacing between individual days and months:
 ```swift
   return CalendarViewContent(...)
-    .withDayItemModelProvider { ... }
+    .dayItemProvider { ... }
 
-    .withInterMonthSpacing(24)
-    .withVerticalDayMargin(8)
-    .withHorizontalDayMargin(8)
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
 ```
 
 Just like when we configured a custom day view via the day item provider, changes to layout metrics are also done through `CalendarViewContent`. `withInterMonthSpacing(_:)`, `withVerticalDayMargin(_:)`, and `withHorizontalDayMargin(_:)` each return a mutated `CalendarViewContent` with the corresponding layout metric value updated, enabling you to chain function calls together to produce a final content instance.
@@ -276,7 +276,7 @@ After building and running your app, you should see a much less cramped layout:
 ![Custom Layout Metrics](Docs/Images/tutorial3.png)
 
 #### Adding a day range indicator
-Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `withDayRangeItemModelProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
+Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `withDayRangeItemProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
 
 First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `Day`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
 ```swift
@@ -285,12 +285,12 @@ First, we need to create a `ClosedRange<Date>` that represents the day range for
   let dateRangeToHighlight = lowerDate...upperDate
 ```
 
-Next, we need to invoke the `withDayRangeItemModelProvider(for:_:)` on our `CalendarViewContent`:
+Next, we need to invoke the `withDayRangeItemProvider(for:_:)` on our `CalendarViewContent`:
 ```swift
   return CalendarViewContent(...)
     ...
     
-    .withDayRangeItemModelProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in 
+    .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in 
       // Return a `CalendarItemModel` representing the view that highlights the entire day range
     }
 ```
@@ -380,7 +380,7 @@ Last, we need to return a `CalendarItemModel` representing our `DayRangeIndicato
   return CalendarViewContent(...)
     ...
     
-    .withDayRangeItemModelProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
+    .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
       CalendarItemModel<DayRangeIndicatorView>(
         invariantViewProperties: .init(indicatorColor: UIColor.blue.withAlphaComponent(0.15)),
         viewModel: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
@@ -405,7 +405,7 @@ Like all other customizations, we'll add an overlay by calling a function on our
   return CalendarViewContent(...)
     ...
     
-    .withOverlayItemModelProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
+    .overlayItemProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
       // Return a `CalendarItemModel` representing the view to use as an overlay for the overlaid item location
     }
 ```
@@ -537,7 +537,7 @@ Last, we need to return a `CalendarItemModel` representing our `TooltipView` fro
   return CalendarViewContent(...)
     ...
     
-    .withOverlayItemModelProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
+    .overlayItemProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
       CalendarItemModel<TooltipView>(
         invariantViewProperties: .init(
           backgroundColor: .white, 
@@ -573,7 +573,7 @@ The day selection handler closure is invoked whenever a day in the calendar is s
 
   return CalendarViewContent(...)
 
-    .withDayItemModelProvider { day in
+    .dayItemProvider { day in
       var invariantViewProperties = DayLabel.InvariantViewProperties(
         font: UIFont.systemFont(ofSize: 18), 
         textColor: .darkGray,

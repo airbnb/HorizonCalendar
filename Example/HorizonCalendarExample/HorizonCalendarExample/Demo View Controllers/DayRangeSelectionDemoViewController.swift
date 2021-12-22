@@ -74,11 +74,11 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
 
-      .withInterMonthSpacing(24)
-      .withVerticalDayMargin(8)
-      .withHorizontalDayMargin(8)
+      .interMonthSpacing(24)
+      .verticalDayMargin(8)
+      .horizontalDayMargin(8)
 
-      .withDayItemModelProvider { [calendar, dayDateFormatter] day in
+      .dayItemProvider { [calendar, dayDateFormatter] day in
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
         let isSelectedStyle: Bool
@@ -105,7 +105,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
             accessibilityHint: nil))
       }
 
-      .withDayRangeItemModelProvider(for: dateRanges) { dayRangeLayoutContext in
+      .dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
         CalendarItemModel<DayRangeIndicatorView>(
           invariantViewProperties: .init(),
           viewModel: .init(

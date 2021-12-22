@@ -39,11 +39,11 @@ final class PartialMonthVisibilityDemoViewController: DemoViewController {
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
 
-      .withInterMonthSpacing(24)
-      .withVerticalDayMargin(8)
-      .withHorizontalDayMargin(8)
+      .interMonthSpacing(24)
+      .verticalDayMargin(8)
+      .horizontalDayMargin(8)
 
-      .withDayItemModelProvider { [calendar, dayDateFormatter] day in
+      .dayItemProvider { [calendar, dayDateFormatter] day in
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
         let date = calendar.date(from: day.components)
