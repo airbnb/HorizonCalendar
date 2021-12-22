@@ -58,9 +58,9 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
 
-      .withInterMonthSpacing(24)
+      .interMonthSpacing(24)
 
-      .withDayItemModelProvider { [calendar, dayDateFormatter] day in
+      .dayItemProvider { [calendar, dayDateFormatter] day in
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
         let date = calendar.date(from: day.components)
@@ -77,7 +77,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
             accessibilityHint: nil))
       }
 
-      .withOverlayItemModelProvider(for: overlaidItemLocations) { overlayLayoutContext in
+      .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
         CalendarItemModel<TooltipView>(
           invariantViewProperties: .init(),
           viewModel: .init(

@@ -87,7 +87,8 @@ public final class CalendarView: UIView {
   @available(
     *,
     deprecated,
-    message: "Use `_didEndDragging` instead, since it includes a `Bool` to indicate whether the calendar will decelerate when dragging ends. In a future release, `_didEndDragging` will be renamed to `didEndDragging`, and this deprecated property will be removed.")
+    message: "Use `_didEndDragging` instead, since it includes a `Bool` to indicate whether the calendar will decelerate when dragging ends. In a future release, `_didEndDragging` will be renamed to `didEndDragging`, and this deprecated property will be removed.",
+     renamed: "_didEndDragging")
   public var didEndDragging: ((_ visibleDayRange: DayRange) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
@@ -98,7 +99,7 @@ public final class CalendarView: UIView {
 
   /// Whether or not the calendar's scroll view is currently over-scrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
-  public var isOverscrolling: Bool {
+  public var isOverScrolling: Bool {
     let scrollAxis = scrollMetricsMutator.scrollAxis
     let offset = scrollView.offset(for: scrollAxis)
 
@@ -586,7 +587,7 @@ public final class CalendarView: UIView {
         interMonthSpacing: content.interMonthSpacing)
     }
 
-    let firstMonthHeaderItemModel = content.monthHeaderItemModelProvider(
+    let firstMonthHeaderItemModel = content.monthHeaderItemProvider(
       content.monthRange.lowerBound)
     let firstMonthHeader = firstMonthHeaderItemModel.makeView()
     firstMonthHeaderItemModel.setViewModelOnViewOfSameType(firstMonthHeader)
@@ -1113,7 +1114,7 @@ extension CalendarView {
 
     scroll(toMonthContaining: targetMonthDate, scrollPosition: scrollPosition, animated: false)
 
-    let targetMonthItem = content.monthHeaderItemModelProvider(targetMonth)
+    let targetMonthItem = content.monthHeaderItemProvider(targetMonth)
     let targetMonthView = targetMonthItem.makeView()
     targetMonthItem.setViewModelOnViewOfSameType(targetMonthView)
     let accessibilityScrollText = targetMonthView.accessibilityLabel

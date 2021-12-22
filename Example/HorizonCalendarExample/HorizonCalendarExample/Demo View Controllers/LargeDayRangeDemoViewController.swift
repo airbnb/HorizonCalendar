@@ -54,7 +54,7 @@ final class LargeDayRangeDemoViewController: DemoViewController {
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
-      .withInterMonthSpacing(24)
+      .interMonthSpacing(24)
   }
 
   // MARK: Private

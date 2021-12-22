@@ -57,6 +57,7 @@
 		93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */; };
 		93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */; };
 		93B6D99E24F0C6220027A60C /* InternalAnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B6D99D24F0C6220027A60C /* InternalAnyCalendarItemModel.swift */; };
+		93D6789E2772EC1D004948E5 /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6789D2772EC1D004948E5 /* Deprecations.swift */; };
 		93E24A70249D915900B856F7 /* CONTRIBUTING.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A56249D915900B856F7 /* CONTRIBUTING.md */; };
 		93E24A71249D915900B856F7 /* TECHNICAL_DETAILS.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */; };
 		93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */; };
@@ -129,6 +130,7 @@
 		93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewReuseManagerTests.swift; sourceTree = "<group>"; };
 		93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignment.swift; sourceTree = "<group>"; };
 		93B6D99D24F0C6220027A60C /* InternalAnyCalendarItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalAnyCalendarItemModel.swift; sourceTree = "<group>"; };
+		93D6789D2772EC1D004948E5 /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deprecations.swift; sourceTree = "<group>"; };
 		93E24A56249D915900B856F7 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TECHNICAL_DETAILS.md; sourceTree = "<group>"; };
 		93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHelperTests.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				939E693F24846A8C00A8BCC7 /* Day.swift */,
 				939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */,
 				939E694124846EB400A8BCC7 /* DayRange.swift */,
+				93D6789D2772EC1D004948E5 /* Deprecations.swift */,
 				939E693D24846A6600A8BCC7 /* Month.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
 				939E693B2483824600A8BCC7 /* MonthRange.swift */,
@@ -422,6 +425,7 @@
 				9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */,
 				939E692D24837E0300A8BCC7 /* LayoutItem.swift in Sources */,
 				939E693A24837E8700A8BCC7 /* CalendarViewContent.swift in Sources */,
+				93D6789E2772EC1D004948E5 /* Deprecations.swift in Sources */,
 				939E692F24837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
 				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
@@ -614,7 +618,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.12.0;
+				MARKETING_VERSION = 1.13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -648,7 +652,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.12.0;
+				MARKETING_VERSION = 1.13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

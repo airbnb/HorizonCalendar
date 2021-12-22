@@ -66,37 +66,6 @@ public enum MonthsLayout {
   }
 }
 
-// MARK: Deprecated
-
-extension MonthsLayout {
-
-  /// Calendar months will be arranged in a single column, and scroll on the vertical axis.
-  ///
-  /// - `pinDaysOfWeekToTop`: Whether the days of the week will appear once, pinned at the top, or separately for each month.
-  @available(
-    *,
-    deprecated,
-    message: "Use .vertical(options: VerticalMonthsLayoutOptions) instead. This will be removed in a future major release.")
-  public static func vertical(pinDaysOfWeekToTop: Bool) -> Self {
-    let options = VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: pinDaysOfWeekToTop)
-    return .vertical(options: options)
-  }
-
-  /// Calendar months will be arranged in a single row, and scroll on the horizontal axis.
-  ///
-  /// - `monthWidth`: The width of each month.
-  @available(
-    *,
-    deprecated,
-    message: "Use .horizontal(options: HorizontalMonthsLayoutOptions) instead. This will be removed in a future major release.")
-  public static func horizontal(monthWidth: CGFloat) -> Self {
-    var options = HorizontalMonthsLayoutOptions(scrollingBehavior: .freeScrolling)
-    options.monthWidth = monthWidth
-    return .horizontal(options: options)
-  }
-
-}
-
 // MARK: Equatable
 
 extension MonthsLayout: Equatable {

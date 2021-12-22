@@ -42,7 +42,7 @@ final class ScrollToDayWithAnimationDemoViewController: DemoViewController {
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
-      .withInterMonthSpacing(24)
+      .interMonthSpacing(24)
   }
 
 }

@@ -1671,15 +1671,15 @@ final class VisibleItemsProviderTests: XCTestCase {
     -> CalendarViewContent
   {
     baseContent
-      .withMonthDayInsets(UIEdgeInsets(top: 30, left: 5, bottom: 0, right: 5))
-      .withInterMonthSpacing(15)
-      .withVerticalDayMargin(20)
-      .withHorizontalDayMargin(10)
-      .withDaysOfTheWeekRowSeparator(options: .init(height: 1, color: .gray))
-      .withMonthHeaderItemModelProvider  { _ in mockCalendarItemModel }
-      .withDayOfWeekItemModelProvider { _, _ in mockCalendarItemModel }
-      .withDayItemModelProvider { _ in mockCalendarItemModel }
-      .withDayRangeItemModelProvider(
+      .monthDayInsets(UIEdgeInsets(top: 30, left: 5, bottom: 0, right: 5))
+      .interMonthSpacing(15)
+      .verticalDayMargin(20)
+      .horizontalDayMargin(10)
+      .daysOfTheWeekRowSeparator(options: .init(height: 1, color: .gray))
+      .monthHeaderItemProvider  { _ in mockCalendarItemModel }
+      .dayOfWeekItemProvider { _, _ in mockCalendarItemModel }
+      .dayItemProvider { _ in mockCalendarItemModel }
+      .dayRangeItemProvider(
         for: [
           calendar.date(from: DateComponents(year: 2020, month: 03, day: 11))!
             ...
@@ -1690,7 +1690,7 @@ final class VisibleItemsProviderTests: XCTestCase {
           calendar.date(from: DateComponents(year: 2020, month: 05, day: 14))!,
         ],
         { _ in mockCalendarItemModel })
-      .withOverlayItemModelProvider(
+      .overlayItemProvider(
         for: [
           .day(
             containingDate: calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!),

@@ -274,10 +274,10 @@ final class VisibleItemsProvider {
       switch layoutItem.itemType {
       case .monthHeader(let _month):
         month = _month
-        calendarItemModel = self.content.monthHeaderItemModelProvider(month)
+        calendarItemModel = self.content.monthHeaderItemProvider(month)
       case .day(let day):
         month = day.month
-        calendarItemModel = self.content.dayItemModelProvider(day)
+        calendarItemModel = self.content.dayItemProvider(day)
       case .dayOfWeekInMonth:
         return
       }
@@ -622,7 +622,7 @@ final class VisibleItemsProvider {
             for: itemType,
             missingValueProvider: {
               previousCalendarItemModelCache?[itemType]
-                ?? content.monthHeaderItemModelProvider(month)
+                ?? content.monthHeaderItemProvider(month)
             })
 
           // Create a visible item for the separator view, if needed.
@@ -662,14 +662,14 @@ final class VisibleItemsProvider {
             missingValueProvider: {
               let weekdayIndex = calendar.weekdayIndex(for: dayOfWeekPosition)
               return previousCalendarItemModelCache?[itemType]
-                ?? content.dayOfWeekItemModelProvider(month, weekdayIndex)
+                ?? content.dayOfWeekItemProvider(month, weekdayIndex)
             })
 
         case .day(let day):
           calendarItemModel = calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
-              previousCalendarItemModelCache?[itemType] ?? content.dayItemModelProvider(day)
+              previousCalendarItemModelCache?[itemType] ?? content.dayItemProvider(day)
             })
 
           handleDayRangesContaining(
@@ -747,7 +747,7 @@ final class VisibleItemsProvider {
     originsForMonths: inout [Month: CGPoint])
   {
     // Handle day ranges that start or end with the current day.
-    for dayRange in content.dayRangesAndItemModelProvider?.dayRanges ?? [] {
+    for dayRange in content.dayRangesAndItemProvider?.dayRanges ?? [] {
       guard
         !handledDayRanges.contains(dayRange),
         dayRange.contains(day)
@@ -775,11 +775,11 @@ final class VisibleItemsProvider {
     visibleItems: inout Set<VisibleCalendarItem>)
   {
     guard
-      let dayRangeItemModelProvider = content.dayRangesAndItemModelProvider?.dayRangeItemModelProvider
+      let dayRangeItemProvider = content.dayRangesAndItemProvider?.dayRangeItemProvider
     else
     {
       preconditionFailure(
-        "`content.dayRangesAndItemModelProvider` cannot be nil when handling a day range.")
+        "`content.dayRangesAndItemProvider` cannot be nil when handling a day range.")
     }
 
     let frame = dayRangeLayoutContext.frame
@@ -789,7 +789,7 @@ final class VisibleItemsProvider {
 
     visibleItems.insert(
       VisibleCalendarItem(
-        calendarItemModel: dayRangeItemModelProvider(dayRangeLayoutContext),
+        calendarItemModel: dayRangeItemProvider(dayRangeLayoutContext),
         itemType: .dayRange(dayRange),
         frame: frame))
   }
@@ -814,7 +814,7 @@ final class VisibleItemsProvider {
             missingValueProvider: {
               let weekdayIndex = calendar.weekdayIndex(for: dayOfWeekPosition)
               return previousCalendarItemModelCache?[itemType] ??
-                content.dayOfWeekItemModelProvider(nil, weekdayIndex)
+                content.dayOfWeekItemProvider(nil, weekdayIndex)
             }),
           itemType: itemType,
           frame: frame))
@@ -878,7 +878,7 @@ final class VisibleItemsProvider {
     visibleItems: inout Set<VisibleCalendarItem>)
   {
     guard
-      let (overlaidItemLocations, itemModelProvider) = content.overlaidItemLocationsAndItemModelProvider
+      let (overlaidItemLocations, itemModelProvider) = content.overlaidItemLocationsAndItemProvider
     else
     {
       return
