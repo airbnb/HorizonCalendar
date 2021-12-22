@@ -83,6 +83,20 @@ final class FrameProviderTests: XCTestCase {
       layoutMargins: .zero,
       scale: 3,
       monthHeaderHeight: monthHeaderHeight)
+    rectangularDayFrameProvider = FrameProvider(
+      content: CalendarViewContent(
+        calendar: calendar,
+        visibleDateRange: Date.distantPast...Date.distantFuture,
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
+        .withMonthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .withDayAspectRatio(1.5)
+        .withInterMonthSpacing(20)
+        .withVerticalDayMargin(20)
+        .withHorizontalDayMargin(10),
+      size: size,
+      layoutMargins: .zero,
+      scale: 3,
+      monthHeaderHeight: monthHeaderHeight)
   }
 
   func testMaxMonthHeight() {
@@ -119,6 +133,11 @@ final class FrameProviderTests: XCTestCase {
     let size3 = horizontalFrameProvider.daySize.alignedToPixels(forScreenWithScale: 3)
     let expectedSize3 = CGSize(width: 32, height: 32).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(size3 == expectedSize3, "Incorrect day size.")
+
+    let size4 = rectangularDayFrameProvider.daySize.alignedToPixels(forScreenWithScale: 3)
+    let expectedSize4 = CGSize(width: 34.857142857142854, height: 52.28571428571428)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(size4 == expectedSize4, "Incorrect day size.")
   }
 
   // MARK: Test initial month calculations
@@ -366,6 +385,18 @@ final class FrameProviderTests: XCTestCase {
     let expectedFrame3 = CGRect(x: 460, y: 55, width: 32, height: 32)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day of week.")
+
+    let frame4 = rectangularDayFrameProvider.frameOfDayOfWeek(
+      at: .fifth,
+      inMonthWithOrigin: CGPoint(x: 0, y: 200))
+      .alignedToPixels(forScreenWithScale: 3)
+    let expectedFrame4 = CGRect(
+      x: 187.42857142857142,
+      y: 255,
+      width: 34.857142857142854,
+      height: 52.28571428571428)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(frame4 == expectedFrame4, "Incorrect frame for day of week.")
   }
 
   func testDayFrameInMonth() {
@@ -412,6 +443,18 @@ final class FrameProviderTests: XCTestCase {
     let expectedFrame4 = CGRect(x: 476, y: 315, width: 32, height: 32)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame4 == expectedFrame4, "Incorrect frame for day of week.")
+
+    let frame5 = rectangularDayFrameProvider.frameOfDay(
+      Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20),
+      inMonthWithOrigin: CGPoint(x: 0, y: 69))
+      .alignedToPixels(forScreenWithScale: 3)
+    let expectedFrame5 = CGRect(
+      x: 52.857142857142854,
+      y: 413.1428571428571,
+      width: 34.857142857142854,
+      height: 52.28571428571428)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(frame5 == expectedFrame5, "Incorrect frame for day.")
   }
 
   func testAdjacentDayFrame() {
@@ -565,6 +608,18 @@ final class FrameProviderTests: XCTestCase {
       height: 34.857142857142854)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned day of week.")
+
+    let frame2 = rectangularDayFrameProvider.frameOfPinnedDayOfWeek(
+      at: .second,
+      yContentOffset: 275)
+      .alignedToPixels(forScreenWithScale: 3)
+    let expectedFrame2 = CGRect(
+      x: 52.857142857142854,
+      y: 275,
+      width: 34.857142857142854,
+      height: 52.28571428571428)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for pinned day of week.")
   }
 
   func testPinnedDaysOfWeekBackgroundFrame() {
@@ -574,26 +629,47 @@ final class FrameProviderTests: XCTestCase {
     let expectedFrame1 = CGRect(x: 0, y: 140, width: 320, height: 34.857142857142854)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned days-of-week row background.")
+
+    let frame2 = rectangularDayFrameProvider.frameOfPinnedDaysOfWeekRowBackground(
+      yContentOffset: 140)
+      .alignedToPixels(forScreenWithScale: 3)
+    let expectedFrame2 = CGRect(x: 0, y: 140, width: 320, height: 52.28571428571428)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(frame2 == expectedFrame2, "Incorrect frame for pinned days-of-week row background.")
   }
 
   func testPinnedDaysOfWeekSeparatorFrame() {
     let frame1 = verticalPinnedDaysOfWeekFrameProvider.frameOfPinnedDaysOfWeekRowSeparator(
       yContentOffset: 120,
       separatorHeight: 2)
+      .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(x: 0, y: 152.85714285714286, width: 320, height: 2)
+      .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for pinned day-of-week row separator.")
 
     let frame2 = verticalFrameProvider.frameOfDaysOfWeekRowSeparator(
       inMonthWithOrigin: CGPoint(x: 0, y: 120),
       separatorHeight: 1)
+      .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 0, y: 208.85714285714286, width: 320, height: 1)
+      .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame2 == expectedFrame2, "Incorrect frame for day-of-week row separator.")
 
     let frame3 = horizontalFrameProvider.frameOfDaysOfWeekRowSeparator(
       inMonthWithOrigin: CGPoint(x: 421, y: 0),
       separatorHeight: 10)
+      .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 421, y: 77, width: 300, height: 10)
+      .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame3 == expectedFrame3, "Incorrect frame for day-of-week row separator.")
+
+    let frame4 = rectangularDayFrameProvider.frameOfDaysOfWeekRowSeparator(
+      inMonthWithOrigin: CGPoint(x: 0, y: 120),
+      separatorHeight: 3)
+      .alignedToPixels(forScreenWithScale: 3)
+    let expectedFrame4 = CGRect(x: 0, y: 224.28571428571428, width: 320, height: 3)
+      .alignedToPixels(forScreenWithScale: 3)
+    XCTAssert(frame4 == expectedFrame4, "Incorrect frame for day-of-week row separator.")
   }
 
   // MARK: Scroll-to-item Frame Calculations
@@ -716,6 +792,7 @@ final class FrameProviderTests: XCTestCase {
   private var verticalPinnedDaysOfWeekFrameProvider: FrameProvider!
   private var verticalPartialMonthFrameProvider: FrameProvider!
   private var horizontalFrameProvider: FrameProvider!
+  private var rectangularDayFrameProvider: FrameProvider!
 
 }
 

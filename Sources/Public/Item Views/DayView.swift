@@ -94,10 +94,10 @@ public final class DayView: UIView {
     let path: CGPath
     switch invariantViewProperties.shape {
     case .circle:
-      path = UIBezierPath(
-        ovalIn: CGRect(
-          origin: CGPoint(x: edgeInsets.leading, y: edgeInsets.top),
-          size: insetBounds.size)).cgPath
+      let radius = min(insetBounds.size.width, insetBounds.size.height) / 2
+      let origin = CGPoint(x: insetBounds.midX - radius, y: insetBounds.midY - radius)
+      let size = CGSize(width: radius * 2, height: radius * 2)
+      path = UIBezierPath(ovalIn: CGRect(origin: origin, size: size)).cgPath
 
     case .rectangle(let cornerRadius):
       path = UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath

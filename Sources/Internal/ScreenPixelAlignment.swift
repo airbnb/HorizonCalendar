@@ -24,8 +24,8 @@ extension CGFloat {
   
   /// Tests `self` for approximate equality using the threshold value. For example, 1.48 equals 1.52 if the threshold is 0.05.
   /// `threshold` will be treated as a postive value by taking its absolute value.
-  func isEqual(to rhs: CGFloat, threshhold: CGFloat) -> Bool {
-    abs(self - rhs) <= abs(threshhold)
+  func isEqual(to rhs: CGFloat, threshold: CGFloat) -> Bool {
+    abs(self - rhs) <= abs(threshold)
   }
 
 }
