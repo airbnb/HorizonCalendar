@@ -276,7 +276,7 @@ After building and running your app, you should see a much less cramped layout:
 ![Custom Layout Metrics](Docs/Images/tutorial3.png)
 
 #### Adding a day range indicator
-Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `withDayRangeItemProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
+Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `dayRangeItemProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
 
 First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `Day`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
 ```swift
