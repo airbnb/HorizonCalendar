@@ -352,10 +352,10 @@ public final class CalendarView: UIView {
     animated: Bool)
   {
     let day = calendar.day(containing: dateInTargetDay)
-    guard content.monthRange.contains(day.month) else {
+    guard content.dayRange.contains(day) else {
       assertionFailure("""
         Attempted to scroll to day \(day), which is out of bounds of the total date range
-        \(content.monthRange).
+        \(content.dayRange).
       """)
       return
     }
