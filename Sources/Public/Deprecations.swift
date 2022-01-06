@@ -172,7 +172,7 @@ extension CalendarViewContent {
     *,
     deprecated,
     renamed: "monthHeaderItemProvider(_:)")
-  public func withMonthHeaderItemProvider(
+  public func withMonthHeaderItemModelProvider(
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
@@ -198,7 +198,7 @@ extension CalendarViewContent {
     *,
     deprecated,
     renamed: "dayOfWeekItemProvider(_:)")
-  public func withDayOfWeekItemProvider(
+  public func withDayOfWeekItemModelProvider(
     _ dayOfWeekItemProvider: @escaping (
       _ month: Month?,
       _ weekdayIndex: Int)
@@ -226,7 +226,7 @@ extension CalendarViewContent {
     *,
     deprecated,
     renamed: "dayItemProvider(_:)")
-  public func withDayItemProvider(
+  public func withDayItemModelProvider(
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
@@ -259,7 +259,7 @@ extension CalendarViewContent {
     *,
     deprecated,
     renamed: "dayRangeItemProvider(for:_:)")
-  public func withDayRangeItemProvider(
+  public func withDayRangeItemModelProvider(
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
       _ dayRangeLayoutContext: DayRangeLayoutContext)
@@ -289,7 +289,7 @@ extension CalendarViewContent {
     *,
     deprecated,
     renamed: "overlayItemProvider(for:_:)")
-  public func withOverlayItemProvider(
+  public func withOverlayItemModelProvider(
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
       _ overlayLayoutContext: OverlayLayoutContext)
