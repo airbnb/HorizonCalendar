@@ -51,7 +51,9 @@ final class FrameProvider {
     let height = width * content.dayAspectRatio
     daySize = CGSize(width: width, height: height)
 
-    validateCalendarMetrics(size: size)
+    if daySize.width <= 0 || daySize.height <= 0 {
+      print("Calendar metrics and size resulted in a negative-or-zero size of (\(daySize.debugDescription) points for each day. If ignored, this will cause incorrect / unexpected layouts.")
+    }
   }
 
   // MARK: Internal
@@ -323,15 +325,6 @@ final class FrameProvider {
 
   private var monthsLayout: MonthsLayout {
     content.monthsLayout
-  }
-
-  private func validateCalendarMetrics(size: CGSize) {
-    assert(
-      daySize.width > 0,
-      """
-        Calendar metrics and size resulted in a negative-or-zero size of \(daySize.width) points for
-        each day. If ignored, this will cause very odd / incorrect layouts.
-      """)
   }
 
   private func minXOfItem(
