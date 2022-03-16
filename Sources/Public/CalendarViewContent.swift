@@ -330,6 +330,12 @@ public final class CalendarViewContent {
     return self
   }
 
+  // Temporary
+  public func _renderDayRangesOnTopOfDays() -> CalendarViewContent {
+    renderDayRangesOnTopOfDays = true
+    return self
+  }
+
   // MARK: Internal
 
   let calendar: Calendar
@@ -345,6 +351,9 @@ public final class CalendarViewContent {
   private(set) var verticalDayMargin: CGFloat = 0
   private(set) var horizontalDayMargin: CGFloat = 0
   private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
+
+  // Temporary
+  private(set) var renderDayRangesOnTopOfDays = false
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemProvider: (Month) -> InternalAnyCalendarItemModel
