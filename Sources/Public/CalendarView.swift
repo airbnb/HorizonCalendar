@@ -657,6 +657,11 @@ public final class CalendarView: UIView {
       view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
       view.layer.zPosition = visibleItem.itemType.zPosition
 
+      // Temporary
+      if case .dayRange = visibleItem.itemType, content.renderDayRangesOnTopOfDays {
+        view.layer.zPosition = 501 // One more than 500 which is used for days
+      }
+
       if traitCollection.layoutDirection == .rightToLeft {
         view.transform = .init(scaleX: -1, y: 1)
       } else {
