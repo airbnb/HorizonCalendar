@@ -237,8 +237,6 @@ public final class CalendarView: UIView {
   /// - Parameters:
   ///   - content: The content to use when rendering `CalendarView`.
   public func setContent(_ content: CalendarViewContent) {
-    self.content = content
-
     if let contentBackgroundColor = content.backgroundColor {
       backgroundColor = contentBackgroundColor
     }
@@ -268,6 +266,19 @@ public final class CalendarView: UIView {
       scrollView.decelerationRate = .normal
     }
 
+    let oldContent = self.content
+
+    if
+      oldContent.monthsLayout != content.monthsLayout ||
+      oldContent.monthDayInsets != content.monthDayInsets ||
+      oldContent.dayAspectRatio != content.dayAspectRatio ||
+      oldContent.horizontalDayMargin != content.horizontalDayMargin ||
+      oldContent.verticalDayMargin != content.verticalDayMargin
+    {
+      invalidateIntrinsicContentSize()
+    }
+
+    self.content = content
     setNeedsLayout()
   }
 

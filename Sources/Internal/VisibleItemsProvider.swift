@@ -149,8 +149,18 @@ final class VisibleItemsProvider {
     var handledDayRanges = Set<DayRange>()
 
     var originsForMonths = [Month: CGPoint]()
-    var lastHandledLayoutItemEnumeratingBackwards = previouslyVisibleLayoutItem
-    var lastHandledLayoutItemEnumeratingForwards = previouslyVisibleLayoutItem
+
+    // Creating a new starting layout item based on our previous visible layout item allows us to
+    // ensure that the most up-to-date layout metrics (day aspect ratio, margins, etc) are taken
+    // into account. If layout metrics were just updated, then our previously visible layout item
+    // could still have old values, leading to a slightly incorrect layout.
+    let startingLayoutItem = layoutItem(
+      for: previouslyVisibleLayoutItem.itemType,
+      lastHandledLayoutItem: previouslyVisibleLayoutItem,
+      originsForMonths: &originsForMonths)
+
+    var lastHandledLayoutItemEnumeratingBackwards = startingLayoutItem
+    var lastHandledLayoutItemEnumeratingForwards = startingLayoutItem
 
     layoutItemTypeEnumerator.enumerateItemTypes(
       startingAt: previouslyVisibleLayoutItem.itemType,
