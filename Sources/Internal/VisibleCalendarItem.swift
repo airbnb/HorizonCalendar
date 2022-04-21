@@ -86,6 +86,7 @@ extension VisibleCalendarItem {
     case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(CalendarViewContent.OverlaidItemLocation)
+    case monthBackground(Month)
 
     var zPosition: CGFloat {
       switch self {
@@ -96,6 +97,7 @@ extension VisibleCalendarItem {
       case .daysOfWeekRowSeparator: return 501
       case .dayRange: return 250
       case .overlayItem: return 750
+      case .monthBackground: return 75
       }
     }
 
@@ -108,6 +110,7 @@ extension VisibleCalendarItem {
       case .daysOfWeekRowSeparator: return false
       case .dayRange: return false
       case .overlayItem: return false
+      case .monthBackground: return false
       }
     }
   }

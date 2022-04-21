@@ -336,6 +336,12 @@ public final class CalendarViewContent {
     return self
   }
 
+  // Temporary
+  public func _showMonthGridLines() -> CalendarViewContent {
+    showMonthGridlines = true
+    return self
+  }
+
   // MARK: Internal
 
   let calendar: Calendar
@@ -354,6 +360,9 @@ public final class CalendarViewContent {
 
   // Temporary
   private(set) var renderDayRangesOnTopOfDays = false
+
+  // Temporary
+  private(set) var showMonthGridlines = false
 
   // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
   var monthHeaderItemProvider: (Month) -> InternalAnyCalendarItemModel

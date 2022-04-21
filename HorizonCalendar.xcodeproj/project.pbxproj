@@ -18,6 +18,7 @@
 		932FC00E26ED5191005E39A6 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FC00D26ED5191005E39A6 /* DayView.swift */; };
 		932FC01126ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */; };
 		933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */; };
+		9350E992280FA61D002A28FA /* MonthGridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9350E991280FA61D002A28FA /* MonthGridBackgroundView.swift */; };
 		938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */; };
 		938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */; };
 		9391E66926293A3F00A79C6E /* RenderInContextObservingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9391E66826293A3F00A79C6E /* RenderInContextObservingLayer.swift */; };
@@ -88,6 +89,7 @@
 		932FC00D26ED5191005E39A6 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Hashable.swift"; sourceTree = "<group>"; };
 		933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleLayoutPassHelpers.swift; sourceTree = "<group>"; };
+		9350E991280FA61D002A28FA /* MonthGridBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGridBackgroundView.swift; sourceTree = "<group>"; };
 		938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarItemViewRepresentable.swift; sourceTree = "<group>"; };
 		938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCalendarItemModel.swift; sourceTree = "<group>"; };
 		9391E66826293A3F00A79C6E /* RenderInContextObservingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderInContextObservingLayer.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				939E691D24837E0200A8BCC7 /* ItemViewReuseManager.swift */,
 				939E692024837E0300A8BCC7 /* LayoutItem.swift */,
 				939E691824837E0200A8BCC7 /* LayoutItemTypeEnumerator.swift */,
+				9350E991280FA61D002A28FA /* MonthGridBackgroundView.swift */,
 				939E692224837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift */,
 				9391F15525C097DF001D14A2 /* PaginationHelpers.swift */,
 				9391E66826293A3F00A79C6E /* RenderInContextObservingLayer.swift */,
@@ -421,6 +424,7 @@
 				939E692E24837E0300A8BCC7 /* ScrollToItemContext.swift in Sources */,
 				9321958426EEB97F0001C7E9 /* MonthHeaderView.swift in Sources */,
 				932FC01126ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift in Sources */,
+				9350E992280FA61D002A28FA /* MonthGridBackgroundView.swift in Sources */,
 				939E693824837E8700A8BCC7 /* CalendarViewScrollPosition.swift in Sources */,
 				9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */,
 				939E692D24837E0300A8BCC7 /* LayoutItem.swift in Sources */,
