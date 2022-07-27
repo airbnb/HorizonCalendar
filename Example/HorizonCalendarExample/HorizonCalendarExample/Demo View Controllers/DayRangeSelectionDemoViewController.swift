@@ -80,6 +80,9 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
 
       .dayItemProvider { [calendar, dayDateFormatter] day in
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
+        invariantViewProperties.shape = .custom({ bounds in
+          .diamond(bounds: bounds, cornerRadius: 2)
+        })
 
         let isSelectedStyle: Bool
         switch calendarSelection {
@@ -121,4 +124,16 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
   }
   private var calendarSelection: CalendarSelection?
 
+}
+
+private extension UIBezierPath {
+  static func diamond(bounds: CGRect, cornerRadius: CGFloat) -> UIBezierPath {
+    let path = UIBezierPath()
+    path.move(to: CGPoint(x: bounds.midX, y: bounds.minY + cornerRadius))
+    path.addLine(to: CGPoint(x: bounds.maxX - cornerRadius, y: bounds.midY))
+    path.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY - cornerRadius))
+    path.addLine(to: CGPoint(x: bounds.minX + cornerRadius, y: bounds.midY))
+    path.close()
+    return path
+  }
 }
