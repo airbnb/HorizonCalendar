@@ -14,9 +14,39 @@
 // limitations under the License.
 
 import CoreGraphics
+import UIKit.UIBezierPath
 
 /// Represents a background or highlight layer shape; used by `DayView` and `DayOfWeekView`.
-public enum Shape: Hashable {
+public enum Shape {
   case circle
   case rectangle(cornerRadius: CGFloat = 0)
+  case custom((CGRect) -> UIBezierPath)
+}
+
+extension Shape: Hashable {
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .circle:
+      break
+    case .rectangle(let cornerRadius):
+      hasher.combine(cornerRadius)
+    case .custom:
+      break
+    }
+  }
+}
+
+extension Shape: Equatable {
+  public static func == (lhs: Shape, rhs: Shape) -> Bool {
+    switch (lhs, rhs) {
+    case (.circle, .circle):
+      return true
+    case (.rectangle, .rectangle):
+      return true
+    case (.custom, .custom):
+      return true
+    default:
+      return false
+    }
+  }
 }

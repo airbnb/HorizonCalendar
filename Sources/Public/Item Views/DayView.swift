@@ -101,6 +101,8 @@ public final class DayView: UIView {
 
     case .rectangle(let cornerRadius):
       path = UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath
+    case .custom(let closure):
+      path = closure(insetBounds).cgPath
     }
 
     backgroundLayer.path = path
