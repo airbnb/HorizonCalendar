@@ -422,7 +422,6 @@ public final class CalendarView: UIView {
 
   private lazy var scrollView: NoContentInsetAdjustmentScrollView = {
     let scrollView = NoContentInsetAdjustmentScrollView()
-    scrollView.scrollsToTop = false
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.delegate = self
@@ -762,7 +761,7 @@ public final class CalendarView: UIView {
     case (.before, .after), (.after, .before):
       finalizeScrollingTowardItem(for: scrollToItemContext)
 
-      // Force layout immdiately to prevent the overshoot from being visible to the user.
+      // Force layout immediately to prevent the overshoot from being visible to the user.
       setNeedsLayout()
       layoutIfNeeded()
 
@@ -988,6 +987,23 @@ extension CalendarView: UIScrollViewDelegate {
         velocity: velocity.x,
         pageSize: pageSize)
     }
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+    if content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
+      let firstMonth = content.monthRange.lowerBound
+      let firstDate = calendar.firstDate(of: firstMonth)
+      scroll(
+        toMonthContaining: firstDate,
+        scrollPosition: .firstFullyVisiblePosition(padding: 0),
+        animated: true)
+    }
+
+    return false
   }
 
 }

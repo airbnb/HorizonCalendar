@@ -70,3 +70,4 @@ fastlane/test_output
 *.xcuserstate
 xcshareddata
 UserInterfaceState.xcuserstate
+.DS_Store
