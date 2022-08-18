@@ -64,6 +64,13 @@ public enum MonthsLayout {
 
     return true
   }
+
+  var scrollsToFirstMonthOnStatusBarTap: Bool {
+    switch self {
+    case .vertical(let options): return options.scrollsToFirstMonthOnStatusBarTap
+    case .horizontal: return false
+    }
+  }
 }
 
 // MARK: Equatable
@@ -94,9 +101,16 @@ public struct VerticalMonthsLayoutOptions: Equatable {
   ///   The default value is `false`.
   ///   - alwaysShowCompleteBoundaryMonths: Whether the calendar will always show complete months, even if the visible
   ///   date range does not start on the first date or end on the last date of a month. The default value is `true`.
-  public init(pinDaysOfWeekToTop: Bool = false, alwaysShowCompleteBoundaryMonths: Bool = true) {
+  ///   - scrollsToFirstMonthOnStatusBarTap: Whether the calendar should scroll to the first month when the system
+  ///   status bar is tapped. The default value is `false`.
+  public init(
+    pinDaysOfWeekToTop: Bool = false,
+    alwaysShowCompleteBoundaryMonths: Bool = true,
+    scrollsToFirstMonthOnStatusBarTap: Bool = false)
+  {
     self.pinDaysOfWeekToTop = pinDaysOfWeekToTop
     self.alwaysShowCompleteBoundaryMonths = alwaysShowCompleteBoundaryMonths
+    self.scrollsToFirstMonthOnStatusBarTap = scrollsToFirstMonthOnStatusBarTap
   }
 
   // MARK: Public
@@ -107,6 +121,9 @@ public struct VerticalMonthsLayoutOptions: Equatable {
   /// Whether the calendar will always show complete months at the calendar's boundaries, even if the visible date range does not start
   /// on the first date or end on the last date of a month.
   public let alwaysShowCompleteBoundaryMonths: Bool
+
+  /// Whether the calendar should scroll to the first month when the system status bar is tapped.
+  public let scrollsToFirstMonthOnStatusBarTap: Bool
 
 }
 
