@@ -452,7 +452,11 @@ public final class CalendarView: UIView {
   }
 
   private var scale: CGFloat {
-    window?.screen.scale ?? UIScreen.main.scale
+    let scale = traitCollection.displayScale
+    // The documentation mentions that 0 is a possible value, so we guard against this.
+    // It's unclear whether values between 0 and 1 are possible, otherwise `max(scale, 1)` would
+    // suffice.
+    return scale > 0 ? scale : 1
   }
 
   private var scrollMetricsMutator: ScrollMetricsMutator {
