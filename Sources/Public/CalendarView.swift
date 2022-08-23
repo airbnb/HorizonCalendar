@@ -59,7 +59,7 @@ public final class CalendarView: UIView {
 
     // Must be the first subview so that `UINavigationController` can monitor its scroll position
     // and make navigation bars opaque on scroll.
-    addSubview(scrollView)
+    insertSubview(scrollView, at: 0)
 
     installDoubleLayoutPassSizingLabel()
 
