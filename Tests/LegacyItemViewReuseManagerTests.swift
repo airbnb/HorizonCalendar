@@ -58,7 +58,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
 
     reuseManager.viewsForVisibleItems(
       visibleItems,
-      viewHandler: { _, _, previousBackingItem in
+      viewHandler: { _, _, previousBackingItem, _ in
         XCTAssert(
           previousBackingItem == nil,
           "Previous backing item should be nil since there are no views to reuse.")
@@ -98,12 +98,12 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
     let subsequentVisibleItems = initialVisibleItems
 
     // Populate the reuse manager with the initial visible items
-    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _ in })
+    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _, _ in })
 
     // Ensure all views are reused by using the exact same previous views
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      viewHandler: { _, item, previousBackingItem in
+      viewHandler: { _, item, previousBackingItem, _ in
         XCTAssert(
           item == previousBackingItem,
           """
@@ -173,12 +173,12 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
     ]
 
     // Populate the reuse manager with the initial visible items
-    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _ in })
+    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _, _ in })
 
     // Ensure all views are reused given the subsequent visible items
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      viewHandler: { _, item, previousBackingItem in
+      viewHandler: { _, item, previousBackingItem, _ in
         XCTAssert(
           item.calendarItemModel.reuseIdentifier == previousBackingItem?.calendarItemModel.reuseIdentifier,
           """
@@ -264,12 +264,12 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
     ]
 
     // Populate the reuse manager with the initial visible items
-    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _ in })
+    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _, _ in })
 
     // Ensure the correct subset of views are reused given the subsequent visible items
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      viewHandler: { _, item, previousBackingItem in
+      viewHandler: { _, item, previousBackingItem, _ in
         switch item.calendarItemModel.reuseIdentifier {
         case "item_type_1", "item_type_3":
           XCTAssert(
@@ -391,14 +391,14 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
     ]
 
     // Populate the reuse manager with the initial visible items
-    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _ in })
+    reuseManager.viewsForVisibleItems(initialVisibleItems, viewHandler: { _, _, _, _ in })
 
     // Ensure the correct subset of views are reused given the subsequent visible items
     var reuseCountsForReuseIDs = [String: Int]()
     var newViewCountsForReuseIDs = [String: Int]()
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      viewHandler: { _, item, previousBackingItem in
+      viewHandler: { _, item, previousBackingItem, _ in
         if previousBackingItem != nil {
           let reuseCount = (reuseCountsForReuseIDs[item.calendarItemModel.reuseIdentifier] ?? 0) + 1
           reuseCountsForReuseIDs[item.calendarItemModel.reuseIdentifier] = reuseCount
