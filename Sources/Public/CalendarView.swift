@@ -627,14 +627,14 @@ public final class CalendarView: UIView {
 
     reuseManager.viewsForVisibleItems(
       visibleItems,
-      viewHandler: { view, visibleItem, previousBackingVisibleItem in
-        if view.superview == nil {
-          UIView.performWithoutAnimation {
+      viewHandler: { view, visibleItem, previousBackingVisibleItem, isReusedViewSameAsPreviousView in
+        UIView.conditionallyPerformWithoutAnimation(when: !isReusedViewSameAsPreviousView) {
+          if view.superview == nil {
             scrollView.addSubview(view)
           }
-        }
 
-        configureView(view, with: visibleItem)
+          configureView(view, with: visibleItem)
+        }
 
         visibleViewsForVisibleItems[visibleItem] = view
 
@@ -652,21 +652,18 @@ public final class CalendarView: UIView {
   private func configureView(_ view: ItemView, with visibleItem: VisibleCalendarItem) {
     view.calendarItemModel = visibleItem.calendarItemModel
 
-    // Update the visibility
-    UIView.performWithoutAnimation {
-      view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
-      view.layer.zPosition = visibleItem.itemType.zPosition
+    view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
+    view.layer.zPosition = visibleItem.itemType.zPosition
 
-      // Temporary
-      if case .dayRange = visibleItem.itemType, content.renderDayRangesOnTopOfDays {
-        view.layer.zPosition = 501 // One more than 500 which is used for days
-      }
+    // Temporary
+    if case .dayRange = visibleItem.itemType, content.renderDayRangesOnTopOfDays {
+      view.layer.zPosition = 501 // One more than 500 which is used for days
+    }
 
-      if traitCollection.layoutDirection == .rightToLeft {
-        view.transform = .init(scaleX: -1, y: 1)
-      } else {
-        view.transform = .identity
-      }
+    if traitCollection.layoutDirection == .rightToLeft {
+      view.transform = .init(scaleX: -1, y: 1)
+    } else {
+      view.transform = .identity
     }
 
     view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
