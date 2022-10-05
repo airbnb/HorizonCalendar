@@ -64,6 +64,7 @@
 		93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */; };
 		93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */; };
 		93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */; };
+		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,7 @@
 		93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
 		93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
 		93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
+		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +277,7 @@
 				939E691C24837E0200A8BCC7 /* VisibleCalendarItem.swift */,
 				939E691A24837E0200A8BCC7 /* VisibleItemsProvider.swift */,
 				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
+				FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
 				9391F15625C097DF001D14A2 /* PaginationHelpers.swift in Sources */,
+				FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */,
 				93B6D99E24F0C6220027A60C /* InternalAnyCalendarItemModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -618,7 +622,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.1;
+				MARKETING_VERSION = 1.14.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -652,7 +656,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.1;
+				MARKETING_VERSION = 1.14.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendar;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
