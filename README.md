@@ -243,7 +243,7 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
   return CalendarViewContent(...)
 
     .dayItemProvider { day in
-      CalendarItemModel<DayLabel>(
+      DayLabel.calendarItemModel(
         invariantViewProperties: .init(
           font: UIFont.systemFont(ofSize: 18), 
           textColor: .darkGray,
@@ -381,7 +381,7 @@ Last, we need to return a `CalendarItemModel` representing our `DayRangeIndicato
     ...
     
     .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
-      CalendarItemModel<DayRangeIndicatorView>(
+      DayRangeIndicatorView.calendarItemModel(
         invariantViewProperties: .init(indicatorColor: UIColor.blue.withAlphaComponent(0.15)),
         viewModel: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
     }
@@ -538,7 +538,7 @@ Last, we need to return a `CalendarItemModel` representing our `TooltipView` fro
     ...
     
     .overlayItemProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
-      CalendarItemModel<TooltipView>(
+      TooltipView.calendarItemModel(
         invariantViewProperties: .init(
           backgroundColor: .white, 
           borderColor: .black, 
@@ -584,7 +584,7 @@ The day selection handler closure is invoked whenever a day in the calendar is s
         invariantViewProperties.backgroundColor = .blue
       }
       
-      return CalendarItemModel<DayLabel>(
+      return DayLabel.calendarItemModel(
         invariantViewProperties: invariantViewProperties,
         viewModel: .init(day: day))
   }

@@ -65,7 +65,7 @@ public final class CalendarViewContent {
     monthHeaderItemProvider = { month in
       let firstDateInMonth = calendar.firstDate(of: month)
       let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
-      let itemModel = CalendarItemModel<MonthHeaderView>(
+      let itemModel = MonthHeaderView.calendarItemModel(
         invariantViewProperties: .base,
         viewModel: .init(monthText: monthText, accessibilityLabel: monthText))
       return .itemModel(itemModel)
@@ -73,7 +73,7 @@ public final class CalendarViewContent {
 
     dayOfWeekItemProvider = { _, weekdayIndex in
       let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-      let itemModel = CalendarItemModel<DayOfWeekView>(
+      let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         viewModel: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
       return .itemModel(itemModel)
@@ -89,7 +89,7 @@ public final class CalendarViewContent {
 
     dayItemProvider = { day in
       let date = calendar.startDate(of: day)
-      let itemModel = CalendarItemModel<DayView>(
+      let itemModel = DayView.calendarItemModel(
         invariantViewProperties: .baseNonInteractive,
         viewModel: .init(
           dayText: "\(day.day)",

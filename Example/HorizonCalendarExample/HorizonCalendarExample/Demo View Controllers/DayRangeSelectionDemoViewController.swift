@@ -97,7 +97,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
 
         let date = calendar.date(from: day.components)
 
-        return CalendarItemModel<DayView>(
+        return DayView.calendarItemModel(
           invariantViewProperties: invariantViewProperties,
           viewModel: .init(
             dayText: "\(day.day)",
@@ -106,7 +106,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       }
 
       .dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
-        CalendarItemModel<DayRangeIndicatorView>(
+        DayRangeIndicatorView.calendarItemModel(
           invariantViewProperties: .init(),
           viewModel: .init(
             framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))

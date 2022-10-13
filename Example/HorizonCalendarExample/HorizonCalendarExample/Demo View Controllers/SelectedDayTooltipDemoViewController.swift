@@ -69,7 +69,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
           invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
         }
 
-        return CalendarItemModel<DayView>(
+        return DayView.calendarItemModel(
           invariantViewProperties: invariantViewProperties,
           viewModel: .init(
             dayText: "\(day.day)",
@@ -78,7 +78,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
       }
 
       .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
-        CalendarItemModel<TooltipView>(
+        TooltipView.calendarItemModel(
           invariantViewProperties: .init(),
           viewModel: .init(
             frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
