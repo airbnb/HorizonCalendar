@@ -75,7 +75,7 @@ final class SingleDaySelectionDemoViewController: DemoViewController {
           invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
         }
 
-        return CalendarItemModel<DayView>(
+        return DayView.calendarItemModel(
           invariantViewProperties: invariantViewProperties,
           viewModel: .init(
             dayText: "\(day.day)",
