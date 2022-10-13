@@ -1764,7 +1764,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       static func setViewModel(_ viewModel: Int, on view: MockView) { }
     }
 
-    return CalendarItemModel<MockView>(invariantViewProperties: 0, viewModel: 0)
+    return MockView.calendarItemModel(invariantViewProperties: 0, viewModel: 0)
   }
 
   private static func makeContent(
