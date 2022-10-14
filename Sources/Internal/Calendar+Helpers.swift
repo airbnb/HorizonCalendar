@@ -28,8 +28,7 @@ extension Calendar {
   }
 
   func firstDate(of month: Month) -> Date {
-    let firstDateComponents = DateComponents(era: month.era, year: month.year, month: month.month)
-    guard let firstDate = date(from: firstDateComponents) else {
+    guard let firstDate = date(from: month.components) else {
       preconditionFailure("Failed to create a `Date` representing the first day of \(month).")
     }
 
@@ -84,12 +83,7 @@ extension Calendar {
   }
 
   func startDate(of day: Day) -> Date {
-    let dateComponents = DateComponents(
-      era: day.month.era,
-      year: day.month.year,
-      month: day.month.month,
-      day: day.day)
-    guard let date = date(from: dateComponents) else {
+    guard let date = date(from: day.components) else {
       preconditionFailure("Failed to create a `Date` representing the start of \(day).")
     }
 

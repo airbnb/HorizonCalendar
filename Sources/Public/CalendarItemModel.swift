@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import SwiftUI
 import UIKit
 
 // MARK: - CalendarItemModel
@@ -106,6 +107,26 @@ extension CalendarItemViewRepresentable {
     -> CalendarItemModel<Self>
   {
     CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties, viewModel: viewModel)
+  }
+
+}
+
+// MARK: SwiftUI Convenience Factory
+
+@available(iOS 13.0, *)
+extension View {
+
+  /// Creates a `CalendarItemModel` from a SwiftUI `View`.
+  ///
+  /// This is equivalent to manually creating a
+  /// `CalendarItemModel<SwiftUIWrapperView<YourView>>`, where `YourView` is some SwiftUI `View`.
+  ///
+  /// - Warning: Using a SwiftUI view with the calendar will cause `SwiftUIView.HostingController`(s) to be added to the
+  /// closest view controller in the responder chain in relation to the `CalendarView`.
+  public var calendarItemModel: CalendarItemModel<SwiftUIWrapperView<Self>> {
+    CalendarItemModel<SwiftUIWrapperView<Self>>(
+      invariantViewProperties: .init(initialContent: self),
+      viewModel: .init(content: self))
   }
 
 }
