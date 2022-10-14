@@ -9,7 +9,7 @@ A declarative, performant, calendar UI component that supports use cases ranging
 ![Swift](https://github.com/airbnb/HorizonCalendar/workflows/Swift/badge.svg)
 
 ## Introduction
-`HorizonCalendar` is UIKit library for displaying a range of dates in a vertically-scrolling or horizontally-scrolling calendar component. Its declarative API makes updating the calendar straightforward, while also providing many customization points to support a diverse set of designs and use cases.
+`HorizonCalendar` is an interactive calendar component for iOS (compatible with UIKit and SwiftUI). Its declarative API makes updating the calendar straightforward, while also providing many customization points to support a diverse set of designs and use cases.
 
 Features:
 
@@ -18,16 +18,16 @@ Features:
 - Declarative API that enables unidirectional data flow for updating the content of the calendar
 - A custom layout system that enables virtually infinite date ranges without increasing memory usage
 - Pagination for horizontally-scrolling calendars
-- Specify custom views for individual days, month headers, and days of the week
-- Specify custom views to highlight date ranges
-- Specify custom views to overlay parts of the calendar, enabling features like tooltips
+- Specify custom views (`UIView` or SwiftUI `View`) for individual days, month headers, and days of the week
+- Specify custom views (`UIView` or SwiftUI `View`) to highlight date ranges
+- Specify custom views (`UIView` or SwiftUI `View`) to overlay parts of the calendar, enabling features like tooltips
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
 - Pin the days-of-the-week row to the top
 - Show partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
 - Scroll to arbitrary dates and months, with or without animation
 - Robust accessibility support
-- Inset the content without affecting the scrollable region using `UIView` layout margins
+- Inset the content without affecting the scrollable region using layout margins
 - Separator below the days-of-the-week row
 - Right-to-left layout support
 
@@ -191,7 +191,7 @@ private func makeContent() -> CalendarViewContent {
 
 The `dayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `Day`.
 
-`CalendarItemModel` is a type that abstracts away the creation and configuration of a `UIView`. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view, we'll need to create a type that knows how to create and update that label. Here's a simple example:
+`CalendarItemModel` is a type that abstracts away the creation and configuration of a view displayed in the calendar. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view, we'll need to create a type that knows how to create and update that label. Here's a simple example:
 ```swift
 import HorizonCalendar
 
@@ -249,6 +249,19 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
           textColor: .darkGray,
           backgroundColor: .clear),
         viewModel: .init(day: day))
+    }
+```
+
+Using a SwiftUI view is even easier - simply initialize your SwiftUI view and call `.calendarItemModel` on it. There's no need to create a custom type conforming to `CalendarItemViewRepresentable` like we had to do with the UIKit example above.
+
+```swift
+  return CalendarViewContent(...)
+
+    .dayItemProvider { day in
+      Text("\(day.day)")
+        .font(.system(size: 18))
+        .foregroundColor(Color(UIColor.darkGray))
+        .calendarItemModel
     }
 ```
 
