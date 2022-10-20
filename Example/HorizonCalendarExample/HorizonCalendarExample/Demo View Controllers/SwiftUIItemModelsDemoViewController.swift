@@ -1,5 +1,5 @@
-// Created by Bryan Keller on 6/18/20.
-// Copyright © 2020 Airbnb Inc. All rights reserved.
+// Created by Bryan Keller on 8/23/22.
+// Copyright © 2022 Airbnb Inc. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,15 +15,16 @@
 
 import HorizonCalendar
 import UIKit
+import SwiftUI
 
-final class SelectedDayTooltipDemoViewController: DemoViewController {
+final class SwiftUIItemModelsDemoViewController: DemoViewController {
 
   // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    title = "Selected Day Tooltip"
+    title = "SwiftUI Day and Month Views"
 
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self = self else { return }
@@ -48,47 +49,47 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
 
     let selectedDate = self.selectedDate
 
-    let overlaidItemLocations: Set<CalendarViewContent.OverlaidItemLocation>
-    if let selectedDate = selectedDate {
-      overlaidItemLocations = [.day(containingDate: selectedDate)]
-    } else {
-      overlaidItemLocations = []
-    }
-
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
 
       .interMonthSpacing(24)
+      .verticalDayMargin(8)
+      .horizontalDayMargin(8)
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-
-        let date = calendar.date(from: day.components)
-        if date == selectedDate {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
+      .monthHeaderItemProvider { [calendar, monthDateFormatter] month in
+        guard let firstDateInMonth = calendar.date(from: month.components) else {
+          preconditionFailure("Could not find a date corresponding to the month \(month).")
         }
-
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          viewModel: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
+        let monthText = monthDateFormatter.string(from: firstDateInMonth)
+        return HStack {
+          Text(monthText).font(.headline)
+          Spacer()
+        }
+        .padding(.vertical)
+        .calendarItemModel
       }
 
-      .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
-        TooltipView.calendarItemModel(
-          invariantViewProperties: .init(),
-          viewModel: .init(
-            frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
-            text: "Selected Day"))
+      .dayItemProvider { [calendar, selectedDate] day in
+        let date = calendar.date(from: day.components)
+        let isSelected = date == selectedDate
+        return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
       }
   }
 
   // MARK: Private
+
+  private lazy var monthDateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.calendar = calendar
+    dateFormatter.locale = calendar.locale
+    dateFormatter.dateFormat = DateFormatter.dateFormat(
+      fromTemplate: "MMMM yyyy",
+      options: 0,
+      locale: calendar.locale ?? Locale.current)
+    return dateFormatter
+  }()
 
   private var selectedDate: Date?
 

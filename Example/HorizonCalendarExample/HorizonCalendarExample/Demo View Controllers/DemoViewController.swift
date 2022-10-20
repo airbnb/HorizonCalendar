@@ -38,11 +38,7 @@ class DemoViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    if #available(iOS 13.0, *) {
-      view.backgroundColor = .systemBackground
-    } else {
-      view.backgroundColor = .white
-    }
+    view.backgroundColor = .systemBackground
 
     view.addSubview(calendarView)
 
