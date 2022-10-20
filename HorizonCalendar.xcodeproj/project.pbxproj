@@ -66,6 +66,7 @@
 		93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */; };
 		93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
+		FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
 		93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
+		FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 				9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */,
 				9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */,
 				9321957F26EEB6330001C7E9 /* Shape.swift */,
+				FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */,
 				932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */,
 			);
 			path = ItemViews;
@@ -434,6 +437,7 @@
 				939E693A24837E8700A8BCC7 /* CalendarViewContent.swift in Sources */,
 				93D6789E2772EC1D004948E5 /* Deprecations.swift in Sources */,
 				939E692F24837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift in Sources */,
+				FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
 				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
 				939E694024846A8C00A8BCC7 /* Day.swift in Sources */,

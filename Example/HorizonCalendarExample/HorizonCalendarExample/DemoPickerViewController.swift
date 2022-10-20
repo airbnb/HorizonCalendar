@@ -27,11 +27,7 @@ final class DemoPickerViewController: UIViewController {
 
     title = "HorizonCalendar Example App"
 
-    if #available(iOS 13.0, *) {
-      view.backgroundColor = .systemBackground
-    } else {
-      view.backgroundColor = .white
-    }
+    view.backgroundColor = .systemBackground
 
     view.addSubview(tableView)
     view.addSubview(monthsLayoutPicker)
@@ -61,22 +57,26 @@ final class DemoPickerViewController: UIViewController {
 
   // MARK: Private
 
-  private let verticalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
-    ("Single Day Selection", SingleDaySelectionDemoViewController.self),
-    ("Day Range Selection", DayRangeSelectionDemoViewController.self),
-    ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
-    ("Large Day Range", LargeDayRangeDemoViewController.self),
-    ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
-    ("Partial Month Visibility", PartialMonthVisibilityDemoViewController.self),
-  ]
+  private let verticalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] =
+    [
+      ("Single Day Selection", SingleDaySelectionDemoViewController.self),
+      ("Day Range Selection", DayRangeSelectionDemoViewController.self),
+      ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
+      ("Large Day Range", LargeDayRangeDemoViewController.self),
+      ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
+      ("Partial Month Visibility", PartialMonthVisibilityDemoViewController.self),
+      ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
+    ]
 
-  private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] = [
-    ("Single Day Selection", SingleDaySelectionDemoViewController.self),
-    ("Day Range Selection", DayRangeSelectionDemoViewController.self),
-    ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
-    ("Large Day Range", LargeDayRangeDemoViewController.self),
-    ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
-  ]
+  private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] =
+    [
+      ("Single Day Selection", SingleDaySelectionDemoViewController.self),
+      ("Day Range Selection", DayRangeSelectionDemoViewController.self),
+      ("Selected Day Tooltip", SelectedDayTooltipDemoViewController.self),
+      ("Large Day Range", LargeDayRangeDemoViewController.self),
+      ("Scroll to Day With Animation", ScrollToDayWithAnimationDemoViewController.self),
+      ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
+    ]
 
   private lazy var tableView: UITableView = {
     let tableView = UITableView(frame: .zero)

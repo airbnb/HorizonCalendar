@@ -22,6 +22,8 @@
 		939E69942484D55200A8BCC7 /* HorizonCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 939E69912484D11000A8BCC7 /* HorizonCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */; };
 		93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */; };
+		FDA0FB3528F5EFD90066DEFA /* SwiftUIDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */; };
+		FDA0FB3728F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +57,8 @@
 		939E69912484D11000A8BCC7 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialMonthVisibilityDemoViewController.swift; sourceTree = "<group>"; };
 		93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeIndicatorView.swift; sourceTree = "<group>"; };
+		FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIDayView.swift; sourceTree = "<group>"; };
+		FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIItemModelsDemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,7 @@
 				938176A4249B828600E18FA3 /* LargeDayRangeDemoViewController.swift */,
 				9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */,
 				93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */,
+				FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */,
 			);
 			path = "Demo View Controllers";
 			sourceTree = "<group>";
@@ -106,6 +111,7 @@
 				939E696A2484CD8E00A8BCC7 /* AppDelegate.swift */,
 				9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */,
 				9381769D249B79CB00E18FA3 /* Demo View Controllers */,
+				FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */,
 				93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */,
 				939853512498992E0022A3A1 /* TooltipView.swift */,
 				939E69732484CD9000A8BCC7 /* Assets.xcassets */,
@@ -195,8 +201,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */,
+				FDA0FB3728F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift in Sources */,
 				939E696F2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift in Sources */,
 				938176A3249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift in Sources */,
+				FDA0FB3528F5EFD90066DEFA /* SwiftUIDayView.swift in Sources */,
 				938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */,
 				9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */,
 				939853522498992E0022A3A1 /* TooltipView.swift in Sources */,
@@ -273,7 +281,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -328,7 +336,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -345,7 +353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C835JB7RUE;
 				INFOPLIST_FILE = HorizonCalendarExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -364,7 +372,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C835JB7RUE;
 				INFOPLIST_FILE = HorizonCalendarExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

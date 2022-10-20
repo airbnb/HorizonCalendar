@@ -302,7 +302,7 @@ extension DayView {
         color = .lightGray
       }
 
-      return DrawingConfig(fillColor: color, borderColor: color)
+      return DrawingConfig(fillColor: color, borderColor: .clear)
     }()
 
     /// The font of the day's label.
