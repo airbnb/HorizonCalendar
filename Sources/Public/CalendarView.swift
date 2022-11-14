@@ -120,6 +120,11 @@ public final class CalendarView: UIView {
     visibleItemsDetails?.visibleDayRange
   }
 
+  /// The month of the centered item the layout of the calendar.
+  public var visibleCentermostMonth: Month? {
+    visibleItemsDetails?.centermostLayoutItem.itemType.month
+  }
+
   /// `CalendarView` only supports positive values for `layoutMargins`. Negative values will be changed to `0`.
   public override var layoutMargins: UIEdgeInsets {
     get { super.layoutMargins }
