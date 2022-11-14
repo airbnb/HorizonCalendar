@@ -633,8 +633,6 @@ public final class CalendarView: UIView {
             scrollView.addSubview(view)
           }
 
-          view.isHidden = false
-
           configureView(view, with: visibleItem)
         }
 
@@ -645,10 +643,9 @@ public final class CalendarView: UIView {
         }
       })
 
-    // Hide any old views that weren't reused. This is cheaper than removing them and re-adding them
-    // as subviews later.
+    // Remove any old views that weren't reused
     for visibleItemWithViewToRemove in visibleItemsWithViewsToRemove {
-      previousVisibleViewsForVisibleItems[visibleItemWithViewToRemove]?.isHidden = true
+      previousVisibleViewsForVisibleItems[visibleItemWithViewToRemove]?.removeFromSuperview()
     }
   }
 
