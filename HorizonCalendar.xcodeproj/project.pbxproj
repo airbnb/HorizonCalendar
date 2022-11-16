@@ -268,6 +268,7 @@
 			children = (
 				939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */,
 				939E691E24837E0200A8BCC7 /* Dictionary+MutatingValueForKey.swift */,
+				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
 				939E692324837E0300A8BCC7 /* FrameProvider.swift */,
 				93B6D99D24F0C6220027A60C /* InternalAnyCalendarItemModel.swift */,
 				939E691B24837E0200A8BCC7 /* ItemView.swift */,
@@ -282,7 +283,6 @@
 				939E692124837E0300A8BCC7 /* ScrollToItemContext.swift */,
 				939E691C24837E0200A8BCC7 /* VisibleCalendarItem.swift */,
 				939E691A24837E0200A8BCC7 /* VisibleItemsProvider.swift */,
-				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
 				FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */,
 			);
 			path = Internal;
