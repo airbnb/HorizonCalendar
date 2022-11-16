@@ -620,7 +620,7 @@ public final class CalendarView: UIView {
     withVisibleItems visibleItems: Set<VisibleCalendarItem>,
     previouslyVisibleItems: Set<VisibleCalendarItem>)
   {
-    var visibleItemsWithViewsToRemove = previouslyVisibleItems
+    var visibleItemsWithViewsToHide = previouslyVisibleItems
     let previousVisibleViewsForVisibleItems = visibleViewsForVisibleItems
 
     visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
@@ -633,19 +633,21 @@ public final class CalendarView: UIView {
             scrollView.addSubview(view)
           }
 
+          view.isHidden = false
+
           configureView(view, with: visibleItem)
         }
 
         visibleViewsForVisibleItems[visibleItem] = view
 
         if let previousBackingVisibleItem = previousBackingVisibleItem {
-          visibleItemsWithViewsToRemove.remove(previousBackingVisibleItem)
+          visibleItemsWithViewsToHide.remove(previousBackingVisibleItem)
         }
       })
 
-    // Remove any old views that weren't reused
-    for visibleItemWithViewToRemove in visibleItemsWithViewsToRemove {
-      previousVisibleViewsForVisibleItems[visibleItemWithViewToRemove]?.removeFromSuperview()
+    // Hide any old views that weren't reused. This is faster than adding / removing subviews.
+    for visibleItemWithViewToHide in visibleItemsWithViewsToHide {
+      previousVisibleViewsForVisibleItems[visibleItemWithViewToHide]?.isHidden = true
     }
   }
 
