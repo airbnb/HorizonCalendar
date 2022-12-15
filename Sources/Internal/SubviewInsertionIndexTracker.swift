@@ -13,28 +13,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
-
-/// Manages adding item views to a parent view, ensuring that the subviews array remains sorted so that subviews have the correct
-/// order along the z-axis.
-final class SubviewsManager {
-
-  // MARK: Lifecycle
-
-  init(parentView: UIView) {
-    self.parentView = parentView
-  }
+/// Tracks the correct insertion index when adding subviews during layout, ensuring that item views are inserted in the correct position in
+/// the `subviews` array so that they're ordered correctly along the z-axis.
+final class SubviewInsertionIndexTracker {
 
   // MARK: Internal
 
-  // Only used for XCTest support
-  var _testSupport_insertedItemTypes = [VisibleItem.ItemType]()
-
-  func insertSubview(_ view: UIView, correspondingItemType: VisibleItem.ItemType) {
-    guard let parentView = parentView else { return }
-
+  func insertionIndex(
+    forSubviewWithCorrespondingItemType itemType: VisibleItem.ItemType)
+    -> Int
+  {
     let index: Int
-    switch correspondingItemType {
+    switch itemType {
     case .dayRange:
       index = dayRangeItemsEndIndex
       dayRangeItemsEndIndex += 1
@@ -85,14 +75,10 @@ final class SubviewsManager {
       pinnedDayOfWeekItemsEndIndex += 1
     }
 
-    parentView.insertSubview(view, at: index)
-
-    _testSupport_insertedItemTypes.insert(correspondingItemType, at: index)
+    return index
   }
 
   // MARK: Private
-
-  private weak var parentView: UIView?
 
   private var dayRangeItemsEndIndex = 0
   private var mainItemsEndIndex = 0

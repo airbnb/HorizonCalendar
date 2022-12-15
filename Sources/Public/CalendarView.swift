@@ -391,6 +391,7 @@ public final class CalendarView: UIView {
   // MARK: Private
 
   private let reuseManager = ItemViewReuseManager()
+  private let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
 
   private var content: CalendarViewContent
 
@@ -424,8 +425,6 @@ public final class CalendarView: UIView {
     scrollView.delegate = self
     return scrollView
   }()
-
-  private lazy var subviewsManager = SubviewsManager(parentView: scrollView)
   
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverscrollIfNeeded` for more context.
@@ -624,7 +623,9 @@ public final class CalendarView: UIView {
       viewHandler: { view, visibleItem, previousBackingVisibleItem, isReusedViewSameAsPreviousView in
         UIView.conditionallyPerformWithoutAnimation(when: !isReusedViewSameAsPreviousView) {
           if view.superview == nil {
-            subviewsManager.insertSubview(view, correspondingItemType: visibleItem.itemType)
+            let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
+              forSubviewWithCorrespondingItemType: visibleItem.itemType)
+            scrollView.insertSubview(view, at: insertionIndex)
           }
 
           view.isHidden = false

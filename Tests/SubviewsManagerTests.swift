@@ -18,19 +18,9 @@ import XCTest
 
 // MARK: - SubviewsManagerTests
 
-final class SubviewsManagerTests: XCTestCase {
+final class SubviewInsertionIndexTrackerTests: XCTestCase {
 
   // MARK: Internal
-
-  func testParentViewWeaklyHeld() {
-    let view = UIView()
-    let subviewsManager = SubviewsManager(parentView: view)
-    DispatchQueue.main.async {
-      XCTAssertNil(
-        subviewsManager,
-        "Subviews manager should not strongly hold a reference to the parent view.")
-    }
-  }
 
   func testCorrectSubviewsOrderFewItems() throws {
     let itemTypesToInsert: [VisibleItem.ItemType] = [
@@ -45,13 +35,14 @@ final class SubviewsManagerTests: XCTestCase {
       .dayRange(.init(containing: Date()...Date(), in: .current)),
     ]
 
-    for itemTypeTypeToInsert in itemTypesToInsert {
-      subviewsManager.insertSubview(UIView(), correspondingItemType: itemTypeTypeToInsert)
+    var itemTypes = [VisibleItem.ItemType]()
+    for itemTypeToInsert in itemTypesToInsert {
+      let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
+        forSubviewWithCorrespondingItemType: itemTypeToInsert)
+      itemTypes.insert(itemTypeToInsert, at: insertionIndex)
     }
 
-    XCTAssert(
-      subviewsManager._testSupport_insertedItemTypes == itemTypesToInsert.sorted(),
-      "Incorrect subviews order.")
+    XCTAssert(itemTypes == itemTypesToInsert.sorted(), "Incorrect subviews order.")
   }
 
   func testCorrectSubviewsOrderManyItems() throws {
@@ -111,20 +102,19 @@ final class SubviewsManagerTests: XCTestCase {
       .pinnedDayOfWeek(.last),
     ]
 
-    for itemTypeTypeToInsert in itemTypesToInsert {
-      subviewsManager.insertSubview(UIView(), correspondingItemType: itemTypeTypeToInsert)
+    var itemTypes = [VisibleItem.ItemType]()
+    for itemTypeToInsert in itemTypesToInsert {
+      let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
+        forSubviewWithCorrespondingItemType: itemTypeToInsert)
+      itemTypes.insert(itemTypeToInsert, at: insertionIndex)
     }
 
-    XCTAssert(
-      subviewsManager._testSupport_insertedItemTypes == itemTypesToInsert.sorted(),
-      "Incorrect subviews order.")
+    XCTAssert(itemTypes == itemTypesToInsert.sorted(), "Incorrect subviews order.")
   }
 
   // MARK: Private
 
-  private lazy var subviewsManager = SubviewsManager(parentView: parentView)
-
-  private let parentView = UIView()
+  private let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
 
 }
 

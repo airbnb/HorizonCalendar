@@ -66,7 +66,7 @@
 		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
-		FD9CDA90293B5E4D00A77188 /* SubviewsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9CDA8F293B5E4D00A77188 /* SubviewsManager.swift */; };
+		FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */; };
 		FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */; };
 /* End PBXBuildFile section */
 
@@ -143,7 +143,7 @@
 		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
-		FD9CDA8F293B5E4D00A77188 /* SubviewsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManager.swift; sourceTree = "<group>"; };
+		FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewInsertionIndexTracker.swift; sourceTree = "<group>"; };
 		FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -283,7 +283,7 @@
 				93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */,
 				939E691924837E0200A8BCC7 /* ScrollMetricsMutator.swift */,
 				939E692124837E0300A8BCC7 /* ScrollToItemContext.swift */,
-				FD9CDA8F293B5E4D00A77188 /* SubviewsManager.swift */,
+				FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */,
 				939E691C24837E0200A8BCC7 /* VisibleItem.swift */,
 				939E691A24837E0200A8BCC7 /* VisibleItemsProvider.swift */,
 				FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */,
@@ -416,7 +416,7 @@
 			files = (
 				932FC00E26ED5191005E39A6 /* DayView.swift in Sources */,
 				939E692A24837E0300A8BCC7 /* ItemViewReuseManager.swift in Sources */,
-				FD9CDA90293B5E4D00A77188 /* SubviewsManager.swift in Sources */,
+				FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */,
 				939E692524837E0300A8BCC7 /* LayoutItemTypeEnumerator.swift in Sources */,
 				938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */,
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
