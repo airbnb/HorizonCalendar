@@ -24,16 +24,16 @@ final class ItemViewReuseManager {
   // MARK: Internal
 
   func viewsForVisibleItems(
-    _ visibleItems: Set<VisibleCalendarItem>,
+    _ visibleItems: Set<VisibleItem>,
     viewHandler: (
       ItemView,
-      VisibleCalendarItem,
-      _ previousBackingVisibleItem: VisibleCalendarItem?,
+      VisibleItem,
+      _ previousBackingVisibleItem: VisibleItem?,
       _ isReusedViewSameAsPreviousView: Bool)
       -> Void)
   {
     var visibleItemsDifferencesItemViewDifferentiators = [
-      _CalendarItemViewDifferentiator: Set<VisibleCalendarItem>
+      _CalendarItemViewDifferentiator: Set<VisibleItem>
     ]()
 
     // For each reuse ID, track the difference between the new set of visible items and the previous
@@ -43,7 +43,7 @@ final class ItemViewReuseManager {
     for visibleItem in visibleItems {
       let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
-      var visibleItemsDifference: Set<VisibleCalendarItem>
+      var visibleItemsDifference: Set<VisibleItem>
       if let difference = visibleItemsDifferencesItemViewDifferentiators[differentiator] {
         visibleItemsDifference = difference
       } else if
@@ -70,19 +70,19 @@ final class ItemViewReuseManager {
   // MARK: Private
 
   private var visibleItemsForItemViewDifferentiators = [
-    _CalendarItemViewDifferentiator: Set<VisibleCalendarItem>
+    _CalendarItemViewDifferentiator: Set<VisibleItem>
   ]()
-  private var viewsForVisibleItems = [VisibleCalendarItem: ItemView]()
+  private var viewsForVisibleItems = [VisibleItem: ItemView]()
 
   private func reusedViewContext(
-    for visibleItem: VisibleCalendarItem,
-    unusedPreviouslyVisibleItems: inout Set<VisibleCalendarItem>)
+    for visibleItem: VisibleItem,
+    unusedPreviouslyVisibleItems: inout Set<VisibleItem>)
     -> ReusedViewContext
   {
     let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
     let view: ItemView
-    let previousBackingVisibleItem: VisibleCalendarItem?
+    let previousBackingVisibleItem: VisibleItem?
     let isReusedViewSameAsPreviousView: Bool
 
     if let previouslyVisibleItems = visibleItemsForItemViewDifferentiators[differentiator] {
@@ -153,6 +153,6 @@ final class ItemViewReuseManager {
 
 private struct ReusedViewContext {
   let view: ItemView
-  let previousBackingVisibleItem: VisibleCalendarItem?
+  let previousBackingVisibleItem: VisibleItem?
   let isReusedViewSameAsPreviousView: Bool
 }

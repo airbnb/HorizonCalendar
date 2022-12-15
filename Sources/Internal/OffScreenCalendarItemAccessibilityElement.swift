@@ -22,7 +22,7 @@ final class OffScreenCalendarItemAccessibilityElement: UIAccessibilityElement {
 
   // MARK: Lifecycle
 
-  init?(correspondingItem: VisibleCalendarItem, scrollViewContainer: UIScrollView) {
+  init?(correspondingItem: VisibleItem, scrollViewContainer: UIScrollView) {
     let view = correspondingItem.calendarItemModel.makeView()
     correspondingItem.calendarItemModel.setViewModelOnViewOfSameType(view)
     guard view.isAccessibilityElement else { return nil }
@@ -37,6 +37,6 @@ final class OffScreenCalendarItemAccessibilityElement: UIAccessibilityElement {
 
   // MARK: Internal
 
-  let correspondingItem: VisibleCalendarItem
+  let correspondingItem: VisibleItem
 
 }

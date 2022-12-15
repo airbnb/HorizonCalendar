@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated code using `UIScreen.main.scale` (deprecated in iOS 16) to use `traitCollection.displayScale` instead
 - Updated README.md and the example app to use the new convenience function for creating `CalendarItemModel`s
 - Improved the highlight-state animation for the default `DayView`, improving perceived responsiveness
+- Renamed the internal type `VisibleCalendarItem` to `VisibleItem` for brevity
+- Switched from relying on `layer.zPosition` to control item view z-axis ordering, to inserting subviews in the correct order of the scroll view's subviews array.
+- Optimized view reuse code by hiding and unhiding views, rather than adding and removing subviews. This was made possible by the aforementioned z-axis ordering refactor.
 
 ## [v1.14.0](https://github.com/airbnb/HorizonCalendar/compare/v1.13.0...v1.14.0) - 2022-08-18
 
