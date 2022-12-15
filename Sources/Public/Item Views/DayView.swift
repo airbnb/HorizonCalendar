@@ -170,8 +170,8 @@ public final class DayView: UIView {
       let animation = CABasicAnimation(keyPath: #keyPath(CALayer.opacity))
       animation.fromValue = highlightLayer.presentation()?.opacity ?? highlightLayer.opacity
       animation.toValue = opacity
-      animation.duration = 0.1
-      animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+      animation.duration = 0.06
+      animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
       highlightLayer.add(animation, forKey: "fade")
     }
 
