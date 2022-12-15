@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated code using `UIScreen.main.scale` (deprecated in iOS 16) to use `traitCollection.displayScale` instead
 - Updated README.md and the example app to use the new convenience function for creating `CalendarItemModel`s
+- Improved the highlight-state animation for the default `DayView`, improving perceived responsiveness
 
 ## [v1.14.0](https://github.com/airbnb/HorizonCalendar/compare/v1.13.0...v1.14.0) - 2022-08-18
 
