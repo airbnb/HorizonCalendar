@@ -15,16 +15,16 @@
 
 import CoreGraphics
 
-// MARK: - VisibleCalendarItem
+// MARK: - VisibleItem
 
 /// Represents any visible item in the calendar, ranging from core layout items like month headers and days, to secondary items like
-/// selection layer items and overlay layer items.
+/// day range items and overlay items.
 ///
 /// - Note: This is a reference type because it's heavily used in `Set`s, especially in the reuse manager. By making it a reference
-/// type, we avoid `VisibleCalendarItem` `initializeWithCopy` when mutating the `Set`s. This type also caches its hash
+/// type, we avoid `VisibleItem` `initializeWithCopy` when mutating the `Set`s. This type also caches its hash
 /// value, which otherwise would be recomputed for every `Set` operation performed by the reuse manager. On an iPhone 6s, this
 /// reduces CPU usage by nearly 10% when programmatically scrolling down at a rate of 500 points / frame.
-final class VisibleCalendarItem {
+final class VisibleItem {
 
   // MARK: Lifecycle
 
@@ -55,9 +55,9 @@ final class VisibleCalendarItem {
 
 // MARK: Equatable
 
-extension VisibleCalendarItem: Equatable {
+extension VisibleItem: Equatable {
 
-  static func == (lhs: VisibleCalendarItem, rhs: VisibleCalendarItem) -> Bool {
+  static func == (lhs: VisibleItem, rhs: VisibleItem) -> Bool {
     lhs.calendarItemModel.itemViewDifferentiator == rhs.calendarItemModel.itemViewDifferentiator &&
       lhs.itemType == rhs.itemType
   }
@@ -66,7 +66,7 @@ extension VisibleCalendarItem: Equatable {
 
 // MARK: Hashable
 
-extension VisibleCalendarItem: Hashable {
+extension VisibleItem: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(cachedHashValue)
@@ -74,9 +74,9 @@ extension VisibleCalendarItem: Hashable {
 
 }
 
-// MARK: - VisibleCalendarItem.ItemType
+// MARK: - VisibleItem.ItemType
 
-extension VisibleCalendarItem {
+extension VisibleItem {
 
   enum ItemType: Equatable, Hashable {
     case layoutItemType(LayoutItem.ItemType)
@@ -86,18 +86,6 @@ extension VisibleCalendarItem {
     case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(CalendarViewContent.OverlaidItemLocation)
-
-    var zPosition: CGFloat {
-      switch self {
-      case .layoutItemType: return 500
-      case .pinnedDayOfWeek: return 1000
-      case .pinnedDaysOfWeekRowBackground: return 999
-      case .pinnedDaysOfWeekRowSeparator: return 1001
-      case .daysOfWeekRowSeparator: return 501
-      case .dayRange: return 250
-      case .overlayItem: return 750
-      }
-    }
 
     var isUserInteractionEnabled: Bool {
       switch self {

@@ -55,7 +55,7 @@ First, we need to figure out what subset of the calendar is currently visible. T
 
 When `CalendarView` is first laid out, we bootstrap it with an initially visible item for the month header of the first month. Using the frame of the first visible month header and the current visible viewport, we can look at adjacent items until we've determined every currently visible item for the current viewport. This process is performed by the `VisibleItemsProvider`, and repeats for every layout pass as the calendar is scrolling. As the calendar scrolls, the visible viewport changes and the frames of the visible items in the current viewport change, resulting in different sets of calendar items being returned from the `VisibleItemsProvider`.
 
-The `VisibleItemsProvider`  takes a visible item and looks at all adjacent items using the `LayoutItemTypeEnumerator`. For each adjacent layout item type, the `VisibleItemsProvider` gets a frame for that item using the `FrameProvider`. If an adjacent item's frame is in the current visible bounds, then we make a `VisibleCalendarItem` for it and add it to the set of visible calendar items that gets returned to `CalendarView`.
+The `VisibleItemsProvider`  takes a visible item and looks at all adjacent items using the `LayoutItemTypeEnumerator`. For each adjacent layout item type, the `VisibleItemsProvider` gets a frame for that item using the `FrameProvider`. If an adjacent item's frame is in the current visible bounds, then we make a `VisibleItem` for it and add it to the set of visible calendar items that gets returned to `CalendarView`.
 
 #### Getting frames
 
@@ -65,7 +65,7 @@ By taking an incremental approach to laying out items, always basing our calcula
 
 #### Creating and reusing views
 
-Using the `LayoutItemTypeEnumerator` and `FrameProvider`, the `VisibleItemsProvider` is able to return a `Set<VisibleCalendarItem>`. This set represents everything that's currently visible.
+Using the `LayoutItemTypeEnumerator` and `FrameProvider`, the `VisibleItemsProvider` is able to return a `Set<VisibleItem>`. This set represents everything that's currently visible.
 
 `CalendarView` uses this set, along with the previous set of visible items, to determine which parts have changed. The difference between these two sets is used to create new views when necessary, or reuse existing views that have been scrolled off screen and can be repurposed. This process is very similar to `UICollectionView`'s view reuse, and the bulk of the logic is contained in `ItemViewReuseManager`.
 

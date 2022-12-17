@@ -1803,9 +1803,9 @@ final class VisibleItemsProviderTests: XCTestCase {
 
 }
 
-// MARK: VisibleCalendarItem+CustomStringConvertible
+// MARK: VisibleItem+CustomStringConvertible
 
-extension VisibleCalendarItem: CustomStringConvertible {
+extension VisibleItem: CustomStringConvertible {
 
   public var description: String {
     let itemTypeText: String

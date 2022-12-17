@@ -27,7 +27,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
   }
 
   func testInitialViewCreationWithNoReuse() {
-    let visibleItems: Set<VisibleCalendarItem> = [
+    let visibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -66,7 +66,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
   }
 
   func testReusingIdenticalViews() {
-    let initialVisibleItems: Set<VisibleCalendarItem> = [
+    let initialVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -114,7 +114,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
   }
 
   func testReusingAllViews() {
-    let initialVisibleItems: Set<VisibleCalendarItem> = [
+    let initialVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -143,7 +143,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
         frame: .zero),
     ]
 
-    let subsequentVisibleItems: Set<VisibleCalendarItem> = [
+    let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -189,7 +189,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
   }
 
   func testReusingSomeViews() {
-    let initialVisibleItems: Set<VisibleCalendarItem> = [
+    let initialVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -234,7 +234,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
         frame: .zero),
     ]
 
-    let subsequentVisibleItems: Set<VisibleCalendarItem> = [
+    let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_1")),
         itemType: .layoutItemType(
@@ -287,7 +287,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
   }
 
   func testDepletingAvailableReusableViews() {
-    let initialVisibleItems: Set<VisibleCalendarItem> = [
+    let initialVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
@@ -324,7 +324,7 @@ final class LegacyItemViewReuseManagerTests: XCTestCase {
         frame: .zero),
     ]
 
-    let subsequentVisibleItems: Set<VisibleCalendarItem> = [
+    let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
         calendarItemModel: .legacy(MockCalendarItem(reuseIdentifier: "item_type_0")),
         itemType: .layoutItemType(
