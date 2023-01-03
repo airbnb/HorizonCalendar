@@ -166,16 +166,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		93061FFB24F1AE1700177ECC /* Legacy CalendarItem Support */ = {
+		93061FFB24F1AE1700177ECC /* LegacyCalendarItemSupport */ = {
 			isa = PBXGroup;
 			children = (
 				93061FFC24F1AE1700177ECC /* CalendarViewContent+CalendarItem.swift */,
 				93061FFD24F1AE1700177ECC /* CalendarItem.swift */,
 			);
-			path = "Legacy CalendarItem Support";
+			path = LegacyCalendarItemSupport;
 			sourceTree = "<group>";
 		};
-		932FC00F26ED51B6005E39A6 /* Item Views */ = {
+		932FC00F26ED51B6005E39A6 /* ItemViews */ = {
 			isa = PBXGroup;
 			children = (
 				9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */,
@@ -186,7 +186,7 @@
 				FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */,
 				932FC01026ED6C49005E39A6 /* UIEdgeInsets+Hashable.swift */,
 			);
-			path = "Item Views";
+			path = ItemViews;
 			sourceTree = "<group>";
 		};
 		9396F3B82483261B008AD306 = {
@@ -247,7 +247,7 @@
 		9396F3E024832857008AD306 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				932FC00F26ED51B6005E39A6 /* Item Views */,
+				932FC00F26ED51B6005E39A6 /* ItemViews */,
 				938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */,
 				939E693224837E8700A8BCC7 /* CalendarItemModel.swift */,
 				938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */,
@@ -261,7 +261,7 @@
 				939E693D24846A6600A8BCC7 /* Month.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
 				939E693B2483824600A8BCC7 /* MonthRange.swift */,
-				93061FFB24F1AE1700177ECC /* Legacy CalendarItem Support */,
+				93061FFB24F1AE1700177ECC /* LegacyCalendarItemSupport */,
 			);
 			path = Public;
 			sourceTree = "<group>";
