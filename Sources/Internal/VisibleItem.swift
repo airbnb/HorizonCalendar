@@ -80,6 +80,7 @@ extension VisibleItem {
 
   enum ItemType: Equatable, Hashable {
     case layoutItemType(LayoutItem.ItemType)
+    case monthBackground(Month)
     case pinnedDayOfWeek(DayOfWeekPosition)
     case pinnedDaysOfWeekRowBackground
     case pinnedDaysOfWeekRowSeparator
@@ -92,6 +93,8 @@ extension VisibleItem {
       case .layoutItemType: return true
       case .pinnedDayOfWeek: return true
       case .pinnedDaysOfWeekRowBackground: return true
+
+      case .monthBackground: return false
       case .pinnedDaysOfWeekRowSeparator: return false
       case .daysOfWeekRowSeparator: return false
       case .dayRange: return false
