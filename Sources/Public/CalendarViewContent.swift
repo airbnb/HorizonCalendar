@@ -267,6 +267,35 @@ public final class CalendarViewContent {
     return self
   }
 
+  /// Configures the month background item provider.
+  ///
+  /// `CalendarView` invokes the provided `monthBackgroundItemProvider` for each month being displayed. The
+  /// `CalendarItemModel` that you return for each month will be used to create a view that spans the entire frame of that month,
+  /// encapsulating all days, days-of-the-week headers, and the month header. This behavior makes month backgrounds useful for
+  /// things like grid lines or colored backgrounds.
+  ///
+  /// If you don't configure your own month background item provider via this function, then months will not have additional
+  /// background decoration.
+  ///
+  /// - Parameters:
+  ///   - monthBackgroundItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing the
+  ///   background of a single month in the calendar.
+  ///   - monthLayoutContext: The layout context for the month containing information about the frames of views in that month
+  ///   and the bounds in which your month background will be displayed.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new month background item provider.
+  public func monthBackgroundItemProvider(
+    _ monthBackgroundItemProvider: @escaping (
+      _ monthLayoutContext: MonthLayoutContext)
+      -> AnyCalendarItemModel?)
+    -> CalendarViewContent
+  {
+    self.monthBackgroundItemProvider = {
+      guard let monthBackgroundItemModel = monthBackgroundItemProvider($0) else { return nil }
+      return .itemModel(monthBackgroundItemModel)
+    }
+    return self
+  }
+
   /// Configures the day range item provider.
   ///
   /// `CalendarView` invokes the provided `dayRangeItemProvider` for each day range in the `dateRanges` set.
@@ -353,6 +382,7 @@ public final class CalendarViewContent {
     _ weekdayIndex: Int)
     -> InternalAnyCalendarItemModel
   var dayItemProvider: (Day) -> InternalAnyCalendarItemModel
+  var monthBackgroundItemProvider: ((MonthLayoutContext) -> InternalAnyCalendarItemModel?)?
   var dayRangesAndItemProvider: (
     dayRanges: Set<DayRange>,
     dayRangeItemProvider: (DayRangeLayoutContext) -> InternalAnyCalendarItemModel)?
@@ -367,17 +397,51 @@ public final class CalendarViewContent {
 extension CalendarViewContent {
 
   /// The layout context for a day range, containing information about the frames of days in the day range and the bounding rect (union)
-  /// of those days frames.
+  /// of those frames. This can be used in a custom day range view to draw the day range in the correct location.
   public struct DayRangeLayoutContext {
     /// An ordered list of tuples containing day and day frame pairs.
     ///
-    /// Each day frame represents the frame of an individual day in the day range in the coordinate system of
+    /// Each frame represents the frame of an individual day in the day range in the coordinate system of
     /// `boundingUnionRectOfDayFrames`.
     public let daysAndFrames: [(day: Day, frame: CGRect)]
 
     /// A rectangle that perfectly contains all day frames in `daysAndFrames`. In other words, it is the union of all day frames in
     /// `daysAndFrames`.
     public let boundingUnionRectOfDayFrames: CGRect
+  }
+
+}
+
+// MARK: - CalendarViewContent.MonthLayoutContext
+
+extension CalendarViewContent {
+
+  /// The layout context for all of the views contained in a month, including frames for days, the month header, and days-of-the-week
+  /// headers. Also included is the bounding rect (union) of those frames. This can be used in a custom month background view to
+  /// draw the background around the month's foreground views.
+  public struct MonthLayoutContext {
+
+    /// The month that this layout context describes.
+    public let month: Month
+
+    /// The frame of the month header in the coordinate system of `bounds`.
+    public let monthHeaderFrame: CGRect
+
+    /// An ordered list of tuples containing day-of-the-week positions and frames.
+    ///
+    /// Each frame corresponds to an individual day-of-the-week item (Sunday, Monday, etc.) in the month, in the coordinate system
+    /// of `bounds`. If `monthsLayout` is `.vertical`, and `pinDaysOfWeekToTop` is `true`, then this array will be
+    /// empty since day-of-the-week items appear outside of individual months.
+    public let dayOfWeekPositionsAndFrames: [(dayOfWeekPosition: DayOfWeekPosition, frame: CGRect)]
+
+    /// An ordered list of tuples containing day and day frame pairs.
+    ///
+    /// Each frame represents the frame of an individual day in the month in the coordinate system of `bounds`.
+    public let daysAndFrames: [(day: Day, frame: CGRect)]
+
+    /// The bounds into which a background can be drawn without getting clipped. Additionally, all other frames in this type are in the
+    /// coordinate system of this.
+    public let bounds: CGRect
   }
 
 }

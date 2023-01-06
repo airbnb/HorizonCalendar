@@ -120,6 +120,7 @@ final class VisibleItemsProvider {
     var lastVisibleMonth: Month?
     var framesForVisibleMonths = [Month: CGRect]()
     var framesForVisibleDays = [Day: CGRect]()
+    var framesForDaysForVisibleMonths = [Month: [Day: CGRect]]()
     var contentStartBoundary: CGFloat?
     var contentEndBoundary: CGFloat?
     var heightOfPinnedContent = CGFloat(0)
@@ -183,6 +184,7 @@ final class VisibleItemsProvider {
           lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
+          framesForDaysForVisibleMonths: &framesForDaysForVisibleMonths,
           contentStartBoundary: &contentStartBoundary,
           contentEndBoundary: &contentEndBoundary,
           visibleItems: &visibleItems,
@@ -210,6 +212,7 @@ final class VisibleItemsProvider {
           lastVisibleMonth: &lastVisibleMonth,
           framesForVisibleMonths: &framesForVisibleMonths,
           framesForVisibleDays: &framesForVisibleDays,
+          framesForDaysForVisibleMonths: &framesForDaysForVisibleMonths,
           contentStartBoundary: &contentStartBoundary,
           contentEndBoundary: &contentEndBoundary,
           visibleItems: &visibleItems,
@@ -247,6 +250,12 @@ final class VisibleItemsProvider {
       bounds: bounds,
       framesForVisibleMonths: framesForVisibleMonths,
       framesForVisibleDays: framesForVisibleDays,
+      visibleItems: &visibleItems)
+
+    // Handle background items
+    handleMonthBackgroundItemsIfNeeded(
+      framesForVisibleMonths: framesForVisibleMonths,
+      framesForDaysForVisibleMonths: framesForDaysForVisibleMonths,
       visibleItems: &visibleItems)
 
     previousCalendarItemModelCache = calendarItemModelCache
@@ -458,7 +467,7 @@ final class VisibleItemsProvider {
     return LayoutItem(itemType: itemType, frame: frame)
   }
 
-  // Builds a `DayRangeLayoutContext` by getting frames for each day layout item in the prodvided
+  // Builds a `DayRangeLayoutContext` by getting frames for each day layout item in the provided
   // `dayRange`, using the provided `day` and `frame` as a starting point.
   private func dayRangeLayoutContext(
     for dayRange: DayRange,
@@ -569,7 +578,7 @@ final class VisibleItemsProvider {
   // Handles a layout item by creating a visible calendar item and adding it to the `visibleItems`
   // set if it's in `bounds`. This function also handles any visible items associated with the
   // provided `layoutItem`. For example, an individual `day` layout item may also have an associated
-  // selection layer visible item, or a day range visible item.
+  // day range or overlay visible item.
   private func handleLayoutItem(
     _ layoutItem: LayoutItem,
     inBounds bounds: CGRect,
@@ -582,6 +591,7 @@ final class VisibleItemsProvider {
     lastVisibleMonth: inout Month?,
     framesForVisibleMonths: inout [Month: CGRect],
     framesForVisibleDays: inout [Day: CGRect],
+    framesForDaysForVisibleMonths: inout [Month: [Day: CGRect]],
     contentStartBoundary: inout CGFloat?,
     contentEndBoundary: inout CGFloat?,
     visibleItems: inout Set<VisibleItem>,
@@ -601,9 +611,12 @@ final class VisibleItemsProvider {
       monthFrame = frameProvider.frameOfMonth(month, withOrigin: monthOrigin)
     }
 
+    let layoutNonVisibleItemsInPartiallyVisibleMonth = content.monthsLayout.isHorizontal ||
+      content.monthBackgroundItemProvider != nil
+
     if
       layoutItem.frame.intersects(extendedBounds) ||
-      (content.monthsLayout.isHorizontal && monthFrame.intersects(extendedBounds))
+      (layoutNonVisibleItemsInPartiallyVisibleMonth && monthFrame.intersects(extendedBounds))
     {
       firstVisibleMonth = min(firstVisibleMonth ?? month, month)
       lastVisibleMonth = max(lastVisibleMonth ?? month, month)
@@ -614,6 +627,12 @@ final class VisibleItemsProvider {
         withFrame: monthFrame,
         contentStartBoundary: &contentStartBoundary,
         contentEndBoundary: &contentEndBoundary)
+
+      if case .day(let day) = layoutItem.itemType {
+        var framesForDaysInMonth = framesForDaysForVisibleMonths[month] ?? [:]
+        framesForDaysInMonth[day] = layoutItem.frame
+        framesForDaysForVisibleMonths[month] = framesForDaysInMonth
+      }
 
       // Handle items that actually intersect the visible bounds.
       if layoutItem.frame.intersects(bounds) {
@@ -915,6 +934,80 @@ final class VisibleItemsProvider {
           calendarItemModel: itemModelProvider(layoutContext),
           itemType: .overlayItem(overlaidItemLocation),
           frame: bounds))
+    }
+  }
+
+  private func handleMonthBackgroundItemsIfNeeded(
+    framesForVisibleMonths: [Month: CGRect],
+    framesForDaysForVisibleMonths: [Month: [Day: CGRect]],
+    visibleItems: inout Set<VisibleItem>)
+  {
+    guard let monthBackgroundItemProvider = content.monthBackgroundItemProvider else { return }
+
+    for (month, monthFrame) in framesForVisibleMonths {
+      guard let framesForDays = framesForDaysForVisibleMonths[month] else { continue }
+
+      // We need to expand the frame of the month so that we have enough room at the edges to draw
+      // the background without getting clipped.
+      let extraWidth: CGFloat
+      let extraHeight: CGFloat
+      if content.monthsLayout.isHorizontal {
+        extraWidth = content.interMonthSpacing // half before leading edge, half after trailing edge
+        extraHeight = size.height - monthFrame.height
+      } else {
+        extraWidth = size.width - monthFrame.width
+        extraHeight = content.interMonthSpacing // half before top edge, half after bottom edge
+      }
+
+      let expandedMonthFrame = CGRect(
+        x: monthFrame.minX - (extraWidth / 2),
+        y: monthFrame.minY - (extraHeight / 2),
+        width: monthFrame.width + extraWidth,
+        height: monthFrame.height + extraHeight)
+      let frameToBoundsTransform = CGAffineTransform(
+        translationX: -expandedMonthFrame.minX,
+        y: -expandedMonthFrame.minY)
+
+      // Get the month header frame
+      let monthHeaderFrame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: monthFrame.origin)
+      let finalMonthHeaderFrame = monthHeaderFrame
+        .applying(frameToBoundsTransform)
+        .alignedToPixels(forScreenWithScale: scale)
+
+      // Get the days-of-the-week item frames
+      var dayOfWeekPositionsAndFrames = [(dayOfWeekPosition: DayOfWeekPosition, frame: CGRect)]()
+      for dayOfWeekPosition in DayOfWeekPosition.allCases {
+        let dayOfWeekFrame = frameProvider.frameOfDayOfWeek(
+          at: dayOfWeekPosition,
+          inMonthWithOrigin: monthFrame.origin)
+        let finalDayOfWeekFrame = dayOfWeekFrame
+          .applying(frameToBoundsTransform)
+          .alignedToPixels(forScreenWithScale: scale)
+        dayOfWeekPositionsAndFrames.append((dayOfWeekPosition, finalDayOfWeekFrame))
+      }
+
+      // Get all frames for days in the month
+      var daysAndFrames = [(day: Day, frame: CGRect)]()
+      for (day, dayFrame) in framesForDays {
+        let finalDayFrame = dayFrame
+          .applying(frameToBoundsTransform)
+          .alignedToPixels(forScreenWithScale: scale)
+        daysAndFrames.append((day, finalDayFrame))
+      }
+
+      let monthLayoutContext = CalendarViewContent.MonthLayoutContext(
+        month: month,
+        monthHeaderFrame: finalMonthHeaderFrame,
+        dayOfWeekPositionsAndFrames: dayOfWeekPositionsAndFrames,
+        daysAndFrames: daysAndFrames.sorted(by: { $0.day < $1.day }),
+        bounds: CGRect(origin: .zero, size: expandedMonthFrame.size))
+      if let itemModel = monthBackgroundItemProvider(monthLayoutContext) {
+        let visibleItem = VisibleItem(
+          calendarItemModel: itemModel,
+          itemType: .monthBackground(month),
+          frame: expandedMonthFrame)
+        visibleItems.insert(visibleItem)
+      }
     }
   }
 
