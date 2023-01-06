@@ -360,6 +360,9 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-03-14)), frame: (279.5, 409.5, 35.5, 17.5)]",
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fourth, 2020-03)), frame: (142.0, 333.5, 36.0, 18.0)]",
       "[itemType: .layoutItemType(.day(2020-03-23)), frame: (50.5, 485.0, 36.0, 18.0)]",
+      "[itemType: .monthBackground(2020-03), frame: (-0.0, 246.0, 320.0, 302.0)]",
+      "[itemType: .monthBackground(2020-02), frame: (0.0, -56.0, 320.0, 302.0)]",
+      "[itemType: .monthBackground(2020-04), frame: (0.0, 548.0, 320.0, 302.5)]",
     ]
 
     XCTAssert(
@@ -429,6 +432,9 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-03-04)), frame: (142.0, 335.5, 36.0, 36.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-4), frame: (0.0, 724.0, 320.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-3), frame: (0.0, 314.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-04), frame: (0.0, 602.0, 320.0, 409.0)]",
+      "[itemType: .monthBackground(2020-03), frame: (0.0, 192.5, 320.0, 409.5)]",
+      "[itemType: .monthBackground(2020-02), frame: (0.0, -217.0, 320.0, 409.5)]",
     ]
 
     XCTAssert(
@@ -496,6 +502,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 450.0, 320.0, 50.0)]",
       "[itemType: .pinnedDaysOfWeekRowBackground, frame: (0.0, 450.0, 320.0, 35.5)]",
       "[itemType: .pinnedDaysOfWeekRowSeparator, frame: (0.0, 484.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-07), frame: (0.0, 796.0, 320.0, 353.5)]",
+      "[itemType: .monthBackground(2020-06), frame: (0.0, 442.5, 320.0, 353.5)]",
     ]
 
     XCTAssert(
@@ -544,6 +552,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-02-01)), frame: (279.5, 578.0, 35.5, 35.5)]",
       "[itemType: .daysOfWeekRowSeparator(2020-2), frame: (0.0, 557.0, 320.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-1), frame: (0.0, 314.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-02), frame: (0.0, 434.5, 320.0, 409.5)]",
+      "[itemType: .monthBackground(2020-01), frame: (0.0, 192.5, 320.0, 242.0)]",
     ]
 
     XCTAssert(
@@ -615,6 +625,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-04-18)), frame: (197.0, 238.5, 33.0, 33.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-5), frame: (250.0, 112.0, 300.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-4), frame: (-65.0, 112.0, 300.0, 1.0)]",
+      "[itemType: .monthBackground(2020-04), frame: (-72.5, -51.5, 315.0, 480.0)]",
+      "[itemType: .monthBackground(2020-05), frame: (242.5, -25.0, 315.0, 480.0)]",
     ]
 
     XCTAssert(
@@ -684,6 +696,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-05-15)), frame: (233.5, 270.5, 36.0, 36.0)]",
       "[itemType: .layoutItemType(.day(2020-05-19)), frame: (96.5, 326.5, 35.5, 35.5)]",
       "[itemType: .daysOfWeekRowSeparator(2020-6), frame: (0.0, 603.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-05), frame: (0.0, 16.0, 320.0, 465.0)]",
+      "[itemType: .monthBackground(2020-06), frame: (0.0, 481.0, 320.0, 409.5)]",
     ]
 
     XCTAssert(
@@ -748,6 +762,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 0.0, 300.0, 50.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-1), frame: (0.0, 112.0, 300.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-2), frame: (315.0, 112.0, 300.0, 1.0)]",
+      "[itemType: .monthBackground(2020-02), frame: (307.5, -51.5, 315.0, 480.0)]",
+      "[itemType: .monthBackground(2020-01), frame: (-7.5, -51.5, 315.0, 480.0)]",
     ]
 
     XCTAssert(
@@ -808,6 +824,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.fifth, 2020-01)), frame: (188.0, 80.0, 35.5, 35.5)]",
       "[itemType: .daysOfWeekRowSeparator(2020-1), frame: (0.0, 114.5, 320.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-2), frame: (0.0, 524.0, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-02), frame: (0.0, 402.0, 320.0, 409.0)]",
+      "[itemType: .monthBackground(2020-01), frame: (0.0, -7.5, 320.0, 409.5)]",
     ]
 
     XCTAssert(
@@ -874,6 +892,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-01-12)), frame: (5.0, 236.5, 35.5, 35.5)]",
       "[itemType: .pinnedDaysOfWeekRowBackground, frame: (0.0, 50.0, 320.0, 35.5)]",
       "[itemType: .pinnedDaysOfWeekRowSeparator, frame: (0.0, 84.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-02), frame: (0.0, 391.0, 320.0, 353.5)]",
+      "[itemType: .monthBackground(2020-01), frame: (0.0, 37.5, 320.0, 353.5)]",
     ]
 
     XCTAssert(
@@ -908,6 +928,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.dayOfWeekInMonth(.sixth, 2020-12)), frame: (233.5, 770.0, 36.0, 35.5)]",
       "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 825.5, 35.5, 36.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-12), frame: (0.0, 804.5, 320.0, 1.0)]",
+      "[itemType: .monthBackground(2020-12), frame: (0.0, 682.5, 320.0, 186.5)]",
     ]
 
     XCTAssert(
@@ -978,6 +999,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .layoutItemType(.day(2020-12-27)), frame: (1205.0, 344.5, 33.0, 32.5)]",
       "[itemType: .daysOfWeekRowSeparator(2020-11), frame: (885.0, 112.0, 300.0, 1.0)]",
       "[itemType: .daysOfWeekRowSeparator(2020-12), frame: (1200.0, 112.0, 300.0, 1.0)]",
+      "[itemType: .monthBackground(2020-11), frame: (877.5, -51.5, 315.0, 480.0)]",
+      "[itemType: .monthBackground(2020-12), frame: (1192.5, -51.5, 315.0, 480.0)]",
     ]
 
     XCTAssert(
@@ -1778,6 +1801,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       .horizontalDayMargin(10)
       .daysOfTheWeekRowSeparator(options: .init(height: 1, color: .gray))
       .monthHeaderItemProvider  { _ in mockCalendarItemModel }
+      .monthBackgroundItemProvider { _ in mockCalendarItemModel }
       .dayOfWeekItemProvider { _, _ in mockCalendarItemModel }
       .dayItemProvider { _ in mockCalendarItemModel }
       .dayRangeItemProvider(
@@ -1822,6 +1846,8 @@ extension VisibleItem: CustomStringConvertible {
       itemTypeText = ".daysOfWeekRowSeparator(\(month.year)-\(month.month))"
     case .dayRange(let dayRange):
       itemTypeText = ".dayRange(\(dayRange.lowerBound), \(dayRange.upperBound))"
+    case .monthBackground(let month):
+      itemTypeText = ".monthBackground(\(month.description))"
     case .overlayItem(let overlaidItemLocation):
       let calendar = Calendar(identifier: .gregorian)
       let itemLocationText: String
