@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...HEAD)
 
+### Added
+- Added support for month backgrounds, enabling things like grid lines and colored backgrounds for months
+
 ### Changed
 - Removed spaces from folder names within the `Sources` folder to reduce the chance of sensitive 🥺 build systems complaining or breaking
 

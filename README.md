@@ -21,6 +21,7 @@ Features:
 - Specify custom views (`UIView` or SwiftUI `View`) for individual days, month headers, and days of the week
 - Specify custom views (`UIView` or SwiftUI `View`) to highlight date ranges
 - Specify custom views (`UIView` or SwiftUI `View`) to overlay parts of the calendar, enabling features like tooltips
+- Specify custom views (`UIView` or SwiftUI `View`) for month background decorations (colors, grids, etc.)
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
 - Pin the days-of-the-week row to the top
