@@ -817,6 +817,7 @@ final class VisibleItemsProvider {
 
     let frame = dayRangeLayoutContext.frame
     let dayRangeLayoutContext = CalendarViewContent.DayRangeLayoutContext(
+      dayRange: dayRange,
       daysAndFrames: dayRangeLayoutContext.daysAndFrames,
       boundingUnionRectOfDayFrames: dayRangeLayoutContext.boundingUnionRectOfDayFrames)
 

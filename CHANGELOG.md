@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added support for month backgrounds, enabling things like grid lines and colored backgrounds for months
+- Added a `dayRange` property to `CalendarViewContent.DayRangeLayoutContext`
 
 ### Changed
 - Removed spaces from folder names within the `Sources` folder to reduce the chance of sensitive 🥺 build systems complaining or breaking
