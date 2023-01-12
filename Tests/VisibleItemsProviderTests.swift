@@ -363,6 +363,24 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .monthBackground(2020-03), frame: (-0.0, 246.0, 320.0, 302.0)]",
       "[itemType: .monthBackground(2020-02), frame: (0.0, -56.0, 320.0, 302.0)]",
       "[itemType: .monthBackground(2020-04), frame: (0.0, 548.0, 320.0, 302.5)]",
+      "[itemType: .dayBackground(2020-03-14), frame: (279.5, 409.5, 35.5, 17.5)]",
+      "[itemType: .dayBackground(2020-03-11), frame: (142.0, 409.5, 36.0, 17.5)]",
+      "[itemType: .dayBackground(2020-03-19), frame: (188.0, 447.0, 35.5, 18.0)]",
+      "[itemType: .dayBackground(2020-03-13), frame: (233.5, 409.5, 36.0, 17.5)]",
+      "[itemType: .dayBackground(2020-03-12), frame: (188.0, 409.5, 35.5, 17.5)]",
+      "[itemType: .dayBackground(2020-02-17), frame: (50.5, 183.0, 36.0, 17.5)]",
+      "[itemType: .dayBackground(2020-02-11), frame: (96.5, 145.0, 35.5, 18.0)]",
+      "[itemType: .dayBackground(2020-02-19), frame: (142.0, 183.0, 36.0, 17.5)]",
+      "[itemType: .dayBackground(2020-02-14), frame: (233.5, 145.0, 36.0, 18.0)]",
+      "[itemType: .dayBackground(2020-03-18), frame: (142.0, 447.0, 36.0, 18.0)]",
+      "[itemType: .dayBackground(2020-02-18), frame: (96.5, 183.0, 35.5, 17.5)]",
+      "[itemType: .dayBackground(2020-02-15), frame: (279.5, 145.0, 35.5, 18.0)]",
+      "[itemType: .dayBackground(2020-03-15), frame: (5.0, 447.0, 35.5, 18.0)]",
+      "[itemType: .dayBackground(2020-02-16), frame: (5.0, 183.0, 35.5, 17.5)]",
+      "[itemType: .dayBackground(2020-03-17), frame: (96.5, 447.0, 35.5, 18.0)]",
+      "[itemType: .dayBackground(2020-03-16), frame: (50.5, 447.0, 36.0, 18.0)]",
+      "[itemType: .dayBackground(2020-02-12), frame: (142.0, 145.0, 36.0, 18.0)]",
+      "[itemType: .dayBackground(2020-02-13), frame: (188.0, 145.0, 35.5, 18.0)]",
     ]
 
     XCTAssert(
@@ -435,6 +453,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .monthBackground(2020-04), frame: (0.0, 602.0, 320.0, 409.0)]",
       "[itemType: .monthBackground(2020-03), frame: (0.0, 192.5, 320.0, 409.5)]",
       "[itemType: .monthBackground(2020-02), frame: (0.0, -217.0, 320.0, 409.5)]",
+      "[itemType: .dayBackground(2020-03-17), frame: (96.5, 447.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-03-14), frame: (279.5, 391.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-03-12), frame: (188.0, 391.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-03-19), frame: (188.0, 447.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-03-13), frame: (233.5, 391.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-03-18), frame: (142.0, 447.0, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-03-11), frame: (142.0, 391.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-03-16), frame: (50.5, 447.0, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-03-15), frame: (5.0, 447.0, 35.5, 36.0)]",
     ]
 
     XCTAssert(
@@ -504,6 +531,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .pinnedDaysOfWeekRowSeparator, frame: (0.0, 484.5, 320.0, 1.0)]",
       "[itemType: .monthBackground(2020-07), frame: (0.0, 796.0, 320.0, 353.5)]",
       "[itemType: .monthBackground(2020-06), frame: (0.0, 442.5, 320.0, 353.5)]",
+      "[itemType: .dayBackground(2020-06-14), frame: (5.0, 641.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-06-17), frame: (142.0, 641.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-06-15), frame: (50.5, 641.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-06-13), frame: (279.5, 585.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-06-12), frame: (233.5, 585.5, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-06-11), frame: (188.0, 585.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-06-16), frame: (96.5, 641.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-06-18), frame: (188.0, 641.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-06-19), frame: (233.5, 641.5, 36.0, 35.5)]",
     ]
 
     XCTAssert(
@@ -627,6 +663,17 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .daysOfWeekRowSeparator(2020-4), frame: (-65.0, 112.0, 300.0, 1.0)]",
       "[itemType: .monthBackground(2020-04), frame: (-72.5, -51.5, 315.0, 480.0)]",
       "[itemType: .monthBackground(2020-05), frame: (242.5, -25.0, 315.0, 480.0)]",
+      "[itemType: .dayBackground(2020-05-17), frame: (255.0, 291.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-05-11), frame: (298.0, 238.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-04-16), frame: (111.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-04-15), frame: (68.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-04-18), frame: (197.0, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-05-13), frame: (383.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-05-12), frame: (340.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-04-17), frame: (154.5, 238.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-05-19), frame: (340.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-05-18), frame: (298.0, 291.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-04-11), frame: (197.0, 185.5, 33.0, 33.0)]",
     ]
 
     XCTAssert(
@@ -698,6 +745,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .daysOfWeekRowSeparator(2020-6), frame: (0.0, 603.5, 320.0, 1.0)]",
       "[itemType: .monthBackground(2020-05), frame: (0.0, 16.0, 320.0, 465.0)]",
       "[itemType: .monthBackground(2020-06), frame: (0.0, 481.0, 320.0, 409.5)]",
+      "[itemType: .dayBackground(2020-05-15), frame: (233.5, 270.5, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-05-19), frame: (96.5, 326.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-05-18), frame: (50.5, 326.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-05-14), frame: (188.0, 270.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-05-17), frame: (5.0, 326.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-05-12), frame: (96.5, 270.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-05-16), frame: (279.5, 270.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-05-13), frame: (142.0, 270.5, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-05-11), frame: (50.5, 270.5, 36.0, 36.0)]",
     ]
 
     XCTAssert(
@@ -764,6 +820,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .daysOfWeekRowSeparator(2020-2), frame: (315.0, 112.0, 300.0, 1.0)]",
       "[itemType: .monthBackground(2020-02), frame: (307.5, -51.5, 315.0, 480.0)]",
       "[itemType: .monthBackground(2020-01), frame: (-7.5, -51.5, 315.0, 480.0)]",
+      "[itemType: .dayBackground(2020-02-15), frame: (577.0, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-13), frame: (491.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-14), frame: (534.5, 238.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-02-19), frame: (448.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-17), frame: (363.0, 291.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-02-18), frame: (405.5, 291.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-16), frame: (320.0, 291.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-11), frame: (405.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-02-12), frame: (448.5, 238.5, 33.0, 33.0)]",
     ]
 
     XCTAssert(
@@ -826,6 +891,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .daysOfWeekRowSeparator(2020-2), frame: (0.0, 524.0, 320.0, 1.0)]",
       "[itemType: .monthBackground(2020-02), frame: (0.0, 402.0, 320.0, 409.0)]",
       "[itemType: .monthBackground(2020-01), frame: (0.0, -7.5, 320.0, 409.5)]",
+      "[itemType: .dayBackground(2020-01-13), frame: (50.5, 247.0, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-01-11), frame: (279.5, 191.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-01-15), frame: (142.0, 247.0, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-01-18), frame: (279.5, 247.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-16), frame: (188.0, 247.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-17), frame: (233.5, 247.0, 36.0, 36.0)]",
+      "[itemType: .dayBackground(2020-01-14), frame: (96.5, 247.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-12), frame: (5.0, 247.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-19), frame: (5.0, 303.0, 35.5, 35.5)]",
     ]
 
     XCTAssert(
@@ -894,6 +968,15 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .pinnedDaysOfWeekRowSeparator, frame: (0.0, 84.5, 320.0, 1.0)]",
       "[itemType: .monthBackground(2020-02), frame: (0.0, 391.0, 320.0, 353.5)]",
       "[itemType: .monthBackground(2020-01), frame: (0.0, 37.5, 320.0, 353.5)]",
+      "[itemType: .dayBackground(2020-01-17), frame: (233.5, 236.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-01-19), frame: (5.0, 292.0, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-15), frame: (142.0, 236.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-01-12), frame: (5.0, 236.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-01-13), frame: (50.5, 236.5, 36.0, 35.5)]",
+      "[itemType: .dayBackground(2020-01-16), frame: (188.0, 236.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-01-18), frame: (279.5, 236.5, 35.5, 35.5)]",
+      "[itemType: .dayBackground(2020-01-11), frame: (279.5, 180.5, 35.5, 36.0)]",
+      "[itemType: .dayBackground(2020-01-14), frame: (96.5, 236.5, 35.5, 35.5)]",
     ]
 
     XCTAssert(
@@ -1001,6 +1084,16 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .daysOfWeekRowSeparator(2020-12), frame: (1200.0, 112.0, 300.0, 1.0)]",
       "[itemType: .monthBackground(2020-11), frame: (877.5, -51.5, 315.0, 480.0)]",
       "[itemType: .monthBackground(2020-12), frame: (1192.5, -51.5, 315.0, 480.0)]",
+      "[itemType: .dayBackground(2020-11-19), frame: (1061.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-11-12), frame: (1061.5, 185.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-12-14), frame: (1248.0, 238.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-12-13), frame: (1205.0, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-11-18), frame: (1018.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-11-17), frame: (975.5, 238.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-11-13), frame: (1104.5, 185.5, 32.5, 33.0)]",
+      "[itemType: .dayBackground(2020-11-14), frame: (1147.0, 185.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-11-11), frame: (1018.5, 185.5, 33.0, 33.0)]",
+      "[itemType: .dayBackground(2020-12-15), frame: (1290.5, 238.5, 33.0, 33.0)]",
     ]
 
     XCTAssert(
@@ -1804,6 +1897,14 @@ final class VisibleItemsProviderTests: XCTestCase {
       .monthBackgroundItemProvider { _ in mockCalendarItemModel }
       .dayOfWeekItemProvider { _, _ in mockCalendarItemModel }
       .dayItemProvider { _ in mockCalendarItemModel }
+      .dayBackgroundItemProvider { day in
+        // Just test a few backgrounds to make sure they're working correctly
+        if day.day > 10 && day.day < 20 {
+          return mockCalendarItemModel
+        } else {
+          return nil
+        }
+      }
       .dayRangeItemProvider(
         for: [
           calendar.date(from: DateComponents(year: 2020, month: 03, day: 11))!
@@ -1846,6 +1947,8 @@ extension VisibleItem: CustomStringConvertible {
       itemTypeText = ".daysOfWeekRowSeparator(\(month.year)-\(month.month))"
     case .dayRange(let dayRange):
       itemTypeText = ".dayRange(\(dayRange.lowerBound), \(dayRange.upperBound))"
+    case .dayBackground(let day):
+      itemTypeText = ".dayBackground(\(day))"
     case .monthBackground(let month):
       itemTypeText = ".monthBackground(\(month.description))"
     case .overlayItem(let overlaidItemLocation):

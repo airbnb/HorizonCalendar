@@ -137,13 +137,14 @@ extension VisibleItem.ItemType: Comparable {
   private var relativeDistanceFromBack: Int {
     switch self {
     case .monthBackground: return 0
-    case .dayRange: return 1
-    case .layoutItemType: return 2
-    case .daysOfWeekRowSeparator: return 3
-    case .overlayItem: return 4
-    case .pinnedDaysOfWeekRowBackground: return 5
-    case .pinnedDaysOfWeekRowSeparator: return 6
-    case .pinnedDayOfWeek: return 7
+    case .dayBackground: return 1
+    case .dayRange: return 2
+    case .layoutItemType: return 3
+    case .daysOfWeekRowSeparator: return 4
+    case .overlayItem: return 5
+    case .pinnedDaysOfWeekRowBackground: return 6
+    case .pinnedDaysOfWeekRowSeparator: return 7
+    case .pinnedDayOfWeek: return 8
     }
   }
 
