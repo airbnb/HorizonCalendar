@@ -267,6 +267,30 @@ public final class CalendarViewContent {
     return self
   }
 
+  /// Configures the day background item provider.
+  ///
+  /// `CalendarView` invokes the provided `dayBackgroundItemProvider` for each day being displayed. The
+  /// `CalendarItemModel`s that you return will be used to create the background views for each day in `CalendarView`. If a
+  /// particular day does not have a background view, return `nil` for that day.
+  ///
+  /// If you don't configure a day background item provider via this function, then days will not have additional background decoration.
+  ///
+  /// - Parameters:
+  ///   - dayBackgroundItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing the
+  ///   background of a single day in the calendar.
+  ///   - day: The `Day` for which to provide a day background item.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new day background item provider.
+  public func dayBackgroundItemProvider(
+    _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+    -> CalendarViewContent
+  {
+    self.dayBackgroundItemProvider = {
+      guard let dayBackgroundItemModel = dayBackgroundItemProvider($0) else { return nil }
+      return .itemModel(dayBackgroundItemModel)
+    }
+    return self
+  }
+
   /// Configures the month background item provider.
   ///
   /// `CalendarView` invokes the provided `monthBackgroundItemProvider` for each month being displayed. The
@@ -382,6 +406,7 @@ public final class CalendarViewContent {
     _ weekdayIndex: Int)
     -> InternalAnyCalendarItemModel
   var dayItemProvider: (Day) -> InternalAnyCalendarItemModel
+  var dayBackgroundItemProvider: ((Day) -> InternalAnyCalendarItemModel?)?
   var monthBackgroundItemProvider: ((MonthLayoutContext) -> InternalAnyCalendarItemModel?)?
   var dayRangesAndItemProvider: (
     dayRanges: Set<DayRange>,

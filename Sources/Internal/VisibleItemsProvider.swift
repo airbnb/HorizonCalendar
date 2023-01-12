@@ -701,6 +701,22 @@ final class VisibleItemsProvider {
               previousCalendarItemModelCache?[itemType] ?? content.dayItemProvider(day)
             })
 
+          // Handle the optional day background for this day
+          let dayBackgroundItemModel = calendarItemModelCache.optionalValue(
+            for: .dayBackground(day),
+            missingValueProvider: {
+              previousCalendarItemModelCache?[.dayBackground(day)]
+                ?? content.dayBackgroundItemProvider?(day)
+            })
+          if let dayBackgroundItemModel = dayBackgroundItemModel {
+            visibleItems.insert(
+              VisibleItem(
+                calendarItemModel: dayBackgroundItemModel,
+                itemType: .dayBackground(day),
+                frame: layoutItem.frame))
+          }
+
+          // Handle any day ranges that contain this day
           handleDayRangesContaining(
             day,
             withFrame: layoutItem.frame,
