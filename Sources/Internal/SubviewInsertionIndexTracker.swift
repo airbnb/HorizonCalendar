@@ -35,6 +35,17 @@ final class SubviewInsertionIndexTracker {
       pinnedDaysOfWeekRowBackgroundEndIndex += 1
       pinnedDaysOfWeekRowSeparatorEndIndex += 1
       pinnedDayOfWeekItemsEndIndex += 1
+
+    case .dayBackground:
+      index = dayBackgroundItemsEndIndex
+      dayBackgroundItemsEndIndex += 1
+      dayRangeItemsEndIndex += 1
+      mainItemsEndIndex += 1
+      daysOfWeekRowSeparatorItemsEndIndex += 1
+      overlayItemsEndIndex += 1
+      pinnedDaysOfWeekRowBackgroundEndIndex += 1
+      pinnedDaysOfWeekRowSeparatorEndIndex += 1
+      pinnedDayOfWeekItemsEndIndex += 1
     
     case .dayRange:
       index = dayRangeItemsEndIndex
@@ -92,6 +103,7 @@ final class SubviewInsertionIndexTracker {
   // MARK: Private
 
   private var monthBackgroundItemsEndIndex = 0
+  private var dayBackgroundItemsEndIndex = 0
   private var dayRangeItemsEndIndex = 0
   private var mainItemsEndIndex = 0
   private var daysOfWeekRowSeparatorItemsEndIndex = 0
