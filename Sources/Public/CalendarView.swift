@@ -240,12 +240,19 @@ public final class CalendarView: UIView {
   /// - Parameters:
   ///   - content: The content to use when rendering `CalendarView`.
   public func setContent(_ content: CalendarViewContent) {
+    let oldContent = self.content
+
     if let contentBackgroundColor = content.backgroundColor {
       backgroundColor = contentBackgroundColor
     }
 
     _visibleItemsProvider = nil
-    scrollToItemContext = nil
+
+    // We only need to clear the `scrollToItemContext` if the monthsLayout changed or the visible
+    // day range changed.
+    if content.monthsLayout != oldContent.monthsLayout || content.dayRange != oldContent.dayRange {
+      scrollToItemContext = nil
+    }
 
     let isAnchorLayoutItemValid: Bool
     switch anchorLayoutItem?.itemType {
@@ -268,8 +275,6 @@ public final class CalendarView: UIView {
     } else {
       scrollView.decelerationRate = .normal
     }
-
-    let oldContent = self.content
 
     if
       oldContent.monthsLayout != content.monthsLayout ||
