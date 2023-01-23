@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `dayRange` property to `CalendarViewContent.DayRangeLayoutContext`
 - Added support for day backgrounds, enabling developers to add visual decoration behind individual days. These decoration views also appear behind any day range indicators, making it possible to have a day range indicator appear between the day's number and any background decoration.
 
+### Fixed
+- Fixed an issue that caused an in-flight programmatic scroll to be cancelled if `setContent` was called
+
 ### Changed
 - Removed spaces from folder names within the `Sources` folder to reduce the chance of sensitive 🥺 build systems complaining or breaking
 
@@ -32,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated README.md and the example app to use the new convenience function for creating `CalendarItemModel`s
 - Improved the highlight-state animation for the default `DayView`, improving perceived responsiveness
 - Renamed the internal type `VisibleCalendarItem` to `VisibleItem` for brevity
-- Switched from relying on `layer.zPosition` to control item view z-axis ordering, to inserting subviews in the correct order of the scroll view's subviews array.
+- Switched from relying on `layer.zPosition` to control item view z-axis ordering, to inserting subviews in the correct order of the scroll view's subviews array
 - Optimized view reuse code by hiding and unhiding views, rather than adding and removing subviews. This was made possible by the aforementioned z-axis ordering refactor.
 
 ## [v1.14.0](https://github.com/airbnb/HorizonCalendar/compare/v1.13.0...v1.14.0) - 2022-08-18
