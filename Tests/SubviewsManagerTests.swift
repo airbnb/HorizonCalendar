@@ -143,8 +143,8 @@ extension VisibleItem.ItemType: Comparable {
     case .daysOfWeekRowSeparator: return 4
     case .overlayItem: return 5
     case .pinnedDaysOfWeekRowBackground: return 6
-    case .pinnedDaysOfWeekRowSeparator: return 7
-    case .pinnedDayOfWeek: return 8
+    case .pinnedDayOfWeek: return 7
+    case .pinnedDaysOfWeekRowSeparator: return 8
     }
   }
 
