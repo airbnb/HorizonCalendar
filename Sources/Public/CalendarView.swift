@@ -416,6 +416,7 @@ public final class CalendarView: UIView {
 
   private var cachedAccessibilityElements: [Any]?
   private var focusedAccessibilityElement: Any?
+  private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
 
   private var scrollToItemContext: ScrollToItemContext? {
     willSet {
@@ -643,6 +644,14 @@ public final class CalendarView: UIView {
         if let previousBackingVisibleItem = previousBackingVisibleItem {
           // Don't hide views that were reused
           viewsToHideForVisibleItems.removeValue(forKey: previousBackingVisibleItem)
+        }
+
+        if
+          UIAccessibility.isVoiceOverRunning,
+          itemTypeOfFocusedAccessibilityElement == visibleItem.itemType
+        {
+          // Preserve the focused accessibility element even after views are reused
+          UIAccessibility.post(notification: .screenChanged, argument: view.contentView)
         }
       })
 
@@ -1155,21 +1164,26 @@ extension CalendarView {
     guard let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] else {
       return
     }
+    
     focusedAccessibilityElement = element
 
-    guard let offScreenElement = element as? OffScreenCalendarItemAccessibilityElement else {
-      return
+    if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
+      itemTypeOfFocusedAccessibilityElement = visibleViewsForVisibleItems
+        .first { _, visibleView in itemView === visibleView }?
+        .key.itemType
     }
 
-    switch offScreenElement.correspondingItem.itemType {
-    case .layoutItemType(.monthHeader(let month)):
-      let dateInTargetMonth = calendar.firstDate(of: month)
-      scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
-    case .layoutItemType(.day(let day)):
-      let dateInTargetDay = calendar.startDate(of: day)
-      scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
-    default:
-      break
+    if let offScreenElement = element as? OffScreenCalendarItemAccessibilityElement {
+      switch offScreenElement.correspondingItem.itemType {
+      case .layoutItemType(.monthHeader(let month)):
+        let dateInTargetMonth = calendar.firstDate(of: month)
+        scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
+      case .layoutItemType(.day(let day)):
+        let dateInTargetDay = calendar.startDate(of: day)
+        scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
+      default:
+        break
+      }
     }
   }
 
