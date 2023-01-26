@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed an issue that caused an in-flight programmatic scroll to be cancelled if `setContent` was called
-- Fixed an issue that caused the pinned days-of-the-week row separator to appear at the wrong z-position 
+- Fixed an issue that caused the pinned days-of-the-week row separator to appear at the wrong z-position
+- Fixed an issue that caused accessibility focus to shift to an unexpected location after some types of content updates occurred
 
 ### Changed
 - Removed spaces from folder names within the `Sources` folder to reduce the chance of sensitive 🥺 build systems complaining or breaking

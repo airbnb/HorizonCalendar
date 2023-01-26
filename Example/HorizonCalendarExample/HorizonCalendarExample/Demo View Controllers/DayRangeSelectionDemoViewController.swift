@@ -40,18 +40,6 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       }
 
       self.calendarView.setContent(self.makeContent())
-
-      if
-        UIAccessibility.isVoiceOverRunning,
-        let selectedDate = self.calendar.date(from: day.components)
-      {
-        // Forcing layout is necessary to guarantee that the view will be ready to receive
-        // accessibility focus.
-        self.calendarView.layoutIfNeeded()
-        let accessibilityElementToFocus = self.calendarView.accessibilityElementForVisibleDate(
-          selectedDate)
-        UIAccessibility.post(notification: .screenChanged, argument: accessibilityElementToFocus)
-      }
     }
   }
 
