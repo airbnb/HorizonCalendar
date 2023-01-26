@@ -18,15 +18,6 @@ final class PartialMonthVisibilityDemoViewController: DemoViewController {
 
       self.selectedDate = self.calendar.date(from: day.components)
       self.calendarView.setContent(self.makeContent())
-
-      if UIAccessibility.isVoiceOverRunning, let selectedDate = self.selectedDate {
-        // Forcing layout is necessary to guarantee that the view will be ready to receive
-        // accessibility focus.
-        self.calendarView.layoutIfNeeded()
-        let accessibilityElementToFocus = self.calendarView.accessibilityElementForVisibleDate(
-          selectedDate)
-        UIAccessibility.post(notification: .screenChanged, argument: accessibilityElementToFocus)
-      }
     }
   }
 
