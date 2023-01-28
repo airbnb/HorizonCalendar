@@ -323,6 +323,22 @@ extension DayView {
     /// The accessibility traits of the `DayView`.
     public var accessibilityTraits = UIAccessibilityTraits.staticText
 
+    public func hash(into hasher: inout Hasher) {
+      hasher.combine(interaction)
+      hasher.combine(backgroundColor)
+      hasher.combine(edgeInsets.leading)
+      hasher.combine(edgeInsets.trailing)
+      hasher.combine(edgeInsets.top)
+      hasher.combine(edgeInsets.bottom)
+      hasher.combine(shape)
+      hasher.combine(backgroundShapeDrawingConfig)
+      hasher.combine(highlightShapeDrawingConfig)
+      hasher.combine(font)
+      hasher.combine(textAlignment)
+      hasher.combine(textColor)
+      hasher.combine(accessibilityTraits)
+    }
+
   }
 
 }

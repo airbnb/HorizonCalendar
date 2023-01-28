@@ -45,7 +45,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     invariantViewProperties: ViewRepresentable.InvariantViewProperties,
     viewModel: ViewRepresentable.ViewModel)
   {
-    _itemViewDifferentiator = .viewRepresentable(
+    _itemViewDifferentiator = _CalendarItemViewDifferentiator(
       viewRepresentableTypeDescription: String(reflecting: ViewRepresentable.self),
       viewTypeDescription: String(reflecting: ViewRepresentable.ViewType.self),
       invariantViewProperties: invariantViewProperties)
@@ -71,7 +71,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     ViewRepresentable.setViewModel(viewModel, on: view)
   }
 
-  public func _isViewModel(equalToViewModelOf other: AnyCalendarItemModel) -> Bool {
+  public func _isViewModelEqual(toViewModelOf other: AnyCalendarItemModel) -> Bool {
     guard let other = other as? Self else {
       let selfTypeDescription = String(reflecting: Self.self)
       preconditionFailure(

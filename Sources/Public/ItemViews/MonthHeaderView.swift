@@ -149,6 +149,18 @@ extension MonthHeaderView {
     /// The accessibility traits of the `MonthHeaderView`.
     public var accessibilityTraits = UIAccessibilityTraits.header
 
+    public func hash(into hasher: inout Hasher) {
+      hasher.combine(backgroundColor)
+      hasher.combine(edgeInsets.leading)
+      hasher.combine(edgeInsets.trailing)
+      hasher.combine(edgeInsets.top)
+      hasher.combine(edgeInsets.bottom)
+      hasher.combine(font)
+      hasher.combine(textAlignment)
+      hasher.combine(textColor)
+      hasher.combine(accessibilityTraits)
+    }
+
   }
 
 }

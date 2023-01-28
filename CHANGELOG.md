@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...HEAD)
 
+### Changed
+- Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
+
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 
 ### Added
@@ -21,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Removed spaces from folder names within the `Sources` folder to reduce the chance of sensitive 🥺 build systems complaining or breaking
-
 
 ## [v1.15.0](https://github.com/airbnb/HorizonCalendar/compare/v1.14.0...v1.15.0) - 2022-12-25
 

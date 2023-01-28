@@ -41,7 +41,7 @@ public protocol AnyCalendarItemModel {
   /// Compares the view models of two `CalendarItemModel`s for equality.
   ///
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _isViewModel(equalToViewModelOf other: AnyCalendarItemModel) -> Bool
+  func _isViewModelEqual(toViewModelOf other: AnyCalendarItemModel) -> Bool
 
 }
 
@@ -51,10 +51,8 @@ public protocol AnyCalendarItemModel {
 /// recycled / reused.
 ///
 /// - Note: There is no reason to create an instance of this enum from your feature code; it should only be invoked internally.
-public enum _CalendarItemViewDifferentiator: Hashable {
-  case viewRepresentable(
-    viewRepresentableTypeDescription: String,
-    viewTypeDescription: String,
-    invariantViewProperties: AnyHashable)
-  case legacyReuseIdentifier(String)
+public struct _CalendarItemViewDifferentiator: Hashable {
+  let viewRepresentableTypeDescription: String
+  let viewTypeDescription: String
+  let invariantViewProperties: AnyHashable
 }
