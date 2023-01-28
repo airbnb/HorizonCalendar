@@ -163,14 +163,7 @@ public struct HorizontalMonthsLayoutOptions: Equatable {
 
   // MARK: Internal
 
-  /// This property exists only to support `MonthsLayout.horizontal(monthWidth: CGFloat)`, which is deprecated.
-  var monthWidth: CGFloat?
-
   func monthWidth(calendarWidth: CGFloat, interMonthSpacing: CGFloat) -> CGFloat {
-    if let monthWidth = monthWidth {
-      return monthWidth
-    }
-
     let visibleInterMonthSpacing = CGFloat(maximumFullyVisibleMonths) * interMonthSpacing
     return (calendarWidth - visibleInterMonthSpacing) / CGFloat(maximumFullyVisibleMonths)
   }
