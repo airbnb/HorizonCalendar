@@ -68,7 +68,7 @@ public final class CalendarViewContent {
       let itemModel = MonthHeaderView.calendarItemModel(
         invariantViewProperties: .base,
         viewModel: .init(monthText: monthText, accessibilityLabel: monthText))
-      return .itemModel(itemModel)
+      return itemModel
     }
 
     dayOfWeekItemProvider = { _, weekdayIndex in
@@ -76,7 +76,7 @@ public final class CalendarViewContent {
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         viewModel: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
-      return .itemModel(itemModel)
+      return itemModel
     }
 
     let dayDateFormatter = DateFormatter()
@@ -95,26 +95,11 @@ public final class CalendarViewContent {
           dayText: "\(day.day)",
           accessibilityLabel: dayDateFormatter.string(from: date),
           accessibilityHint: nil))
-      return .itemModel(itemModel)
+      return itemModel
     }
   }
 
   // MARK: Public
-
-  /// Configures the background color of `CalendarView`. If you do not invoke this function, the `backgroundColor` property on
-  /// `CalendarView` will be used instead.
-  ///
-  /// - Parameters:
-  ///   - backgroundColor: The background color of the calendar.
-  /// - Returns: A mutated `CalendarViewContent` instance with a new background color.
-  @available(
-    *,
-    deprecated,
-    message: "Set the `backgroundColor` property on your `CalendarView` instance directly instead.")
-  public func withBackgroundColor(_ backgroundColor: UIColor) -> CalendarViewContent {
-    self.backgroundColor = backgroundColor
-    return self
-  }
 
   /// Configures the aspect ratio of each day.
   ///
@@ -215,7 +200,7 @@ public final class CalendarViewContent {
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.monthHeaderItemProvider = { .itemModel(monthHeaderItemProvider($0)) }
+    self.monthHeaderItemProvider = { monthHeaderItemProvider($0) }
     return self
   }
 
@@ -241,7 +226,7 @@ public final class CalendarViewContent {
       -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.dayOfWeekItemProvider = { .itemModel(dayOfWeekItemProvider($0, $1)) }
+    self.dayOfWeekItemProvider = { dayOfWeekItemProvider($0, $1) }
     return self
   }
 
@@ -263,7 +248,7 @@ public final class CalendarViewContent {
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.dayItemProvider = { .itemModel(dayItemProvider($0)) }
+    self.dayItemProvider = { dayItemProvider($0) }
     return self
   }
 
@@ -286,7 +271,7 @@ public final class CalendarViewContent {
   {
     self.dayBackgroundItemProvider = {
       guard let dayBackgroundItemModel = dayBackgroundItemProvider($0) else { return nil }
-      return .itemModel(dayBackgroundItemModel)
+      return dayBackgroundItemModel
     }
     return self
   }
@@ -315,7 +300,7 @@ public final class CalendarViewContent {
   {
     self.monthBackgroundItemProvider = {
       guard let monthBackgroundItemModel = monthBackgroundItemProvider($0) else { return nil }
-      return .itemModel(monthBackgroundItemModel)
+      return monthBackgroundItemModel
     }
     return self
   }
@@ -350,7 +335,7 @@ public final class CalendarViewContent {
     -> CalendarViewContent
   {
     let dayRanges = Set(dateRanges.map { DayRange(containing: $0, in: calendar) })
-    dayRangesAndItemProvider = (dayRanges, { .itemModel(dayRangeItemProvider($0)) })
+    dayRangesAndItemProvider = (dayRanges, { dayRangeItemProvider($0) })
     return self
   }
 
@@ -379,7 +364,7 @@ public final class CalendarViewContent {
   {
     overlaidItemLocationsAndItemProvider = (
       overlaidItemLocations,
-      { .itemModel(overlayItemProvider($0)) })
+      { overlayItemProvider($0) })
     return self
   }
 
@@ -390,8 +375,6 @@ public final class CalendarViewContent {
   let monthRange: MonthRange
   let monthsLayout: MonthsLayout
 
-  // TODO(BK): Remove; the `withBackgroundColor` function is deprecated.
-  private(set) var backgroundColor: UIColor?
   private(set) var dayAspectRatio: CGFloat = 1
   private(set) var interMonthSpacing: CGFloat = 0
   private(set) var monthDayInsets: UIEdgeInsets = .zero
@@ -399,21 +382,20 @@ public final class CalendarViewContent {
   private(set) var horizontalDayMargin: CGFloat = 0
   private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-  // TODO(BK): Make all item provider closures private(set) after legacy `CalendarItem` is removed.
-  var monthHeaderItemProvider: (Month) -> InternalAnyCalendarItemModel
-  var dayOfWeekItemProvider: (
+  private(set) var monthHeaderItemProvider: (Month) -> AnyCalendarItemModel
+  private(set) var dayOfWeekItemProvider: (
     _ month: Month?,
     _ weekdayIndex: Int)
-    -> InternalAnyCalendarItemModel
-  var dayItemProvider: (Day) -> InternalAnyCalendarItemModel
-  var dayBackgroundItemProvider: ((Day) -> InternalAnyCalendarItemModel?)?
-  var monthBackgroundItemProvider: ((MonthLayoutContext) -> InternalAnyCalendarItemModel?)?
-  var dayRangesAndItemProvider: (
+    -> AnyCalendarItemModel
+  private(set) var dayItemProvider: (Day) -> AnyCalendarItemModel
+  private(set) var dayBackgroundItemProvider: ((Day) -> AnyCalendarItemModel?)?
+  private(set) var monthBackgroundItemProvider: ((MonthLayoutContext) -> AnyCalendarItemModel?)?
+  private(set) var dayRangesAndItemProvider: (
     dayRanges: Set<DayRange>,
-    dayRangeItemProvider: (DayRangeLayoutContext) -> InternalAnyCalendarItemModel)?
-  var overlaidItemLocationsAndItemProvider: (
+    dayRangeItemProvider: (DayRangeLayoutContext) -> AnyCalendarItemModel)?
+  private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
-    overlayItemProvider: (OverlayLayoutContext) -> InternalAnyCalendarItemModel)?
+    overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
 }
 

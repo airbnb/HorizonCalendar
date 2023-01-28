@@ -20,9 +20,9 @@ final class ItemView: UIView {
 
   // MARK: Lifecycle
 
-  init(initialCalendarItemModel: InternalAnyCalendarItemModel) {
+  init(initialCalendarItemModel: AnyCalendarItemModel) {
     calendarItemModel = initialCalendarItemModel
-    contentView = calendarItemModel.makeView()
+    contentView = calendarItemModel._makeView()
 
     super.init(frame: .zero)
 
@@ -42,9 +42,9 @@ final class ItemView: UIView {
 
   var selectionHandler: (() -> Void)?
 
-  var calendarItemModel: InternalAnyCalendarItemModel {
+  var calendarItemModel: AnyCalendarItemModel {
     didSet {
-      guard calendarItemModel.itemViewDifferentiator == oldValue.itemViewDifferentiator else {
+      guard calendarItemModel._itemViewDifferentiator == oldValue._itemViewDifferentiator else {
         preconditionFailure("""
           Cannot configure a reused `ItemView` with a calendar item model that was created with a
           different instance of invariant view properties.
@@ -52,7 +52,7 @@ final class ItemView: UIView {
       }
 
       // Only update the view model if it's different from the old one.
-      guard !calendarItemModel.isViewModelEqualToViewModelOfOther(oldValue) else { return }
+      guard !calendarItemModel._isViewModel(equalToViewModelOf: oldValue) else { return }
 
       updateViewModel()
     }
@@ -79,7 +79,7 @@ final class ItemView: UIView {
   // MARK: Private
 
   private func updateViewModel() {
-    calendarItemModel.setViewModelOnViewOfSameType(contentView)
+    calendarItemModel._setViewModel(onViewOfSameType: contentView)
   }
 
   private func isTouchInView(_ touch: UITouch) -> Bool {
