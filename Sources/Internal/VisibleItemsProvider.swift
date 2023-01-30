@@ -127,7 +127,7 @@ final class VisibleItemsProvider {
 
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of
     // calendar item models.
-    var calendarItemModelCache = Dictionary<VisibleItem.ItemType, AnyCalendarItemModel>(
+    var calendarItemModelCache = Dictionary<VisibleItem.ItemType, InternalAnyCalendarItemModel>(
       minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100)
 
     // `extendedBounds` is used to make sure that we're always laying out a continuous set of items,
@@ -289,7 +289,7 @@ final class VisibleItemsProvider {
     let handleItem: (LayoutItem, Bool, inout Bool) -> Void =
     { layoutItem, isLookingBackwards, shouldStop in
       let month: Month
-      let calendarItemModel: AnyCalendarItemModel
+      let calendarItemModel: InternalAnyCalendarItemModel
       switch layoutItem.itemType {
       case .monthHeader(let _month):
         month = _month
@@ -351,7 +351,7 @@ final class VisibleItemsProvider {
   private let frameProvider: FrameProvider
 
   private var previousCalendarItemModelCache: [
-    VisibleItem.ItemType: AnyCalendarItemModel
+    VisibleItem.ItemType: InternalAnyCalendarItemModel
   ]?
 
   private var calendar: Calendar {
@@ -595,7 +595,7 @@ final class VisibleItemsProvider {
     contentStartBoundary: inout CGFloat?,
     contentEndBoundary: inout CGFloat?,
     visibleItems: inout Set<VisibleItem>,
-    calendarItemModelCache: inout [VisibleItem.ItemType: AnyCalendarItemModel],
+    calendarItemModelCache: inout [VisibleItem.ItemType: InternalAnyCalendarItemModel],
     originsForMonths: inout [Month: CGPoint],
     handledDayRanges: inout Set<DayRange>,
     shouldStop: inout Bool)
@@ -644,7 +644,7 @@ final class VisibleItemsProvider {
 
         let itemType = VisibleItem.ItemType.layoutItemType(layoutItem.itemType)
 
-        let calendarItemModel: AnyCalendarItemModel
+        let calendarItemModel: InternalAnyCalendarItemModel
         switch layoutItem.itemType {
         case .monthHeader(let month):
           calendarItemModel = calendarItemModelCache.value(
@@ -664,9 +664,16 @@ final class VisibleItemsProvider {
               for: separatorItemType,
               missingValueProvider: {
                 previousCalendarItemModelCache?[separatorItemType] ??
-                  ColorViewRepresentable.calendarItemModel(
-                    invariantViewProperties: separatorOptions.color,
-                    viewModel: 0)
+                  .legacy(
+                    CalendarItem<UIView, Month>(
+                      viewModel: month,
+                      styleID: "DaysOfTheWeekRowSeparator",
+                      buildView: {
+                        let view = UIView()
+                        view.backgroundColor = separatorOptions.color
+                        return view
+                      },
+                      updateViewModel: { _, _ in }))
               })
 
             visibleItems.insert(
@@ -839,7 +846,7 @@ final class VisibleItemsProvider {
 
   private func handlePinnedDaysOfWeekIfNeeded(
     yContentOffset: CGFloat,
-    calendarItemModelCache: inout [VisibleItem.ItemType: AnyCalendarItemModel],
+    calendarItemModelCache: inout [VisibleItem.ItemType: InternalAnyCalendarItemModel],
     visibleItems: inout Set<VisibleItem>,
     heightOfPinnedContent: inout CGFloat)
   {
@@ -872,9 +879,16 @@ final class VisibleItemsProvider {
     // items as content is scrolled underneath.
     visibleItems.insert(
       VisibleItem(
-        calendarItemModel: ColorViewRepresentable.calendarItemModel(
-          invariantViewProperties: backgroundColor ?? .clear,
-          viewModel: 0),
+        calendarItemModel: .legacy(
+          CalendarItem<UIView, Int>(
+            viewModel: 0,
+            styleID: "PinnedDaysOfTheWeekRowBackground",
+            buildView: { [unowned self] in
+              let view = UIView()
+              view.backgroundColor = backgroundColor
+              return view
+            },
+            updateViewModel: { _, _ in })),
         itemType: .pinnedDaysOfWeekRowBackground,
         frame: frameProvider.frameOfPinnedDaysOfWeekRowBackground(yContentOffset: yContentOffset)))
 
@@ -885,9 +899,16 @@ final class VisibleItemsProvider {
         for: separatorItemType,
         missingValueProvider: {
           previousCalendarItemModelCache?[separatorItemType] ??
-            ColorViewRepresentable.calendarItemModel(
-              invariantViewProperties: separatorOptions.color,
-              viewModel: 0)
+            .legacy(
+              CalendarItem<UIView, Int>(
+                viewModel: 0,
+                styleID: "PinnedDaysOfTheWeekRowSeparator",
+                buildView: {
+                  let view = UIView()
+                  view.backgroundColor = separatorOptions.color
+                  return view
+                },
+                updateViewModel: { _, _ in }))
         })
 
       visibleItems.insert(

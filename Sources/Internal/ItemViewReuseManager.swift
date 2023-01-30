@@ -41,7 +41,7 @@ final class ItemViewReuseManager {
     // visible items are the previously visible items that aren't currently visible, and are
     // therefore free to be reused.
     for visibleItem in visibleItems {
-      let differentiator = visibleItem.calendarItemModel._itemViewDifferentiator
+      let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
       var visibleItemsDifference: Set<VisibleItem>
       if let difference = visibleItemsDifferencesItemViewDifferentiators[differentiator] {
@@ -79,7 +79,7 @@ final class ItemViewReuseManager {
     unusedPreviouslyVisibleItems: inout Set<VisibleItem>)
     -> ReusedViewContext
   {
-    let differentiator = visibleItem.calendarItemModel._itemViewDifferentiator
+    let differentiator = visibleItem.calendarItemModel.itemViewDifferentiator
 
     let view: ItemView
     let previousBackingVisibleItem: VisibleItem?

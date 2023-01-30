@@ -56,4 +56,5 @@ public enum _CalendarItemViewDifferentiator: Hashable {
     viewRepresentableTypeDescription: String,
     viewTypeDescription: String,
     invariantViewProperties: AnyHashable)
+  case legacyReuseIdentifier(String)
 }

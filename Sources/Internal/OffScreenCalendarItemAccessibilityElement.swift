@@ -23,8 +23,8 @@ final class OffScreenCalendarItemAccessibilityElement: UIAccessibilityElement {
   // MARK: Lifecycle
 
   init?(correspondingItem: VisibleItem, scrollViewContainer: UIScrollView) {
-    let view = correspondingItem.calendarItemModel._makeView()
-    correspondingItem.calendarItemModel._setViewModel(onViewOfSameType: view)
+    let view = correspondingItem.calendarItemModel.makeView()
+    correspondingItem.calendarItemModel.setViewModelOnViewOfSameType(view)
     guard view.isAccessibilityElement else { return nil }
 
     self.correspondingItem = correspondingItem
