@@ -28,20 +28,20 @@ final class VisibleItem {
 
   // MARK: Lifecycle
 
-  init(calendarItemModel: AnyCalendarItemModel, itemType: ItemType, frame: CGRect) {
+  init(calendarItemModel: InternalAnyCalendarItemModel, itemType: ItemType, frame: CGRect) {
     self.calendarItemModel = calendarItemModel
     self.itemType = itemType
     self.frame = frame
 
     var hasher = Hasher()
-    hasher.combine(calendarItemModel._itemViewDifferentiator)
+    hasher.combine(calendarItemModel.itemViewDifferentiator)
     hasher.combine(itemType)
     cachedHashValue = hasher.finalize()
   }
 
   // MARK: Internal
 
-  let calendarItemModel: AnyCalendarItemModel
+  let calendarItemModel: InternalAnyCalendarItemModel
   let itemType: ItemType
   let frame: CGRect
 
@@ -58,7 +58,7 @@ final class VisibleItem {
 extension VisibleItem: Equatable {
 
   static func == (lhs: VisibleItem, rhs: VisibleItem) -> Bool {
-    lhs.calendarItemModel._itemViewDifferentiator == rhs.calendarItemModel._itemViewDifferentiator &&
+    lhs.calendarItemModel.itemViewDifferentiator == rhs.calendarItemModel.itemViewDifferentiator &&
       lhs.itemType == rhs.itemType
   }
 

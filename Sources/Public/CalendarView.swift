@@ -81,7 +81,15 @@ public final class CalendarView: UIView {
   public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
-  public var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
+  @available(
+    *,
+    deprecated,
+    message: "Use `_didEndDragging` instead, since it includes a `Bool` to indicate whether the calendar will decelerate when dragging ends. In a future release, `_didEndDragging` will be renamed to `didEndDragging`, and this deprecated property will be removed.",
+     renamed: "_didEndDragging")
+  public var didEndDragging: ((_ visibleDayRange: DayRange) -> Void)?
+
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
+  public var _didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
   public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
@@ -227,6 +235,10 @@ public final class CalendarView: UIView {
   ///   - content: The content to use when rendering `CalendarView`.
   public func setContent(_ content: CalendarViewContent) {
     let oldContent = self.content
+
+    if let contentBackgroundColor = content.backgroundColor {
+      backgroundColor = contentBackgroundColor
+    }
 
     _visibleItemsProvider = nil
 
@@ -381,85 +393,15 @@ public final class CalendarView: UIView {
 
   lazy var doubleLayoutPassSizingLabel = DoubleLayoutPassSizingLabel(provider: self)
 
-  // MARK: Fileprivate
-
-  fileprivate var content: CalendarViewContent
-
-  fileprivate var previousPageIndex: Int?
-
-  fileprivate var scrollToItemContext: ScrollToItemContext? {
-    willSet {
-      scrollToItemDisplayLink?.invalidate()
-    }
-  }
-
-  fileprivate var calendar: Calendar {
-    content.calendar
-  }
-
-  // This hack is needed to prevent the scroll view from over-scrolling far past the content. This
-  // occurs in 2 scenarios:
-  // - On macOS if you scroll quickly toward a boundary
-  // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
-  //
-  // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
-  fileprivate func preventLargeOverScrollIfNeeded() {
-    guard isRunningOnMac || content.monthsLayout.isPaginationEnabled else { return }
-
-    let scrollAxis = scrollMetricsMutator.scrollAxis
-    let offset = scrollView.offset(for: scrollAxis)
-
-    let boundsSize: CGFloat
-    switch scrollAxis {
-    case .vertical: boundsSize = scrollView.bounds.height * 0.7
-    case .horizontal: boundsSize = scrollView.bounds.width * 0.7
-    }
-
-    let newOffset: CGPoint?
-    if offset < scrollView.minimumOffset(for: scrollAxis) - boundsSize {
-      switch scrollAxis {
-      case .vertical:
-        newOffset = CGPoint(
-          x: scrollView.contentOffset.x,
-          y: scrollView.minimumOffset(for: scrollAxis))
-
-      case .horizontal:
-        newOffset = CGPoint(
-          x: scrollView.minimumOffset(for: scrollAxis),
-          y: scrollView.contentOffset.y)
-      }
-    } else if offset > scrollView.maximumOffset(for: scrollAxis) + boundsSize {
-      switch scrollAxis {
-      case .vertical:
-        newOffset = CGPoint(
-          x: scrollView.contentOffset.x,
-          y: scrollView.maximumOffset(for: scrollAxis))
-
-      case .horizontal:
-        newOffset = CGPoint(
-          x: scrollView.maximumOffset(for: scrollAxis),
-          y: scrollView.contentOffset.y)
-      }
-    } else {
-      newOffset = nil
-    }
-
-    if let newOffset = newOffset {
-      scrollView.performWithoutNotifyingDelegate {
-        // Passing `false` for `animated` is necessary to stop the in-flight deceleration animation
-        UIView.animate(withDuration: 0.4, delay: 0, options: [.curveEaseOut], animations: {
-          self.scrollView.setContentOffset(newOffset, animated: false)
-        })
-      }
-    }
-  }
-
   // MARK: Private
 
   private let reuseManager = ItemViewReuseManager()
   private let subviewInsertionIndexTracker = SubviewInsertionIndexTracker()
 
+  private var content: CalendarViewContent
+
   private var _scrollMetricsMutator: ScrollMetricsMutator?
+  private var previousPageIndex: Int?
 
   private var anchorLayoutItem: LayoutItem?
   private var _visibleItemsProvider: VisibleItemsProvider?
@@ -476,18 +418,22 @@ public final class CalendarView: UIView {
   private var focusedAccessibilityElement: Any?
   private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
 
+  private var scrollToItemContext: ScrollToItemContext? {
+    willSet {
+      scrollToItemDisplayLink?.invalidate()
+    }
+  }
+
   private lazy var scrollView: NoContentInsetAdjustmentScrollView = {
     let scrollView = NoContentInsetAdjustmentScrollView()
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
-    scrollView.delegate = scrollViewDelegate
+    scrollView.delegate = self
     return scrollView
   }()
-
-  private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
-  // and `preventLargeOverScrollIfNeeded` for more context.
+  // and `preventLargeOverscrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
     if #available(iOS 13.0, *) {
       if ProcessInfo.processInfo.isMacCatalystApp {
@@ -498,6 +444,9 @@ public final class CalendarView: UIView {
     return false
   }()
 
+  private var calendar: Calendar {
+    content.calendar
+  }
 
   private var isReadyForLayout: Bool {
     // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
@@ -658,8 +607,8 @@ public final class CalendarView: UIView {
 
     let firstMonthHeaderItemModel = content.monthHeaderItemProvider(
       content.monthRange.lowerBound)
-    let firstMonthHeader = firstMonthHeaderItemModel._makeView()
-    firstMonthHeaderItemModel._setViewModel(onViewOfSameType: firstMonthHeader)
+    let firstMonthHeader = firstMonthHeaderItemModel.makeView()
+    firstMonthHeaderItemModel.setViewModelOnViewOfSameType(firstMonthHeader)
 
     let size = firstMonthHeader.systemLayoutSizeFitting(
       CGSize(width: monthWidth, height: 0),
@@ -835,6 +784,63 @@ public final class CalendarView: UIView {
       break
     }
   }
+  
+  // This hack is needed to prevent the scroll view from over-scrolling far past the content. This
+  // occurs in 2 scenarios:
+  // - On macOS if you scroll quickly toward a boundary
+  // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
+  //
+  // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
+  private func preventLargeOverscrollIfNeeded() {
+    guard isRunningOnMac || content.monthsLayout.isPaginationEnabled else { return }
+    
+    let scrollAxis = scrollMetricsMutator.scrollAxis
+    let offset = scrollView.offset(for: scrollAxis)
+    
+    let boundsSize: CGFloat
+    switch scrollAxis {
+    case .vertical: boundsSize = scrollView.bounds.height * 0.7
+    case .horizontal: boundsSize = scrollView.bounds.width * 0.7
+    }
+    
+    let newOffset: CGPoint?
+    if offset < scrollView.minimumOffset(for: scrollAxis) - boundsSize {
+      switch scrollAxis {
+      case .vertical:
+        newOffset = CGPoint(
+          x: scrollView.contentOffset.x,
+          y: scrollView.minimumOffset(for: scrollAxis))
+        
+      case .horizontal:
+        newOffset = CGPoint(
+          x: scrollView.minimumOffset(for: scrollAxis),
+          y: scrollView.contentOffset.y)
+      }
+    } else if offset > scrollView.maximumOffset(for: scrollAxis) + boundsSize {
+      switch scrollAxis {
+      case .vertical:
+        newOffset = CGPoint(
+          x: scrollView.contentOffset.x,
+          y: scrollView.maximumOffset(for: scrollAxis))
+        
+      case .horizontal:
+        newOffset = CGPoint(
+          x: scrollView.maximumOffset(for: scrollAxis),
+          y: scrollView.contentOffset.y)
+      }
+    } else {
+      newOffset = nil
+    }
+    
+    if let newOffset = newOffset {
+      scrollView.performWithoutNotifyingDelegate {
+        // Passing `false` for `animated` is necessary to stop the in-flight deceleration animation
+        UIView.animate(withDuration: 0.4, delay: 0, options: [.curveEaseOut], animations: {
+          self.scrollView.setContentOffset(newOffset, animated: false)
+        })
+      }
+    }
+  }
 
   private func maintainScrollPositionAfterBoundsOrMarginsChange() {
     guard
@@ -876,6 +882,137 @@ public final class CalendarView: UIView {
         scrollPosition: .firstFullyVisiblePosition(padding: paddingFromFirstEdge),
         animated: false)
     }
+  }
+
+}
+
+// MARK: UIScrollViewDelegate
+
+extension CalendarView: UIScrollViewDelegate {
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    preventLargeOverscrollIfNeeded()
+
+    let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
+
+    if let visibleDayRange = visibleDayRange {
+      didScroll?(visibleDayRange, isUserInitiatedScrolling)
+    }
+
+    if isUserInitiatedScrolling {
+      // If the user interacts with the scroll view, we should clear out any existing
+      // `scrollToItemContext` that might be leftover from the initial layout process.
+      scrollToItemContext = nil
+    }
+
+    setNeedsLayout()
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewDidEndDragging(
+    _ scrollView: UIScrollView,
+    willDecelerate decelerate: Bool)
+  {
+    guard let visibleDayRange = visibleDayRange else { return }
+    didEndDragging?(visibleDayRange)
+    _didEndDragging?(visibleDayRange, decelerate)
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    guard let visibleDayRange = visibleDayRange else { return }
+    didEndDecelerating?(visibleDayRange)
+  }
+  
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    guard
+      case .horizontal(let options) = content.monthsLayout,
+      case .paginatedScrolling = options.scrollingBehavior
+    else
+    {
+      return
+    }
+
+    let pageSize = options.pageSize(
+      calendarWidth: bounds.width,
+      interMonthSpacing: content.interMonthSpacing)
+    previousPageIndex = PaginationHelpers.closestPageIndex(
+      forOffset: scrollView.contentOffset.x,
+      pageSize: pageSize)
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewWillEndDragging(
+    _ scrollView: UIScrollView,
+    withVelocity velocity: CGPoint,
+    targetContentOffset: UnsafeMutablePointer<CGPoint>)
+  {
+    guard
+      case .horizontal(let options) = content.monthsLayout,
+      case .paginatedScrolling(let paginationConfiguration) = options.scrollingBehavior
+    else
+    {
+      return
+    }
+    
+    let pageSize = options.pageSize(
+      calendarWidth: bounds.width,
+      interMonthSpacing: content.interMonthSpacing)
+    
+    switch paginationConfiguration.restingAffinity {
+    case .atPositionsAdjacentToPrevious:
+      guard let previousPageIndex = previousPageIndex else {
+        preconditionFailure("""
+          `previousPageIndex` was accessed before being set in `scrollViewWillBeginDragging`.
+        """)
+      }
+      targetContentOffset.pointee.x = PaginationHelpers.adjacentPageOffset(
+        toPreviousPageIndex: previousPageIndex,
+        targetOffset: targetContentOffset.pointee.x,
+        velocity: velocity.x,
+        pageSize: pageSize)
+      
+    case .atPositionsClosestToTargetOffset:
+      targetContentOffset.pointee.x = PaginationHelpers.closestPageOffset(
+        toTargetOffset: targetContentOffset.pointee.x,
+        touchUpOffset: scrollView.contentOffset.x,
+        velocity: velocity.x,
+        pageSize: pageSize)
+    }
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Do not invoke this function directly, as it is only intended to be called from the internal implementation of `CalendarView`. This will be removed in a future major release.")
+  public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+    if content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
+      let firstMonth = content.monthRange.lowerBound
+      let firstDate = calendar.firstDate(of: firstMonth)
+      scroll(
+        toMonthContaining: firstDate,
+        scrollPosition: .firstFullyVisiblePosition(padding: 0),
+        animated: true)
+    }
+
+    return false
   }
 
 }
@@ -1014,8 +1151,8 @@ extension CalendarView {
     scroll(toMonthContaining: targetMonthDate, scrollPosition: scrollPosition, animated: false)
 
     let targetMonthItem = content.monthHeaderItemProvider(targetMonth)
-    let targetMonthView = targetMonthItem._makeView()
-    targetMonthItem._setViewModel(onViewOfSameType: targetMonthView)
+    let targetMonthView = targetMonthItem.makeView()
+    targetMonthItem.setViewModelOnViewOfSameType(targetMonthView)
     let accessibilityScrollText = targetMonthView.accessibilityLabel
     UIAccessibility.post(notification: .pageScrolled, argument: accessibilityScrollText)
 
@@ -1049,126 +1186,6 @@ extension CalendarView {
       }
     }
   }
-
-}
-
-// MARK: - ScrollViewDelegate
-
-/// Rather than making `CalendarView` conform to `UIScrollViewDelegate`, which would expose those methods as public, we
-/// use a separate delegate object to hide these methods from the public API.
-final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
-
-  // MARK: Lifecycle
-
-  init(calendarView: CalendarView) {
-    self.calendarView = calendarView
-  }
-
-  // MARK: Internal
-
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    calendarView.preventLargeOverScrollIfNeeded()
-
-    let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
-
-    if let visibleDayRange = calendarView.visibleDayRange {
-      calendarView.didScroll?(visibleDayRange, isUserInitiatedScrolling)
-    }
-
-    if isUserInitiatedScrolling {
-      // If the user interacts with the scroll view, we should clear out any existing
-      // `scrollToItemContext` that might be leftover from the initial layout process.
-      calendarView.scrollToItemContext = nil
-    }
-
-    calendarView.setNeedsLayout()
-  }
-
-  func scrollViewDidEndDragging(
-    _ scrollView: UIScrollView,
-    willDecelerate decelerate: Bool)
-  {
-    guard let visibleDayRange = calendarView.visibleDayRange else { return }
-    calendarView.didEndDragging?(visibleDayRange, decelerate)
-  }
-
-  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    guard let visibleDayRange = calendarView.visibleDayRange else { return }
-    calendarView.didEndDecelerating?(visibleDayRange)
-  }
-
-  public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-    guard
-      case .horizontal(let options) = calendarView.content.monthsLayout,
-      case .paginatedScrolling = options.scrollingBehavior
-    else
-    {
-      return
-    }
-
-    let pageSize = options.pageSize(
-      calendarWidth: calendarView.bounds.width,
-      interMonthSpacing: calendarView.content.interMonthSpacing)
-    calendarView.previousPageIndex = PaginationHelpers.closestPageIndex(
-      forOffset: scrollView.contentOffset.x,
-      pageSize: pageSize)
-  }
-
-  func scrollViewWillEndDragging(
-    _ scrollView: UIScrollView,
-    withVelocity velocity: CGPoint,
-    targetContentOffset: UnsafeMutablePointer<CGPoint>)
-  {
-    guard
-      case .horizontal(let options) = calendarView.content.monthsLayout,
-      case .paginatedScrolling(let paginationConfiguration) = options.scrollingBehavior
-    else
-    {
-      return
-    }
-
-    let pageSize = options.pageSize(
-      calendarWidth: calendarView.bounds.width,
-      interMonthSpacing: calendarView.content.interMonthSpacing)
-
-    switch paginationConfiguration.restingAffinity {
-    case .atPositionsAdjacentToPrevious:
-      guard let previousPageIndex = calendarView.previousPageIndex else {
-        preconditionFailure("""
-          `previousPageIndex` was accessed before being set in `scrollViewWillBeginDragging`.
-        """)
-      }
-      targetContentOffset.pointee.x = PaginationHelpers.adjacentPageOffset(
-        toPreviousPageIndex: previousPageIndex,
-        targetOffset: targetContentOffset.pointee.x,
-        velocity: velocity.x,
-        pageSize: pageSize)
-
-    case .atPositionsClosestToTargetOffset:
-      targetContentOffset.pointee.x = PaginationHelpers.closestPageOffset(
-        toTargetOffset: targetContentOffset.pointee.x,
-        touchUpOffset: scrollView.contentOffset.x,
-        velocity: velocity.x,
-        pageSize: pageSize)
-    }
-  }
-
-  func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-    if calendarView.content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
-      let firstMonth = calendarView.content.monthRange.lowerBound
-      let firstDate = calendarView.calendar.firstDate(of: firstMonth)
-      calendarView.scroll(
-        toMonthContaining: firstDate,
-        scrollPosition: .firstFullyVisiblePosition(padding: 0),
-        animated: true)
-    }
-
-    return false
-  }
-
-  // MARK: Private
-
-  private weak var calendarView: CalendarView!
 
 }
 
