@@ -24,6 +24,7 @@
 		93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */; };
 		FDA0FB3528F5EFD90066DEFA /* SwiftUIDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */; };
 		FDA0FB3728F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */; };
+		FDD8EE7429885AF500F6EC9D /* MonthBackgroundDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD8EE7329885AF500F6EC9D /* MonthBackgroundDemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,7 @@
 		93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeIndicatorView.swift; sourceTree = "<group>"; };
 		FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIDayView.swift; sourceTree = "<group>"; };
 		FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIItemModelsDemoViewController.swift; sourceTree = "<group>"; };
+		FDD8EE7329885AF500F6EC9D /* MonthBackgroundDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthBackgroundDemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				938176A4249B828600E18FA3 /* LargeDayRangeDemoViewController.swift */,
 				9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */,
 				93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */,
+				FDD8EE7329885AF500F6EC9D /* MonthBackgroundDemoViewController.swift */,
 				FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */,
 			);
 			path = "Demo View Controllers";
@@ -212,6 +215,7 @@
 				9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */,
 				93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */,
 				938176A5249B828600E18FA3 /* LargeDayRangeDemoViewController.swift in Sources */,
+				FDD8EE7429885AF500F6EC9D /* MonthBackgroundDemoViewController.swift in Sources */,
 				939E696B2484CD8E00A8BCC7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

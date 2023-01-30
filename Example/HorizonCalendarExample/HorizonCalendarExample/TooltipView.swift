@@ -47,18 +47,6 @@ final class TooltipView: UIView {
 
   // MARK: Internal
 
-  var frameOfTooltippedItem: CGRect? {
-    didSet {
-      guard frameOfTooltippedItem != oldValue else { return }
-      setNeedsLayout()
-    }
-  }
-
-  var text: String {
-    get { label.text ?? "" }
-    set { label.text = newValue }
-  }
-
   override func layoutSubviews() {
     super.layoutSubviews()
 
@@ -88,6 +76,20 @@ final class TooltipView: UIView {
 
     backgroundView.frame = frame
     label.center = backgroundView.center
+  }
+
+  // MARK: Fileprivate
+
+  fileprivate var frameOfTooltippedItem: CGRect? {
+    didSet {
+      guard frameOfTooltippedItem != oldValue else { return }
+      setNeedsLayout()
+    }
+  }
+
+  fileprivate var text: String {
+    get { label.text ?? "" }
+    set { label.text = newValue }
   }
 
   // MARK: Private
