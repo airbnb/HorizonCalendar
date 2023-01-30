@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "HorizonCalendar"
-  spec.version = "1.15.0"
+  spec.version = "1.16.0"
   spec.license = "Apache License, Version 2.0"
   spec.summary = "A declarative, performant, calendar UI component that supports use cases ranging from simple date pickers to fully-featured calendar apps."
 
@@ -17,6 +17,8 @@ Features:
 - Specify custom views (`UIView` or SwiftUI `View`) for individual days, month headers, and days of the week
 - Specify custom views (`UIView` or SwiftUI `View`) to highlight date ranges
 - Specify custom views (`UIView` or SwiftUI `View`) to overlay parts of the calendar, enabling features like tooltips
+- Specify custom views (`UIView` or SwiftUI `View`) for month background decorations (colors, grids, etc.)
+- Specify custom views (`UIView` or SwiftUI `View`) for day background decorations (colors, patterns, etc.)
 - A day selection handler to monitor when a day is tapped
 - Customizable layout metrics
 - Pin the days-of-the-week row to the top
