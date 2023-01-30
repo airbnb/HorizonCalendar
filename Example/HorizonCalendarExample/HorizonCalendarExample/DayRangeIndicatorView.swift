@@ -36,21 +36,14 @@ final class DayRangeIndicatorView: UIView {
 
   // MARK: Internal
 
-  var framesOfDaysToHighlight = [CGRect]() {
-    didSet {
-      guard framesOfDaysToHighlight != oldValue else { return }
-      setNeedsDisplay()
-    }
-  }
-
   override func draw(_ rect: CGRect) {
     let context = UIGraphicsGetCurrentContext()
     context?.setFillColor(indicatorColor.cgColor)
 
     if traitCollection.layoutDirection == .rightToLeft {
-      transform = .init(scaleX: -1, y: 1)
-    } else {
-      transform = .identity
+      context?.translateBy(x: bounds.midX, y: bounds.midY)
+      context?.scaleBy(x: -1, y: 1)
+      context?.translateBy(x: -bounds.midX, y: -bounds.midY)
     }
 
     // Get frames of day rows in the range
@@ -72,6 +65,20 @@ final class DayRangeIndicatorView: UIView {
       let roundedRectanglePath = UIBezierPath(roundedRect: dayRowFrame, cornerRadius: cornerRadius)
       context?.addPath(roundedRectanglePath.cgPath)
       context?.fillPath()
+    }
+  }
+
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    setNeedsDisplay()
+  }
+
+  // MARK: Fileprivate
+
+  fileprivate var framesOfDaysToHighlight = [CGRect]() {
+    didSet {
+      guard framesOfDaysToHighlight != oldValue else { return }
+      setNeedsDisplay()
     }
   }
 

@@ -40,9 +40,9 @@ public final class MonthGridBackgroundView: UIView {
     context?.setStrokeColor(invariantViewProperties.color.cgColor)
 
     if traitCollection.layoutDirection == .rightToLeft {
-      transform = .init(scaleX: -1, y: 1)
-    } else {
-      transform = .identity
+      context?.translateBy(x: bounds.midX, y: bounds.midY)
+      context?.scaleBy(x: -1, y: 1)
+      context?.translateBy(x: -bounds.midX, y: -bounds.midY)
     }
 
     for dayFrame in framesOfDays {
@@ -53,6 +53,11 @@ public final class MonthGridBackgroundView: UIView {
         height: dayFrame.height + invariantViewProperties.verticalDayMargin)
       context?.stroke(gridRect)
     }
+  }
+
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    setNeedsDisplay()
   }
 
   // MARK: Fileprivate
