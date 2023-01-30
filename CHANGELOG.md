@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for month backgrounds, enabling things like grid lines and colored backgrounds for months
 - Added a `dayRange` property to `CalendarViewContent.DayRangeLayoutContext`
 - Added support for day backgrounds, enabling developers to add visual decoration behind individual days. These decoration views also appear behind any day range indicators, making it possible to have a day range indicator appear between the day's number and any background decoration.
+- Added `MonthGridBackgroundView`, a view that can be used with the `monthBackgroundItemProvider` to add grid lines between the days in a month
 
 ### Fixed
 - Fixed an issue that caused an in-flight programmatic scroll to be cancelled if `setContent` was called
