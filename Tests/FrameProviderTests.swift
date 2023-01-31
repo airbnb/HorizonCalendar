@@ -569,7 +569,7 @@ final class FrameProviderTests: XCTestCase {
       content: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: Date.distantPast...Date.distantFuture,
-        monthsLayout: .horizontal(monthWidth: 163.5))
+        monthsLayout: .horizontal(options: .init(maximumFullyVisibleMonths: 2.3)))
         .interMonthSpacing(24),
       size: CGSize(width: 375, height: 275),
       layoutMargins: .init(top: 8, leading: 8, bottom: 8, trailing: 8),

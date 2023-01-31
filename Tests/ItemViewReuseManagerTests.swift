@@ -29,17 +29,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
   func testInitialViewCreationWithNoReuse() {
     let visibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -47,7 +47,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -71,17 +71,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
   func testReusingIdenticalViews() {
     let initialVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -89,7 +89,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -122,17 +122,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
   func testReusingAllViews() {
     let initialVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -140,7 +140,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -151,17 +151,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
 
     let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -169,7 +169,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -186,7 +186,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
       subsequentVisibleItems,
       viewHandler: { _, item, previousBackingItem, _ in
         XCTAssert(
-          item.calendarItemModel.itemViewDifferentiator == previousBackingItem?.calendarItemModel.itemViewDifferentiator,
+          item.calendarItemModel._itemViewDifferentiator == previousBackingItem?.calendarItemModel._itemViewDifferentiator,
           """
             Expected the new item to have the same view differentiator as the previous backing item,
             since it was reused.
@@ -197,17 +197,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
   func testReusingSomeViews() {
     let initialVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -215,7 +215,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -223,7 +223,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant2),
+        calendarItemModel: MockCalendarItemModel.variant2,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -231,7 +231,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant3),
+        calendarItemModel: MockCalendarItemModel.variant3,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -242,7 +242,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
 
     let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -250,7 +250,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant3),
+        calendarItemModel: MockCalendarItemModel.variant3,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -258,12 +258,12 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant4),
+        calendarItemModel: MockCalendarItemModel.variant4,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant5),
+        calendarItemModel: MockCalendarItemModel.variant5,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
         frame: .zero),
@@ -276,11 +276,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
       viewHandler: { _, item, previousBackingItem, isReusedViewSameAsPreviousView in
-        guard
-          case .itemModel(let opaqueCalendarItemModel) = item.calendarItemModel,
-          let itemModel = opaqueCalendarItemModel as? MockCalendarItemModel
-        else
-        {
+        guard let itemModel = item.calendarItemModel as? MockCalendarItemModel else {
           preconditionFailure(
             "Failed to convert the calendar item model to an instance of MockCalendarItemModel.")
         }
@@ -288,7 +284,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
         switch itemModel {
         case .variant1, .variant3:
           XCTAssert(
-            item.calendarItemModel.itemViewDifferentiator == previousBackingItem?.calendarItemModel.itemViewDifferentiator,
+            item.calendarItemModel._itemViewDifferentiator == previousBackingItem?.calendarItemModel._itemViewDifferentiator,
             """
               Expected the new item to have the same reuse identifier as the previous backing item,
               since it was reused.
@@ -310,17 +306,17 @@ final class ItemViewReuseManagerTests: XCTestCase {
   func testDepletingAvailableReusableViews() {
     let initialVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -328,7 +324,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -336,7 +332,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -347,22 +343,22 @@ final class ItemViewReuseManagerTests: XCTestCase {
 
     let subsequentVisibleItems: Set<VisibleItem> = [
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant0),
+        calendarItemModel: MockCalendarItemModel.variant0,
         itemType: .layoutItemType(
           .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -370,7 +366,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -378,7 +374,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -386,7 +382,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -394,7 +390,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant1),
+        calendarItemModel: MockCalendarItemModel.variant1,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -402,7 +398,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
               day: 01))),
         frame: .zero),
       .init(
-        calendarItemModel: .itemModel(MockCalendarItemModel.variant2),
+        calendarItemModel: MockCalendarItemModel.variant2,
         itemType: .layoutItemType(
           .day(
             Day(
@@ -421,11 +417,11 @@ final class ItemViewReuseManagerTests: XCTestCase {
       subsequentVisibleItems,
       viewHandler: { _, item, previousBackingItem, _ in
         if previousBackingItem != nil {
-          let reuseCount = (reuseCountsForDifferentiators[item.calendarItemModel.itemViewDifferentiator] ?? 0) + 1
-          reuseCountsForDifferentiators[item.calendarItemModel.itemViewDifferentiator] = reuseCount
+          let reuseCount = (reuseCountsForDifferentiators[item.calendarItemModel._itemViewDifferentiator] ?? 0) + 1
+          reuseCountsForDifferentiators[item.calendarItemModel._itemViewDifferentiator] = reuseCount
         } else {
-          let newViewCount = (newViewCountsForDifferentiators[item.calendarItemModel.itemViewDifferentiator] ?? 0) + 1
-          newViewCountsForDifferentiators[item.calendarItemModel.itemViewDifferentiator] = newViewCount
+          let newViewCount = (newViewCountsForDifferentiators[item.calendarItemModel._itemViewDifferentiator] ?? 0) + 1
+          newViewCountsForDifferentiators[item.calendarItemModel._itemViewDifferentiator] = newViewCount
         }
       })
 
@@ -465,7 +461,7 @@ private struct MockCalendarItemModel: AnyCalendarItemModel, Equatable {
     viewTypeDescription: String,
     invariantViewProperties: AnyHashable)
   {
-    _itemViewDifferentiator = .viewRepresentable(
+    _itemViewDifferentiator = _CalendarItemViewDifferentiator(
       viewRepresentableTypeDescription: viewRepresentableTypeDescription,
       viewTypeDescription: viewTypeDescription,
       invariantViewProperties: invariantViewProperties)
@@ -521,7 +517,7 @@ private struct MockCalendarItemModel: AnyCalendarItemModel, Equatable {
 
   func _setViewModel(onViewOfSameType view: UIView) { }
 
-  func _isViewModel(equalToViewModelOf other: AnyCalendarItemModel) -> Bool {
+  func _isViewModelEqual(toViewModelOf other: AnyCalendarItemModel) -> Bool {
     false
   }
 

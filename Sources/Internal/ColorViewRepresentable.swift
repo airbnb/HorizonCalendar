@@ -1,5 +1,5 @@
-// Created by Bryan Keller on 9/11/21.
-// Copyright © 2021 Airbnb Inc. All rights reserved.
+// Created by Bryan Keller on 1/27/23.
+// Copyright © 2023 Airbnb Inc. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,17 @@
 
 import UIKit
 
-extension NSDirectionalEdgeInsets: Hashable {
+enum ColorViewRepresentable: CalendarItemViewRepresentable {
 
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(top)
-    hasher.combine(leading)
-    hasher.combine(bottom)
-    hasher.combine(trailing)
+  static func makeView(
+    withInvariantViewProperties invariantViewProperties: UIColor)
+    -> UIView
+  {
+    let view = UIView()
+    view.backgroundColor = invariantViewProperties
+    return view
   }
+
+  static func setViewModel(_ viewModel: Int, on view: UIView) { }
 
 }

@@ -195,6 +195,21 @@ extension DayOfWeekView {
     /// The accessibility traits of the `DayOfWeekView`.
     public var accessibilityTraits = UIAccessibilityTraits.none
 
+    public func hash(into hasher: inout Hasher) {
+      hasher.combine(backgroundColor)
+      hasher.combine(edgeInsets.leading)
+      hasher.combine(edgeInsets.trailing)
+      hasher.combine(edgeInsets.top)
+      hasher.combine(edgeInsets.bottom)
+      hasher.combine(shape)
+      hasher.combine(backgroundShapeDrawingConfig)
+      hasher.combine(font)
+      hasher.combine(textAlignment)
+      hasher.combine(textColor)
+      hasher.combine(isAccessibilityElement)
+      hasher.combine(accessibilityTraits)
+    }
+
   }
 
 }
