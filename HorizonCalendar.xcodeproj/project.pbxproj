@@ -62,6 +62,7 @@
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
 		FD8CF37A2988A06C00D0482D /* MonthGridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8CF3792988A06C00D0482D /* MonthGridBackgroundView.swift */; };
 		FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */; };
+		FDB6D6BD298CB1A600A17668 /* Hasher+CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB6D6BC298CB1A600A17668 /* Hasher+CGRect.swift */; };
 		FDD8EE6E2984C08A00F6EC9D /* ColorViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD8EE6D2984C08A00F6EC9D /* ColorViewRepresentable.swift */; };
 		FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */; };
 /* End PBXBuildFile section */
@@ -135,6 +136,7 @@
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
 		FD8CF3792988A06C00D0482D /* MonthGridBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthGridBackgroundView.swift; sourceTree = "<group>"; };
 		FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewInsertionIndexTracker.swift; sourceTree = "<group>"; };
+		FDB6D6BC298CB1A600A17668 /* Hasher+CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Hasher+CGRect.swift"; sourceTree = "<group>"; };
 		FDD8EE6D2984C08A00F6EC9D /* ColorViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewRepresentable.swift; sourceTree = "<group>"; };
 		FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -254,6 +256,7 @@
 				939E691E24837E0200A8BCC7 /* Dictionary+MutatingValueForKey.swift */,
 				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
 				939E692324837E0300A8BCC7 /* FrameProvider.swift */,
+				FDB6D6BC298CB1A600A17668 /* Hasher+CGRect.swift */,
 				939E691B24837E0200A8BCC7 /* ItemView.swift */,
 				939E691D24837E0200A8BCC7 /* ItemViewReuseManager.swift */,
 				939E692024837E0300A8BCC7 /* LayoutItem.swift */,
@@ -411,6 +414,7 @@
 				939E693E24846A6600A8BCC7 /* Month.swift in Sources */,
 				939E692E24837E0300A8BCC7 /* ScrollToItemContext.swift in Sources */,
 				9321958426EEB97F0001C7E9 /* MonthHeaderView.swift in Sources */,
+				FDB6D6BD298CB1A600A17668 /* Hasher+CGRect.swift in Sources */,
 				939E693824837E8700A8BCC7 /* CalendarViewScrollPosition.swift in Sources */,
 				9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */,
 				939E692D24837E0300A8BCC7 /* LayoutItem.swift in Sources */,

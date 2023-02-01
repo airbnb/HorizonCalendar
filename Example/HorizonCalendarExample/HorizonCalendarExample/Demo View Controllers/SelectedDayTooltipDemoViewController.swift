@@ -39,7 +39,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
 
     let selectedDate = self.selectedDate
 
-    let overlaidItemLocations: Set<CalendarViewContent.OverlaidItemLocation>
+    let overlaidItemLocations: Set<OverlaidItemLocation>
     if let selectedDate = selectedDate {
       overlaidItemLocations = [.day(containingDate: selectedDate)]
     } else {

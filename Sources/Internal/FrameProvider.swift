@@ -44,7 +44,7 @@ final class FrameProvider {
         interMonthSpacing: content.interMonthSpacing)
     }
 
-    let insetWidth = monthWidth - content.monthDayInsets.left - content.monthDayInsets.right
+    let insetWidth = monthWidth - content.monthDayInsets.leading - content.monthDayInsets.trailing
     let numberOfDaysPerWeek = CGFloat(7)
     let availableWidth = insetWidth - (content.horizontalDayMargin * (numberOfDaysPerWeek - 1))
     let width = availableWidth / numberOfDaysPerWeek
@@ -186,8 +186,8 @@ final class FrameProvider {
       preconditionFailure("\(day) must be adjacent to \(adjacentDay) (one day apart, same month).")
     }
 
-    let minX = monthOrigin.x + content.monthDayInsets.left
-    let maxX = monthOrigin.x + monthWidth - content.monthDayInsets.right - daySize.width
+    let minX = monthOrigin.x + content.monthDayInsets.leading
+    let maxX = monthOrigin.x + monthWidth - content.monthDayInsets.trailing - daySize.width
 
     let origin: CGPoint
     if distanceFromAdjacentDay < 0 {
@@ -334,7 +334,7 @@ final class FrameProvider {
   {
     let distanceFromMonthLeadingEdge = CGFloat(dayOfWeekPosition.rawValue - 1) *
       (daySize.width + content.horizontalDayMargin)
-    return minXOfContainingRow + content.monthDayInsets.left + distanceFromMonthLeadingEdge
+    return minXOfContainingRow + content.monthDayInsets.leading + distanceFromMonthLeadingEdge
   }
 
   private func minXOfMonth(

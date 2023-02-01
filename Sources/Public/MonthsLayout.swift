@@ -18,7 +18,7 @@ import CoreGraphics
 // MARK: - MonthsLayout
 
 /// The layout of months displayed in `CalendarView`.
-public enum MonthsLayout {
+public enum MonthsLayout: Hashable {
 
   /// Calendar months will be arranged in a single column, and scroll on the vertical axis.
   ///
@@ -73,24 +73,10 @@ public enum MonthsLayout {
   }
 }
 
-// MARK: Equatable
-
-extension MonthsLayout: Equatable {
-
-  public static func == (lhs: MonthsLayout, rhs: MonthsLayout) -> Bool {
-    switch (lhs, rhs)  {
-    case (.vertical(let lhsOptions), .vertical(let rhsOptions)): return lhsOptions == rhsOptions
-    case (.horizontal(let lhsOptions), .horizontal(let rhsOptions)): return lhsOptions == rhsOptions
-    default: return false
-    }
-  }
-
-}
-
 // MARK: - VerticalMonthsLayoutOptions
 
 /// Layout options for a vertically-scrolling calendar.
-public struct VerticalMonthsLayoutOptions: Equatable {
+public struct VerticalMonthsLayoutOptions: Hashable {
 
   // MARK: Lifecycle
 
@@ -130,7 +116,7 @@ public struct VerticalMonthsLayoutOptions: Equatable {
 // MARK: - HorizontalMonthsLayoutOptions
 
 /// Layout options for a horizontally-scrolling calendar.
-public struct HorizontalMonthsLayoutOptions: Equatable {
+public struct HorizontalMonthsLayoutOptions: Hashable {
 
   // MARK: Lifecycle
 
@@ -192,7 +178,7 @@ public struct HorizontalMonthsLayoutOptions: Equatable {
 extension HorizontalMonthsLayoutOptions {
   
   /// The scrolling behavior of the horizontally-scrolling calendar: either paginated-scrolling or free-scrolling.
-  public enum ScrollingBehavior: Equatable {
+  public enum ScrollingBehavior: Hashable {
     
     /// The calendar will come to a rest at specific scroll positions, defined by the `PaginationConfiguration`.
     case paginatedScrolling(PaginationConfiguration)
@@ -208,7 +194,7 @@ extension HorizontalMonthsLayoutOptions {
 extension HorizontalMonthsLayoutOptions {
   
   /// The pagination behavior's configurable options.
-  public struct PaginationConfiguration: Equatable {
+  public struct PaginationConfiguration: Hashable {
     
     // MARK: Lifecycle
     
@@ -234,7 +220,7 @@ extension HorizontalMonthsLayoutOptions.PaginationConfiguration {
   // MARK: - HorizontalMonthsLayoutOptions.PaginationConfiguration.RestingPosition
   
   /// The position at which the calendar will come to a rest when paginating.
-  public enum RestingPosition: Equatable {
+  public enum RestingPosition: Hashable {
 
     /// The calendar will come to a rest at the leading edge of each month.
     case atLeadingEdgeOfEachMonth
@@ -247,7 +233,7 @@ extension HorizontalMonthsLayoutOptions.PaginationConfiguration {
   // MARK: - HorizontalMonthsLayoutOptions.PaginationConfiguration.RestingAffinity
   
   /// The calendar's affinity for stopping at a resting position.
-  public enum RestingAffinity: Equatable {
+  public enum RestingAffinity: Hashable {
     
     /// The calendar will come to a rest at the position adjacent to the previous resting position, regardless of how fast the user
     /// swipes.

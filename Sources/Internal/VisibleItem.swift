@@ -87,7 +87,7 @@ extension VisibleItem {
     case pinnedDaysOfWeekRowSeparator
     case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
-    case overlayItem(CalendarViewContent.OverlaidItemLocation)
+    case overlayItem(OverlaidItemLocation)
 
     var isUserInteractionEnabled: Bool {
       switch self {
