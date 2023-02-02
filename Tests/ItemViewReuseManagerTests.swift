@@ -515,9 +515,9 @@ private struct MockCalendarItemModel: AnyCalendarItemModel, Equatable {
     UIView()
   }
 
-  func _setViewModel(onViewOfSameType view: UIView) { }
+  func _setContent(onViewOfSameType view: UIView) { }
 
-  func _isViewModelEqual(toViewModelOf other: AnyCalendarItemModel) -> Bool {
+  func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool {
     false
   }
 

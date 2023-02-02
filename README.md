@@ -208,7 +208,7 @@ struct DayLabel: CalendarItemViewRepresentable {
   }
 
   /// Properties that will vary depending on the particular date being displayed.
-  struct ViewModel: Equatable {
+  struct Content: Equatable {
     let day: Day
   }
 
@@ -229,8 +229,8 @@ struct DayLabel: CalendarItemViewRepresentable {
     return label
   }
 
-  static func setViewModel(_ viewModel: ViewModel, on view: UILabel) {
-    view.text = "\(viewModel.day.day)"
+  static func setContent(_ content: Content, on view: UILabel) {
+    view.text = "\(content.day.day)"
   }
 
 }
@@ -238,7 +238,7 @@ struct DayLabel: CalendarItemViewRepresentable {
 
 `CalendarItemViewRepresentable` requires us to implement a `static` `makeView` function, which should create and return a view given a set of invariant view properties. We want our label to have a configurable font and text color, so we've made those configurable via the `InvariantViewProperties` type. In our `makeView` function, we use those invariant view properties to create and configure an instance of our label.
 
-`CalendarItemViewRepresentable` also requires us to implement a `static` `setViewModel` function, which should update all data-dependent properties (like the day text) on the provided view.
+`CalendarItemViewRepresentable` also requires us to implement a `static` `setContent` function, which should update all data-dependent properties (like the day text) on the provided view.
 
 Now that we have a type conforming to `CalendarItemViewRepresentable`, we can use it to create a `CalendarItemModel` to return from the day item model provider:
 
@@ -251,7 +251,7 @@ Now that we have a type conforming to `CalendarItemViewRepresentable`, we can us
           font: UIFont.systemFont(ofSize: 18), 
           textColor: .darkGray,
           backgroundColor: .clear),
-        viewModel: .init(day: day))
+        content: .init(day: day))
     }
 ```
 
@@ -372,7 +372,7 @@ extension DayRangeIndicatorView: CalendarItemViewRepresentable {
     let indicatorColor = UIColor.blue.withAlphaComponent(0.15)
   }
 
-  struct ViewModel: Equatable {
+  struct Content: Equatable {
     let framesOfDaysToHighlight: [CGRect]
   }
 
@@ -383,8 +383,8 @@ extension DayRangeIndicatorView: CalendarItemViewRepresentable {
     DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
   }
 
-  static func setViewModel(_ viewModel: ViewModel, on view: DayRangeIndicatorView) {
-    view.framesOfDaysToHighlight = viewModel.framesOfDaysToHighlight
+  static func setContent(_ content: Content, on view: DayRangeIndicatorView) {
+    view.framesOfDaysToHighlight = content.framesOfDaysToHighlight
   }
 
 }
@@ -399,7 +399,7 @@ Last, we need to return a `CalendarItemModel` representing our `DayRangeIndicato
     .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
       DayRangeIndicatorView.calendarItemModel(
         invariantViewProperties: .init(indicatorColor: UIColor.blue.withAlphaComponent(0.15)),
-        viewModel: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
+        content: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
     }
 ```
 
@@ -525,7 +525,7 @@ extension TooltipView: CalendarItemViewRepresentable {
     let textColor: UIColor
   }
 
-  struct ViewModel: Equatable {
+  struct Content: Equatable {
     let frameOfTooltippedItem: CGRect?
     let text: String
   }
@@ -540,9 +540,9 @@ extension TooltipView: CalendarItemViewRepresentable {
     textColor: invariantViewProperties.textColor)
   }
 
-  static func setViewModel(_ viewModel: ViewModel, on view: TooltipView) {
-    view.frameOfTooltippedItem = viewModel.frameOfTooltippedItem
-    view.text = viewModel.text
+  static func setContent(_ content: Content, on view: TooltipView) {
+    view.frameOfTooltippedItem = content.frameOfTooltippedItem
+    view.text = content.text
   }
 
 }
@@ -560,7 +560,7 @@ Last, we need to return a `CalendarItemModel` representing our `TooltipView` fro
           borderColor: .black, 
           font: UIFont.systemFont(ofSize: 16), 
           textColor: .black),
-        viewModel: .init(
+        content: .init(
           frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame, 
           text: "Dr. Martin Luther King Jr.'s Birthday"))
     }
@@ -583,7 +583,7 @@ If you build and run the app, you should see a tooltip view hovering above 2020-
     .monthBackgroundItemProvider { monthLayoutContext in
       MonthGridBackgroundView.calendarItemModel(
         invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
-        viewModel: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
+        content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
     }
 ```
 
@@ -623,7 +623,7 @@ The day selection handler closure is invoked whenever a day in the calendar is s
       
       return DayLabel.calendarItemModel(
         invariantViewProperties: invariantViewProperties,
-        viewModel: .init(day: day))
+        content: .init(day: day))
   }
 ```
 

@@ -22,7 +22,7 @@ final class TooltipView: UIView {
 
   // MARK: Lifecycle
 
-  init(invariantViewProperties: InvariantViewProperties) {
+  fileprivate init(invariantViewProperties: InvariantViewProperties) {
     backgroundView = UIView()
     backgroundView.backgroundColor = invariantViewProperties.backgroundColor
     backgroundView.layer.borderColor = invariantViewProperties.borderColor.cgColor
@@ -111,7 +111,7 @@ extension TooltipView: CalendarItemViewRepresentable {
     var textColor = UIColor.black
   }
 
-  struct ViewModel: Equatable {
+  struct Content: Equatable {
     let frameOfTooltippedItem: CGRect?
     let text: String
   }
@@ -123,9 +123,9 @@ extension TooltipView: CalendarItemViewRepresentable {
     TooltipView(invariantViewProperties: invariantViewProperties)
   }
 
-  static func setViewModel(_ viewModel: ViewModel, on view: TooltipView) {
-    view.frameOfTooltippedItem = viewModel.frameOfTooltippedItem
-    view.text = viewModel.text
+  static func setContent(_ content: Content, on view: TooltipView) {
+    view.frameOfTooltippedItem = content.frameOfTooltippedItem
+    view.text = content.text
   }
 
 }

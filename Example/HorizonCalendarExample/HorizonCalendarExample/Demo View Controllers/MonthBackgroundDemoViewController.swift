@@ -42,7 +42,7 @@ final class MonthBackgroundDemoViewController: DemoViewController {
       .monthBackgroundItemProvider { monthLayoutContext in
         MonthGridBackgroundView.calendarItemModel(
           invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
-          viewModel: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
+          content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
       }
   }
 

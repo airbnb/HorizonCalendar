@@ -26,6 +26,6 @@ enum ColorViewRepresentable: CalendarItemViewRepresentable {
     return view
   }
 
-  static func setViewModel(_ viewModel: Int, on view: UIView) { }
+  static func setContent(_ content: Int, on view: UIView) { }
 
 }

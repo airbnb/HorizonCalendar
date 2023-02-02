@@ -89,7 +89,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
 
         return DayView.calendarItemModel(
           invariantViewProperties: invariantViewProperties,
-          viewModel: .init(
+          content: .init(
             dayText: "\(day.day)",
             accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
             accessibilityHint: nil))
@@ -98,7 +98,7 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
       .dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
         DayRangeIndicatorView.calendarItemModel(
           invariantViewProperties: .init(),
-          viewModel: .init(
+          content: .init(
             framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
       }
   }

@@ -55,9 +55,9 @@ public final class MonthHeaderView: UIView {
 
   // MARK: Fileprivate
 
-  fileprivate func setViewModel(_ viewModel: ViewModel) {
-    label.text = viewModel.monthText
-    accessibilityLabel = viewModel.accessibilityLabel
+  fileprivate func setContent(_ content: Content) {
+    label.text = content.monthText
+    accessibilityLabel = content.accessibilityLabel
   }
 
   // MARK: Private
@@ -83,7 +83,7 @@ extension MonthHeaderView {
 
 }
 
-// MARK: - DayView.ViewModel
+// MARK: - DayView.Content
 
 extension MonthHeaderView {
 
@@ -92,7 +92,7 @@ extension MonthHeaderView {
   ///
   /// - Note: To avoid performance issues, reuse the same `DateFormatter` for each month, rather than creating
   /// a new `DateFormatter` for each month.
-  public struct ViewModel: Equatable {
+  public struct Content: Equatable {
 
     // MARK: Lifecycle
 
@@ -176,8 +176,8 @@ extension MonthHeaderView: CalendarItemViewRepresentable {
     MonthHeaderView(invariantViewProperties: invariantViewProperties)
   }
 
-  public static func setViewModel(_ viewModel: ViewModel, on view: MonthHeaderView) {
-    view.setViewModel(viewModel)
+  public static func setContent(_ content: Content, on view: MonthHeaderView) {
+    view.setContent(content)
   }
 
 }

@@ -666,7 +666,7 @@ final class VisibleItemsProvider {
                 previousCalendarItemModelCache?[separatorItemType] ??
                   ColorViewRepresentable.calendarItemModel(
                     invariantViewProperties: separatorOptions.color,
-                    viewModel: 0)
+                    content: 0)
               })
 
             visibleItems.insert(
@@ -874,7 +874,7 @@ final class VisibleItemsProvider {
       VisibleItem(
         calendarItemModel: ColorViewRepresentable.calendarItemModel(
           invariantViewProperties: backgroundColor ?? .clear,
-          viewModel: 0),
+          content: 0),
         itemType: .pinnedDaysOfWeekRowBackground,
         frame: frameProvider.frameOfPinnedDaysOfWeekRowBackground(yContentOffset: yContentOffset)))
 
@@ -887,7 +887,7 @@ final class VisibleItemsProvider {
           previousCalendarItemModelCache?[separatorItemType] ??
             ColorViewRepresentable.calendarItemModel(
               invariantViewProperties: separatorOptions.color,
-              viewModel: 0)
+              content: 0)
         })
 
       visibleItems.insert(

@@ -33,15 +33,15 @@ public protocol AnyCalendarItemModel {
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   func _makeView() -> UIView
 
-  /// Updates the view model on an instance of `ViewType` by invoking `setViewModel`.
+  /// Updates the content on an instance of `ViewType` by invoking `setContent`.
   ///
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _setViewModel(onViewOfSameType view: UIView)
+  func _setContent(onViewOfSameType view: UIView)
 
-  /// Compares the view models of two `CalendarItemModel`s for equality.
+  /// Compares the contents of two `CalendarItemModel`s for equality.
   ///
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
-  func _isViewModelEqual(toViewModelOf other: AnyCalendarItemModel) -> Bool
+  func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool
 
 }
 
