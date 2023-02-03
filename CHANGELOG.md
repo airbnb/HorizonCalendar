@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
+- Renamed `viewModel` to `content`, since it's a less-overloaded term
+- Changed `monthDayInsets` to take `NSDirectionalEdgeInsets`, rather than `UIEdgeInsets`
+- Un-nested some types to make them fit better with an upcoming SwiftUI API
+- Updated the default `HorizontalMonthLayoutOptions` to use a `restingPosition` of `.atLeadingEdgeOfEachMonth`, which is probably what most people want
+- Added `MonthsLayout.vertical` and `MonthsLayout.horizontal` as more concise alternatives to `MonthsLayout.vertical(options: .init())` and `MonthsLayout.horizontal(options: .init())`, respectively
+- Make more publicly-exposed types conform to `Hashable`, because why not - maybe API consumers want to stick things in a `Set` or `Dictionary`.
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 
