@@ -30,6 +30,16 @@ public enum MonthsLayout: Hashable {
   /// - `options`: Additional options to adjust the layout of the horizontally-scrolling calendar.
   case horizontal(options: HorizontalMonthsLayoutOptions)
 
+  // MARK: Public
+
+  public static var vertical: MonthsLayout {
+    .vertical(options: .init())
+  }
+
+  public static var horizontal: MonthsLayout {
+    .horizontal(options: .init())
+  }
+
   // MARK: Internal
 
   var isHorizontal: Bool {
@@ -131,7 +141,7 @@ public struct HorizontalMonthsLayoutOptions: Hashable {
     maximumFullyVisibleMonths: Double = 1,
     scrollingBehavior: ScrollingBehavior = .paginatedScrolling(
       .init(
-        restingPosition: .atIncrementsOfCalendarWidth,
+        restingPosition: .atLeadingEdgeOfEachMonth,
         restingAffinity: .atPositionsAdjacentToPrevious)))
   {
     assert(maximumFullyVisibleMonths >= 1, "`maximumFullyVisibleMonths` must be greater than 1.")
