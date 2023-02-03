@@ -60,6 +60,11 @@
 		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
+		FD6E1CFA298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */; };
+		FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */; };
+		FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */; };
+		FD6E1CFD298D94DC00B480A6 /* OverlaidItemLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF8298D94DC00B480A6 /* OverlaidItemLocation.swift */; };
+		FD6E1CFE298D94DC00B480A6 /* DayRangeLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */; };
 		FD8CF37A2988A06C00D0482D /* MonthGridBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8CF3792988A06C00D0482D /* MonthGridBackgroundView.swift */; };
 		FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */; };
 		FDB6D6BD298CB1A600A17668 /* Hasher+CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB6D6BC298CB1A600A17668 /* Hasher+CGRect.swift */; };
@@ -134,6 +139,11 @@
 		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
+		FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysOfTheWeekRowSeparatorOptions.swift; sourceTree = "<group>"; };
+		FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayLayoutContext.swift; sourceTree = "<group>"; };
+		FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthLayoutContext.swift; sourceTree = "<group>"; };
+		FD6E1CF8298D94DC00B480A6 /* OverlaidItemLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlaidItemLocation.swift; sourceTree = "<group>"; };
+		FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayRangeLayoutContext.swift; sourceTree = "<group>"; };
 		FD8CF3792988A06C00D0482D /* MonthGridBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthGridBackgroundView.swift; sourceTree = "<group>"; };
 		FD9CDA8F293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewInsertionIndexTracker.swift; sourceTree = "<group>"; };
 		FDB6D6BC298CB1A600A17668 /* Hasher+CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Hasher+CGRect.swift"; sourceTree = "<group>"; };
@@ -239,11 +249,16 @@
 				939E693524837E8700A8BCC7 /* CalendarViewContent.swift */,
 				939E693324837E8700A8BCC7 /* CalendarViewScrollPosition.swift */,
 				939E693F24846A8C00A8BCC7 /* Day.swift */,
+				FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */,
 				939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */,
 				939E694124846EB400A8BCC7 /* DayRange.swift */,
+				FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */,
 				939E693D24846A6600A8BCC7 /* Month.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
+				FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */,
 				939E693B2483824600A8BCC7 /* MonthRange.swift */,
+				FD6E1CF8298D94DC00B480A6 /* OverlaidItemLocation.swift */,
+				FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -402,6 +417,7 @@
 				FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */,
 				939E692524837E0300A8BCC7 /* LayoutItemTypeEnumerator.swift in Sources */,
 				938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */,
+				FD6E1CFD298D94DC00B480A6 /* OverlaidItemLocation.swift in Sources */,
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
 				939E693024837E0300A8BCC7 /* FrameProvider.swift in Sources */,
 				939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */,
@@ -423,16 +439,20 @@
 				939E692F24837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift in Sources */,
 				FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
+				FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */,
 				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
 				939E694024846A8C00A8BCC7 /* Day.swift in Sources */,
 				939E692424837E0300A8BCC7 /* CalendarView.swift in Sources */,
 				939E693924837E8700A8BCC7 /* MonthsLayout.swift in Sources */,
 				939E692B24837E0300A8BCC7 /* Dictionary+MutatingValueForKey.swift in Sources */,
+				FD6E1CFE298D94DC00B480A6 /* DayRangeLayoutContext.swift in Sources */,
 				939E692624837E0300A8BCC7 /* ScrollMetricsMutator.swift in Sources */,
 				939E694224846EB400A8BCC7 /* DayRange.swift in Sources */,
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
+				FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
 				FD8CF37A2988A06C00D0482D /* MonthGridBackgroundView.swift in Sources */,
+				FD6E1CFA298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift in Sources */,
 				9391F15625C097DF001D14A2 /* PaginationHelpers.swift in Sources */,
 				FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */,
 			);
