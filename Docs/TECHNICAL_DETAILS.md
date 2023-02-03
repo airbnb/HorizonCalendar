@@ -69,7 +69,7 @@ Using the `LayoutItemTypeEnumerator` and `FrameProvider`, the `VisibleItemsProvi
 
 `CalendarView` uses this set, along with the previous set of visible items, to determine which parts have changed. The difference between these two sets is used to create new views when necessary, or reuse existing views that have been scrolled off screen and can be repurposed. This process is very similar to `UICollectionView`'s view reuse, and the bulk of the logic is contained in `ItemViewReuseManager`.
 
-Once the reuse manager determines which views can be reused vs. made from scratch, `CalendarView` will update the view model on that view so that its displaying the latest data from the content.
+Once the reuse manager determines which views can be reused vs. made from scratch, `CalendarView` will update the content on that view so that its displaying the latest data from the content.
 
 #### Manage the underlying scroll view
 

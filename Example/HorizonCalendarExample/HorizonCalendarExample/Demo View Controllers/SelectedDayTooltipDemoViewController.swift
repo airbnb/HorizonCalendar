@@ -39,7 +39,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
 
     let selectedDate = self.selectedDate
 
-    let overlaidItemLocations: Set<CalendarViewContent.OverlaidItemLocation>
+    let overlaidItemLocations: Set<OverlaidItemLocation>
     if let selectedDate = selectedDate {
       overlaidItemLocations = [.day(containingDate: selectedDate)]
     } else {
@@ -64,7 +64,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
 
         return DayView.calendarItemModel(
           invariantViewProperties: invariantViewProperties,
-          viewModel: .init(
+          content: .init(
             dayText: "\(day.day)",
             accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
             accessibilityHint: nil))
@@ -73,7 +73,7 @@ final class SelectedDayTooltipDemoViewController: DemoViewController {
       .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
         TooltipView.calendarItemModel(
           invariantViewProperties: .init(),
-          viewModel: .init(
+          content: .init(
             frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
             text: "Selected Day"))
       }

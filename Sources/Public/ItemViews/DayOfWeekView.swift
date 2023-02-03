@@ -88,9 +88,9 @@ public final class DayOfWeekView: UIView {
 
   // MARK: Fileprivate
 
-  fileprivate func setViewModel(_ viewModel: ViewModel) {
-    label.text = viewModel.dayOfWeekText
-    accessibilityLabel = viewModel.accessibilityLabel
+  fileprivate func setContent(_ content: Content) {
+    label.text = content.dayOfWeekText
+    accessibilityLabel = content.accessibilityLabel
   }
 
   // MARK: Private
@@ -117,7 +117,7 @@ extension DayOfWeekView {
 
 }
 
-// MARK: - DayView.ViewModel
+// MARK: - DayView.Content
 
 extension DayOfWeekView {
 
@@ -125,7 +125,7 @@ extension DayOfWeekView {
   /// your `CalendarView` to access localized weekday symbols. For example, you can use
   /// `calendar.shortWeekdaySymbols` or `calendar.veryShortWeekdaySymbols`. For the `accessibilityLabel`,
   /// consider using the full-length symbol names in `calendar.weekdaySymbols`.
-  public struct ViewModel: Equatable {
+  public struct Content: Equatable {
 
     // MARK: Lifecycle
 
@@ -225,8 +225,8 @@ extension DayOfWeekView: CalendarItemViewRepresentable {
     DayOfWeekView(invariantViewProperties: invariantViewProperties)
   }
 
-  public static func setViewModel(_ viewModel: ViewModel, on view: DayOfWeekView) {
-    view.setViewModel(viewModel)
+  public static func setContent(_ content: Content, on view: DayOfWeekView) {
+    view.setContent(content)
   }
 
 }

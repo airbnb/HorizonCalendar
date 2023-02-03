@@ -67,7 +67,7 @@ public final class CalendarViewContent {
       let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
       let itemModel = MonthHeaderView.calendarItemModel(
         invariantViewProperties: .base,
-        viewModel: .init(monthText: monthText, accessibilityLabel: monthText))
+        content: .init(monthText: monthText, accessibilityLabel: monthText))
       return itemModel
     }
 
@@ -75,7 +75,7 @@ public final class CalendarViewContent {
       let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
-        viewModel: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
       return itemModel
     }
 
@@ -91,7 +91,7 @@ public final class CalendarViewContent {
       let date = calendar.startDate(of: day)
       let itemModel = DayView.calendarItemModel(
         invariantViewProperties: .baseNonInteractive,
-        viewModel: .init(
+        content: .init(
           dayText: "\(day.day)",
           accessibilityLabel: dayDateFormatter.string(from: date),
           accessibilityHint: nil))
@@ -136,7 +136,7 @@ public final class CalendarViewContent {
   /// - Parameters:
   ///   - monthDayInsets: The amount to inset days and day-of-week items from the edges of a month.
   /// - Returns: A mutated `CalendarViewContent` instance with a new month-day-insets value.
-  public func monthDayInsets(_ monthDayInsets: UIEdgeInsets) -> CalendarViewContent {
+  public func monthDayInsets(_ monthDayInsets: NSDirectionalEdgeInsets) -> CalendarViewContent {
     self.monthDayInsets = monthDayInsets
     return self
   }
@@ -175,7 +175,7 @@ public final class CalendarViewContent {
   ///   - options: An instance that has properties to control various aspects of the separator's design.
   /// - Returns: A mutated `CalendarViewContent` instance with a days-of-the-week row separator configured.
   public func daysOfTheWeekRowSeparator(
-    options: DaysOfTheWeekRowSeparatorOptions)
+    options: DaysOfTheWeekRowSeparatorOptions?)
     -> CalendarViewContent
   {
     daysOfTheWeekRowSeparatorOptions = options
@@ -200,7 +200,7 @@ public final class CalendarViewContent {
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.monthHeaderItemProvider = { monthHeaderItemProvider($0) }
+    self.monthHeaderItemProvider = monthHeaderItemProvider
     return self
   }
 
@@ -226,7 +226,7 @@ public final class CalendarViewContent {
       -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.dayOfWeekItemProvider = { dayOfWeekItemProvider($0, $1) }
+    self.dayOfWeekItemProvider = dayOfWeekItemProvider
     return self
   }
 
@@ -248,7 +248,7 @@ public final class CalendarViewContent {
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    self.dayItemProvider = { dayItemProvider($0) }
+    self.dayItemProvider = dayItemProvider
     return self
   }
 
@@ -269,10 +269,7 @@ public final class CalendarViewContent {
     _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.dayBackgroundItemProvider = {
-      guard let dayBackgroundItemModel = dayBackgroundItemProvider($0) else { return nil }
-      return dayBackgroundItemModel
-    }
+    self.dayBackgroundItemProvider = dayBackgroundItemProvider
     return self
   }
 
@@ -298,10 +295,7 @@ public final class CalendarViewContent {
       -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.monthBackgroundItemProvider = {
-      guard let monthBackgroundItemModel = monthBackgroundItemProvider($0) else { return nil }
-      return monthBackgroundItemModel
-    }
+    self.monthBackgroundItemProvider = monthBackgroundItemProvider
     return self
   }
 
@@ -335,7 +329,7 @@ public final class CalendarViewContent {
     -> CalendarViewContent
   {
     let dayRanges = Set(dateRanges.map { DayRange(containing: $0, in: calendar) })
-    dayRangesAndItemProvider = (dayRanges, { dayRangeItemProvider($0) })
+    dayRangesAndItemProvider = (dayRanges, dayRangeItemProvider)
     return self
   }
 
@@ -362,9 +356,7 @@ public final class CalendarViewContent {
       -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
-    overlaidItemLocationsAndItemProvider = (
-      overlaidItemLocations,
-      { overlayItemProvider($0) })
+    overlaidItemLocationsAndItemProvider = (overlaidItemLocations, overlayItemProvider)
     return self
   }
 
@@ -377,7 +369,7 @@ public final class CalendarViewContent {
 
   private(set) var dayAspectRatio: CGFloat = 1
   private(set) var interMonthSpacing: CGFloat = 0
-  private(set) var monthDayInsets: UIEdgeInsets = .zero
+  private(set) var monthDayInsets: NSDirectionalEdgeInsets = .zero
   private(set) var verticalDayMargin: CGFloat = 0
   private(set) var horizontalDayMargin: CGFloat = 0
   private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
@@ -396,148 +388,5 @@ public final class CalendarViewContent {
   private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
-
-}
-
-// MARK: - CalendarViewContent.DayRangeLayoutContext
-
-extension CalendarViewContent {
-
-  /// The layout context for a day range, containing information about the frames of days in the day range and the bounding rect (union)
-  /// of those frames. This can be used in a custom day range view to draw the day range in the correct location.
-  public struct DayRangeLayoutContext {
-    /// The day range that this layout context describes.
-    public let dayRange: DayRange
-
-    /// An ordered list of tuples containing day and day frame pairs.
-    ///
-    /// Each frame represents the frame of an individual day in the day range in the coordinate system of
-    /// `boundingUnionRectOfDayFrames`. If a day range extends beyond the `visibleDateRange`, this array will only
-    /// contain the day-frame pairs for the visible portion of the day range.
-    public let daysAndFrames: [(day: Day, frame: CGRect)]
-
-    /// A rectangle that perfectly contains all day frames in `daysAndFrames`. In other words, it is the union of all day frames in
-    /// `daysAndFrames`.
-    public let boundingUnionRectOfDayFrames: CGRect
-  }
-
-}
-
-// MARK: - CalendarViewContent.MonthLayoutContext
-
-extension CalendarViewContent {
-
-  /// The layout context for all of the views contained in a month, including frames for days, the month header, and days-of-the-week
-  /// headers. Also included is the bounding rect (union) of those frames. This can be used in a custom month background view to
-  /// draw the background around the month's foreground views.
-  public struct MonthLayoutContext {
-
-    /// The month that this layout context describes.
-    public let month: Month
-
-    /// The frame of the month header in the coordinate system of `bounds`.
-    public let monthHeaderFrame: CGRect
-
-    /// An ordered list of tuples containing day-of-the-week positions and frames.
-    ///
-    /// Each frame corresponds to an individual day-of-the-week item (Sunday, Monday, etc.) in the month, in the coordinate system
-    /// of `bounds`. If `monthsLayout` is `.vertical`, and `pinDaysOfWeekToTop` is `true`, then this array will be
-    /// empty since day-of-the-week items appear outside of individual months.
-    public let dayOfWeekPositionsAndFrames: [(dayOfWeekPosition: DayOfWeekPosition, frame: CGRect)]
-
-    /// An ordered list of tuples containing day and day frame pairs.
-    ///
-    /// Each frame represents the frame of an individual day in the month in the coordinate system of `bounds`.
-    public let daysAndFrames: [(day: Day, frame: CGRect)]
-
-    /// The bounds into which a background can be drawn without getting clipped. Additionally, all other frames in this type are in the
-    /// coordinate system of this.
-    public let bounds: CGRect
-  }
-
-}
-
-// MARK: - CalendarViewContent.OverlaidItemLocation
-
-extension CalendarViewContent {
-
-  /// Represents the location of an item that can be overlaid.
-  public enum OverlaidItemLocation: Hashable {
-
-    /// A month header location that can be overlaid.
-    ///
-    /// The particular month to be overlaid is specified with a `Date` instance, which will be used to determine the associated month
-    /// using the `calendar` instance with which `CalendarViewContent` was instantiated.
-    case monthHeader(monthContainingDate: Date)
-
-    /// A day location that can be overlaid.
-    ///
-    /// The particular day to be overlaid is specified with a `Date` instance, which will be used to determine the associated day
-    /// using the `calendar` instance with which `CalendarViewContent` was instantiated.
-    case day(containingDate: Date)
-  }
-
-}
-
-
-// MARK: - CalendarViewContent.OverlayLayoutContext
-
-extension CalendarViewContent {
-
-  /// The layout context for an overlaid item, containing information about the location and frame of the item being overlaid, as well as
-  /// the bounds available to the overlay item for drawing and layout.
-  public struct OverlayLayoutContext {
-
-    /// The location of the item to be overlaid.
-    public let overlaidItemLocation: OverlaidItemLocation
-
-    /// The frame of the overlaid item in the coordinate system of `availableBounds`.
-    ///
-    /// Use this property, in conjunction with `availableBounds`, to prevent your overlay item from laying out outside of the
-    /// available bounds.
-    public let overlaidItemFrame: CGRect
-
-    /// A rectangle that defines the available region into which the overlay item can be laid out.
-    ///
-    /// Use this property, in conjunction with `overlaidItemFrame`, to prevent your overlay item from laying out outside of the
-    /// available bounds.
-    public let availableBounds: CGRect
-
-  }
-
-}
-
-// MARK: - CalendarViewContent.DaysOfTheWeekRowSeparatorOptions
-
-extension CalendarViewContent {
-
-  /// Used to configure the days-of-the-week row's separator.
-  public struct DaysOfTheWeekRowSeparatorOptions {
-
-    // MARK: Lifecycle
-
-    /// Initialized a new `DaysOfTheWeekRowSeparatorOptions`.
-    ///
-    /// - Parameters:
-    ///   - height: The height of the separator in points.
-    ///   - color: The color of the separator.
-    public init(height: CGFloat = 1, color: UIColor = .lightGray) {
-      self.height = height
-      self.color = color
-    }
-
-    // MARK: Public
-
-    @available(iOS 13.0, *)
-    public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
-      height: 1,
-      color: .separator)
-
-    /// The height of the separator in points.
-    public var height: CGFloat
-
-    /// The color of the separator.
-    public var color: UIColor
-  }
 
 }

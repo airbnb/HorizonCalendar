@@ -145,11 +145,11 @@ public final class DayView: UIView {
 
   // MARK: Fileprivate
 
-  fileprivate func setViewModel(_ viewModel: ViewModel) {
-    label.text = viewModel.dayText
+  fileprivate func setContent(_ content: Content) {
+    label.text = content.dayText
 
-    accessibilityLabel = viewModel.accessibilityLabel
-    accessibilityHint = viewModel.accessibilityHint
+    accessibilityLabel = content.accessibilityLabel
+    accessibilityHint = content.accessibilityHint
   }
 
   // MARK: Private
@@ -218,7 +218,7 @@ extension DayView: UIPointerInteractionDelegate {
 
 }
 
-// MARK: - DayView.ViewModel
+// MARK: - DayView.Content
 
 extension DayView {
 
@@ -227,7 +227,7 @@ extension DayView {
   ///
   /// - Note: To avoid performance issues, reuse the same `DateFormatter` for each day, rather than creating
   /// a new `DateFormatter` for each day.
-  public struct ViewModel: Equatable {
+  public struct Content: Equatable {
 
     // MARK: Lifecycle
 
@@ -354,8 +354,8 @@ extension DayView: CalendarItemViewRepresentable {
     DayView(invariantViewProperties: invariantViewProperties)
   }
 
-  public static func setViewModel(_ viewModel: ViewModel, on view: DayView) {
-    view.setViewModel(viewModel)
+  public static func setContent(_ content: Content, on view: DayView) {
+    view.setContent(content)
   }
 
 }

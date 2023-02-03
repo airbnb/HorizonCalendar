@@ -1877,10 +1877,10 @@ final class VisibleItemsProviderTests: XCTestCase {
       {
         MockView()
       }
-      static func setViewModel(_ viewModel: Int, on view: MockView) { }
+      static func setContent(_ content: Int, on view: MockView) { }
     }
 
-    return MockView.calendarItemModel(invariantViewProperties: 0, viewModel: 0)
+    return MockView.calendarItemModel(invariantViewProperties: 0, content: 0)
   }
 
   private static func makeContent(
@@ -1888,7 +1888,7 @@ final class VisibleItemsProviderTests: XCTestCase {
     -> CalendarViewContent
   {
     baseContent
-      .monthDayInsets(UIEdgeInsets(top: 30, left: 5, bottom: 0, right: 5))
+      .monthDayInsets(.init(top: 30, leading: 5, bottom: 0, trailing: 5))
       .interMonthSpacing(15)
       .verticalDayMargin(20)
       .horizontalDayMargin(10)

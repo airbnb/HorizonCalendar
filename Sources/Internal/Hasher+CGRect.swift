@@ -1,4 +1,4 @@
-// Created by Bryan Keller on 1/27/23.
+// Created by Bryan Keller on 2/2/23.
 // Copyright © 2023 Airbnb Inc. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
+import Foundation
 
-enum ColorViewRepresentable: CalendarItemViewRepresentable {
+extension Hasher {
 
-  static func makeView(
-    withInvariantViewProperties invariantViewProperties: UIColor)
-    -> UIView
-  {
-    let view = UIView()
-    view.backgroundColor = invariantViewProperties
-    return view
+  mutating func combine(_ rect: CGRect) {
+    combine(rect.origin.x)
+    combine(rect.origin.y)
+    combine(rect.size.width)
+    combine(rect.size.height)
   }
 
 }

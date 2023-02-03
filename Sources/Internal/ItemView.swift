@@ -29,7 +29,7 @@ final class ItemView: UIView {
     contentView.insetsLayoutMarginsFromSafeArea = false
     addSubview(contentView)
 
-    updateViewModel()
+    updateContent()
   }
 
   required init?(coder: NSCoder) {
@@ -51,10 +51,10 @@ final class ItemView: UIView {
         """)
       }
 
-      // Only update the view model if it's different from the old one.
-      guard !calendarItemModel._isViewModelEqual(toViewModelOf: oldValue) else { return }
+      // Only update the content if it's different from the old one.
+      guard !calendarItemModel._isContentEqual(toContentOf: oldValue) else { return }
 
-      updateViewModel()
+      updateContent()
     }
   }
 
@@ -78,8 +78,8 @@ final class ItemView: UIView {
 
   // MARK: Private
 
-  private func updateViewModel() {
-    calendarItemModel._setViewModel(onViewOfSameType: contentView)
+  private func updateContent() {
+    calendarItemModel._setContent(onViewOfSameType: contentView)
   }
 
   private func isTouchInView(_ touch: UITouch) -> Bool {

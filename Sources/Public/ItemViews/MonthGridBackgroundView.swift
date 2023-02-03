@@ -103,7 +103,7 @@ extension MonthGridBackgroundView: CalendarItemViewRepresentable {
     var verticalDayMargin: CGFloat
   }
 
-  public struct ViewModel: Equatable {
+  public struct Content: Equatable {
 
     // MARK: Lifecycle
 
@@ -123,8 +123,8 @@ extension MonthGridBackgroundView: CalendarItemViewRepresentable {
     MonthGridBackgroundView(invariantViewProperties: invariantViewProperties)
   }
 
-  public static func setViewModel(_ viewModel: ViewModel, on view: MonthGridBackgroundView) {
-    view.framesOfDays = viewModel.framesOfDays
+  public static func setContent(_ content: Content, on view: MonthGridBackgroundView) {
+    view.framesOfDays = content.framesOfDays
   }
 
 }

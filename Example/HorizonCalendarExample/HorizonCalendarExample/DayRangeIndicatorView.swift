@@ -22,7 +22,7 @@ final class DayRangeIndicatorView: UIView {
 
   // MARK: Lifecycle
 
-  init(indicatorColor: UIColor) {
+  fileprivate init(indicatorColor: UIColor) {
     self.indicatorColor = indicatorColor
 
     super.init(frame: .zero)
@@ -96,7 +96,7 @@ extension DayRangeIndicatorView: CalendarItemViewRepresentable {
     var indicatorColor = UIColor.blue.withAlphaComponent(0.15)
   }
 
-  struct ViewModel: Equatable {
+  struct Content: Equatable {
     let framesOfDaysToHighlight: [CGRect]
   }
 
@@ -107,8 +107,8 @@ extension DayRangeIndicatorView: CalendarItemViewRepresentable {
     DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
   }
 
-  static func setViewModel(_ viewModel: ViewModel, on view: DayRangeIndicatorView) {
-    view.framesOfDaysToHighlight = viewModel.framesOfDaysToHighlight
+  static func setContent(_ content: Content, on view: DayRangeIndicatorView) {
+    view.framesOfDaysToHighlight = content.framesOfDaysToHighlight
   }
 
 }

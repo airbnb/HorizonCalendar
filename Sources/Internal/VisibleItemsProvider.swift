@@ -467,14 +467,14 @@ final class VisibleItemsProvider {
     return LayoutItem(itemType: itemType, frame: frame)
   }
 
-  // Builds a `DayRangeLayoutContext` by getting frames for each day layout item in the provided
+  // Builds a `_DayRangeLayoutContext` by getting frames for each day layout item in the provided
   // `dayRange`, using the provided `day` and `frame` as a starting point.
   private func dayRangeLayoutContext(
     for dayRange: DayRange,
     containing day: Day,
     withFrame frame: CGRect,
     originsForMonths: inout [Month: CGPoint])
-    -> DayRangeLayoutContext
+    -> _DayRangeLayoutContext
   {
     guard dayRange.contains(day) else {
       preconditionFailure("""
@@ -533,7 +533,7 @@ final class VisibleItemsProvider {
       translationX: -boundingUnionRectOfDayFrames.minX,
       y: -boundingUnionRectOfDayFrames.minY)
 
-    return DayRangeLayoutContext(
+    return _DayRangeLayoutContext(
       daysAndFrames: daysAndFrames.map {
         (
           $0.day,
@@ -547,11 +547,11 @@ final class VisibleItemsProvider {
   }
 
   private func overlayLayoutContext(
-    for overlaidItemLocation: CalendarViewContent.OverlaidItemLocation,
+    for overlaidItemLocation: OverlaidItemLocation,
     inBounds bounds: CGRect,
     framesForVisibleMonths: [Month: CGRect],
     framesForVisibleDays: [Day: CGRect])
-    -> CalendarViewContent.OverlayLayoutContext?
+    -> OverlayLayoutContext?
   {
     let itemFrame: CGRect
     switch overlaidItemLocation {
@@ -665,8 +665,7 @@ final class VisibleItemsProvider {
               missingValueProvider: {
                 previousCalendarItemModelCache?[separatorItemType] ??
                   ColorViewRepresentable.calendarItemModel(
-                    invariantViewProperties: separatorOptions.color,
-                    viewModel: 0)
+                    invariantViewProperties: separatorOptions.color)
               })
 
             visibleItems.insert(
@@ -812,7 +811,7 @@ final class VisibleItemsProvider {
   // `visibleItems` set.
   private func handleDayRange(
     _ dayRange: DayRange,
-    with dayRangeLayoutContext: DayRangeLayoutContext,
+    with dayRangeLayoutContext: _DayRangeLayoutContext,
     inBounds bounds: CGRect,
     visibleItems: inout Set<VisibleItem>)
   {
@@ -825,7 +824,7 @@ final class VisibleItemsProvider {
     }
 
     let frame = dayRangeLayoutContext.frame
-    let dayRangeLayoutContext = CalendarViewContent.DayRangeLayoutContext(
+    let dayRangeLayoutContext = DayRangeLayoutContext(
       dayRange: dayRange,
       daysAndFrames: dayRangeLayoutContext.daysAndFrames,
       boundingUnionRectOfDayFrames: dayRangeLayoutContext.boundingUnionRectOfDayFrames)
@@ -873,8 +872,7 @@ final class VisibleItemsProvider {
     visibleItems.insert(
       VisibleItem(
         calendarItemModel: ColorViewRepresentable.calendarItemModel(
-          invariantViewProperties: backgroundColor ?? .clear,
-          viewModel: 0),
+          invariantViewProperties: backgroundColor ?? .clear),
         itemType: .pinnedDaysOfWeekRowBackground,
         frame: frameProvider.frameOfPinnedDaysOfWeekRowBackground(yContentOffset: yContentOffset)))
 
@@ -886,8 +884,7 @@ final class VisibleItemsProvider {
         missingValueProvider: {
           previousCalendarItemModelCache?[separatorItemType] ??
             ColorViewRepresentable.calendarItemModel(
-              invariantViewProperties: separatorOptions.color,
-              viewModel: 0)
+              invariantViewProperties: separatorOptions.color)
         })
 
       visibleItems.insert(
@@ -991,7 +988,7 @@ final class VisibleItemsProvider {
         daysAndFrames.append((day, finalDayFrame))
       }
 
-      let monthLayoutContext = CalendarViewContent.MonthLayoutContext(
+      let monthLayoutContext = MonthLayoutContext(
         month: month,
         monthHeaderFrame: finalMonthHeaderFrame,
         dayOfWeekPositionsAndFrames: dayOfWeekPositionsAndFrames,
@@ -1127,10 +1124,10 @@ struct VisibleItemsDetails {
   let maxMonthHeight: CGFloat
 }
 
-// MARK: - DayRangeLayoutContext
+// MARK: - _DayRangeLayoutContext
 
-/// Similar to `CalendarViewContent.DayRangeLayoutContext`, but also includes the `frame` of the day range visible item.
-private struct DayRangeLayoutContext {
+/// Similar to `DayRangeLayoutContext`, but also includes the `frame` of the day range visible item.
+private struct _DayRangeLayoutContext {
   let daysAndFrames: [(day: Day, frame: CGRect)]
   let boundingUnionRectOfDayFrames: CGRect
   let frame: CGRect

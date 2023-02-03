@@ -17,9 +17,9 @@ import Foundation
 
 // MARK: - Month
 
-/// Represents a month (with a corresponding year) in a particular calendar. All months are assumed to have been instantiated with the
-/// same `Calendar`, which is enforced throughout the implementation.
-public struct Month {
+/// Represents the components of a month (with a corresponding year) in a particular calendar. All months are assumed to have been
+/// instantiated with the same `Calendar`, which is enforced throughout the implementation.
+public struct Month: Hashable {
 
   // MARK: Lifecycle
 
@@ -54,32 +54,6 @@ extension Month: CustomStringConvertible {
 
   public var description: String {
     "\(String(format: "%04d", year))-\(String(format: "%02d", month))"
-  }
-
-}
-
-// MARK: Equatable
-
-extension Month: Equatable {
-
-  public static func == (lhs: Month, rhs: Month) -> Bool {
-    lhs.era == rhs.era &&
-      lhs.year == rhs.year &&
-      lhs.month == rhs.month &&
-      lhs.isInGregorianCalendar == rhs.isInGregorianCalendar
-  }
-
-}
-
-// MARK: Hashable
-
-extension Month: Hashable {
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(era)
-    hasher.combine(year)
-    hasher.combine(month)
-    hasher.combine(isInGregorianCalendar)
   }
 
 }

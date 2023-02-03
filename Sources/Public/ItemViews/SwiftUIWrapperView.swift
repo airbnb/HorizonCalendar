@@ -146,7 +146,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
   }
 
-  public struct ViewModel: Equatable {
+  public struct ContentWrapper: Equatable {
 
     // MARK: Lifecycle
 
@@ -156,7 +156,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Public
 
-    public static func == (_: ViewModel, _: ViewModel) -> Bool {
+    public static func == (_: ContentWrapper, _: ContentWrapper) -> Bool {
       false
     }
 
@@ -173,8 +173,8 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
     SwiftUIWrapperView<Content>(content: invariantViewProperties.initialContent)
   }
 
-  public static func setViewModel(_ viewModel: ViewModel, on view: SwiftUIWrapperView<Content>) {
-    view.content = viewModel.content
+  public static func setContent(_ content: ContentWrapper, on view: SwiftUIWrapperView<Content>) {
+    view.content = content.content
   }
 
 }

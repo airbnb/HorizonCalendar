@@ -34,7 +34,7 @@ final class FrameProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: Date.distantPast...Date.distantFuture,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
-        .monthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .interMonthSpacing(20)
         .verticalDayMargin(20)
         .horizontalDayMargin(10),
@@ -47,7 +47,7 @@ final class FrameProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: Date.distantPast...Date.distantFuture,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))
-        .monthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .interMonthSpacing(20)
         .verticalDayMargin(20)
         .horizontalDayMargin(10),
@@ -61,7 +61,7 @@ final class FrameProviderTests: XCTestCase {
         visibleDateRange: lowerBoundDate...upperBoundDate,
         monthsLayout: .vertical(
           options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))
-        .monthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .interMonthSpacing(20)
         .verticalDayMargin(20)
         .horizontalDayMargin(10),
@@ -75,7 +75,7 @@ final class FrameProviderTests: XCTestCase {
         visibleDateRange: Date.distantPast...Date.distantFuture,
         monthsLayout: .horizontal(
           options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 1)))
-        .monthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .interMonthSpacing(20)
         .verticalDayMargin(20)
         .horizontalDayMargin(10),
@@ -88,7 +88,7 @@ final class FrameProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: Date.distantPast...Date.distantFuture,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
-        .monthDayInsets(UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
+        .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .dayAspectRatio(1.5)
         .interMonthSpacing(20)
         .verticalDayMargin(20)

@@ -659,7 +659,7 @@ public final class CalendarView: UIView {
     let firstMonthHeaderItemModel = content.monthHeaderItemProvider(
       content.monthRange.lowerBound)
     let firstMonthHeader = firstMonthHeaderItemModel._makeView()
-    firstMonthHeaderItemModel._setViewModel(onViewOfSameType: firstMonthHeader)
+    firstMonthHeaderItemModel._setContent(onViewOfSameType: firstMonthHeader)
 
     let size = firstMonthHeader.systemLayoutSizeFitting(
       CGSize(width: monthWidth, height: 0),
@@ -1015,7 +1015,7 @@ extension CalendarView {
 
     let targetMonthItem = content.monthHeaderItemProvider(targetMonth)
     let targetMonthView = targetMonthItem._makeView()
-    targetMonthItem._setViewModel(onViewOfSameType: targetMonthView)
+    targetMonthItem._setContent(onViewOfSameType: targetMonthView)
     let accessibilityScrollText = targetMonthView.accessibilityLabel
     UIAccessibility.post(notification: .pageScrolled, argument: accessibilityScrollText)
 

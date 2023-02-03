@@ -19,7 +19,7 @@ import Foundation
 
 /// Represents a day of the week. In the Gregorian calendar, the first position is Sunday and the last position is Saturday. All calendars
 /// in `Foundation.Calendar` have 7 day of the week positions.
-public enum DayOfWeekPosition: Int, CaseIterable, Equatable {
+public enum DayOfWeekPosition: Int, CaseIterable, Hashable {
 
   // MARK: Public
 
