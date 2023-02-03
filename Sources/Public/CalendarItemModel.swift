@@ -63,6 +63,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
   }
 
   public func _setContent(onViewOfSameType view: UIView) {
+    guard let content else { return }
     guard let view = view as? ViewRepresentable.ViewType else {
       let viewTypeDescription = String(reflecting: ViewRepresentable.ViewType.self)
       preconditionFailure("Failed to convert the view to an instance of \(viewTypeDescription).")
@@ -84,7 +85,30 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
   // MARK: Private
 
   private let invariantViewProperties: ViewRepresentable.InvariantViewProperties
-  private let content: ViewRepresentable.Content
+  private let content: ViewRepresentable.Content?
+
+}
+
+extension CalendarItemModel where ViewRepresentable.Content == Never {
+
+  /// Initializes a new `CalendarItemModel` that does not depend on any variable data, and can be returned from the various
+  /// item-provider `CalendarViewContent` closures. If there is variable data to pass into this view, such as the current day, use
+  /// `init(invariantViewProperties:content:)` instead, and pass your data in via the `content` parameter.
+  ///
+  /// - Parameters:
+  ///   - invariantViewProperties: A type containing all of the immutable / view-model-independent properties necessary to
+  ///   initialize a `ViewType`. Use this to configure appearance options that do not change based on the data in the `content`.
+  ///   For example, you might pass a type that contains properties to configure a `UILabel`'s `textAlignment`, `textColor`,
+  ///   and `font`, assuming none of those values change in response to `content` updates.
+  public init(invariantViewProperties: ViewRepresentable.InvariantViewProperties) {
+    _itemViewDifferentiator = _CalendarItemViewDifferentiator(
+      viewRepresentableTypeDescription: String(reflecting: ViewRepresentable.self),
+      viewTypeDescription: String(reflecting: ViewRepresentable.ViewType.self),
+      invariantViewProperties: invariantViewProperties)
+
+    self.invariantViewProperties = invariantViewProperties
+    self.content = nil
+  }
 
 }
 
@@ -107,6 +131,27 @@ extension CalendarItemViewRepresentable {
     -> CalendarItemModel<Self>
   {
     CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties, content: content)
+  }
+
+}
+
+extension CalendarItemViewRepresentable where Content == Never {
+
+  /// Creates a `CalendarItemModel` that does not depend on any variable data, and can be returned from the various
+  /// item-provider `CalendarViewContent` closures. If there is variable data to pass into this view, such as the current day, use
+  /// `calendarItemModel(invariantViewProperties:content:)` instead, and pass your data in via the `content`
+  /// parameter.
+  ///
+  /// - Parameters:
+  ///   - invariantViewProperties: A type containing all of the immutable / view-model-independent properties necessary to
+  ///   initialize a `ViewType`. Use this to configure appearance options that do not change based on the data in the `content`.
+  ///   For example, you might pass a type that contains properties to configure a `UILabel`'s `textAlignment`, `textColor`,
+  ///   and `font`, assuming none of those values change in response to `content` updates.
+  public static func calendarItemModel(
+    invariantViewProperties: InvariantViewProperties)
+    -> CalendarItemModel<Self>
+  {
+    CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties)
   }
 
 }

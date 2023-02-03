@@ -26,6 +26,4 @@ enum ColorViewRepresentable: CalendarItemViewRepresentable {
     return view
   }
 
-  static func setContent(_ content: Int, on view: UIView) { }
-
 }

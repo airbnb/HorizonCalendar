@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the default `HorizontalMonthLayoutOptions` to use a `restingPosition` of `.atLeadingEdgeOfEachMonth`, which is probably what most people want
 - Added `MonthsLayout.vertical` and `MonthsLayout.horizontal` as more concise alternatives to `MonthsLayout.vertical(options: .init())` and `MonthsLayout.horizontal(options: .init())`, respectively
 - Make more publicly-exposed types conform to `Hashable`, because why not - maybe API consumers want to stick things in a `Set` or `Dictionary`.
+- Allow `CalendarItemViewRepresentable` to have no `Content` type if the conforming view does not depend on any variable data
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 

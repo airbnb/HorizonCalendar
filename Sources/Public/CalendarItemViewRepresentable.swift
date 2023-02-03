@@ -31,7 +31,11 @@ public protocol CalendarItemViewRepresentable {
 
   /// A type containing all of the variable data necessary to update the view. Use this to update the dynamic, data-driven parts of the
   /// view.
-  associatedtype Content: Equatable
+  ///
+  /// If your view does not depend on any variable data, then `Content` can be `Never` and `setContent(_:on)` does not
+  /// need to be implemented. This is not common, since most views used in the calendar change what they display based on the
+  /// parameters passed into the `*itemProvider*` closures (e.g. the current day, month, or day range layout context information).
+  associatedtype Content: Equatable = Never
 
   /// Creates a view using a set of invariant view properties that contain all of the immutable / initial setup values necessary to
   /// configure the view. All immutable / view-model-independent properties should be configured here. For example, you might set up
@@ -52,4 +56,8 @@ public protocol CalendarItemViewRepresentable {
   ///   - content: An instance containing all of the variable data necessary to update the view.
   static func setContent(_ content: Content, on view: ViewType)
 
+}
+
+extension CalendarItemViewRepresentable where Content == Never {
+  public static func setContent(_: Content, on _: ViewType) { }
 }
