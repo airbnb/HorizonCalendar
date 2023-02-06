@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class DayRangeSelectionDemoViewController: DemoViewController {
+final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 
@@ -105,10 +105,6 @@ final class DayRangeSelectionDemoViewController: DemoViewController {
 
   // MARK: Private
 
-  private enum CalendarSelection {
-    case singleDay(Day)
-    case dayRange(DayRange)
-  }
   private var calendarSelection: CalendarSelection?
 
 }

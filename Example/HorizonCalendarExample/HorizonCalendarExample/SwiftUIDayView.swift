@@ -23,21 +23,13 @@ struct SwiftUIDayView: View {
 
   var body: some View {
     ZStack(alignment: .center) {
-      if #available(iOS 15.0, *) {
-        Circle()
-          .strokeBorder(isSelected ? Color(UIColor.blue) : .clear, lineWidth: 1)
-          .background {
-            Circle()
-              .foregroundColor(
-                (isSelected ? Color(UIColor.blue.withAlphaComponent(0.15)) : .clear))
-          }
-          .aspectRatio(1, contentMode: .fill)
-      } else {
-        Circle()
-          .foregroundColor(
-            (isSelected ? Color(UIColor.blue.withAlphaComponent(0.15)) : .clear))
-          .aspectRatio(1, contentMode: .fill)
-      }
+      Circle()
+        .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
+        .background {
+          Circle()
+            .foregroundColor(isSelected ? .white : .clear)
+        }
+        .aspectRatio(1, contentMode: .fill)
       Text("\(dayNumber)").foregroundColor(Color(UIColor.label))
     }
   }

@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class ScrollToDayWithAnimationDemoViewController: DemoViewController {
+final class ScrollToDayWithAnimationDemoViewController: BaseDemoViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()

@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class SelectedDayTooltipDemoViewController: DemoViewController {
+final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 

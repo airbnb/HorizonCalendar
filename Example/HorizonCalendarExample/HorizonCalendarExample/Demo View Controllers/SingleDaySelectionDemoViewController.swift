@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class SingleDaySelectionDemoViewController: DemoViewController {
+final class SingleDaySelectionDemoViewController: BaseDemoViewController {
 
   // MARK: Lifecycle
 

@@ -4,7 +4,7 @@
 import HorizonCalendar
 import UIKit
 
-final class PartialMonthVisibilityDemoViewController: DemoViewController {
+final class PartialMonthVisibilityDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 

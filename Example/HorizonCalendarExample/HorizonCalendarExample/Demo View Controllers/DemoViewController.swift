@@ -4,7 +4,20 @@
 import HorizonCalendar
 import UIKit
 
-class DemoViewController: UIViewController {
+// MARK: - DemoViewController
+
+protocol DemoViewController: UIViewController {
+
+  init(monthsLayout: MonthsLayout)
+
+  var calendar: Calendar { get }
+  var monthsLayout: MonthsLayout { get }
+
+}
+
+// MARK: - BaseDemoViewController
+
+class BaseDemoViewController: UIViewController, DemoViewController {
 
   // MARK: Lifecycle
 
