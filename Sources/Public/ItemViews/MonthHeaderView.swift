@@ -22,7 +22,7 @@ public final class MonthHeaderView: UIView {
 
   // MARK: Lifecycle
 
-  public init(invariantViewProperties: InvariantViewProperties) {
+  fileprivate init(invariantViewProperties: InvariantViewProperties) {
     self.invariantViewProperties = invariantViewProperties
 
     label = UILabel()

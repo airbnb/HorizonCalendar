@@ -22,7 +22,7 @@ public final class DayOfWeekView: UIView {
 
   // MARK: Lifecycle
 
-  public init(invariantViewProperties: InvariantViewProperties) {
+  fileprivate init(invariantViewProperties: InvariantViewProperties) {
     self.invariantViewProperties = invariantViewProperties
 
     backgroundLayer = CAShapeLayer()
