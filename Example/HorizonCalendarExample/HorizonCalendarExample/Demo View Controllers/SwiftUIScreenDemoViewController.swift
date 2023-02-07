@@ -99,13 +99,15 @@ struct SwiftUIScreenDemo: View {
       let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
       if case .vertical = monthsLayout {
         return HStack {
-          Text(monthHeaderText).font(.title2)
+          Text(monthHeaderText)
+            .font(.title2)
           Spacer()
         }
         .padding()
         .calendarItemModel
       } else {
-        return Text(monthHeaderText).font(.title2)
+        return Text(monthHeaderText)
+          .font(.title2)
           .padding()
           .calendarItemModel
       }
