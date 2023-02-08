@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class LargeDayRangeDemoViewController: DemoViewController {
+final class LargeDayRangeDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 

@@ -17,22 +17,23 @@ import UIKit
 
 // MARK: - CalendarView
 
-/// A declarative, performant, calendar UI component that supports use cases ranging from simple date pickers all the way up to
+/// A declarative, performant calendar `UIView` that supports use cases ranging from simple date pickers all the way up to
 /// fully-featured calendar apps. Its declarative API makes updating the calendar straightforward, while also providing many
 /// customization points to support a diverse set of designs and use cases.
 ///
 /// `CalendarView` does not handle any business logic related to day range selection or deselection. Instead, it provides a
 /// single callback for day selection, allowing you to customize selection behavior in any way that you’d like.
 ///
-/// Your business logic should respond to the day selection callback, regenerate `CalendarView` content based on changes to the
+/// Your business logic can respond to the day selection callback, regenerate `CalendarView` content based on changes to the
 /// backing-models for your feature, then set the content on `CalendarView`. This will trigger `CalendarView` to re-render,
 /// reflecting all new changes from the content you provide.
 ///
 /// `CalendarView`’s content contains all information about how to render the calendar (you can think of `CalendarView` as a
-/// pure function of its content). The two most important things provided by the content are:
+/// pure function of its content). The most important things provided by the content are:
 /// * The date range to display
 ///   * e.g. September, 2019 - April, 2020
-/// * The `CalendarItem` to display for each day in the date range
+/// * A months-layout (vertical or horizontal)
+/// * An optional `CalendarItem` to display for each day in the date range if you don't want to use the default day view
 ///   * e.g. a view with a label representing a single day
 public final class CalendarView: UIView {
 

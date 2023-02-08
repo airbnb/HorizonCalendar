@@ -17,7 +17,7 @@ import HorizonCalendar
 import UIKit
 import SwiftUI
 
-final class SwiftUIItemModelsDemoViewController: DemoViewController {
+final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 

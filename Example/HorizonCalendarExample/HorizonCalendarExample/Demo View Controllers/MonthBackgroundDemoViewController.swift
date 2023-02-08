@@ -16,7 +16,7 @@
 import HorizonCalendar
 import UIKit
 
-final class MonthBackgroundDemoViewController: DemoViewController {
+final class MonthBackgroundDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 
