@@ -50,7 +50,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendar: Calendar = Calendar.current,
     visibleDateRange: ClosedRange<Date>,
     monthsLayout: MonthsLayout,
-    dataDependency: Any? = nil)
+    dataDependency: Any?)
   {
     self.calendar = calendar
     self.visibleDateRange = visibleDateRange
