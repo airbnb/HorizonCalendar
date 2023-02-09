@@ -468,7 +468,7 @@ extension CalendarViewRepresentable {
   ///
   /// Multiple selection is initiated with a long press, followed by a drag / pan. As the gesture crosses over more days in the calendar,
   /// this handler will be invoked with each new day. It is the responsibility of your feature code to decide what to do with this stream of
-  /// days. For example, you might convert them to `Date` instances, and use them as input to the `dayRangeItemProvider`. If
+  /// days. For example, you might convert them to `Date` instances and use them as input to the `dayRangeItemProvider`. If
   /// one of your item provider closures depends on state referencing this stream of selected days, remember to include it as part of
   /// the `dataDependency` parameter when initializing your `CalendarViewRepresentable`.
   ///
