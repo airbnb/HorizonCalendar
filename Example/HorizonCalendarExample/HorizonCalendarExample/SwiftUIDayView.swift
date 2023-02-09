@@ -27,7 +27,7 @@ struct SwiftUIDayView: View {
         .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
         .background {
           Circle()
-            .foregroundColor(isSelected ? .white : .clear)
+            .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
         }
         .aspectRatio(1, contentMode: .fill)
       Text("\(dayNumber)").foregroundColor(Color(UIColor.label))

@@ -26,7 +26,7 @@ final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
     title = "Selected Day Tooltip"
 
     calendarView.daySelectionHandler = { [weak self] day in
-      guard let self = self else { return }
+      guard let self else { return }
 
       self.selectedDate = self.calendar.date(from: day.components)
       self.calendarView.setContent(self.makeContent())
