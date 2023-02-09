@@ -75,8 +75,20 @@ public final class CalendarView: UIView {
 
   // MARK: Public
 
-  /// A closure (that is retained) that is invoked whenever a day is selected.
+  /// A closure (that is retained) that is invoked whenever a day is selected. It is the responsibility of your feature code to decide what to
+  /// do with each day. For example, you might store the most recent day in a selected day property, then read that property in your
+  /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
   public var daySelectionHandler: ((Day) -> Void)?
+
+  /// A closure (that is retained) that is invoked during a multiple-selection-drag-gesture. Multiple selection is initiated with a long press,
+  /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
+  /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
+  /// `Date` instances, and use them as input to the `dayRangeItemProvider`.
+  public var multipleDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
+    didSet {
+      configureMultipleDaySelectionPanGestureRecognizer()
+    }
+  }
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
   public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
@@ -388,6 +400,23 @@ public final class CalendarView: UIView {
 
   fileprivate var previousPageIndex: Int?
 
+  fileprivate lazy var scrollView: NoContentInsetAdjustmentScrollView = {
+    let scrollView = NoContentInsetAdjustmentScrollView()
+    scrollView.showsVerticalScrollIndicator = false
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.delegate = scrollViewDelegate
+    return scrollView
+  }()
+
+  fileprivate lazy var multipleDaySelectionGestureRecognizer: UILongPressGestureRecognizer = {
+    let gestureRecognizer = UILongPressGestureRecognizer(
+      target: self,
+      action: #selector(multipleDaySelectionGestureRecognized(_:)))
+    gestureRecognizer.allowableMovement = .greatestFiniteMagnitude
+    gestureRecognizer.delegate = gestureRecognizerDelegate
+    return gestureRecognizer
+  }()
+
   fileprivate var scrollToItemContext: ScrollToItemContext? {
     willSet {
       scrollToItemDisplayLink?.invalidate()
@@ -477,15 +506,10 @@ public final class CalendarView: UIView {
   private var focusedAccessibilityElement: Any?
   private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
 
-  private lazy var scrollView: NoContentInsetAdjustmentScrollView = {
-    let scrollView = NoContentInsetAdjustmentScrollView()
-    scrollView.showsVerticalScrollIndicator = false
-    scrollView.showsHorizontalScrollIndicator = false
-    scrollView.delegate = scrollViewDelegate
-    return scrollView
-  }()
+  private var lastMultipleDaySelectionDay: Day?
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
+  private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
   
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
@@ -715,7 +739,7 @@ public final class CalendarView: UIView {
 
   private func configureView(_ view: ItemView, with visibleItem: VisibleItem) {
     view.calendarItemModel = visibleItem.calendarItemModel
-
+    view.itemType = visibleItem.itemType
     view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
 
     if traitCollection.layoutDirection == .rightToLeft {
@@ -879,6 +903,57 @@ public final class CalendarView: UIView {
     }
   }
 
+  private func configureMultipleDaySelectionPanGestureRecognizer() {
+    if multipleDaySelectionDragHandler == nil {
+      removeGestureRecognizer(multipleDaySelectionGestureRecognizer)
+    } else {
+      addGestureRecognizer(multipleDaySelectionGestureRecognizer)
+    }
+  }
+
+  @objc
+  private func multipleDaySelectionGestureRecognized(
+    _ gestureRecognizer: UILongPressGestureRecognizer)
+  {
+    guard gestureRecognizer.state != .possible else {
+      lastMultipleDaySelectionDay = nil
+      return
+    }
+
+    let locationInScrollView = gestureRecognizer.location(in: scrollView)
+
+    var intersectedDay: Day?
+    for subview in scrollView.subviews {
+      guard
+        let itemView = subview as? ItemView,
+        case .layoutItemType(.day(let day)) = itemView.itemType,
+        itemView.frame.contains(locationInScrollView)
+      else {
+        continue
+      }
+      intersectedDay = day
+      break
+    }
+
+    let newMultipleDaySelectionDay: Day
+    if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
+      newMultipleDaySelectionDay = intersectedDay
+    } else {
+      return
+    }
+
+    lastMultipleDaySelectionDay = newMultipleDaySelectionDay
+
+    multipleDaySelectionDragHandler?(newMultipleDaySelectionDay, gestureRecognizer.state)
+
+    switch gestureRecognizer.state {
+    case .ended, .cancelled, .failed:
+      lastMultipleDaySelectionDay = nil
+    default:
+      break
+    }
+  }
+
 }
 
 // MARK: WidthDependentIntrinsicContentHeightProviding
@@ -1032,9 +1107,7 @@ extension CalendarView {
     focusedAccessibilityElement = element
 
     if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
-      itemTypeOfFocusedAccessibilityElement = visibleViewsForVisibleItems
-        .first { _, visibleView in itemView === visibleView }?
-        .key.itemType
+      itemTypeOfFocusedAccessibilityElement = itemView.itemType
     }
 
     if let offScreenElement = element as? OffScreenCalendarItemAccessibilityElement {
@@ -1057,7 +1130,7 @@ extension CalendarView {
 
 /// Rather than making `CalendarView` conform to `UIScrollViewDelegate`, which would expose those methods as public, we
 /// use a separate delegate object to hide these methods from the public API.
-final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
+private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
   // MARK: Lifecycle
 
@@ -1093,12 +1166,12 @@ final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     calendarView.didEndDragging?(visibleDayRange, decelerate)
   }
 
-  public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     guard let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDecelerating?(visibleDayRange)
   }
 
-  public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
     guard
       case .horizontal(let options) = calendarView.content.monthsLayout,
       case .paginatedScrolling = options.scrollingBehavior
@@ -1173,11 +1246,40 @@ final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
 }
 
+// MARK: - GestureRecognizerDelegate
+
+/// Rather than making `CalendarView` conform to `UIGestureRecognizerDelegate`, which would expose those methods as
+/// public, we use a separate delegate object to hide these methods from the public API.
+private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate {
+
+  // MARK: Lifecycle
+
+  init(calendarView: CalendarView) {
+    self.calendarView = calendarView
+  }
+
+  // MARK: Internal
+
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+    -> Bool
+  {
+    otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer &&
+      gestureRecognizer.state == .changed
+  }
+
+  // MARK: Private
+
+  private weak var calendarView: CalendarView!
+
+}
+
 // MARK: - NoContentInsetAdjustmentScrollView
 
 /// A scroll view that forces `contentInsetAdjustmentBehavior == .never`.
 ///
-/// The main thing this prevents is the situation where the view hierachy is traversed to find a scroll view, and attempts are made to
+/// The main thing this prevents is the situation where the view hierarchy is traversed to find a scroll view, and attempts are made to
 /// change that scroll view's `contentInsetAdjustmentBehavior`.
 private final class NoContentInsetAdjustmentScrollView: UIScrollView {
 

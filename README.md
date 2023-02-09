@@ -24,6 +24,7 @@ Features:
 - Specify custom views (`UIView` or SwiftUI `View`) for month background decorations (colors, grids, etc.)
 - Specify custom views (`UIView` or SwiftUI `View`) for day background decorations (colors, patterns, etc.)
 - A day selection handler to monitor when a day is tapped
+- A multi-day selection handler to monitor when multiple days are selected via a drag gesture
 - Customizable layout metrics
 - Pin the days-of-the-week row to the top
 - Show partial boundary months (exactly 2020-03-14 to 2020-04-20, for example)
@@ -630,7 +631,7 @@ The day selection handler closure is invoked whenever a day in the calendar is s
 Last, we'll change our day selection handler so that it not only stores the selected day, but also sets an updated content instance on `calendarView`:
 ```swift
 calendarView.daySelectionHandler = { [weak self] day in
-  guard let self = self else { return }
+  guard let self else { return }
   
   self.selectedDay = day
   

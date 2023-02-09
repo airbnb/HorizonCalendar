@@ -66,6 +66,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
     calendarView.daySelectionHandler = daySelectionHandler
+    calendarView.multipleDaySelectionDragHandler = multipleDaySelectionDragHandler
     calendarView.didScroll = didScroll
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
@@ -98,6 +99,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
   fileprivate var daySelectionHandler: ((Day) -> Void)?
+  fileprivate var multipleDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)?
   fileprivate var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
   fileprivate var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
   fileprivate var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
@@ -447,9 +449,52 @@ extension CalendarViewRepresentable {
 @available(iOS 13.0, *)
 extension CalendarViewRepresentable {
 
+  /// Configures the day-selection handler.
+  ///
+  /// It is the responsibility of your feature code to decide what to do with each day. For example, you might store the most recent day
+  /// in a selected day property, then read that property in your `dayItemProvider` closure to add specific "selected" styling to a
+  /// particular day view. If one of your item provider closures depends on this selected day state, remember to include it as part of the
+  /// `dataDependency` parameter when initializing your `CalendarViewRepresentable`.
+  ///
+  /// - Parameters:
+  ///   - daySelectionHandler: A closure (that is retained) that is invoked whenever a day is selected.
   public func onDaySelection(_ daySelectionHandler: @escaping (Day) -> Void) -> Self {
     var view = self
     view.daySelectionHandler = daySelectionHandler
+    return view
+  }
+
+  /// Configures the multiple-day-selection drag handler.
+  ///
+  /// Multiple selection is initiated with a long press, followed by a drag / pan. As the gesture crosses over more days in the calendar,
+  /// this handler will be invoked with each new day. It is the responsibility of your feature code to decide what to do with this stream of
+  /// days. For example, you might convert them to `Date` instances, and use them as input to the `dayRangeItemProvider`. If
+  /// one of your item provider closures depends on state referencing this stream of selected days, remember to include it as part of
+  /// the `dataDependency` parameter when initializing your `CalendarViewRepresentable`.
+  ///
+  /// - Parameters:
+  ///   - began: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture begins.
+  ///   - changed: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture intersects a new day.
+  ///   - ended: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture ends.
+  public func onMultipleDaySelectionDrag(
+    began: @escaping (Day) -> Void,
+    changed: @escaping (Day) -> Void,
+    ended: @escaping (Day) -> Void)
+    -> Self
+  {
+    var view = self
+    view.multipleDaySelectionDragHandler = { day, state in
+      switch state {
+      case .began:
+        began(day)
+      case .changed:
+        changed(day)
+      case .ended, .failed, .cancelled:
+        ended(day)
+      default:
+        break
+      }
+    }
     return view
   }
 

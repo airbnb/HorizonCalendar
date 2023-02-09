@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `MonthsLayout.vertical` and `MonthsLayout.horizontal` as more concise alternatives to `MonthsLayout.vertical(options: .init())` and `MonthsLayout.horizontal(options: .init())`, respectively
 - Added `CalendarViewRepresentable` enabling developers to use `CalendarView` from SwiftUI
+- Added a `multipleDaySelectionDragHandler`, enabling developers to implement multiple-day-selection via a drag gesture (similar to multi-select in the iOS Photos app)
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release

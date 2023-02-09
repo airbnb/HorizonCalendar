@@ -58,6 +58,8 @@ final class ItemView: UIView {
     }
   }
 
+  var itemType: VisibleItem.ItemType?
+
   override class var layerClass: AnyClass {
     CATransformLayer.self
   }
