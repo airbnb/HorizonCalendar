@@ -26,18 +26,24 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
     title = "Day Range Selection"
 
     calendarView.daySelectionHandler = { [weak self] day in
-      guard let self = self else { return }
+      guard let self else { return }
 
-      switch self.calendarSelection {
-      case .singleDay(let selectedDay):
-        if day > selectedDay {
-          self.calendarSelection = .dayRange(selectedDay...day)
-        } else {
-          self.calendarSelection = .singleDay(day)
-        }
-      case .none, .dayRange:
-        self.calendarSelection = .singleDay(day)
-      }
+      DayRangeSelectionHelper.updateDayRange(
+        afterTapSelectionOf: day,
+        existingDayRange: &self.selectedDayRange)
+
+      self.calendarView.setContent(self.makeContent())
+    }
+
+    calendarView.multipleDaySelectionDragHandler = { [weak self, calendar] day, state in
+      guard let self else { return }
+
+      DayRangeSelectionHelper.updateDayRange(
+        afterDragSelectionOf: day,
+        existingDayRange: &self.selectedDayRange,
+        initialDayRange: &self.selectedDayRangeAtStartOfDrag,
+        state: state,
+        calendar: calendar)
 
       self.calendarView.setContent(self.makeContent())
     }
@@ -47,12 +53,12 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let calendarSelection = self.calendarSelection
     let dateRanges: Set<ClosedRange<Date>>
+    let selectedDayRange = selectedDayRange
     if
-      case .dayRange(let dayRange) = calendarSelection,
-      let lowerBound = calendar.date(from: dayRange.lowerBound.components),
-      let upperBound = calendar.date(from: dayRange.upperBound.components)
+      let selectedDayRange,
+      let lowerBound = calendar.date(from: selectedDayRange.lowerBound.components),
+      let upperBound = calendar.date(from: selectedDayRange.upperBound.components)
     {
       dateRanges = [lowerBound...upperBound]
     } else {
@@ -72,17 +78,15 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
         let isSelectedStyle: Bool
-        switch calendarSelection {
-        case .singleDay(let selectedDay):
-          isSelectedStyle = day == selectedDay
-        case .dayRange(let selectedDayRange):
+        if let selectedDayRange {
           isSelectedStyle = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-        case .none:
+        } else {
           isSelectedStyle = false
         }
 
         if isSelectedStyle {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .systemBackground
+          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = UIColor(.accentColor)
         }
 
         let date = calendar.date(from: day.components)
@@ -105,6 +109,7 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
   // MARK: Private
 
-  private var calendarSelection: CalendarSelection?
+  private var selectedDayRange: DayRange?
+  private var selectedDayRangeAtStartOfDrag: DayRange?
 
 }

@@ -89,7 +89,7 @@ struct SwiftUIScreenDemo: View {
       calendar: calendar,
       visibleDateRange: visibleDateRange,
       monthsLayout: monthsLayout,
-      dataDependency: calendarSelection)
+      dataDependency: selectedDayRange)
 
     .verticalDayMargin(8)
     .horizontalDayMargin(8)
@@ -115,12 +115,9 @@ struct SwiftUIScreenDemo: View {
 
     .dayItemProvider { day in
       let isSelected: Bool
-      switch calendarSelection {
-      case .singleDay(let selectedDay):
-        isSelected = day == selectedDay
-      case .dayRange(let selectedDayRange):
+      if let selectedDayRange {
         isSelected = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-      case .none:
+      } else {
         isSelected = false
       }
       return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected)
@@ -131,22 +128,42 @@ struct SwiftUIScreenDemo: View {
       let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
       // UIKit view
       return DayRangeIndicatorView.calendarItemModel(
-        invariantViewProperties: .init(indicatorColor: UIColor(.accentColor.opacity(0.3))),
+        invariantViewProperties: .init(),
         content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
     }
 
     .onDaySelection { day in
-      switch calendarSelection {
-      case .singleDay(let selectedDay):
-        if day > selectedDay {
-          calendarSelection = .dayRange(selectedDay...day)
-        } else {
-          calendarSelection = .singleDay(day)
-        }
-      case .none, .dayRange:
-        calendarSelection = .singleDay(day)
-      }
+      DayRangeSelectionHelper.updateDayRange(
+        afterTapSelectionOf: day,
+        existingDayRange: &selectedDayRange)
     }
+
+    .onMultipleDaySelectionDrag(
+      began: { day in
+        DayRangeSelectionHelper.updateDayRange(
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .began,
+          calendar: calendar)
+      },
+      changed: { day in
+        DayRangeSelectionHelper.updateDayRange(
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .changed,
+          calendar: calendar)
+      },
+      ended: { day in
+        DayRangeSelectionHelper.updateDayRange(
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .ended,
+          calendar: calendar)
+      })
+
   }
 
   // MARK: Private
@@ -157,10 +174,11 @@ struct SwiftUIScreenDemo: View {
 
   private let monthDateFormatter: DateFormatter
 
-  @State private var calendarSelection: CalendarSelection?
+  @State private var selectedDayRange: DayRange?
+  @State private var selectedDayRangeAtStartOfDrag: DayRange?
 
   private var selectedDateRanges: Set<ClosedRange<Date>> {
-    guard case .dayRange(let selectedDayRange) = calendarSelection else { return [] }
+    guard let selectedDayRange else { return [] }
     let selectedStartDate = calendar.date(from: selectedDayRange.lowerBound.components)!
     let selectedEndDate = calendar.date(from: selectedDayRange.upperBound.components)!
     return [selectedStartDate...selectedEndDate]
