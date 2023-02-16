@@ -510,7 +510,7 @@ public final class CalendarView: UIView {
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
-
+  
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
@@ -519,7 +519,7 @@ public final class CalendarView: UIView {
         return true
       }
     }
-  
+    
     return false
   }()
 
@@ -1105,7 +1105,7 @@ extension CalendarView {
     guard let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] else {
       return
     }
-
+    
     focusedAccessibilityElement = element
 
     if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
