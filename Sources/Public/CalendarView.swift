@@ -925,6 +925,7 @@ public final class CalendarView: UIView {
     var intersectedDay: Day?
     for subview in scrollView.subviews {
       guard
+        !subview.isHidden,
         let itemView = subview as? ItemView,
         case .layoutItemType(.day(let day)) = itemView.itemType,
         itemView.frame.contains(locationInScrollView)
