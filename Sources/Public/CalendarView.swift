@@ -510,7 +510,7 @@ public final class CalendarView: UIView {
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
-  
+
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
@@ -519,7 +519,7 @@ public final class CalendarView: UIView {
         return true
       }
     }
-    
+
     return false
   }()
 
@@ -935,20 +935,24 @@ public final class CalendarView: UIView {
       intersectedDay = day
       break
     }
+    if let intersectedDay = intersectedDay {
+      print("===============intersectedDay: \(intersectedDay)=================")
+    }
 
     let newMultipleDaySelectionDay: Day
     if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
       newMultipleDaySelectionDay = intersectedDay
-    } else {
-      return
+
+      lastMultipleDaySelectionDay = newMultipleDaySelectionDay
+      print("===============newMultipleDaySelectionDay: \(newMultipleDaySelectionDay)=================")
+      multipleDaySelectionDragHandler?(newMultipleDaySelectionDay, gestureRecognizer.state)
     }
-
-    lastMultipleDaySelectionDay = newMultipleDaySelectionDay
-
-    multipleDaySelectionDragHandler?(newMultipleDaySelectionDay, gestureRecognizer.state)
 
     switch gestureRecognizer.state {
     case .ended, .cancelled, .failed:
+      if let lastMultipleDaySelectionDay = lastMultipleDaySelectionDay {
+        multipleDaySelectionDragHandler?(lastMultipleDaySelectionDay, gestureRecognizer.state)
+      }
       lastMultipleDaySelectionDay = nil
     default:
       break
@@ -1104,7 +1108,7 @@ extension CalendarView {
     guard let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] else {
       return
     }
-    
+
     focusedAccessibilityElement = element
 
     if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
@@ -1266,8 +1270,8 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
     shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
     -> Bool
   {
-    otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer &&
-      gestureRecognizer.state == .changed
+    return otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer &&
+    (gestureRecognizer.state == .changed || gestureRecognizer.state == .ended)
   }
 
   // MARK: Private
