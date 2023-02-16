@@ -936,12 +936,9 @@ public final class CalendarView: UIView {
       break
     }
 
-    let newMultipleDaySelectionDay: Day
     if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
-      newMultipleDaySelectionDay = intersectedDay
-
-      lastMultipleDaySelectionDay = newMultipleDaySelectionDay
-      multipleDaySelectionDragHandler?(newMultipleDaySelectionDay, gestureRecognizer.state)
+      lastMultipleDaySelectionDay = intersectedDay
+      multipleDaySelectionDragHandler?(intersectedDay, gestureRecognizer.state)
     }
 
     switch gestureRecognizer.state {
