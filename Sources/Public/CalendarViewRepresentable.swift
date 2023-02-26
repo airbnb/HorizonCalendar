@@ -66,12 +66,15 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   public func makeUIView(context: Context) -> CalendarView {
     let calendarView = CalendarView(initialContent: makeContent())
     calendarView.backgroundColor = .clear
-    calendarView.layoutMargins = .zero
+    calendarView.directionalLayoutMargins = .zero
     proxy?._calendarView = calendarView
     return calendarView
   }
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
+    calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
+    calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
+
     calendarView.daySelectionHandler = daySelectionHandler
     calendarView.multipleDaySelectionDragHandler = multipleDaySelectionDragHandler
     calendarView.didScroll = didScroll
@@ -82,6 +85,9 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   }
 
   // MARK: Fileprivate
+
+  fileprivate var backgroundColor: UIColor?
+  fileprivate var layoutMargins: NSDirectionalEdgeInsets?
 
   fileprivate var dayAspectRatio: CGFloat?
   fileprivate var dayOfWeekAspectRatio: CGFloat?
@@ -189,6 +195,28 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
 @available(iOS 13.0, *)
 extension CalendarViewRepresentable {
+
+  /// Configures the background color of the calendar view.
+  ///
+  ///  - Parameters:
+  ///     - backgroundColor: The background color to apply to the calendar view.
+  ///  - Returns: A mutated `CalendarViewRepresentable` with a new background color.
+  public func backgroundColor(_ backgroundColor: UIColor) -> Self {
+    var view = self
+    view.backgroundColor = backgroundColor
+    return view
+  }
+
+  /// Configures the layout margins of the calendar view.
+  ///
+  ///  - Parameters:
+  ///     - layoutMargins: The layout margins to apply to the calendar view.
+  ///  - Returns: A mutated `CalendarViewRepresentable` with new layout margins.
+  public func layoutMargins(_ layoutMargins: NSDirectionalEdgeInsets) -> Self {
+    var view = self
+    view.layoutMargins = layoutMargins
+    return view
+  }
 
   /// Configures the aspect ratio of each day.
   ///
