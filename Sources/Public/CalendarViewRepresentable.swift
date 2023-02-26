@@ -63,6 +63,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   public func makeUIView(context: Context) -> CalendarView {
     let calendarView = CalendarView(initialContent: makeContent())
     calendarView.backgroundColor = .clear
+    calendarView.layoutMargins = .zero
     return calendarView
   }
 
