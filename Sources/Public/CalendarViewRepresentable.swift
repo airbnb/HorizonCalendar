@@ -73,6 +73,10 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
 
+    if #available(iOS 15.0, *) {
+      print("BLK: \(Self._printChanges()) \(dataDependency)")
+    }
+
     // We want to avoid calling
     if hasUpdateUIViewBeenCalledMoreThanOnce.value {
       calendarView.setContent(makeContent())
