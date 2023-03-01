@@ -61,22 +61,24 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   // MARK: Public
 
   public func makeUIView(context: Context) -> CalendarView {
-    let calendarView = CalendarView(initialContent: makeContent())
-    calendarView.directionalLayoutMargins = .zero
-    return calendarView
+    CalendarView(initialContent: makeContent())
   }
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
     calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
     calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
-
     calendarView.daySelectionHandler = daySelectionHandler
     calendarView.multipleDaySelectionDragHandler = multipleDaySelectionDragHandler
     calendarView.didScroll = didScroll
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
 
-    calendarView.setContent(makeContent())
+    // We want to avoid calling
+    if hasUpdateUIViewBeenCalledMoreThanOnce.value {
+      calendarView.setContent(makeContent())
+    } else {
+      hasUpdateUIViewBeenCalledMoreThanOnce.value = true
+    }
   }
 
   // MARK: Fileprivate
@@ -118,6 +120,8 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   private let visibleDateRange: ClosedRange<Date>
   private let monthsLayout: MonthsLayout
   private let dataDependency: Any?
+
+  @StateObject private var hasUpdateUIViewBeenCalledMoreThanOnce = Reference<Bool>(value: false)
 
   private func makeContent() -> CalendarViewContent {
     var content = CalendarViewContent(
@@ -554,5 +558,22 @@ extension CalendarViewRepresentable {
     view.didEndDecelerating = deceleratingEndHandler
     return view
   }
+
+}
+
+// MARK: - Reference
+
+@available(iOS 13.0, *)
+private final class Reference<Value>: ObservableObject {
+
+  // MARK: Lifecycle
+
+  init(value: Value) {
+    self.value = value
+  }
+
+  // MARK: Internal
+
+  var value: Value
 
 }
