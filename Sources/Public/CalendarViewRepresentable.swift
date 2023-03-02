@@ -61,7 +61,12 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   // MARK: Public
 
   public func makeUIView(context: Context) -> CalendarView {
-    CalendarView(initialContent: makeContent())
+    let calendarView = CalendarView(initialContent: makeContent())
+    calendarView.scroll(
+      toMonthContaining: Date(),
+      scrollPosition: .lastFullyVisiblePosition,
+      animated: false)
+    return calendarView
   }
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
@@ -72,10 +77,6 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendarView.didScroll = didScroll
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
-
-    if #available(iOS 15.0, *) {
-      print("BLK: \(Self._printChanges()) \(dataDependency)")
-    }
 
     // We want to avoid calling
     if hasUpdateUIViewBeenCalledMoreThanOnce.value {
