@@ -502,6 +502,9 @@ public final class CalendarView: UIView {
   private weak var scrollToItemDisplayLink: CADisplayLink?
   private var scrollToItemAnimationStartTime: CFTimeInterval?
 
+  private weak var autoScrollDisplayLink: CADisplayLink?
+  private var autoScrollOffset: CGFloat?
+
   private var cachedAccessibilityElements: [Any]?
   private var focusedAccessibilityElement: Any?
   private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
@@ -915,13 +918,31 @@ public final class CalendarView: UIView {
   private func multipleDaySelectionGestureRecognized(
     _ gestureRecognizer: UILongPressGestureRecognizer)
   {
-    guard gestureRecognizer.state != .possible else {
+    guard gestureRecognizer.state != .possible else { return }
+
+    // If the user interacts with the drag gesture, we should clear out any existing
+    // `scrollToItemContext` that might be leftover from the initial layout process.
+    scrollToItemContext = nil
+
+    updateSelectedDayRange(dragGestureRecognizer: gestureRecognizer)
+    updateAutoScrollingState(dragGestureRecognizer: gestureRecognizer)
+
+    switch gestureRecognizer.state {
+    case .ended, .cancelled, .failed:
+      if let lastMultipleDaySelectionDay = lastMultipleDaySelectionDay {
+        multipleDaySelectionDragHandler?(lastMultipleDaySelectionDay, gestureRecognizer.state)
+      }
       lastMultipleDaySelectionDay = nil
-      return
+
+    default:
+      break
     }
+  }
 
-    let locationInScrollView = gestureRecognizer.location(in: scrollView)
+  private func updateSelectedDayRange(dragGestureRecognizer: UILongPressGestureRecognizer) {
+    let locationInScrollView = dragGestureRecognizer.location(in: scrollView)
 
+    // Find the intersected day
     var intersectedDay: Day?
     for subview in scrollView.subviews {
       guard
@@ -939,18 +960,66 @@ public final class CalendarView: UIView {
 
     if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
       lastMultipleDaySelectionDay = intersectedDay
-      multipleDaySelectionDragHandler?(intersectedDay, gestureRecognizer.state)
+      multipleDaySelectionDragHandler?(intersectedDay, dragGestureRecognizer.state)
+    }
+  }
+
+  private func updateAutoScrollingState(dragGestureRecognizer: UILongPressGestureRecognizer) {
+    func enableAutoScroll(offset: CGFloat) {
+      autoScrollOffset = offset
+
+      if autoScrollDisplayLink == nil {
+        let autoScrollDisplayLink = CADisplayLink(
+          target: self,
+          selector: #selector(autoScrollDisplayLinkFired))
+        autoScrollDisplayLink.add(to: .main, forMode: .common)
+        self.autoScrollDisplayLink = autoScrollDisplayLink
+      }
     }
 
-    switch gestureRecognizer.state {
-    case .ended, .cancelled, .failed:
-      if let lastMultipleDaySelectionDay = lastMultipleDaySelectionDay {
-        multipleDaySelectionDragHandler?(lastMultipleDaySelectionDay, gestureRecognizer.state)
-      }
-      lastMultipleDaySelectionDay = nil
-    default:
-      break
+    func disableAutoScroll() {
+      autoScrollDisplayLink?.invalidate()
+      autoScrollOffset = nil
     }
+
+    switch dragGestureRecognizer.state {
+    case .changed:
+      let edgeMargin: CGFloat = 32
+      let offset: CGFloat = 6
+      let locationInCalendarView = dragGestureRecognizer.location(in: self)
+      switch content.monthsLayout {
+      case .vertical:
+        if locationInCalendarView.y < layoutMargins.top + edgeMargin {
+          enableAutoScroll(offset: -offset)
+        } else if locationInCalendarView.y > bounds.height - layoutMargins.bottom - edgeMargin {
+          enableAutoScroll(offset: offset)
+        } else {
+          disableAutoScroll()
+        }
+
+      case .horizontal:
+        if locationInCalendarView.x < layoutMargins.left + edgeMargin {
+          enableAutoScroll(offset: -offset)
+        } else if locationInCalendarView.x > bounds.width - layoutMargins.right - edgeMargin {
+          enableAutoScroll(offset: offset)
+        } else {
+          disableAutoScroll()
+        }
+      }
+
+    default:
+      disableAutoScroll()
+    }
+  }
+
+  @objc
+  private func autoScrollDisplayLinkFired() {
+    guard let autoScrollOffset else {
+      fatalError("The autoScrollDisplayLink should not fire if `autoScrollOffset` is `nil`.")
+    }
+
+    scrollMetricsMutator.applyOffset(autoScrollOffset)
+    updateSelectedDayRange(dragGestureRecognizer: multipleDaySelectionGestureRecognizer)
   }
 
 }
