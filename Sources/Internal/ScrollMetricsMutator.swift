@@ -76,7 +76,10 @@ final class ScrollMetricsMutator {
 
   func applyOffset(_ offset: CGFloat) {
     let currentOffset = scrollMetricsProvider.offset(for: scrollAxis)
-    scrollMetricsProvider.setOffset(to: currentOffset + offset, for: scrollAxis)
+    let minimumOffset = scrollMetricsProvider.minimumOffset(for: scrollAxis)
+    let maximumOffset = scrollMetricsProvider.maximumOffset(for: scrollAxis)
+    let newOffset = max(minimumOffset, min(currentOffset + offset, maximumOffset))
+    scrollMetricsProvider.setOffset(to: newOffset, for: scrollAxis)
   }
 
   // MARK: Private
