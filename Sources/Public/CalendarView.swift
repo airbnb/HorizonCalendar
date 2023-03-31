@@ -336,16 +336,16 @@ public final class CalendarView: UIView {
     // Cancel in-flight scroll
     scrollView.setContentOffset(scrollView.contentOffset, animated: false)
 
-    scrollToItemContext = ScrollToItemContext(
+    let scrollToItemContext = ScrollToItemContext(
       targetItem: .month(month),
       scrollPosition: scrollPosition,
       animated: animated)
 
     if animated {
+      self.scrollToItemContext = scrollToItemContext
       startScrollingTowardTargetItem()
     } else {
-      setNeedsLayout()
-      layoutIfNeeded()
+      finalizeScrollingTowardItem(for: scrollToItemContext)
     }
   }
 
@@ -377,16 +377,16 @@ public final class CalendarView: UIView {
     // Cancel in-flight scroll
     scrollView.setContentOffset(scrollView.contentOffset, animated: false)
 
-    scrollToItemContext = ScrollToItemContext(
+    let scrollToItemContext = ScrollToItemContext(
       targetItem: .day(day),
       scrollPosition: scrollPosition,
       animated: animated)
 
     if animated {
+      self.scrollToItemContext = scrollToItemContext
       startScrollingTowardTargetItem()
     } else {
-      setNeedsLayout()
-      layoutIfNeeded()
+      finalizeScrollingTowardItem(for: scrollToItemContext)
     }
   }
 
@@ -788,6 +788,11 @@ public final class CalendarView: UIView {
       targetItem: scrollToItemContext.targetItem,
       scrollPosition: scrollToItemContext.scrollPosition,
       animated: false)
+
+    setNeedsLayout()
+    layoutIfNeeded()
+
+    self.scrollToItemContext = nil
   }
 
   @objc
