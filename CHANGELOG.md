@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `CalendarViewRepresentable` enabling developers to use `CalendarView` from SwiftUI
 - Added a `multipleDaySelectionDragHandler`, enabling developers to implement multiple-day-selection via a drag gesture (similar to multi-select in the iOS Photos app)
 
+### Fixed
+- Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled. 
+
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
 - Renamed `viewModel` to `content`, since it's a less-overloaded term
