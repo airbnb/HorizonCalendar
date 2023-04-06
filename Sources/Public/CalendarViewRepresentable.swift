@@ -77,6 +77,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   // MARK: Fileprivate
 
   fileprivate var dayAspectRatio: CGFloat?
+  fileprivate var dayOfWeekAspectRatio: CGFloat?
   fileprivate var interMonthSpacing: CGFloat?
   fileprivate var monthDayInsets: NSDirectionalEdgeInsets?
   fileprivate var verticalDayMargin: CGFloat?
@@ -119,6 +120,10 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
     if let dayAspectRatio {
       content = content.dayAspectRatio(dayAspectRatio)
+    }
+
+    if let dayOfWeekAspectRatio {
+      content = content.dayOfWeekAspectRatio(dayOfWeekAspectRatio)
     }
 
     if let interMonthSpacing {
@@ -179,9 +184,8 @@ extension CalendarViewRepresentable {
 
   /// Configures the aspect ratio of each day.
   ///
-  /// Values less than 1 will result in rectangular days that are wider than they are tall. Values
-  /// greater than 1 will result in rectangular days that are taller than they are wide. The default value is `1`, which results in square
-  /// views with the same width and height.
+  /// Values less than 1 will result in rectangular days that are wider than they are tall. Values greater than 1 will result in rectangular
+  /// days that are taller than they are wide. The default value is `1`, which results in square views with the same width and height.
   ///
   /// - Parameters:
   ///   - dayAspectRatio: The aspect ratio of each day view.
@@ -189,6 +193,21 @@ extension CalendarViewRepresentable {
   public func dayAspectRatio(_ dayAspectRatio: CGFloat) -> Self {
     var view = self
     view.dayAspectRatio = dayAspectRatio
+    return view
+  }
+
+  /// Configures the aspect ratio of each day of the week.
+  ///
+  /// Values less than 1 will result in rectangular days of the week that are wider than they are tall. Values greater than 1 will result in
+  /// rectangular days of the week that are taller than they are wide. The default value is `1`, which results in square views with the
+  /// same width and height.
+  ///
+  /// - Parameters:
+  ///   - dayAspectRatio: The aspect ratio of each day-of-the-week view.
+  /// - Returns: A mutated `CalendarViewRepresentable` with a new day-of-the-week aspect ratio value.
+  public func dayOfWeekAspectRatio(_ dayAspectRatio: CGFloat) -> Self {
+    var view = self
+    view.dayOfWeekAspectRatio = dayOfWeekAspectRatio
     return view
   }
 

@@ -48,8 +48,12 @@ final class FrameProvider {
     let numberOfDaysPerWeek = CGFloat(7)
     let availableWidth = insetWidth - (content.horizontalDayMargin * (numberOfDaysPerWeek - 1))
     let width = availableWidth / numberOfDaysPerWeek
-    let height = width * content.dayAspectRatio
-    daySize = CGSize(width: width, height: height)
+
+    let dayHeight = width * content.dayAspectRatio
+    daySize = CGSize(width: width, height: dayHeight)
+
+    let dayOfWeekHeight = width * content.dayOfWeekAspectRatio
+    dayOfWeekSize = CGSize(width: width, height: dayOfWeekHeight)
 
     if daySize.width <= 0 || daySize.height <= 0 {
       print("Calendar metrics and size resulted in a negative-or-zero size of (\(daySize.debugDescription) points for each day. If ignored, this will cause incorrect / unexpected layouts.")
@@ -62,6 +66,7 @@ final class FrameProvider {
   let layoutMargins: NSDirectionalEdgeInsets
   let scale: CGFloat
   let daySize: CGSize
+  let dayOfWeekSize: CGSize
 
   var maxMonthHeight: CGFloat {
     let maxNumberOfWeekRowsPerMonth = 6
@@ -147,7 +152,7 @@ final class FrameProvider {
   {
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top
-    return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
+    return CGRect(origin: CGPoint(x: x, y: y), size: dayOfWeekSize)
   }
 
   func frameOfDay(_ day: Day, inMonthWithOrigin monthOrigin: CGPoint) -> CGRect {
@@ -220,7 +225,7 @@ final class FrameProvider {
   {
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: layoutMargins.leading)
     let y = layoutMargins.top + yContentOffset
-    return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
+    return CGRect(origin: CGPoint(x: x, y: y), size: dayOfWeekSize)
   }
 
   func frameOfPinnedDaysOfWeekRowBackground(yContentOffset: CGFloat) -> CGRect {
@@ -228,7 +233,7 @@ final class FrameProvider {
       x: layoutMargins.leading,
       y: layoutMargins.top + yContentOffset,
       width: monthWidth,
-      height: daySize.height)
+      height: dayOfWeekSize.height)
   }
 
   func frameOfPinnedDaysOfWeekRowSeparator(
@@ -238,7 +243,7 @@ final class FrameProvider {
   {
     CGRect(
       x: layoutMargins.leading,
-      y: layoutMargins.top + yContentOffset + daySize.height - separatorHeight,
+      y: layoutMargins.top + yContentOffset + dayOfWeekSize.height - separatorHeight,
       width: monthWidth,
       height: separatorHeight)
   }
@@ -250,7 +255,7 @@ final class FrameProvider {
     let y = monthOrigin.y +
       monthHeaderHeight +
       content.monthDayInsets.top +
-      daySize.height -
+      dayOfWeekSize.height -
       separatorHeight
     return CGRect(x: monthOrigin.x, y: y, width: monthWidth, height: separatorHeight)
   }
@@ -269,7 +274,7 @@ final class FrameProvider {
   {
     switch content.monthsLayout {
     case .vertical(let options):
-      let additionalOffset = (options.pinDaysOfWeekToTop ? daySize.height : 0)
+      let additionalOffset = (options.pinDaysOfWeekToTop ? dayOfWeekSize.height : 0)
       let minY = offset.y + additionalOffset
       let maxY = offset.y + size.height
       let firstFullyVisibleY = minY
@@ -432,7 +437,7 @@ final class FrameProvider {
   // days in each month. The returned value will be `0` if
   // `monthsLayout.pinDaysOfWeekToTop == true`.
   private func heightOfDaysOfTheWeekRowInMonth() -> CGFloat {
-    monthsLayout.pinDaysOfWeekToTop ? 0 : (daySize.height + content.verticalDayMargin)
+    monthsLayout.pinDaysOfWeekToTop ? 0 : (dayOfWeekSize.height + content.verticalDayMargin)
   }
 
 }
