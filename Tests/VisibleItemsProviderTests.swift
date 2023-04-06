@@ -1821,7 +1821,8 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())))
-      .dayAspectRatio(0.5),
+      .dayAspectRatio(0.5)
+      .dayOfWeekAspectRatio(0.5),
     size: size,
     layoutMargins: .zero,
     scale: 2,

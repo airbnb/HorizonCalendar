@@ -720,7 +720,7 @@ final class VisibleItemsProvider {
           // Take into account the pinned days of week header when determining the first visible day
           if
             !content.monthsLayout.pinDaysOfWeekToTop ||
-            layoutItem.frame.maxY > (bounds.minY + frameProvider.daySize.height)
+            layoutItem.frame.maxY > (bounds.minY + frameProvider.dayOfWeekSize.height)
           {
             firstVisibleDay = min(firstVisibleDay ?? day, day)
           }
@@ -757,7 +757,7 @@ final class VisibleItemsProvider {
       switch content.monthsLayout {
       case .vertical(let options):
         contentStartBoundary = monthFrame.minY -
-          (options.pinDaysOfWeekToTop ? frameProvider.daySize.height : 0)
+          (options.pinDaysOfWeekToTop ? frameProvider.dayOfWeekSize.height : 0)
       case .horizontal:
         contentStartBoundary = monthFrame.minX
       }

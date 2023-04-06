@@ -90,6 +90,7 @@ final class FrameProviderTests: XCTestCase {
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
         .monthDayInsets(NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .dayAspectRatio(1.5)
+        .dayOfWeekAspectRatio(1.5)
         .interMonthSpacing(20)
         .verticalDayMargin(20)
         .horizontalDayMargin(10),

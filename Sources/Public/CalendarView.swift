@@ -275,6 +275,7 @@ public final class CalendarView: UIView {
       oldContent.monthsLayout != content.monthsLayout ||
       oldContent.monthDayInsets != content.monthDayInsets ||
       oldContent.dayAspectRatio != content.dayAspectRatio ||
+      oldContent.dayOfWeekAspectRatio != content.dayOfWeekAspectRatio ||
       oldContent.horizontalDayMargin != content.horizontalDayMargin ||
       oldContent.verticalDayMargin != content.verticalDayMargin
     {

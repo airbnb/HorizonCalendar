@@ -121,6 +121,26 @@ public final class CalendarViewContent {
     return self
   }
 
+  /// Configures the aspect ratio of each day of the week.
+  ///
+  /// Values less than 1 will result in rectangular days of the week that are wider than they are tall. Values
+  /// greater than 1 will result in rectangular days of the week that are taller than they are wide. The default value is `1`, which results
+  /// in square views with the same width and height.
+  ///
+  /// - Parameters:
+  ///   - dayOfWeekAspectRatio: The aspect ratio of each day-of-the-week view.
+  /// - Returns: A mutated `CalendarViewContent` instance with a new day-of-the-week aspect ratio value.
+  public func dayOfWeekAspectRatio(_ dayOfWeekAspectRatio: CGFloat) -> CalendarViewContent {
+    let validAspectRatioRange: ClosedRange<CGFloat> = 0.5...3
+    assert(
+      validAspectRatioRange.contains(dayOfWeekAspectRatio),
+      "A day-of-the-week aspect ratio of \(dayOfWeekAspectRatio) will likely cause strange calendar layouts. Only values between \(validAspectRatioRange.lowerBound) and \(validAspectRatioRange.upperBound) should be used.")
+    self.dayOfWeekAspectRatio = min(
+      max(dayOfWeekAspectRatio, validAspectRatioRange.lowerBound),
+      validAspectRatioRange.upperBound)
+    return self
+  }
+
   /// Configures the amount of spacing, in points, between months. The default value is `0`.
   ///
   /// - Parameters:
@@ -368,6 +388,7 @@ public final class CalendarViewContent {
   let monthsLayout: MonthsLayout
 
   private(set) var dayAspectRatio: CGFloat = 1
+  private(set) var dayOfWeekAspectRatio: CGFloat = 1
   private(set) var interMonthSpacing: CGFloat = 0
   private(set) var monthDayInsets: NSDirectionalEdgeInsets = .zero
   private(set) var verticalDayMargin: CGFloat = 0
