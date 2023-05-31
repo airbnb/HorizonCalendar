@@ -199,6 +199,9 @@ public final class CalendarView: UIView {
     let anchorLayoutItem: LayoutItem
     if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
       anchorLayoutItem = self.anchorLayoutItem(for: scrollToItemContext)
+      // Clear the `scrollToItemContext` once we use it. This could happen over the course of
+      // several layout pass attempts since `isReadyForLayout` might be false initially.
+      self.scrollToItemContext = nil
     } else if let previousAnchorLayoutItem = self.anchorLayoutItem {
       anchorLayoutItem = previousAnchorLayoutItem
     } else {
@@ -343,16 +346,16 @@ public final class CalendarView: UIView {
     // Cancel in-flight scroll
     scrollView.setContentOffset(scrollView.contentOffset, animated: false)
 
-    let scrollToItemContext = ScrollToItemContext(
+    scrollToItemContext = ScrollToItemContext(
       targetItem: .month(month),
       scrollPosition: scrollPosition,
       animated: animated)
 
     if animated {
-      self.scrollToItemContext = scrollToItemContext
       startScrollingTowardTargetItem()
     } else {
-      finalizeScrollingTowardItem(for: scrollToItemContext)
+      setNeedsLayout()
+      layoutIfNeeded()
     }
   }
 
@@ -384,16 +387,16 @@ public final class CalendarView: UIView {
     // Cancel in-flight scroll
     scrollView.setContentOffset(scrollView.contentOffset, animated: false)
 
-    let scrollToItemContext = ScrollToItemContext(
+    scrollToItemContext = ScrollToItemContext(
       targetItem: .day(day),
       scrollPosition: scrollPosition,
       animated: animated)
 
     if animated {
-      self.scrollToItemContext = scrollToItemContext
       startScrollingTowardTargetItem()
     } else {
-      finalizeScrollingTowardItem(for: scrollToItemContext)
+      setNeedsLayout()
+      layoutIfNeeded()
     }
   }
 
@@ -795,11 +798,6 @@ public final class CalendarView: UIView {
       targetItem: scrollToItemContext.targetItem,
       scrollPosition: scrollToItemContext.scrollPosition,
       animated: false)
-
-    setNeedsLayout()
-    layoutIfNeeded()
-
-    self.scrollToItemContext = nil
   }
 
   @objc
