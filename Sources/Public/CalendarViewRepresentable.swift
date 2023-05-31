@@ -46,22 +46,27 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   ///   `CalendarView` lazily invokes item provider closures outside of the normal SwiftUI update loop. To ensure that the calendar
   ///   is updated at the right times, pass in any properties that are accessed in your item provider closures. For example, if a
   ///   `dayItemProvider` closure accesses a local state variable called `selectedDay`, then pass it in here.
+  ///   - proxy: A proxy instance that can be used to programmatically scroll the calendar.
   public init(
     calendar: Calendar = Calendar.current,
     visibleDateRange: ClosedRange<Date>,
     monthsLayout: MonthsLayout,
-    dataDependency: Any?)
+    dataDependency: Any?,
+    proxy: CalendarViewProxy? = nil)
   {
     self.calendar = calendar
     self.visibleDateRange = visibleDateRange
     self.monthsLayout = monthsLayout
     self.dataDependency = dataDependency
+    self.proxy = proxy
   }
 
   // MARK: Public
 
   public func makeUIView(context: Context) -> CalendarView {
-    CalendarView(initialContent: makeContent())
+    let calendarView = CalendarView(initialContent: makeContent())
+    proxy?._calendarView = calendarView
+    return calendarView
   }
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
@@ -111,6 +116,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   private let visibleDateRange: ClosedRange<Date>
   private let monthsLayout: MonthsLayout
   private let dataDependency: Any?
+  private let proxy: CalendarViewProxy?
 
   private func makeContent() -> CalendarViewContent {
     var content = CalendarViewContent(
