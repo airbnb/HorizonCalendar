@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the ability to change the aspect ratio of individual day-of-the-week items
 
 ### Fixed
-- Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled. 
+- Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled
+- Fixed Storyboard support by removing the `fatalError` in `init?(coder: NSCoder)`
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
