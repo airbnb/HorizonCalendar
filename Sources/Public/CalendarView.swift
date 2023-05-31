@@ -45,9 +45,19 @@ public final class CalendarView: UIView {
   ///   - initialContent: The content to use when initially rendering `CalendarView`.
   public init(initialContent: CalendarViewContent) {
     content = initialContent
-
     super.init(frame: .zero)
+    commonInit()
+  }
 
+  required init?(coder: NSCoder) {
+    let startDate = Date() // now
+    let endDate = Date(timeIntervalSinceNow: 31_536_000) // one year from now
+    content = CalendarViewContent(visibleDateRange: startDate...endDate, monthsLayout: .vertical)
+    super.init(coder: coder)
+    commonInit()
+  }
+
+  private func commonInit() {
     if #available(iOS 13.0, *) {
       backgroundColor = .systemBackground
     } else {
@@ -60,17 +70,13 @@ public final class CalendarView: UIView {
 
     installDoubleLayoutPassSizingLabel()
 
-    setContent(initialContent)
+    setContent(content)
 
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(accessibilityElementFocused(_:)),
       name: UIAccessibility.elementFocusedNotification,
     object: nil)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Public
