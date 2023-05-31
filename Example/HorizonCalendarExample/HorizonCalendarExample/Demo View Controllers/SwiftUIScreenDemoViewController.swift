@@ -89,7 +89,8 @@ struct SwiftUIScreenDemo: View {
       calendar: calendar,
       visibleDateRange: visibleDateRange,
       monthsLayout: monthsLayout,
-      dataDependency: selectedDayRange)
+      dataDependency: selectedDayRange,
+      proxy: calendarViewProxy)
 
     .verticalDayMargin(8)
     .horizontalDayMargin(8)
@@ -164,6 +165,13 @@ struct SwiftUIScreenDemo: View {
           calendar: calendar)
       })
 
+    .onAppear {
+      calendarViewProxy.scrollToDay(
+        containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
+        scrollPosition: .centered,
+        animated: false)
+    }
+
   }
 
   // MARK: Private
@@ -173,6 +181,8 @@ struct SwiftUIScreenDemo: View {
   private let visibleDateRange: ClosedRange<Date>
 
   private let monthDateFormatter: DateFormatter
+
+  @StateObject private var calendarViewProxy = CalendarViewProxy()
 
   @State private var selectedDayRange: DayRange?
   @State private var selectedDayRangeAtStartOfDrag: DayRange?
