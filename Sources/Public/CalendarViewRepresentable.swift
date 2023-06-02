@@ -65,11 +65,15 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
   public func makeUIView(context: Context) -> CalendarView {
     let calendarView = CalendarView(initialContent: makeContent())
+    calendarView.directionalLayoutMargins = .zero
     proxy?._calendarView = calendarView
     return calendarView
   }
 
   public func updateUIView(_ calendarView: CalendarView, context: Context) {
+    calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
+    calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
+
     calendarView.daySelectionHandler = daySelectionHandler
     calendarView.multipleDaySelectionDragHandler = multipleDaySelectionDragHandler
     calendarView.didScroll = didScroll
@@ -80,6 +84,9 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   }
 
   // MARK: Fileprivate
+
+  fileprivate var backgroundColor: UIColor?
+  fileprivate var layoutMargins: NSDirectionalEdgeInsets?
 
   fileprivate var dayAspectRatio: CGFloat?
   fileprivate var dayOfWeekAspectRatio: CGFloat?
@@ -188,6 +195,28 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 @available(iOS 13.0, *)
 extension CalendarViewRepresentable {
 
+  /// Configures the background color of the calendar view.
+  ///
+  ///  - Parameters:
+  ///     - backgroundColor: The background color to apply to the calendar view.
+  ///  - Returns: A new `CalendarViewRepresentable` with a new background color.
+  public func backgroundColor(_ backgroundColor: UIColor) -> Self {
+    var view = self
+    view.backgroundColor = backgroundColor
+    return view
+  }
+
+  /// Configures the layout margins of the calendar view.
+  ///
+  ///  - Parameters:
+  ///     - layoutMargins: The layout margins to apply to the calendar view.
+  ///  - Returns: A new `CalendarViewRepresentable` with new layout margins.
+  public func layoutMargins(_ layoutMargins: NSDirectionalEdgeInsets) -> Self {
+    var view = self
+    view.layoutMargins = layoutMargins
+    return view
+  }
+
   /// Configures the aspect ratio of each day.
   ///
   /// Values less than 1 will result in rectangular days that are wider than they are tall. Values greater than 1 will result in rectangular
@@ -195,7 +224,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - dayAspectRatio: The aspect ratio of each day view.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day aspect ratio value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day aspect ratio value.
   public func dayAspectRatio(_ dayAspectRatio: CGFloat) -> Self {
     var view = self
     view.dayAspectRatio = dayAspectRatio
@@ -210,7 +239,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - dayAspectRatio: The aspect ratio of each day-of-the-week view.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day-of-the-week aspect ratio value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day-of-the-week aspect ratio value.
   public func dayOfWeekAspectRatio(_ dayAspectRatio: CGFloat) -> Self {
     var view = self
     view.dayOfWeekAspectRatio = dayOfWeekAspectRatio
@@ -221,7 +250,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - interMonthSpacing: The amount of spacing, in points, between months.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new inter-month-spacing value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new inter-month-spacing value.
   public func interMonthSpacing(_ interMonthSpacing: CGFloat) -> Self {
     var view = self
     view.interMonthSpacing = interMonthSpacing
@@ -232,7 +261,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - monthDayInsets: The amount to inset days and day-of-week items from the edges of a month.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new month-day-insets value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new month-day-insets value.
   public func monthDayInsets(_ monthDayInsets: NSDirectionalEdgeInsets) -> Self {
     var view = self
     view.monthDayInsets = monthDayInsets
@@ -247,7 +276,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - verticalDayMargin: The amount of space between two day frames along the vertical axis.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new vertical day margin value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new vertical day margin value.
   public func verticalDayMargin(_ verticalDayMargin: CGFloat) -> Self {
     var view = self
     view.verticalDayMargin = verticalDayMargin
@@ -262,7 +291,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - horizontalDayMargin: The amount of space between two day frames along the horizontal axis.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new horizontal day margin value.
+  /// - Returns: A new `CalendarViewRepresentable` with a new horizontal day margin value.
   public func horizontalDayMargin(_ horizontalDayMargin: CGFloat) -> Self {
     var view = self
     view.horizontalDayMargin = horizontalDayMargin
@@ -273,7 +302,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - options: An instance that has properties to control various aspects of the separator's design.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a days-of-the-week row separator configured.
+  /// - Returns: A new `CalendarViewRepresentable` with a days-of-the-week row separator configured.
   public func daysOfTheWeekRowSeparator(
     options daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?)
     -> Self
@@ -296,7 +325,7 @@ extension CalendarViewRepresentable {
   ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
   ///   month header.
   ///   - month: The `Month` for which to provide a month header item.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new month header item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new month header item provider.
   public func monthHeaderItemProvider(
     _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
     -> Self
@@ -320,7 +349,7 @@ extension CalendarViewRepresentable {
   ///   - month: The month in which the day-of-week item belongs. This parameter will be `nil` if days of the week are pinned to
   ///   the top of the calendar, since in that scenario, they don't belong to any particular month.
   ///   - weekdayIndex: The weekday index for which to provide a `CalendarItemModel`.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day-of-week item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day-of-week item provider.
   public func dayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (
       _ month: Month?,
@@ -346,7 +375,7 @@ extension CalendarViewRepresentable {
   ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day
   ///   in the calendar.
   ///   - day: The `Day` for which to provide a day item.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day item provider.
   public func dayItemProvider(
     _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
     -> Self
@@ -368,7 +397,7 @@ extension CalendarViewRepresentable {
   ///   - dayBackgroundItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing the
   ///   background of a single day in the calendar.
   ///   - day: The `Day` for which to provide a day background item.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day background item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day background item provider.
   public func dayBackgroundItemProvider(
     _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> Self
@@ -393,7 +422,7 @@ extension CalendarViewRepresentable {
   ///   background of a single month in the calendar.
   ///   - monthLayoutContext: The layout context for the month containing information about the frames of views in that month
   ///   and the bounds in which your month background will be displayed.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new month background item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new month background item provider.
   public func monthBackgroundItemProvider(
     _ monthBackgroundItemProvider: @escaping (
       _ monthLayoutContext: MonthLayoutContext)
@@ -426,7 +455,7 @@ extension CalendarViewRepresentable {
   ///   range in the calendar.
   ///   - dayRangeLayoutContext: The layout context for the day range containing information about the frames of days and
   ///   bounds in which your day range item will be displayed.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new day range item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new day range item provider.
   public func dayRangeItemProvider(
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
@@ -454,7 +483,7 @@ extension CalendarViewRepresentable {
   ///   overlay.
   ///   - overlayLayoutContext: The layout context for the overlaid item location containing information about that location's
   ///   frame and the bounds in which your overlay item will be displayed.
-  /// - Returns: A mutated `CalendarViewRepresentable` with a new overlay item provider.
+  /// - Returns: A new `CalendarViewRepresentable` with a new overlay item provider.
   public func overlayItemProvider(
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
