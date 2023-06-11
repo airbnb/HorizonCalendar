@@ -971,6 +971,10 @@ public final class CalendarView: UIView {
     if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
       lastMultipleDaySelectionDay = intersectedDay
       multipleDaySelectionDragHandler?(intersectedDay, dragGestureRecognizer.state)
+    } else if dragGestureRecognizer.state == .began {
+      // If the gesture doesn't intersect a day in the `began` state, cancel it
+      dragGestureRecognizer.isEnabled = false
+      dragGestureRecognizer.isEnabled = true
     }
   }
 
