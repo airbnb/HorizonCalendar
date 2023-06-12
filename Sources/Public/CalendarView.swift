@@ -90,9 +90,9 @@ public final class CalendarView: UIView {
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
   /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
   /// `Date` instances and use them as input to the `dayRangeItemProvider`.
-  public var multipleDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
+  public var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
     didSet {
-      configureMultipleDaySelectionPanGestureRecognizer()
+      configureMultiDaySelectionPanGestureRecognizer()
     }
   }
 
@@ -418,10 +418,19 @@ public final class CalendarView: UIView {
     return scrollView
   }()
 
-  fileprivate lazy var multipleDaySelectionGestureRecognizer: UIPanGestureRecognizer = {
+  fileprivate lazy var multiDaySelectionLongPressGestureRecognizer: UILongPressGestureRecognizer = {
+    let gestureRecognizer = UILongPressGestureRecognizer(
+      target: self,
+      action: #selector(multiDaySelectionGestureRecognized(_:)))
+    gestureRecognizer.allowableMovement = .greatestFiniteMagnitude
+    gestureRecognizer.delegate = gestureRecognizerDelegate
+    return gestureRecognizer
+  }()
+
+  fileprivate lazy var multiDaySelectionPanGestureRecognizer: UIPanGestureRecognizer = {
     let gestureRecognizer = UIPanGestureRecognizer(
       target: self,
-      action: #selector(multipleDaySelectionGestureRecognized(_:)))
+      action: #selector(multiDaySelectionGestureRecognized(_:)))
     gestureRecognizer.maximumNumberOfTouches = 1
     gestureRecognizer.maximumNumberOfTouches = 1
     gestureRecognizer.delegate = gestureRecognizerDelegate
@@ -520,7 +529,7 @@ public final class CalendarView: UIView {
   private var focusedAccessibilityElement: Any?
   private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
 
-  private var lastMultipleDaySelectionDay: Day?
+  private var lastmultiDaySelectionDay: Day?
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
@@ -917,41 +926,41 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func configureMultipleDaySelectionPanGestureRecognizer() {
-    if multipleDaySelectionDragHandler == nil {
-      removeGestureRecognizer(multipleDaySelectionGestureRecognizer)
+  private func configureMultiDaySelectionPanGestureRecognizer() {
+    if multiDaySelectionDragHandler == nil {
+      removeGestureRecognizer(multiDaySelectionLongPressGestureRecognizer)
+      removeGestureRecognizer(multiDaySelectionPanGestureRecognizer)
     } else {
-      addGestureRecognizer(multipleDaySelectionGestureRecognizer)
+      addGestureRecognizer(multiDaySelectionLongPressGestureRecognizer)
+      addGestureRecognizer(multiDaySelectionPanGestureRecognizer)
     }
   }
 
   @objc
-  private func multipleDaySelectionGestureRecognized(
-    _ gestureRecognizer: UILongPressGestureRecognizer)
-  {
+  private func multiDaySelectionGestureRecognized(_ gestureRecognizer: UIGestureRecognizer) {
     guard gestureRecognizer.state != .possible else { return }
 
     // If the user interacts with the drag gesture, we should clear out any existing
     // `scrollToItemContext` that might be leftover from the initial layout process.
     scrollToItemContext = nil
 
-    updateSelectedDayRange(dragGestureRecognizer: gestureRecognizer)
-    updateAutoScrollingState(dragGestureRecognizer: gestureRecognizer)
+    updateSelectedDayRange(gestureRecognizer: gestureRecognizer)
+    updateAutoScrollingState(gestureRecognizer: gestureRecognizer)
 
     switch gestureRecognizer.state {
     case .ended, .cancelled, .failed:
-      if let lastMultipleDaySelectionDay = lastMultipleDaySelectionDay {
-        multipleDaySelectionDragHandler?(lastMultipleDaySelectionDay, gestureRecognizer.state)
+      if let lastmultiDaySelectionDay = lastmultiDaySelectionDay {
+        multiDaySelectionDragHandler?(lastmultiDaySelectionDay, gestureRecognizer.state)
       }
-      lastMultipleDaySelectionDay = nil
+      lastmultiDaySelectionDay = nil
 
     default:
       break
     }
   }
 
-  private func updateSelectedDayRange(dragGestureRecognizer: UIGestureRecognizer) {
-    let locationInScrollView = dragGestureRecognizer.location(in: scrollView)
+  private func updateSelectedDayRange(gestureRecognizer: UIGestureRecognizer) {
+    let locationInScrollView = gestureRecognizer.location(in: scrollView)
 
     // Find the intersected day
     var intersectedDay: Day?
@@ -969,17 +978,17 @@ public final class CalendarView: UIView {
       break
     }
 
-    if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
-      lastMultipleDaySelectionDay = intersectedDay
-      multipleDaySelectionDragHandler?(intersectedDay, dragGestureRecognizer.state)
-    } else if dragGestureRecognizer.state == .began {
+    if let intersectedDay, intersectedDay != lastmultiDaySelectionDay {
+      lastmultiDaySelectionDay = intersectedDay
+      multiDaySelectionDragHandler?(intersectedDay, gestureRecognizer.state)
+    } else if gestureRecognizer.state == .began {
       // If the gesture doesn't intersect a day in the `began` state, cancel it
-      dragGestureRecognizer.isEnabled = false
-      dragGestureRecognizer.isEnabled = true
+      gestureRecognizer.isEnabled = false
+      gestureRecognizer.isEnabled = true
     }
   }
 
-  private func updateAutoScrollingState(dragGestureRecognizer: UILongPressGestureRecognizer) {
+  private func updateAutoScrollingState(gestureRecognizer: UIGestureRecognizer) {
     func enableAutoScroll(offset: CGFloat) {
       autoScrollOffset = offset
 
@@ -997,11 +1006,11 @@ public final class CalendarView: UIView {
       autoScrollOffset = nil
     }
 
-    switch dragGestureRecognizer.state {
+    switch gestureRecognizer.state {
     case .changed:
       let edgeMargin: CGFloat = 32
       let offset: CGFloat = 6
-      let locationInCalendarView = dragGestureRecognizer.location(in: self)
+      let locationInCalendarView = gestureRecognizer.location(in: self)
       switch content.monthsLayout {
       case .vertical:
         if locationInCalendarView.y < layoutMargins.top + edgeMargin {
@@ -1034,7 +1043,14 @@ public final class CalendarView: UIView {
     }
 
     scrollMetricsMutator.applyOffset(autoScrollOffset)
-    updateSelectedDayRange(dragGestureRecognizer: multipleDaySelectionGestureRecognizer)
+
+    if multiDaySelectionLongPressGestureRecognizer.state != .possible {
+      updateSelectedDayRange(gestureRecognizer: multiDaySelectionLongPressGestureRecognizer)
+    } else if multiDaySelectionPanGestureRecognizer.state != .possible {
+      updateSelectedDayRange(gestureRecognizer: multiDaySelectionPanGestureRecognizer)
+    } else {
+      fatalError("The autoScrollDisplayLink should not fire if both gesture recognizers are in the `.possible` state.")
+    }
   }
 
 }
@@ -1348,8 +1364,16 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
     shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
     -> Bool
   {
-    otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer &&
+    let isGestureRecognizerMultiSelectGesture =
+      gestureRecognizer === calendarView.multiDaySelectionLongPressGestureRecognizer ||
+      gestureRecognizer === calendarView.multiDaySelectionPanGestureRecognizer
+    let isOtherGestureRecognizerScrollViewPanGesture =
+      otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer
+    let isMultiSelectingAndScrolling =
+      isGestureRecognizerMultiSelectGesture &&
+      isOtherGestureRecognizerScrollViewPanGesture &&
       gestureRecognizer.state == .changed
+    return isMultiSelectingAndScrolling
   }
 
   // MARK: Private

@@ -35,7 +35,7 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
       self.calendarView.setContent(self.makeContent())
     }
 
-    calendarView.multipleDaySelectionDragHandler = { [weak self, calendar] day, state in
+    calendarView.multiDaySelectionDragHandler = { [weak self, calendar] day, state in
       guard let self else { return }
 
       DayRangeSelectionHelper.updateDayRange(
