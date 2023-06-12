@@ -418,11 +418,12 @@ public final class CalendarView: UIView {
     return scrollView
   }()
 
-  fileprivate lazy var multipleDaySelectionGestureRecognizer: UILongPressGestureRecognizer = {
-    let gestureRecognizer = UILongPressGestureRecognizer(
+  fileprivate lazy var multipleDaySelectionGestureRecognizer: UIPanGestureRecognizer = {
+    let gestureRecognizer = UIPanGestureRecognizer(
       target: self,
       action: #selector(multipleDaySelectionGestureRecognized(_:)))
-    gestureRecognizer.allowableMovement = .greatestFiniteMagnitude
+    gestureRecognizer.maximumNumberOfTouches = 1
+    gestureRecognizer.maximumNumberOfTouches = 1
     gestureRecognizer.delegate = gestureRecognizerDelegate
     return gestureRecognizer
   }()
@@ -949,7 +950,7 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func updateSelectedDayRange(dragGestureRecognizer: UILongPressGestureRecognizer) {
+  private func updateSelectedDayRange(dragGestureRecognizer: UIGestureRecognizer) {
     let locationInScrollView = dragGestureRecognizer.location(in: scrollView)
 
     // Find the intersected day
@@ -971,6 +972,10 @@ public final class CalendarView: UIView {
     if let intersectedDay, intersectedDay != lastMultipleDaySelectionDay {
       lastMultipleDaySelectionDay = intersectedDay
       multipleDaySelectionDragHandler?(intersectedDay, dragGestureRecognizer.state)
+    } else if dragGestureRecognizer.state == .began {
+      // If the gesture doesn't intersect a day in the `began` state, cancel it
+      dragGestureRecognizer.isEnabled = false
+      dragGestureRecognizer.isEnabled = true
     }
   }
 
