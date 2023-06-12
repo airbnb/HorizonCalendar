@@ -75,7 +75,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
 
     calendarView.daySelectionHandler = daySelectionHandler
-    calendarView.multipleDaySelectionDragHandler = multipleDaySelectionDragHandler
+    calendarView.multiDaySelectionDragHandler = multiDaySelectionDragHandler
     calendarView.didScroll = didScroll
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
@@ -112,7 +112,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
   fileprivate var daySelectionHandler: ((Day) -> Void)?
-  fileprivate var multipleDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)?
+  fileprivate var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)?
   fileprivate var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
   fileprivate var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
   fileprivate var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
@@ -537,7 +537,7 @@ extension CalendarViewRepresentable {
     -> Self
   {
     var view = self
-    view.multipleDaySelectionDragHandler = { day, state in
+    view.multiDaySelectionDragHandler = { day, state in
       switch state {
       case .began:
         began(day)
