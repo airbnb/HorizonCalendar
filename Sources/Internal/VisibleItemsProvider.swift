@@ -70,6 +70,9 @@ final class VisibleItemsProvider {
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
   {
+    var context = VisibleItemsContext(
+      centermostLayoutItem: LayoutItem(itemType: .monthHeader(month), frame: .zero))
+
     let baseMonthFrame = frameProvider.frameOfMonth(month, withOrigin: offset)
     let proposedMonthFrame = frameProvider.frameOfItem(
       withOriginalFrame: baseMonthFrame,
@@ -81,7 +84,9 @@ final class VisibleItemsProvider {
       fromProposedFrame: proposedMonthHeaderFrame,
       ofTargetInMonth: month,
       withMonthFrame: proposedMonthFrame,
-      bounds: CGRect(origin: offset, size: size))
+      bounds: CGRect(origin: offset, size: size),
+      context: &context)
+
     return LayoutItem(itemType: .monthHeader(month), frame: finalMonthHeaderFrame)
   }
 
@@ -91,6 +96,9 @@ final class VisibleItemsProvider {
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
   {
+    var context = VisibleItemsContext(
+      centermostLayoutItem: LayoutItem(itemType: .day(day), frame: .zero))
+
     let baseDayFrame = frameProvider.frameOfDay(day, inMonthWithOrigin: offset)
     let proposedDayFrame = frameProvider.frameOfItem(
       withOriginalFrame: baseDayFrame,
@@ -103,7 +111,9 @@ final class VisibleItemsProvider {
       fromProposedFrame: proposedDayFrame,
       ofTargetInMonth: day.month,
       withMonthFrame: proposedMonthFrame,
-      bounds: CGRect(origin: offset, size: size))
+      bounds: CGRect(origin: offset, size: size),
+      context: &context)
+
     return LayoutItem(itemType: .day(day), frame: finalDayFrame)
   }
 
@@ -112,23 +122,12 @@ final class VisibleItemsProvider {
     offset: CGPoint)
     -> VisibleItemsDetails
   {
-    var visibleItems = Set<VisibleItem>()
-    var centermostLayoutItem = previouslyVisibleLayoutItem
-    var firstVisibleDay: Day?
-    var lastVisibleDay: Day?
-    var firstVisibleMonth: Month?
-    var lastVisibleMonth: Month?
-    var framesForVisibleMonths = [Month: CGRect]()
-    var framesForVisibleDays = [Day: CGRect]()
-    var framesForDaysForVisibleMonths = [Month: [Day: CGRect]]()
-    var contentStartBoundary: CGFloat?
-    var contentEndBoundary: CGFloat?
-    var heightOfPinnedContent = CGFloat(0)
-
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of
     // calendar item models.
-    var calendarItemModelCache = Dictionary<VisibleItem.ItemType, AnyCalendarItemModel>(
-      minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100)
+    var context = VisibleItemsContext(
+      centermostLayoutItem: previouslyVisibleLayoutItem,
+      calendarItemModelCache: .init(
+        minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100))
 
     // `extendedBounds` is used to make sure that we're always laying out a continuous set of items,
     // even if the last anchor item is completely off screen.
@@ -147,10 +146,6 @@ final class VisibleItemsProvider {
     let maxY = max(bounds.maxY, previouslyVisibleLayoutItem.frame.maxY)
     let extendedBounds = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
 
-    var handledDayRanges = Set<DayRange>()
-
-    var originsForMonths = [Month: CGPoint]()
-
     // Creating a new starting layout item based on our previous visible layout item allows us to
     // ensure that the most up-to-date layout metrics (day aspect ratio, margins, etc) are taken
     // into account. If layout metrics were just updated, then our previously visible layout item
@@ -158,7 +153,7 @@ final class VisibleItemsProvider {
     let startingLayoutItem = layoutItem(
       for: previouslyVisibleLayoutItem.itemType,
       lastHandledLayoutItem: previouslyVisibleLayoutItem,
-      originsForMonths: &originsForMonths)
+      context: &context)
 
     var lastHandledLayoutItemEnumeratingBackwards = startingLayoutItem
     var lastHandledLayoutItemEnumeratingForwards = startingLayoutItem
@@ -169,7 +164,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
         handleLayoutItem(
@@ -177,27 +172,14 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: true,
-          centermostLayoutItem: &centermostLayoutItem,
-          firstVisibleDay: &firstVisibleDay,
-          lastVisibleDay: &lastVisibleDay,
-          firstVisibleMonth: &firstVisibleMonth,
-          lastVisibleMonth: &lastVisibleMonth,
-          framesForVisibleMonths: &framesForVisibleMonths,
-          framesForVisibleDays: &framesForVisibleDays,
-          framesForDaysForVisibleMonths: &framesForDaysForVisibleMonths,
-          contentStartBoundary: &contentStartBoundary,
-          contentEndBoundary: &contentEndBoundary,
-          visibleItems: &visibleItems,
-          calendarItemModelCache: &calendarItemModelCache,
-          originsForMonths: &originsForMonths,
-          handledDayRanges: &handledDayRanges,
+          context: &context,
           shouldStop: &shouldStop)
       },
       itemTypeHandlerLookingForwards: { itemType, shouldStop in
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
         handleLayoutItem(
@@ -205,71 +187,53 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: false,
-          centermostLayoutItem: &centermostLayoutItem,
-          firstVisibleDay: &firstVisibleDay,
-          lastVisibleDay: &lastVisibleDay,
-          firstVisibleMonth: &firstVisibleMonth,
-          lastVisibleMonth: &lastVisibleMonth,
-          framesForVisibleMonths: &framesForVisibleMonths,
-          framesForVisibleDays: &framesForVisibleDays,
-          framesForDaysForVisibleMonths: &framesForDaysForVisibleMonths,
-          contentStartBoundary: &contentStartBoundary,
-          contentEndBoundary: &contentEndBoundary,
-          visibleItems: &visibleItems,
-          calendarItemModelCache: &calendarItemModelCache,
-          originsForMonths: &originsForMonths,
-          handledDayRanges: &handledDayRanges,
+          context: &context,
           shouldStop: &shouldStop)
       })
 
     // Handle pinned day-of-week layout items
     if case .vertical(let options) = content.monthsLayout, options.pinDaysOfWeekToTop {
-      handlePinnedDaysOfWeekIfNeeded(
-        yContentOffset: bounds.minY,
-        calendarItemModelCache: &calendarItemModelCache,
-        visibleItems: &visibleItems,
-        heightOfPinnedContent: &heightOfPinnedContent)
+      handlePinnedDaysOfWeekIfNeeded(yContentOffset: bounds.minY, context: &context)
     }
 
     let visibleDayRange: DayRange?
-    if let firstVisibleDay = firstVisibleDay, let lastVisibleDay = lastVisibleDay {
+    if
+      let firstVisibleDay = context.firstVisibleDay,
+      let lastVisibleDay = context.lastVisibleDay
+    {
       visibleDayRange = firstVisibleDay...lastVisibleDay
     } else {
       visibleDayRange = nil
     }
 
     let visibleMonthRange: MonthRange?
-    if let firstVisibleMonth = firstVisibleMonth, let lastVisibleMonth = lastVisibleMonth {
+    if
+      let firstVisibleMonth = context.firstVisibleMonth,
+      let lastVisibleMonth = context.lastVisibleMonth
+    {
       visibleMonthRange = firstVisibleMonth...lastVisibleMonth
     } else {
       visibleMonthRange = nil
     }
 
     // Handle overlay items
-    handleOverlayItemsIfNeeded(
-      bounds: bounds,
-      framesForVisibleMonths: framesForVisibleMonths,
-      framesForVisibleDays: framesForVisibleDays,
-      visibleItems: &visibleItems)
+    handleOverlayItemsIfNeeded(bounds: bounds, context: &context)
 
     // Handle background items
-    handleMonthBackgroundItemsIfNeeded(
-      framesForVisibleMonths: framesForVisibleMonths,
-      framesForDaysForVisibleMonths: framesForDaysForVisibleMonths,
-      visibleItems: &visibleItems)
+    handleMonthBackgroundItemsIfNeeded(context: &context)
 
-    previousCalendarItemModelCache = calendarItemModelCache
+    previousCalendarItemModelCache = context.calendarItemModelCache
 
     return VisibleItemsDetails(
-      visibleItems: visibleItems,
-      centermostLayoutItem: centermostLayoutItem,
+      visibleItems: context.visibleItems,
+      centermostLayoutItem: context.centermostLayoutItem,
       visibleDayRange: visibleDayRange,
       visibleMonthRange: visibleMonthRange,
-      framesForVisibleMonths: framesForVisibleMonths,
-      framesForVisibleDays: framesForVisibleDays,
-      contentStartBoundary: contentStartBoundary,
-      contentEndBoundary: contentEndBoundary,
-      heightOfPinnedContent: heightOfPinnedContent,
+      framesForVisibleMonths: context.framesForVisibleMonths,
+      framesForVisibleDays: context.framesForVisibleDays,
+      contentStartBoundary: context.contentStartBoundary,
+      contentEndBoundary: context.contentEndBoundary,
+      heightOfPinnedContent: context.heightOfPinnedContent,
       maxMonthHeight: frameProvider.maxMonthHeight)
   }
 
@@ -317,9 +281,9 @@ final class VisibleItemsProvider {
       }
     }
 
-    var originsForMonths = [Month: CGPoint]()
     var lastHandledLayoutItemEnumeratingBackwards = previouslyVisibleLayoutItem
     var lastHandledLayoutItemEnumeratingForwards = previouslyVisibleLayoutItem
+    var context = VisibleItemsContext(centermostLayoutItem: previouslyVisibleLayoutItem)
 
     layoutItemTypeEnumerator.enumerateItemTypes(
       startingAt: previouslyVisibleLayoutItem.itemType,
@@ -327,7 +291,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
         handleItem(layoutItem, true, &shouldStop)
@@ -336,7 +300,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
         handleItem(layoutItem, false, &shouldStop)
@@ -376,17 +340,17 @@ final class VisibleItemsProvider {
 
   private func monthOrigin(
     forMonthContaining layoutItem: LayoutItem,
-    originsForMonths: inout [Month: CGPoint])
+    context: inout VisibleItemsContext)
     -> CGPoint
   {
     let monthOrigin: CGPoint
-    if let origin = originsForMonths[layoutItem.itemType.month] {
+    if let origin = context.originsForMonths[layoutItem.itemType.month] {
       monthOrigin = origin
     } else {
       monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
     }
 
-    originsForMonths[layoutItem.itemType.month] = monthOrigin
+    context.originsForMonths[layoutItem.itemType.month] = monthOrigin
 
     return monthOrigin
   }
@@ -394,27 +358,29 @@ final class VisibleItemsProvider {
   private func monthOrigin(
     for itemType: LayoutItem.ItemType,
     lastHandledLayoutItem: LayoutItem,
-    originsForMonths: inout [Month: CGPoint])
+    context: inout VisibleItemsContext)
     -> CGPoint
   {
     // Cache the month origin for `lastHandledLayoutItem`, if necessary
-    if originsForMonths[lastHandledLayoutItem.itemType.month] == nil {
+    if context.originsForMonths[lastHandledLayoutItem.itemType.month] == nil {
       let monthOrigin = frameProvider.originOfMonth(containing: lastHandledLayoutItem)
-      originsForMonths[lastHandledLayoutItem.itemType.month] = monthOrigin
+      context.originsForMonths[lastHandledLayoutItem.itemType.month] = monthOrigin
     }
 
     // Get (and cache) the month origin for the current item
     let monthOrigin: CGPoint
-    if let origin = originsForMonths[itemType.month] {
+    if let origin = context.originsForMonths[itemType.month] {
       monthOrigin = origin
     } else if
       itemType.month < lastHandledLayoutItem.itemType.month,
-      let origin = originsForMonths[lastHandledLayoutItem.itemType.month]
+      let origin = context.originsForMonths[lastHandledLayoutItem.itemType.month]
     {
-      monthOrigin = frameProvider.originOfMonth(itemType.month, beforeMonthWithOrigin: origin)
+      monthOrigin = frameProvider.originOfMonth(
+        itemType.month,
+        beforeMonthWithOrigin: origin)
     } else if
       itemType.month > lastHandledLayoutItem.itemType.month,
-      let origin = originsForMonths[lastHandledLayoutItem.itemType.month]
+      let origin = context.originsForMonths[lastHandledLayoutItem.itemType.month]
     {
       monthOrigin = frameProvider.originOfMonth(itemType.month, afterMonthWithOrigin: origin)
     } else {
@@ -423,7 +389,7 @@ final class VisibleItemsProvider {
       """)
     }
 
-    originsForMonths[itemType.month] = monthOrigin
+    context.originsForMonths[itemType.month] = monthOrigin
 
     return monthOrigin
   }
@@ -431,13 +397,13 @@ final class VisibleItemsProvider {
   private func layoutItem(
     for itemType: LayoutItem.ItemType,
     lastHandledLayoutItem: LayoutItem,
-    originsForMonths: inout [Month: CGPoint])
+    context: inout VisibleItemsContext)
     -> LayoutItem
   {
     let monthOrigin = self.monthOrigin(
       for: itemType,
       lastHandledLayoutItem: lastHandledLayoutItem,
-      originsForMonths: &originsForMonths)
+      context: &context)
 
     // Get the frame for the current item
     let frame: CGRect
@@ -473,7 +439,7 @@ final class VisibleItemsProvider {
     for dayRange: DayRange,
     containing day: Day,
     withFrame frame: CGRect,
-    originsForMonths: inout [Month: CGPoint])
+    context: inout VisibleItemsContext)
     -> _DayRangeLayoutContext
   {
     guard dayRange.contains(day) else {
@@ -514,7 +480,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
         handleItem(layoutItem, true, &shouldStop)
@@ -523,7 +489,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
-          originsForMonths: &originsForMonths)
+          context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
         handleItem(layoutItem, false, &shouldStop)
@@ -549,20 +515,19 @@ final class VisibleItemsProvider {
   private func overlayLayoutContext(
     for overlaidItemLocation: OverlaidItemLocation,
     inBounds bounds: CGRect,
-    framesForVisibleMonths: [Month: CGRect],
-    framesForVisibleDays: [Day: CGRect])
+    context: inout VisibleItemsContext)
     -> OverlayLayoutContext?
   {
     let itemFrame: CGRect
     switch overlaidItemLocation {
     case .monthHeader(let date):
       let month = calendar.month(containing: date)
-      guard let monthFrame = framesForVisibleMonths[month] else { return nil }
+      guard let monthFrame = context.framesForVisibleMonths[month] else { return nil }
       itemFrame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: monthFrame.origin)
 
     case .day(let date):
       let day = calendar.day(containing: date)
-      guard let dayFrame = framesForVisibleDays[day] else { return nil }
+      guard let dayFrame = context.framesForVisibleDays[day] else { return nil }
       itemFrame = dayFrame
     }
 
@@ -584,27 +549,14 @@ final class VisibleItemsProvider {
     inBounds bounds: CGRect,
     extendedBounds: CGRect,
     isLookingBackwards: Bool,
-    centermostLayoutItem: inout LayoutItem,
-    firstVisibleDay: inout Day?,
-    lastVisibleDay: inout Day?,
-    firstVisibleMonth: inout Month?,
-    lastVisibleMonth: inout Month?,
-    framesForVisibleMonths: inout [Month: CGRect],
-    framesForVisibleDays: inout [Day: CGRect],
-    framesForDaysForVisibleMonths: inout [Month: [Day: CGRect]],
-    contentStartBoundary: inout CGFloat?,
-    contentEndBoundary: inout CGFloat?,
-    visibleItems: inout Set<VisibleItem>,
-    calendarItemModelCache: inout [VisibleItem.ItemType: AnyCalendarItemModel],
-    originsForMonths: inout [Month: CGPoint],
-    handledDayRanges: inout Set<DayRange>,
+    context: inout VisibleItemsContext,
     shouldStop: inout Bool)
   {
     let month = layoutItem.itemType.month
 
     // Calculate the current month frame if it's not cached; it will be used in other calculations.
     let monthFrame: CGRect
-    if let cachedMonthFrame = framesForVisibleMonths[month] {
+    if let cachedMonthFrame = context.framesForVisibleMonths[month] {
       monthFrame = cachedMonthFrame
     } else {
       let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
@@ -618,28 +570,24 @@ final class VisibleItemsProvider {
       layoutItem.frame.intersects(extendedBounds) ||
       (layoutNonVisibleItemsInPartiallyVisibleMonth && monthFrame.intersects(extendedBounds))
     {
-      firstVisibleMonth = min(firstVisibleMonth ?? month, month)
-      lastVisibleMonth = max(lastVisibleMonth ?? month, month)
+      context.firstVisibleMonth = min(context.firstVisibleMonth ?? month, month)
+      context.lastVisibleMonth = max(context.lastVisibleMonth ?? month, month)
 
       // Use the calculated month frame to determine content boundaries if needed.
-      determineContentBoundariesIfNeeded(
-        for: month,
-        withFrame: monthFrame,
-        contentStartBoundary: &contentStartBoundary,
-        contentEndBoundary: &contentEndBoundary)
+      determineContentBoundariesIfNeeded(for: month, withFrame: monthFrame, context: &context)
 
       if case .day(let day) = layoutItem.itemType {
-        var framesForDaysInMonth = framesForDaysForVisibleMonths[month] ?? [:]
+        var framesForDaysInMonth = context.framesForDaysForVisibleMonths[month] ?? [:]
         framesForDaysInMonth[day] = layoutItem.frame
-        framesForDaysForVisibleMonths[month] = framesForDaysInMonth
+        context.framesForDaysForVisibleMonths[month] = framesForDaysInMonth
       }
 
       // Handle items that actually intersect the visible bounds.
       if layoutItem.frame.intersects(bounds) {
         // Store the month frame from above in the `framesForVisibleMonths` now that we've
         // determined that it's visible.
-        if framesForVisibleMonths[month] == nil {
-          framesForVisibleMonths[month] = monthFrame
+        if context.framesForVisibleMonths[month] == nil {
+          context.framesForVisibleMonths[month] = monthFrame
         }
 
         let itemType = VisibleItem.ItemType.layoutItemType(layoutItem.itemType)
@@ -647,7 +595,7 @@ final class VisibleItemsProvider {
         let calendarItemModel: AnyCalendarItemModel
         switch layoutItem.itemType {
         case .monthHeader(let month):
-          calendarItemModel = calendarItemModelCache.value(
+          calendarItemModel = context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
               previousCalendarItemModelCache?[itemType]
@@ -660,7 +608,7 @@ final class VisibleItemsProvider {
             let separatorOptions = content.daysOfTheWeekRowSeparatorOptions
           {
             let separatorItemType = VisibleItem.ItemType.daysOfWeekRowSeparator(month)
-            let separatorCalendarItemModel = calendarItemModelCache.value(
+            let separatorCalendarItemModel = context.calendarItemModelCache.value(
               for: separatorItemType,
               missingValueProvider: {
                 previousCalendarItemModelCache?[separatorItemType] ??
@@ -668,7 +616,7 @@ final class VisibleItemsProvider {
                     invariantViewProperties: separatorOptions.color)
               })
 
-            visibleItems.insert(
+            context.visibleItems.insert(
               VisibleItem(
                 calendarItemModel: separatorCalendarItemModel,
                 itemType: separatorItemType,
@@ -678,7 +626,7 @@ final class VisibleItemsProvider {
           }
 
         case let .dayOfWeekInMonth(dayOfWeekPosition, month):
-          calendarItemModel = calendarItemModelCache.value(
+          calendarItemModel = context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
               let weekdayIndex = calendar.weekdayIndex(for: dayOfWeekPosition)
@@ -687,21 +635,21 @@ final class VisibleItemsProvider {
             })
 
         case .day(let day):
-          calendarItemModel = calendarItemModelCache.value(
+          calendarItemModel = context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
               previousCalendarItemModelCache?[itemType] ?? content.dayItemProvider(day)
             })
 
           // Handle the optional day background for this day
-          let dayBackgroundItemModel = calendarItemModelCache.optionalValue(
+          let dayBackgroundItemModel = context.calendarItemModelCache.optionalValue(
             for: .dayBackground(day),
             missingValueProvider: {
               previousCalendarItemModelCache?[.dayBackground(day)]
                 ?? content.dayBackgroundItemProvider?(day)
             })
           if let dayBackgroundItemModel = dayBackgroundItemModel {
-            visibleItems.insert(
+            context.visibleItems.insert(
               VisibleItem(
                 calendarItemModel: dayBackgroundItemModel,
                 itemType: .dayBackground(day),
@@ -713,21 +661,19 @@ final class VisibleItemsProvider {
             day,
             withFrame: layoutItem.frame,
             inBounds: bounds,
-            visibleItems: &visibleItems,
-            handledDayRanges: &handledDayRanges,
-            originsForMonths: &originsForMonths)
+            context: &context)
 
           // Take into account the pinned days of week header when determining the first visible day
           if
             !content.monthsLayout.pinDaysOfWeekToTop ||
             layoutItem.frame.maxY > (bounds.minY + frameProvider.dayOfWeekSize.height)
           {
-            firstVisibleDay = min(firstVisibleDay ?? day, day)
+            context.firstVisibleDay = min(context.firstVisibleDay ?? day, day)
           }
-          lastVisibleDay = max(lastVisibleDay ?? day, day)
+          context.lastVisibleDay = max(context.lastVisibleDay ?? day, day)
 
-          if framesForVisibleDays[day] == nil {
-            framesForVisibleDays[day] = layoutItem.frame
+          if context.framesForVisibleDays[day] == nil {
+            context.framesForVisibleDays[day] = layoutItem.frame
           }
         }
 
@@ -735,11 +681,11 @@ final class VisibleItemsProvider {
           calendarItemModel: calendarItemModel,
           itemType: .layoutItemType(layoutItem.itemType),
           frame: layoutItem.frame)
-        visibleItems.insert(visibleItem)
+        context.visibleItems.insert(visibleItem)
 
-        centermostLayoutItem = self.centermostLayoutItem(
+        context.centermostLayoutItem = self.centermostLayoutItem(
           comparing: layoutItem,
-          to: centermostLayoutItem,
+          to: context.centermostLayoutItem,
           inBounds: bounds)
       }
     } else {
@@ -750,25 +696,24 @@ final class VisibleItemsProvider {
   private func determineContentBoundariesIfNeeded(
     for month: Month,
     withFrame monthFrame: CGRect,
-    contentStartBoundary: inout CGFloat?,
-    contentEndBoundary: inout CGFloat?)
+    context: inout VisibleItemsContext)
   {
     if month == content.dayRange.lowerBound.month {
       switch content.monthsLayout {
       case .vertical(let options):
-        contentStartBoundary = monthFrame.minY -
+        context.contentStartBoundary = monthFrame.minY -
           (options.pinDaysOfWeekToTop ? frameProvider.dayOfWeekSize.height : 0)
       case .horizontal:
-        contentStartBoundary = monthFrame.minX
+        context.contentStartBoundary = monthFrame.minX
       }
     }
 
     if month == content.dayRange.upperBound.month {
       switch content.monthsLayout {
       case .vertical:
-        contentEndBoundary = monthFrame.maxY
+        context.contentEndBoundary = monthFrame.maxY
       case .horizontal:
-        contentEndBoundary = monthFrame.maxX
+        context.contentEndBoundary = monthFrame.maxX
       }
     }
   }
@@ -779,14 +724,12 @@ final class VisibleItemsProvider {
     _ day: Day,
     withFrame frame: CGRect,
     inBounds bounds: CGRect,
-    visibleItems: inout Set<VisibleItem>,
-    handledDayRanges: inout Set<DayRange>,
-    originsForMonths: inout [Month: CGPoint])
+    context: inout VisibleItemsContext)
   {
     // Handle day ranges that start or end with the current day.
     for dayRange in content.dayRangesAndItemProvider?.dayRanges ?? [] {
       guard
-        !handledDayRanges.contains(dayRange),
+        !context.handledDayRanges.contains(dayRange),
         dayRange.contains(day)
       else
       {
@@ -797,13 +740,9 @@ final class VisibleItemsProvider {
         for: dayRange,
         containing: day,
         withFrame: frame,
-        originsForMonths: &originsForMonths)
-      handleDayRange(
-        dayRange,
-        with: layoutContext,
-        inBounds: bounds,
-        visibleItems: &visibleItems)
-      handledDayRanges.insert(dayRange)
+        context: &context)
+      handleDayRange(dayRange, with: layoutContext, inBounds: bounds, context: &context)
+      context.handledDayRanges.insert(dayRange)
     }
   }
 
@@ -813,7 +752,7 @@ final class VisibleItemsProvider {
     _ dayRange: DayRange,
     with dayRangeLayoutContext: _DayRangeLayoutContext,
     inBounds bounds: CGRect,
-    visibleItems: inout Set<VisibleItem>)
+    context: inout VisibleItemsContext)
   {
     guard
       let dayRangeItemProvider = content.dayRangesAndItemProvider?.dayRangeItemProvider
@@ -829,7 +768,7 @@ final class VisibleItemsProvider {
       daysAndFrames: dayRangeLayoutContext.daysAndFrames,
       boundingUnionRectOfDayFrames: dayRangeLayoutContext.boundingUnionRectOfDayFrames)
 
-    visibleItems.insert(
+    context.visibleItems.insert(
       VisibleItem(
         calendarItemModel: dayRangeItemProvider(dayRangeLayoutContext),
         itemType: .dayRange(dayRange),
@@ -838,9 +777,7 @@ final class VisibleItemsProvider {
 
   private func handlePinnedDaysOfWeekIfNeeded(
     yContentOffset: CGFloat,
-    calendarItemModelCache: inout [VisibleItem.ItemType: AnyCalendarItemModel],
-    visibleItems: inout Set<VisibleItem>,
-    heightOfPinnedContent: inout CGFloat)
+    context: inout VisibleItemsContext)
   {
     var hasUpdatesHeightOfPinnedContent = false
     for dayOfWeekPosition in DayOfWeekPosition.allCases {
@@ -849,9 +786,9 @@ final class VisibleItemsProvider {
       let frame = frameProvider.frameOfPinnedDayOfWeek(
         at: dayOfWeekPosition,
         yContentOffset: yContentOffset)
-      visibleItems.insert(
+      context.visibleItems.insert(
         VisibleItem(
-          calendarItemModel: calendarItemModelCache.value(
+          calendarItemModel: context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
               let weekdayIndex = calendar.weekdayIndex(for: dayOfWeekPosition)
@@ -862,14 +799,14 @@ final class VisibleItemsProvider {
           frame: frame))
 
       if !hasUpdatesHeightOfPinnedContent {
-        heightOfPinnedContent += frame.height
+        context.heightOfPinnedContent += frame.height
         hasUpdatesHeightOfPinnedContent = true
       }
     }
 
     // The pinned days-of-the-week row needs a background view to prevent gaps between individual
     // items as content is scrolled underneath.
-    visibleItems.insert(
+    context.visibleItems.insert(
       VisibleItem(
         calendarItemModel: ColorViewRepresentable.calendarItemModel(
           invariantViewProperties: backgroundColor ?? .clear),
@@ -879,7 +816,7 @@ final class VisibleItemsProvider {
     // Create a visible item for the separator view, if needed.
     if let separatorOptions = content.daysOfTheWeekRowSeparatorOptions {
       let separatorItemType = VisibleItem.ItemType.pinnedDaysOfWeekRowSeparator
-      let separatorCalendarItemModel = calendarItemModelCache.value(
+      let separatorCalendarItemModel = context.calendarItemModelCache.value(
         for: separatorItemType,
         missingValueProvider: {
           previousCalendarItemModelCache?[separatorItemType] ??
@@ -887,7 +824,7 @@ final class VisibleItemsProvider {
               invariantViewProperties: separatorOptions.color)
         })
 
-      visibleItems.insert(
+      context.visibleItems.insert(
         VisibleItem(
           calendarItemModel: separatorCalendarItemModel,
           itemType: separatorItemType,
@@ -897,12 +834,7 @@ final class VisibleItemsProvider {
     }
   }
 
-  private func handleOverlayItemsIfNeeded(
-    bounds: CGRect,
-    framesForVisibleMonths: [Month: CGRect],
-    framesForVisibleDays: [Day: CGRect],
-    visibleItems: inout Set<VisibleItem>)
-  {
+  private func handleOverlayItemsIfNeeded(bounds: CGRect, context: inout VisibleItemsContext) {
     guard
       let (overlaidItemLocations, itemModelProvider) = content.overlaidItemLocationsAndItemProvider
     else
@@ -915,14 +847,13 @@ final class VisibleItemsProvider {
         let layoutContext = overlayLayoutContext(
           for: overlaidItemLocation,
           inBounds: bounds,
-          framesForVisibleMonths: framesForVisibleMonths,
-          framesForVisibleDays: framesForVisibleDays)
+          context: &context)
       else
       {
         continue
       }
 
-      visibleItems.insert(
+      context.visibleItems.insert(
         VisibleItem(
           calendarItemModel: itemModelProvider(layoutContext),
           itemType: .overlayItem(overlaidItemLocation),
@@ -930,15 +861,11 @@ final class VisibleItemsProvider {
     }
   }
 
-  private func handleMonthBackgroundItemsIfNeeded(
-    framesForVisibleMonths: [Month: CGRect],
-    framesForDaysForVisibleMonths: [Month: [Day: CGRect]],
-    visibleItems: inout Set<VisibleItem>)
-  {
+  private func handleMonthBackgroundItemsIfNeeded(context: inout VisibleItemsContext) {
     guard let monthBackgroundItemProvider = content.monthBackgroundItemProvider else { return }
 
-    for (month, monthFrame) in framesForVisibleMonths {
-      guard let framesForDays = framesForDaysForVisibleMonths[month] else { continue }
+    for (month, monthFrame) in context.framesForVisibleMonths {
+      guard let framesForDays = context.framesForDaysForVisibleMonths[month] else { continue }
 
       // We need to expand the frame of the month so that we have enough room at the edges to draw
       // the background without getting clipped.
@@ -999,7 +926,7 @@ final class VisibleItemsProvider {
           calendarItemModel: itemModel,
           itemType: .monthBackground(month),
           frame: expandedMonthFrame)
-        visibleItems.insert(visibleItem)
+        context.visibleItems.insert(visibleItem)
       }
     }
   }
@@ -1016,25 +943,22 @@ final class VisibleItemsProvider {
     fromProposedFrame proposedFrame: CGRect,
     ofTargetInMonth month: Month,
     withMonthFrame monthFrame: CGRect,
-    bounds: CGRect)
+    bounds: CGRect,
+    context: inout VisibleItemsContext)
     -> CGRect
   {
-    var contentStartBoundary: CGFloat?
-    var contentEndBoundary: CGFloat?
-
     var currentMonth = month
     var currentMonthFrame = monthFrame
 
     // Look backwards for boundary-determining months
     while
       bounds.intersects(currentMonthFrame.alignedToPixels(forScreenWithScale: scale)),
-      contentStartBoundary == nil
+      context.contentStartBoundary == nil
     {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        contentStartBoundary: &contentStartBoundary,
-        contentEndBoundary: &contentEndBoundary)
+        context: &context)
 
       let previousMonth = calendar.month(byAddingMonths: -1, to: currentMonth)
       let previousMonthOrigin = frameProvider.originOfMonth(
@@ -1053,19 +977,18 @@ final class VisibleItemsProvider {
     currentMonthFrame = monthFrame
     while
       bounds.intersects(currentMonthFrame.alignedToPixels(forScreenWithScale: scale)),
-      contentEndBoundary == nil
+      context.contentEndBoundary == nil
     {
       determineContentBoundariesIfNeeded(
         for: currentMonth,
         withFrame: currentMonthFrame,
-        contentStartBoundary: &contentStartBoundary,
-        contentEndBoundary: &contentEndBoundary)
+        context: &context)
 
       let nextMonth = calendar.month(byAddingMonths: 1, to: currentMonth)
       let nextMonthOrigin = frameProvider.originOfMonth(
         nextMonth,
         afterMonthWithOrigin: currentMonthFrame.origin)
-      let nextMonthFrame = frameProvider.frameOfMonth(nextMonth, withOrigin: nextMonthOrigin)
+      let nextMonthFrame = frameProvider.frameOfMonth(nextMonth,  withOrigin: nextMonthOrigin)
 
       currentMonth = nextMonth
       currentMonthFrame = nextMonthFrame
@@ -1075,14 +998,17 @@ final class VisibleItemsProvider {
     switch content.monthsLayout {
     case .vertical:
       if
-        let contentStartBoundary = contentStartBoundary,
-        contentStartBoundary >= bounds.minY || contentEndBoundary != nil
+        let contentStartBoundary = context.contentStartBoundary,
+        contentStartBoundary >= bounds.minY || context.contentEndBoundary != nil
       {
         // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
         // `bounds.height` and can simply adjust based on the `minimumScrollOffset`.
         return proposedFrame.applying(
           .init(translationX: 0, y: bounds.minY - contentStartBoundary + layoutMargins.top))
-      } else if let contentEndBoundary = contentEndBoundary, contentEndBoundary <= bounds.maxY {
+      } else if
+        let contentEndBoundary = context.contentEndBoundary,
+        contentEndBoundary <= bounds.maxY
+      {
         return proposedFrame.applying(
           .init(translationX: 0, y: bounds.maxY - contentEndBoundary - layoutMargins.bottom))
       } else {
@@ -1091,14 +1017,17 @@ final class VisibleItemsProvider {
 
     case .horizontal:
       if
-        let contentStartBoundary = contentStartBoundary,
-        contentStartBoundary >= bounds.minX || contentEndBoundary != nil
+        let contentStartBoundary = context.contentStartBoundary,
+        contentStartBoundary >= bounds.minX || context.contentEndBoundary != nil
       {
         // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
         // `bounds.width` and can simply adjust based on the `minimumScrollOffset`.
         return proposedFrame.applying(
           .init(translationX: bounds.minX - contentStartBoundary + layoutMargins.leading, y: 0))
-      } else if let contentEndBoundary = contentEndBoundary, contentEndBoundary <= bounds.maxX {
+      } else if
+        let contentEndBoundary = context.contentEndBoundary,
+          contentEndBoundary <= bounds.maxX
+      {
         return proposedFrame.applying(
           .init(translationX: bounds.maxX - contentEndBoundary - layoutMargins.trailing, y: 0))
       } else {
@@ -1107,6 +1036,27 @@ final class VisibleItemsProvider {
     }
   }
 
+}
+
+// MARK: VisibleItemsContext
+
+private struct VisibleItemsContext {
+  var centermostLayoutItem: LayoutItem
+  var firstVisibleDay: Day?
+  var lastVisibleDay: Day?
+  var firstVisibleMonth: Month?
+  var lastVisibleMonth: Month?
+  var heightsForVisibleMonthHeaders = [Month: CGFloat]()
+  var framesForVisibleMonths = [Month: CGRect]()
+  var framesForVisibleDays = [Day: CGRect]()
+  var framesForDaysForVisibleMonths = [Month: [Day: CGRect]]()
+  var contentStartBoundary: CGFloat?
+  var contentEndBoundary: CGFloat?
+  var visibleItems = Set<VisibleItem>()
+  var calendarItemModelCache = [VisibleItem.ItemType: AnyCalendarItemModel]()
+  var originsForMonths = [Month: CGPoint]()
+  var handledDayRanges = Set<DayRange>()
+  var heightOfPinnedContent: CGFloat = 0
 }
 
 // MARK: - VisibleItemsDetails
