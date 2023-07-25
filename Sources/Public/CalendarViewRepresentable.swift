@@ -240,7 +240,7 @@ extension CalendarViewRepresentable {
   /// - Parameters:
   ///   - dayAspectRatio: The aspect ratio of each day-of-the-week view.
   /// - Returns: A new `CalendarViewRepresentable` with a new day-of-the-week aspect ratio value.
-  public func dayOfWeekAspectRatio(_ dayAspectRatio: CGFloat) -> Self {
+  public func dayOfWeekAspectRatio(_ dayOfWeekAspectRatio: CGFloat) -> Self {
     var view = self
     view.dayOfWeekAspectRatio = dayOfWeekAspectRatio
     return view
