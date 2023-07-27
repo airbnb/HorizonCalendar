@@ -8,10 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added `MonthsLayout.vertical` and `MonthsLayout.horizontal` as more concise alternatives to `MonthsLayout.vertical(options: .init())` and `MonthsLayout.horizontal(options: .init())`, respectively
-- Added `CalendarViewRepresentable` enabling developers to use `CalendarView` from SwiftUI
+- Added `CalendarViewRepresentable`, enabling developers to use `CalendarView` in a SwiftUI view hierarchy
 - Added a `multiDaySelectionDragHandler`, enabling developers to implement multiple-day-selection via a drag gesture (similar to multi-select in the iOS Photos app)
 - Added the ability to change the aspect ratio of individual day-of-the-week items
-- Added the ability to programmatically scroll to a month or day in SwiftUI
 
 ### Fixed
 - Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled

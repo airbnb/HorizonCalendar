@@ -60,6 +60,7 @@
 		FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */; };
 		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
+		FD33BADE2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
 		FD6E1CFA298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */; };
 		FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */; };
@@ -141,6 +142,7 @@
 		FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewProxy.swift; sourceTree = "<group>"; };
 		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+MaxLayoutValue.swift"; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
 		FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysOfTheWeekRowSeparatorOptions.swift; sourceTree = "<group>"; };
 		FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayLayoutContext.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */,
+				FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */,
 				FDD8EE6D2984C08A00F6EC9D /* ColorViewRepresentable.swift */,
 				939E691E24837E0200A8BCC7 /* Dictionary+MutatingValueForKey.swift */,
 				933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */,
@@ -447,6 +450,7 @@
 				FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
 				FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */,
+				FD33BADE2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift in Sources */,
 				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
 				939E694024846A8C00A8BCC7 /* Day.swift in Sources */,
 				939E692424837E0300A8BCC7 /* CalendarView.swift in Sources */,
