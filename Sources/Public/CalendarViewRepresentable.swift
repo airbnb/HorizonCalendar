@@ -580,3 +580,68 @@ extension CalendarViewRepresentable {
   }
 
 }
+
+@available(iOS 13.0, *)
+extension CalendarViewRepresentable {
+
+  // MARK: Public
+
+  // Pre-iOS-16 support
+  public func _overrideSizeThatFits(
+    _ size: inout CGSize,
+    in proposedSize: _ProposedSize,
+    uiView: CalendarView)
+  {
+    let children = Mirror(reflecting: proposedSize).children
+    let proposedSize = CGSize(
+      width: children.first { $0.label == "width" }?.value as? CGFloat ?? .infinity,
+      height: children.first { $0.label == "height" }?.value as? CGFloat ?? .infinity)
+
+    size = sizeThatFits(proposedSize, uiView: uiView)
+  }
+
+  // Post-iOS-16 support
+  #if swift(>=5.7)
+  @available(iOS 16.0, *)
+  public func sizeThatFits(
+    _ proposal: ProposedViewSize,
+    uiView: CalendarView,
+    context _: Context)
+    -> CGSize?
+  {
+    sizeThatFits(
+      CGSize(width: proposal.width ?? .infinity, height: proposal.height ?? .infinity),
+      uiView: uiView)
+  }
+  #endif
+
+  // MARK: Private
+
+  private func sizeThatFits(_ proposal: CGSize, uiView: CalendarView) -> CGSize {
+    switch monthsLayout {
+    case .vertical:
+      return proposal
+
+    case .horizontal:
+      let _insetsLayoutMarginsFromSafeArea = uiView.insetsLayoutMarginsFromSafeArea
+
+      // We need to set this to false, otherwise the sizing calculation will include inherited layout
+      // margins. For some reason, this is only an issue in SwiftUI, not UIKit.
+      uiView.insetsLayoutMarginsFromSafeArea = false
+
+      let width = min(proposal.width, .maxLayoutValue)
+      let height = min(proposal.height, .maxLayoutValue)
+
+      let size = uiView.systemLayoutSizeFitting(
+        CGSize(width: width, height: height),
+        withHorizontalFittingPriority: .required,
+        verticalFittingPriority: .fittingSizeLevel)
+
+      uiView.insetsLayoutMarginsFromSafeArea = _insetsLayoutMarginsFromSafeArea
+
+      return CGSize(width: proposal.width, height: size.height)
+    }
+
+  }
+
+}

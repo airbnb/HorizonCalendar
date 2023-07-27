@@ -198,7 +198,9 @@ public final class CalendarView: UIView {
 
     let anchorLayoutItem: LayoutItem
     if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
-      anchorLayoutItem = self.anchorLayoutItem(for: scrollToItemContext)
+      anchorLayoutItem = self.anchorLayoutItem(
+        for: scrollToItemContext,
+        visibleItemsProvider: visibleItemsProvider)
       // Clear the `scrollToItemContext` once we use it. This could happen over the course of
       // several layout pass attempts since `isReadyForLayout` might be false initially.
       self.scrollToItemContext = nil
@@ -209,7 +211,9 @@ public final class CalendarView: UIView {
         targetItem: .month(content.monthRange.lowerBound),
         scrollPosition: .firstFullyVisiblePosition,
         animated: false)
-      anchorLayoutItem = self.anchorLayoutItem(for: initialScrollToItemContext)
+      anchorLayoutItem = self.anchorLayoutItem(
+        for: initialScrollToItemContext,
+        visibleItemsProvider: visibleItemsProvider)
     }
 
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
@@ -605,7 +609,7 @@ public final class CalendarView: UIView {
         size: bounds.size,
         layoutMargins: directionalLayoutMargins,
         scale: scale,
-        monthHeaderHeight: monthHeaderHeight(),
+        monthHeaderHeight: monthHeaderHeight(calendarWidth: bounds.width),
         backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
@@ -633,7 +637,11 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func anchorLayoutItem(for scrollToItemContext: ScrollToItemContext) -> LayoutItem {
+  private func anchorLayoutItem(
+    for scrollToItemContext: ScrollToItemContext,
+    visibleItemsProvider: VisibleItemsProvider)
+    -> LayoutItem
+  {
     let offset: CGPoint
     switch scrollMetricsMutator.scrollAxis {
     case .vertical:
@@ -693,14 +701,14 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func monthHeaderHeight() -> CGFloat {
+  private func monthHeaderHeight(calendarWidth: CGFloat) -> CGFloat {
     let monthWidth: CGFloat
     switch content.monthsLayout {
     case .vertical:
-      monthWidth = bounds.width
+      monthWidth = calendarWidth
     case .horizontal(let options):
       monthWidth = options.monthWidth(
-        calendarWidth: bounds.width,
+        calendarWidth: calendarWidth,
         interMonthSpacing: content.interMonthSpacing)
     }
 
@@ -846,10 +854,16 @@ public final class CalendarView: UIView {
       let currentPosition: CGFloat
       switch content.monthsLayout {
       case .vertical:
-        targetPosition = anchorLayoutItem(for: scrollToItemContext).frame.minY
+        targetPosition = anchorLayoutItem(
+          for: scrollToItemContext,
+          visibleItemsProvider: visibleItemsProvider)
+          .frame.minY
         currentPosition = frame.minY
       case .horizontal:
-        targetPosition = anchorLayoutItem(for: scrollToItemContext).frame.minX
+        targetPosition = anchorLayoutItem(
+          for: scrollToItemContext,
+          visibleItemsProvider: visibleItemsProvider)
+          .frame.minX
         currentPosition = frame.minX
       }
       let distanceToTargetPosition = currentPosition - targetPosition
@@ -1062,13 +1076,26 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
   // This is where we perform our width-dependent height calculation. See `DoubleLayoutPassHelpers`
   // for more details about why this is needed and how it works.
   func intrinsicContentSize(forHorizontallyInsetWidth width: CGFloat) -> CGSize {
-    // Force layout so that `visibleItemsDetails.maxMonthHeight` is calculated.
-    setNeedsLayout()
-    layoutIfNeeded()
+    let calendarWidth = width + layoutMargins.left + layoutMargins.right
+    let visibleItemsProvider = VisibleItemsProvider(
+      calendar: calendar,
+      content: content,
+      size: CGSize(width: calendarWidth, height: .maxLayoutValue),
+      layoutMargins: directionalLayoutMargins,
+      scale: scale,
+      monthHeaderHeight: monthHeaderHeight(calendarWidth: calendarWidth),
+      backgroundColor: backgroundColor)
 
-    guard let visibleItemsDetails = visibleItemsDetails else {
-      return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
-    }
+    let anchorMonthHeaderLayoutItem = anchorLayoutItem(
+      for: .init(
+        targetItem: .month(content.monthRange.lowerBound),
+        scrollPosition: .firstFullyVisiblePosition,
+        animated: false),
+      visibleItemsProvider: visibleItemsProvider)
+
+    let visibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
+      surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
+      offset: scrollView.contentOffset)
 
     let height = visibleItemsDetails.maxMonthHeight + visibleItemsDetails.heightOfPinnedContent
     return CGSize(width: UIView.noIntrinsicMetric, height: height)
