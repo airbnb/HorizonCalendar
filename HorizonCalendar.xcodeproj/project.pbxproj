@@ -62,6 +62,7 @@
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
 		FD33BADE2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
+		FD57B2582A6B01F700EEE1AA /* VisibleMonthHeaderHeightTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD57B2572A6B01F700EEE1AA /* VisibleMonthHeaderHeightTracker.swift */; };
 		FD6E1CFA298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */; };
 		FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */; };
 		FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */; };
@@ -144,6 +145,7 @@
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+MaxLayoutValue.swift"; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
+		FD57B2572A6B01F700EEE1AA /* VisibleMonthHeaderHeightTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleMonthHeaderHeightTracker.swift; sourceTree = "<group>"; };
 		FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysOfTheWeekRowSeparatorOptions.swift; sourceTree = "<group>"; };
 		FD6E1CF6298D94DC00B480A6 /* OverlayLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayLayoutContext.swift; sourceTree = "<group>"; };
 		FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthLayoutContext.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */,
 				939E691C24837E0200A8BCC7 /* VisibleItem.swift */,
 				939E691A24837E0200A8BCC7 /* VisibleItemsProvider.swift */,
+				FD57B2572A6B01F700EEE1AA /* VisibleMonthHeaderHeightTracker.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */,
 				939E692D24837E0300A8BCC7 /* LayoutItem.swift in Sources */,
 				939E693A24837E8700A8BCC7 /* CalendarViewContent.swift in Sources */,
+				FD57B2582A6B01F700EEE1AA /* VisibleMonthHeaderHeightTracker.swift in Sources */,
 				FD6E1D1A2991C50100B480A6 /* CalendarViewRepresentable.swift in Sources */,
 				FDD8EE6E2984C08A00F6EC9D /* ColorViewRepresentable.swift in Sources */,
 				939E692F24837E0300A8BCC7 /* OffScreenCalendarItemAccessibilityElement.swift in Sources */,

@@ -606,10 +606,10 @@ public final class CalendarView: UIView {
       let visibleItemsProvider = VisibleItemsProvider(
         calendar: calendar,
         content: content,
+        reuseManager: reuseManager,
         size: bounds.size,
         layoutMargins: directionalLayoutMargins,
         scale: scale,
-        monthHeaderHeight: monthHeaderHeight(calendarWidth: bounds.width),
         backgroundColor: backgroundColor)
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
@@ -699,29 +699,6 @@ public final class CalendarView: UIView {
         preconditionFailure("Could not find a corresponding frame for \(day).")
       }
     }
-  }
-
-  private func monthHeaderHeight(calendarWidth: CGFloat) -> CGFloat {
-    let monthWidth: CGFloat
-    switch content.monthsLayout {
-    case .vertical:
-      monthWidth = calendarWidth
-    case .horizontal(let options):
-      monthWidth = options.monthWidth(
-        calendarWidth: calendarWidth,
-        interMonthSpacing: content.interMonthSpacing)
-    }
-
-    let firstMonthHeaderItemModel = content.monthHeaderItemProvider(
-      content.monthRange.lowerBound)
-    let firstMonthHeader = firstMonthHeaderItemModel._makeView()
-    firstMonthHeaderItemModel._setContent(onViewOfSameType: firstMonthHeader)
-
-    let size = firstMonthHeader.systemLayoutSizeFitting(
-      CGSize(width: monthWidth, height: 0),
-      withHorizontalFittingPriority: .required,
-      verticalFittingPriority: .fittingSizeLevel)
-    return size.height
   }
 
   private func updateVisibleViews(
@@ -1087,10 +1064,10 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     let visibleItemsProvider = VisibleItemsProvider(
       calendar: calendar,
       content: content,
+      reuseManager: reuseManager,
       size: CGSize(width: calendarWidth, height: calendarHeight),
       layoutMargins: directionalLayoutMargins,
       scale: scale,
-      monthHeaderHeight: monthHeaderHeight(calendarWidth: calendarWidth),
       backgroundColor: backgroundColor)
 
     let anchorMonthHeaderLayoutItem = anchorLayoutItem(
@@ -1104,8 +1081,7 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
       surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
       offset: scrollView.contentOffset)
 
-    let height = visibleItemsDetails.maxMonthHeight + visibleItemsDetails.heightOfPinnedContent
-    return CGSize(width: UIView.noIntrinsicMetric, height: height)
+    return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
   }
 
 }
