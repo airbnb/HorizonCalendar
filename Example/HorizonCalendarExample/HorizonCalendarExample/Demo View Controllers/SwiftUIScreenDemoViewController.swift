@@ -92,9 +92,9 @@ struct SwiftUIScreenDemo: View {
       dataDependency: selectedDayRange,
       proxy: calendarViewProxy)
 
+    .interMonthSpacing(24)
     .verticalDayMargin(8)
     .horizontalDayMargin(8)
-    .interMonthSpacing(16)
 
     .monthHeaderItemProvider { month in
       let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
@@ -171,6 +171,8 @@ struct SwiftUIScreenDemo: View {
         scrollPosition: .centered,
         animated: false)
     }
+
+    .frame(maxWidth: 375, maxHeight: .infinity)
 
   }
 
