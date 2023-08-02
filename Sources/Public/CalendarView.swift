@@ -1077,10 +1077,17 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
   // for more details about why this is needed and how it works.
   func intrinsicContentSize(forHorizontallyInsetWidth width: CGFloat) -> CGSize {
     let calendarWidth = width + layoutMargins.left + layoutMargins.right
+    let calendarHeight: CGFloat
+    if content.monthsLayout.isHorizontal {
+      calendarHeight = .maxLayoutValue
+    } else {
+      calendarHeight = bounds.height
+    }
+
     let visibleItemsProvider = VisibleItemsProvider(
       calendar: calendar,
       content: content,
-      size: CGSize(width: calendarWidth, height: .maxLayoutValue),
+      size: CGSize(width: calendarWidth, height: calendarHeight),
       layoutMargins: directionalLayoutMargins,
       scale: scale,
       monthHeaderHeight: monthHeaderHeight(calendarWidth: calendarWidth),
