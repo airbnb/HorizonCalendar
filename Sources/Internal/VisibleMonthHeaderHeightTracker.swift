@@ -61,7 +61,7 @@ final class VisibleMonthHeaderHeightTracker {
         }
 
         let size = itemView.contentView.systemLayoutSizeFitting(
-          CGSize(width: monthWidth, height: 0),
+          CGSize(width: monthWidth, height: UIView.layoutFittingCompressedSize.height),
           withHorizontalFittingPriority: .required,
           verticalFittingPriority: .fittingSizeLevel)
 
