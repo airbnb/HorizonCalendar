@@ -24,7 +24,6 @@ final class FrameProviderTests: XCTestCase {
 
   override func setUp() {
     let size = CGSize(width: 320, height: 480)
-    let monthHeaderHeight = CGFloat(50)
 
     let lowerBoundDate = calendar.date(from: DateComponents(year: 2020, month: 05, day: 15))!
     let upperBoundDate = calendar.date(from: DateComponents(year: 2020, month: 07, day: 20))!
@@ -40,8 +39,7 @@ final class FrameProviderTests: XCTestCase {
         .horizontalDayMargin(10),
       size: size,
       layoutMargins: .zero,
-      scale: 3,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: 3)
     verticalPinnedDaysOfWeekFrameProvider = FrameProvider(
       content: CalendarViewContent(
         calendar: calendar,
@@ -53,8 +51,7 @@ final class FrameProviderTests: XCTestCase {
         .horizontalDayMargin(10),
       size: size,
       layoutMargins: .zero,
-      scale: 3,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: 3)
     verticalPartialMonthFrameProvider = FrameProvider(
       content: CalendarViewContent(
         calendar: calendar,
@@ -67,8 +64,7 @@ final class FrameProviderTests: XCTestCase {
         .horizontalDayMargin(10),
       size: size,
       layoutMargins: .zero,
-      scale: 3,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: 3)
     horizontalFrameProvider = FrameProvider(
       content: CalendarViewContent(
         calendar: calendar,
@@ -81,8 +77,7 @@ final class FrameProviderTests: XCTestCase {
         .horizontalDayMargin(10),
       size: size,
       layoutMargins: .zero,
-      scale: 3,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: 3)
     rectangularDayFrameProvider = FrameProvider(
       content: CalendarViewContent(
         calendar: calendar,
@@ -96,26 +91,27 @@ final class FrameProviderTests: XCTestCase {
         .horizontalDayMargin(10),
       size: size,
       layoutMargins: .zero,
-      scale: 3,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: 3)
   }
 
   func testMaxMonthHeight() {
-    let maxHeight1 = verticalFrameProvider.maxMonthHeight.alignedToPixel(forScreenWithScale: 3)
+    let maxHeight1 = verticalFrameProvider.maxMonthHeight(monthHeaderHeight: 50)
+      .alignedToPixel(forScreenWithScale: 3)
     let expectedMaxHeight1 = CGFloat(424).alignedToPixel(forScreenWithScale: 3)
     XCTAssert(maxHeight1 == expectedMaxHeight1, "Incorrect max month height.")
 
-    let maxHeight2 = verticalPinnedDaysOfWeekFrameProvider.maxMonthHeight
+    let maxHeight2 = verticalPinnedDaysOfWeekFrameProvider.maxMonthHeight(monthHeaderHeight: 50)
       .alignedToPixel(forScreenWithScale: 3)
     let expectedMaxHeight2 = CGFloat(369.1428571428571).alignedToPixel(forScreenWithScale: 3)
     XCTAssert(maxHeight2 == expectedMaxHeight2, "Incorrect max month height.")
 
-    let maxHeight3 = verticalPartialMonthFrameProvider.maxMonthHeight
+    let maxHeight3 = verticalPartialMonthFrameProvider.maxMonthHeight(monthHeaderHeight: 50)
       .alignedToPixel(forScreenWithScale: 3)
     let expectedMaxHeight3 = CGFloat(424).alignedToPixel(forScreenWithScale: 3)
     XCTAssert(maxHeight3 == expectedMaxHeight3, "Incorrect max month height.")
 
-    let maxHeight4 = horizontalFrameProvider.maxMonthHeight.alignedToPixel(forScreenWithScale: 3)
+    let maxHeight4 = horizontalFrameProvider.maxMonthHeight(monthHeaderHeight: 50)
+      .alignedToPixel(forScreenWithScale: 3)
     let expectedMaxHeight4 = CGFloat(404.0).alignedToPixel(forScreenWithScale: 3)
     XCTAssert(maxHeight4 == expectedMaxHeight4, "Incorrect max month height.")
   }
@@ -144,21 +140,25 @@ final class FrameProviderTests: XCTestCase {
   // MARK: Test initial month calculations
 
   func testInitialMonthHeaderFrame() {
-    let frame1 = verticalFrameProvider.frameOfMonthHeader(inMonthWithOrigin: CGPoint(x: 0, y: 100))
+    let frame1 = verticalFrameProvider.frameOfMonthHeader(
+      inMonthWithOrigin: CGPoint(x: 0, y: 100),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(x: 0, y: 100, width: 320, height: 50)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect initial month header frame.")
 
     let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfMonthHeader(
-      inMonthWithOrigin: CGPoint(x: 0, y: 100))
+      inMonthWithOrigin: CGPoint(x: 0, y: 100),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 0, y: 100, width: 320, height: 50)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame2 == expectedFrame2, "Incorrect initial month header frame.")
 
     let frame3 = horizontalFrameProvider.frameOfMonthHeader(
-      inMonthWithOrigin: CGPoint(x: 100, y: 0))
+      inMonthWithOrigin: CGPoint(x: 100, y: 0),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 100, y: 0, width: 300, height: 50)
     XCTAssert(frame3 == expectedFrame3, "Incorrect initial month header frame.")
@@ -202,7 +202,9 @@ final class FrameProviderTests: XCTestCase {
       let monthHeaderLayoutItem = LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 100, width: 320, height: 50))
-      let origin1 = frameProvider.originOfMonth(containing: monthHeaderLayoutItem)
+      let origin1 = frameProvider.originOfMonth(
+        containing: monthHeaderLayoutItem,
+        monthHeaderHeight: 50)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(
         origin1 == expectedOrigins1[index],
@@ -213,7 +215,9 @@ final class FrameProviderTests: XCTestCase {
           position: .fourth,
           month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(origin: CGPoint(x: 130, y: 200), size: frameProvider.daySize))
-      let origin2 = frameProvider.originOfMonth(containing: dayOfWeekLayoutItem)
+      let origin2 = frameProvider.originOfMonth(
+        containing: dayOfWeekLayoutItem,
+        monthHeaderHeight: 50)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(
         origin2 == expectedOrigins2[index],
@@ -223,7 +227,9 @@ final class FrameProviderTests: XCTestCase {
         itemType: .day(
           Day(month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true), day: 29)),
         frame: CGRect(origin: CGPoint(x: 250, y: 400), size: frameProvider.daySize))
-      let origin3 = frameProvider.originOfMonth(containing: dayLayoutItem1)
+      let origin3 = frameProvider.originOfMonth(
+        containing: dayLayoutItem1,
+        monthHeaderHeight: 50)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(origin3 == expectedOrigins3[index], "Incorrect month origin containing day.")
 
@@ -231,7 +237,9 @@ final class FrameProviderTests: XCTestCase {
         itemType: .day(
           Day(month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true), day: 18)),
         frame: CGRect(origin: CGPoint(x: 200, y: 300), size: frameProvider.daySize))
-      let origin4 = frameProvider.originOfMonth(containing: dayLayoutItem2)
+      let origin4 = frameProvider.originOfMonth(
+        containing: dayLayoutItem2,
+        monthHeaderHeight: 50)
         .alignedToPixels(forScreenWithScale: 3)
       XCTAssert(origin4 == expectedOrigins4[index], "Incorrect month origin containing day.")
     }
@@ -240,7 +248,9 @@ final class FrameProviderTests: XCTestCase {
   func testPrecedingMonthOrigin() {
     let origin1 = verticalFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      beforeMonthWithOrigin: CGPoint(x: 0, y: 200))
+      beforeMonthWithOrigin: CGPoint(x: 0, y: 200),
+      subsequentMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin1 = CGPoint(x: 0, y: -189.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
@@ -248,14 +258,18 @@ final class FrameProviderTests: XCTestCase {
 
     let origin2 = verticalPinnedDaysOfWeekFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      beforeMonthWithOrigin: CGPoint(x: 0, y: 400))
+      beforeMonthWithOrigin: CGPoint(x: 0, y: 400),
+      subsequentMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin2 = CGPoint(x: 0, y: 65.71428571428572).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin2 == expectedOrigin2, "Incorrect origin for preceding month.")
 
     let origin3 = verticalPartialMonthFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true),
-      beforeMonthWithOrigin: CGPoint(x: 0, y: 200))
+      beforeMonthWithOrigin: CGPoint(x: 0, y: 200),
+      subsequentMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin3 = CGPoint(x: 0, y: -134.28571428571428)
       .alignedToPixels(forScreenWithScale: 3)
@@ -263,7 +277,9 @@ final class FrameProviderTests: XCTestCase {
 
     let origin4 = horizontalFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      beforeMonthWithOrigin: CGPoint(x: 200, y: 0))
+      beforeMonthWithOrigin: CGPoint(x: 200, y: 0),
+      subsequentMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin4 = CGPoint(x: -120, y: 0).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin4 == expectedOrigin4, "Incorrect origin for preceding month.")
@@ -272,7 +288,9 @@ final class FrameProviderTests: XCTestCase {
   func testSucceedingMonthOrigin() {
     let origin1 = verticalFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      afterMonthWithOrigin: CGPoint(x: 0, y: 200))
+      afterMonthWithOrigin: CGPoint(x: 0, y: 200),
+      previousMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin1 = CGPoint(x: 0, y: 589.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
@@ -280,21 +298,27 @@ final class FrameProviderTests: XCTestCase {
 
     let origin2 = verticalPinnedDaysOfWeekFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      afterMonthWithOrigin: CGPoint(x: 0, y: 400))
+      afterMonthWithOrigin: CGPoint(x: 0, y: 400),
+      previousMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin2 = CGPoint(x: 0, y: 734.2857142857142).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin2 == expectedOrigin2, "Incorrect origin for succeeding month.")
 
     let origin3 = verticalPartialMonthFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
-      afterMonthWithOrigin: CGPoint(x: 0, y: 400))
+      afterMonthWithOrigin: CGPoint(x: 0, y: 400),
+      previousMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin3 = CGPoint(x: 0, y: 734.2857142857142).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin3 == expectedOrigin3, "Incorrect origin for succeeding month.")
 
     let origin4 = horizontalFrameProvider.originOfMonth(
       Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
-      afterMonthWithOrigin: CGPoint(x: 200, y: 0))
+      afterMonthWithOrigin: CGPoint(x: 200, y: 0),
+      previousMonthHeaderHeight: 50,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedOrigin4 = CGPoint(x: 520, y: 0).alignedToPixels(forScreenWithScale: 3)
     XCTAssert(origin4 == expectedOrigin4, "Incorrect origin for succeeding month.")
@@ -303,7 +327,8 @@ final class FrameProviderTests: XCTestCase {
   func testFrameOfMonth() {
     let frame1 = verticalFrameProvider.frameOfMonth(
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
-      withOrigin: CGPoint(x: 0, y: 200))
+      withOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 369.1428571428571)
       .alignedToPixels(forScreenWithScale: 3)
@@ -311,7 +336,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfMonth(
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
-      withOrigin: CGPoint(x: 0, y: 200))
+      withOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 314.2857142857143)
       .alignedToPixels(forScreenWithScale: 3)
@@ -319,7 +345,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame3 = verticalPartialMonthFrameProvider.frameOfMonth(
       Month(era: 1, year: 2020, month: 07, isInGregorianCalendar: true),
-      withOrigin: CGPoint(x: 0, y: 200))
+      withOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 0.0, y: 200.0, width: 320.0, height: 314.2857142857143)
       .alignedToPixels(forScreenWithScale: 3)
@@ -327,7 +354,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame4 = horizontalFrameProvider.frameOfMonth(
       Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
-      withOrigin: CGPoint(x: 500, y: 0))
+      withOrigin: CGPoint(x: 500, y: 0),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame4 = CGRect(x: 500.0, y: 0.0, width: 300.0, height: 352.0)
       .alignedToPixels(forScreenWithScale: 3)
@@ -337,21 +365,25 @@ final class FrameProviderTests: XCTestCase {
   // MARK: Core item frame calculations
 
   func testMonthHeaderFrame() {
-    let frame1 = verticalFrameProvider.frameOfMonthHeader(inMonthWithOrigin: CGPoint(x: 0, y: 300))
+    let frame1 = verticalFrameProvider.frameOfMonthHeader(
+      inMonthWithOrigin: CGPoint(x: 0, y: 300),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(x: 0, y: 300, width: 320, height: 50)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame1 == expectedFrame1, "Incorrect frame for month header.")
 
     let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfMonthHeader(
-      inMonthWithOrigin: CGPoint(x: 0, y: 300))
+      inMonthWithOrigin: CGPoint(x: 0, y: 300),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 0, y: 300, width: 320, height: 50)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frame2 == expectedFrame2, "Incorrect frame for month header.")
 
     let frame3 = horizontalFrameProvider.frameOfMonthHeader(
-      inMonthWithOrigin: CGPoint(x: 300, y: 0))
+      inMonthWithOrigin: CGPoint(x: 300, y: 0),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 300, y: 0, width: 300, height: 50)
       .alignedToPixels(forScreenWithScale: 3)
@@ -361,7 +393,8 @@ final class FrameProviderTests: XCTestCase {
   func testDayOfWeekFrame() {
     let frame1 = verticalFrameProvider.frameOfDayOfWeek(
       at: .fifth,
-      inMonthWithOrigin: CGPoint(x: 0, y: 200))
+      inMonthWithOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(
       x: 187.42857142857142,
@@ -373,7 +406,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfDayOfWeek(
       at: .first,
-      inMonthWithOrigin: CGPoint(x: 0, y: 200))
+      inMonthWithOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 8, y: 255, width: 34.857142857142854, height: 34.857142857142854)
       .alignedToPixels(forScreenWithScale: 3)
@@ -381,7 +415,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame3 = horizontalFrameProvider.frameOfDayOfWeek(
       at: .last,
-      inMonthWithOrigin: CGPoint(x: 200, y: 0))
+      inMonthWithOrigin: CGPoint(x: 200, y: 0),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 460, y: 55, width: 32, height: 32)
       .alignedToPixels(forScreenWithScale: 3)
@@ -389,7 +424,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame4 = rectangularDayFrameProvider.frameOfDayOfWeek(
       at: .fifth,
-      inMonthWithOrigin: CGPoint(x: 0, y: 200))
+      inMonthWithOrigin: CGPoint(x: 0, y: 200),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame4 = CGRect(
       x: 187.42857142857142,
@@ -403,7 +439,8 @@ final class FrameProviderTests: XCTestCase {
   func testDayFrameInMonth() {
     let frame1 = verticalFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20),
-      inMonthWithOrigin: CGPoint(x: 0, y: 69))
+      inMonthWithOrigin: CGPoint(x: 0, y: 69),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame1 = CGRect(
       x: 52.857142857142854,
@@ -415,7 +452,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame2 = verticalPinnedDaysOfWeekFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 1994, month: 01, isInGregorianCalendar: true), day: 01),
-      inMonthWithOrigin: CGPoint(x: 0, y: 130))
+      inMonthWithOrigin: CGPoint(x: 0, y: 130),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(
       x: 277.1428571428571,
@@ -427,7 +465,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame3 = verticalPartialMonthFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true), day: 29),
-      inMonthWithOrigin: CGPoint(x: 0, y: 69))
+      inMonthWithOrigin: CGPoint(x: 0, y: 69),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(
       x: 232.28571428571428,
@@ -439,7 +478,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame4 = horizontalFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 2072, month: 06, isInGregorianCalendar: true), day: 30),
-      inMonthWithOrigin: CGPoint(x: 300, y: 0))
+      inMonthWithOrigin: CGPoint(x: 300, y: 0),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame4 = CGRect(x: 476, y: 315, width: 32, height: 32)
       .alignedToPixels(forScreenWithScale: 3)
@@ -447,7 +487,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame5 = rectangularDayFrameProvider.frameOfDay(
       Day(month: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true), day: 20),
-      inMonthWithOrigin: CGPoint(x: 0, y: 69))
+      inMonthWithOrigin: CGPoint(x: 0, y: 69),
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame5 = CGRect(
       x: 52.857142857142854,
@@ -465,7 +506,8 @@ final class FrameProviderTests: XCTestCase {
     let middleDayMonthOrigin = CGPoint(x: 0, y: 100)
     let middleDayFrame = verticalFrameProvider.frameOfDay(
       middleDay,
-      inMonthWithOrigin: middleDayMonthOrigin)
+      inMonthWithOrigin: middleDayMonthOrigin,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let frameBeforeMiddleDay = verticalFrameProvider.frameOfDay(
       calendar.day(byAddingDays: -1, to: middleDay),
@@ -500,7 +542,8 @@ final class FrameProviderTests: XCTestCase {
     let leftDayMonthOrigin = CGPoint(x: 0, y: 200)
     let leftDayFrame = verticalPinnedDaysOfWeekFrameProvider.frameOfDay(
       leftDay,
-      inMonthWithOrigin: leftDayMonthOrigin)
+      inMonthWithOrigin: leftDayMonthOrigin,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let frameBeforeLeftDay = verticalPinnedDaysOfWeekFrameProvider.frameOfDay(
       calendar.day(byAddingDays: -1, to: leftDay),
@@ -535,7 +578,8 @@ final class FrameProviderTests: XCTestCase {
     let rightDayMonthOrigin = CGPoint(x: 1000, y: 0)
     let rightDayFrame = horizontalFrameProvider.frameOfDay(
       rightDay,
-      inMonthWithOrigin: rightDayMonthOrigin)
+      inMonthWithOrigin: rightDayMonthOrigin,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let frameBeforeRightDay = horizontalFrameProvider.frameOfDay(
       calendar.day(byAddingDays: -1, to: rightDay),
@@ -574,8 +618,7 @@ final class FrameProviderTests: XCTestCase {
         .interMonthSpacing(24),
       size: CGSize(width: 375, height: 275),
       layoutMargins: .init(top: 8, leading: 8, bottom: 8, trailing: 8),
-      scale: 3,
-      monthHeaderHeight: 26.333333333333332)
+      scale: 3)
     
     let adjacentDayFrame = CGRect(
       x: 10218.857142857141,
@@ -650,7 +693,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame2 = verticalFrameProvider.frameOfDaysOfWeekRowSeparator(
       inMonthWithOrigin: CGPoint(x: 0, y: 120),
-      separatorHeight: 1)
+      separatorHeight: 1,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame2 = CGRect(x: 0, y: 208.85714285714286, width: 320, height: 1)
       .alignedToPixels(forScreenWithScale: 3)
@@ -658,7 +702,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame3 = horizontalFrameProvider.frameOfDaysOfWeekRowSeparator(
       inMonthWithOrigin: CGPoint(x: 421, y: 0),
-      separatorHeight: 10)
+      separatorHeight: 10,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame3 = CGRect(x: 421, y: 77, width: 300, height: 10)
       .alignedToPixels(forScreenWithScale: 3)
@@ -666,7 +711,8 @@ final class FrameProviderTests: XCTestCase {
 
     let frame4 = rectangularDayFrameProvider.frameOfDaysOfWeekRowSeparator(
       inMonthWithOrigin: CGPoint(x: 0, y: 120),
-      separatorHeight: 3)
+      separatorHeight: 3,
+      monthHeaderHeight: 50)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrame4 = CGRect(x: 0, y: 224.28571428571428, width: 320, height: 3)
       .alignedToPixels(forScreenWithScale: 3)
