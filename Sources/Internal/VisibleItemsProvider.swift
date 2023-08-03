@@ -25,10 +25,10 @@ final class VisibleItemsProvider {
   init(
     calendar: Calendar,
     content: CalendarViewContent,
+    reuseManager: ItemViewReuseManager,
     size: CGSize,
     layoutMargins: NSDirectionalEdgeInsets,
     scale: CGFloat,
-    monthHeaderHeight: CGFloat,
     backgroundColor: UIColor?)
   {
     self.content = content
@@ -39,12 +39,17 @@ final class VisibleItemsProvider {
       monthsLayout: content.monthsLayout,
       monthRange: content.monthRange,
       dayRange: content.dayRange)
+
+    visibleMonthHeaderHeightTracker = VisibleMonthHeaderHeightTracker(
+      content: content,
+      size: size,
+      reuseManager: reuseManager)
+
     frameProvider = FrameProvider(
       content: content,
       size: size,
       layoutMargins: layoutMargins,
-      scale: scale,
-      monthHeaderHeight: monthHeaderHeight)
+      scale: scale)
   }
 
   // MARK: Internal
@@ -72,18 +77,34 @@ final class VisibleItemsProvider {
   {
     var context = VisibleItemsContext(
       centermostLayoutItem: LayoutItem(itemType: .monthHeader(month), frame: .zero))
+    let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(for: month)
 
-    let baseMonthFrame = frameProvider.frameOfMonth(month, withOrigin: offset)
+    let monthOrigin: CGPoint
+    switch content.monthsLayout {
+    case .vertical:
+      monthOrigin = offset
+    case .horizontal:
+      monthOrigin = CGPoint(
+        x: offset.x,
+        y: size.height - frameProvider.maxMonthHeight(monthHeaderHeight: monthHeaderHeight))
+    }
+
+    let baseMonthFrame = frameProvider.frameOfMonth(
+      month,
+      withOrigin: monthOrigin,
+      monthHeaderHeight: monthHeaderHeight)
     let proposedMonthFrame = frameProvider.frameOfItem(
       withOriginalFrame: baseMonthFrame,
       at: scrollPosition,
       offset: offset)
     let proposedMonthHeaderFrame = frameProvider.frameOfMonthHeader(
-      inMonthWithOrigin: proposedMonthFrame.origin)
+      inMonthWithOrigin: proposedMonthFrame.origin,
+      monthHeaderHeight: monthHeaderHeight)
     let finalMonthHeaderFrame = correctedScrollToItemFrameForContentBoundaries(
       fromProposedFrame: proposedMonthHeaderFrame,
       ofTargetInMonth: month,
       withMonthFrame: proposedMonthFrame,
+      monthHeaderHeight: monthHeaderHeight,
       bounds: CGRect(origin: offset, size: size),
       context: &context)
 
@@ -98,22 +119,43 @@ final class VisibleItemsProvider {
   {
     var context = VisibleItemsContext(
       centermostLayoutItem: LayoutItem(itemType: .day(day), frame: .zero))
+    let month = day.month
+    let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(for: month)
 
-    let baseDayFrame = frameProvider.frameOfDay(day, inMonthWithOrigin: offset)
+    let monthOrigin: CGPoint
+    switch content.monthsLayout {
+    case .vertical:
+      monthOrigin = offset
+    case .horizontal:
+      monthOrigin = CGPoint(
+        x: offset.x,
+        y: size.height - frameProvider.maxMonthHeight(monthHeaderHeight: monthHeaderHeight))
+    }
+
+    let baseDayFrame = frameProvider.frameOfDay(
+      day,
+      inMonthWithOrigin: monthOrigin,
+      monthHeaderHeight: monthHeaderHeight)
     let proposedDayFrame = frameProvider.frameOfItem(
       withOriginalFrame: baseDayFrame,
       at: scrollPosition,
       offset: offset)
     let proposedMonthOrigin = frameProvider.originOfMonth(
-      containing: LayoutItem(itemType: .day(day), frame: proposedDayFrame))
-    let proposedMonthFrame = frameProvider.frameOfMonth(day.month, withOrigin: proposedMonthOrigin)
+      containing: LayoutItem(
+        itemType: .day(day),
+        frame: proposedDayFrame),
+      monthHeaderHeight: monthHeaderHeight)
+    let proposedMonthFrame = frameProvider.frameOfMonth(
+      day.month,
+      withOrigin: proposedMonthOrigin,
+      monthHeaderHeight: monthHeaderHeight)
     let finalDayFrame = correctedScrollToItemFrameForContentBoundaries(
       fromProposedFrame: proposedDayFrame,
       ofTargetInMonth: day.month,
       withMonthFrame: proposedMonthFrame,
+      monthHeaderHeight: monthHeaderHeight,
       bounds: CGRect(origin: offset, size: size),
       context: &context)
-
     return LayoutItem(itemType: .day(day), frame: finalDayFrame)
   }
 
@@ -153,6 +195,8 @@ final class VisibleItemsProvider {
     let startingLayoutItem = layoutItem(
       for: previouslyVisibleLayoutItem.itemType,
       lastHandledLayoutItem: previouslyVisibleLayoutItem,
+      monthHeaderHeight: visibleMonthHeaderHeightTracker.monthHeaderHeight(
+        for: previouslyVisibleLayoutItem.itemType.month),
       context: &context)
 
     var lastHandledLayoutItemEnumeratingBackwards = startingLayoutItem
@@ -161,9 +205,13 @@ final class VisibleItemsProvider {
     layoutItemTypeEnumerator.enumerateItemTypes(
       startingAt: previouslyVisibleLayoutItem.itemType,
       itemTypeHandlerLookingBackwards: { itemType, shouldStop in
+        let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(
+          for: itemType.month)
+
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
+          monthHeaderHeight: monthHeaderHeight,
           context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
@@ -172,13 +220,18 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: true,
+          monthHeaderHeight: monthHeaderHeight,
           context: &context,
           shouldStop: &shouldStop)
       },
       itemTypeHandlerLookingForwards: { itemType, shouldStop in
+        let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(
+          for: itemType.month)
+
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
+          monthHeaderHeight: monthHeaderHeight,
           context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
@@ -187,6 +240,7 @@ final class VisibleItemsProvider {
           inBounds: bounds,
           extendedBounds: extendedBounds,
           isLookingBackwards: false,
+          monthHeaderHeight: monthHeaderHeight,
           context: &context,
           shouldStop: &shouldStop)
       })
@@ -234,7 +288,7 @@ final class VisibleItemsProvider {
       contentStartBoundary: context.contentStartBoundary,
       contentEndBoundary: context.contentEndBoundary,
       heightOfPinnedContent: context.heightOfPinnedContent,
-      maxMonthHeight: frameProvider.maxMonthHeight)
+      maxMonthHeight: context.maxMonthHeight)
   }
 
   func visibleItemsForAccessibilityElements(
@@ -291,6 +345,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
+          monthHeaderHeight: visibleMonthHeaderHeightTracker.monthHeaderHeight(for: itemType.month),
           context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
@@ -300,6 +355,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
+          monthHeaderHeight: visibleMonthHeaderHeightTracker.monthHeaderHeight(for: itemType.month),
           context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
@@ -312,6 +368,7 @@ final class VisibleItemsProvider {
   // MARK: Private
 
   private let layoutItemTypeEnumerator: LayoutItemTypeEnumerator
+  private let visibleMonthHeaderHeightTracker: VisibleMonthHeaderHeightTracker
   private let frameProvider: FrameProvider
 
   private var previousCalendarItemModelCache: [
@@ -340,6 +397,7 @@ final class VisibleItemsProvider {
 
   private func monthOrigin(
     forMonthContaining layoutItem: LayoutItem,
+    monthHeaderHeight: CGFloat,
     context: inout VisibleItemsContext)
     -> CGPoint
   {
@@ -347,7 +405,9 @@ final class VisibleItemsProvider {
     if let origin = context.originsForMonths[layoutItem.itemType.month] {
       monthOrigin = origin
     } else {
-      monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
+      monthOrigin = frameProvider.originOfMonth(
+        containing: layoutItem,
+        monthHeaderHeight: monthHeaderHeight)
     }
 
     context.originsForMonths[layoutItem.itemType.month] = monthOrigin
@@ -358,12 +418,15 @@ final class VisibleItemsProvider {
   private func monthOrigin(
     for itemType: LayoutItem.ItemType,
     lastHandledLayoutItem: LayoutItem,
+    monthHeaderHeight: CGFloat,
     context: inout VisibleItemsContext)
     -> CGPoint
   {
     // Cache the month origin for `lastHandledLayoutItem`, if necessary
     if context.originsForMonths[lastHandledLayoutItem.itemType.month] == nil {
-      let monthOrigin = frameProvider.originOfMonth(containing: lastHandledLayoutItem)
+      let monthOrigin = frameProvider.originOfMonth(
+        containing: lastHandledLayoutItem,
+        monthHeaderHeight: monthHeaderHeight)
       context.originsForMonths[lastHandledLayoutItem.itemType.month] = monthOrigin
     }
 
@@ -375,14 +438,24 @@ final class VisibleItemsProvider {
       itemType.month < lastHandledLayoutItem.itemType.month,
       let origin = context.originsForMonths[lastHandledLayoutItem.itemType.month]
     {
+      let subsequentMonthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(
+        for: lastHandledLayoutItem.itemType.month)
       monthOrigin = frameProvider.originOfMonth(
         itemType.month,
-        beforeMonthWithOrigin: origin)
+        beforeMonthWithOrigin: origin,
+        subsequentMonthHeaderHeight: subsequentMonthHeaderHeight,
+        monthHeaderHeight: monthHeaderHeight)
     } else if
       itemType.month > lastHandledLayoutItem.itemType.month,
       let origin = context.originsForMonths[lastHandledLayoutItem.itemType.month]
     {
-      monthOrigin = frameProvider.originOfMonth(itemType.month, afterMonthWithOrigin: origin)
+      let previousMonthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(
+        for: lastHandledLayoutItem.itemType.month)
+      monthOrigin = frameProvider.originOfMonth(
+        itemType.month,
+        afterMonthWithOrigin: origin,
+        previousMonthHeaderHeight: previousMonthHeaderHeight,
+        monthHeaderHeight: monthHeaderHeight)
     } else {
       preconditionFailure("""
         Could not determine the origin of the month containing the layout item type \(itemType).
@@ -397,21 +470,28 @@ final class VisibleItemsProvider {
   private func layoutItem(
     for itemType: LayoutItem.ItemType,
     lastHandledLayoutItem: LayoutItem,
+    monthHeaderHeight: CGFloat,
     context: inout VisibleItemsContext)
     -> LayoutItem
   {
     let monthOrigin = self.monthOrigin(
       for: itemType,
       lastHandledLayoutItem: lastHandledLayoutItem,
+      monthHeaderHeight: monthHeaderHeight,
       context: &context)
 
     // Get the frame for the current item
     let frame: CGRect
     switch itemType {
     case .monthHeader:
-      frame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: monthOrigin)
+      frame = frameProvider.frameOfMonthHeader(
+        inMonthWithOrigin: monthOrigin,
+        monthHeaderHeight: monthHeaderHeight)
     case .dayOfWeekInMonth(let position, _):
-      frame = frameProvider.frameOfDayOfWeek(at: position, inMonthWithOrigin: monthOrigin)
+      frame = frameProvider.frameOfDayOfWeek(
+        at: position,
+        inMonthWithOrigin: monthOrigin,
+        monthHeaderHeight: monthHeaderHeight)
     case .day(let day):
       // If we're laying out a day in the same month as a previously laid out day, we can use the
       // faster `frameOfDay(_:adjacentTo:withFrame:inMonthWithOrigin:)` function.
@@ -426,7 +506,10 @@ final class VisibleItemsProvider {
           withFrame: lastHandledLayoutItem.frame,
           inMonthWithOrigin: monthOrigin)
       } else {
-        frame = frameProvider.frameOfDay(day, inMonthWithOrigin: monthOrigin)
+        frame = frameProvider.frameOfDay(
+          day,
+          inMonthWithOrigin: monthOrigin,
+          monthHeaderHeight: monthHeaderHeight)
       }
     }
 
@@ -480,6 +563,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
+          monthHeaderHeight: visibleMonthHeaderHeightTracker.monthHeaderHeight(for: itemType.month),
           context: &context)
         lastHandledLayoutItemEnumeratingBackwards = layoutItem
 
@@ -489,6 +573,7 @@ final class VisibleItemsProvider {
         let layoutItem = self.layoutItem(
           for: itemType,
           lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
+          monthHeaderHeight: visibleMonthHeaderHeightTracker.monthHeaderHeight(for: itemType.month),
           context: &context)
         lastHandledLayoutItemEnumeratingForwards = layoutItem
 
@@ -523,7 +608,12 @@ final class VisibleItemsProvider {
     case .monthHeader(let date):
       let month = calendar.month(containing: date)
       guard let monthFrame = context.framesForVisibleMonths[month] else { return nil }
-      itemFrame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: monthFrame.origin)
+
+      let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(for: month)
+
+      itemFrame = frameProvider.frameOfMonthHeader(
+        inMonthWithOrigin: monthFrame.origin,
+        monthHeaderHeight: monthHeaderHeight)
 
     case .day(let date):
       let day = calendar.day(containing: date)
@@ -549,6 +639,7 @@ final class VisibleItemsProvider {
     inBounds bounds: CGRect,
     extendedBounds: CGRect,
     isLookingBackwards: Bool,
+    monthHeaderHeight: CGFloat,
     context: inout VisibleItemsContext,
     shouldStop: inout Bool)
   {
@@ -559,9 +650,18 @@ final class VisibleItemsProvider {
     if let cachedMonthFrame = context.framesForVisibleMonths[month] {
       monthFrame = cachedMonthFrame
     } else {
-      let monthOrigin = frameProvider.originOfMonth(containing: layoutItem)
-      monthFrame = frameProvider.frameOfMonth(month, withOrigin: monthOrigin)
+      let monthOrigin = frameProvider.originOfMonth(
+        containing: layoutItem,
+        monthHeaderHeight: monthHeaderHeight)
+      monthFrame = frameProvider.frameOfMonth(
+        month,
+        withOrigin: monthOrigin,
+        monthHeaderHeight: monthHeaderHeight)
     }
+
+    context.maxMonthHeight = max(
+      frameProvider.maxMonthHeight(monthHeaderHeight: monthHeaderHeight),
+      context.maxMonthHeight)
 
     let layoutNonVisibleItemsInPartiallyVisibleMonth = content.monthsLayout.isHorizontal ||
       content.monthBackgroundItemProvider != nil
@@ -622,7 +722,8 @@ final class VisibleItemsProvider {
                 itemType: separatorItemType,
                 frame: frameProvider.frameOfDaysOfWeekRowSeparator(
                   inMonthWithOrigin: monthFrame.origin,
-                  separatorHeight: separatorOptions.height)))
+                  separatorHeight: separatorOptions.height,
+                  monthHeaderHeight: monthHeaderHeight)))
           }
 
         case let .dayOfWeekInMonth(dayOfWeekPosition, month):
@@ -888,8 +989,12 @@ final class VisibleItemsProvider {
         translationX: -expandedMonthFrame.minX,
         y: -expandedMonthFrame.minY)
 
+      let monthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(for: month)
+
       // Get the month header frame
-      let monthHeaderFrame = frameProvider.frameOfMonthHeader(inMonthWithOrigin: monthFrame.origin)
+      let monthHeaderFrame = frameProvider.frameOfMonthHeader(
+        inMonthWithOrigin: monthFrame.origin,
+        monthHeaderHeight: monthHeaderHeight)
       let finalMonthHeaderFrame = monthHeaderFrame
         .applying(frameToBoundsTransform)
         .alignedToPixels(forScreenWithScale: scale)
@@ -899,7 +1004,8 @@ final class VisibleItemsProvider {
       for dayOfWeekPosition in DayOfWeekPosition.allCases {
         let dayOfWeekFrame = frameProvider.frameOfDayOfWeek(
           at: dayOfWeekPosition,
-          inMonthWithOrigin: monthFrame.origin)
+          inMonthWithOrigin: monthFrame.origin,
+          monthHeaderHeight: monthHeaderHeight)
         let finalDayOfWeekFrame = dayOfWeekFrame
           .applying(frameToBoundsTransform)
           .alignedToPixels(forScreenWithScale: scale)
@@ -943,6 +1049,7 @@ final class VisibleItemsProvider {
     fromProposedFrame proposedFrame: CGRect,
     ofTargetInMonth month: Month,
     withMonthFrame monthFrame: CGRect,
+    monthHeaderHeight: CGFloat,
     bounds: CGRect,
     context: inout VisibleItemsContext)
     -> CGRect
@@ -961,12 +1068,17 @@ final class VisibleItemsProvider {
         context: &context)
 
       let previousMonth = calendar.month(byAddingMonths: -1, to: currentMonth)
+      let previousMonthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(
+        for: previousMonth)
       let previousMonthOrigin = frameProvider.originOfMonth(
         previousMonth,
-        beforeMonthWithOrigin: currentMonthFrame.origin)
+        beforeMonthWithOrigin: currentMonthFrame.origin,
+        subsequentMonthHeaderHeight: monthHeaderHeight,
+        monthHeaderHeight: monthHeaderHeight)
       let previousMonthFrame = frameProvider.frameOfMonth(
         previousMonth,
-        withOrigin: previousMonthOrigin)
+        withOrigin: previousMonthOrigin,
+        monthHeaderHeight: previousMonthHeaderHeight)
 
       currentMonth = previousMonth
       currentMonthFrame = previousMonthFrame
@@ -985,10 +1097,16 @@ final class VisibleItemsProvider {
         context: &context)
 
       let nextMonth = calendar.month(byAddingMonths: 1, to: currentMonth)
+      let nextMonthHeaderHeight = visibleMonthHeaderHeightTracker.monthHeaderHeight(for: nextMonth)
       let nextMonthOrigin = frameProvider.originOfMonth(
         nextMonth,
-        afterMonthWithOrigin: currentMonthFrame.origin)
-      let nextMonthFrame = frameProvider.frameOfMonth(nextMonth,  withOrigin: nextMonthOrigin)
+        afterMonthWithOrigin: currentMonthFrame.origin,
+        previousMonthHeaderHeight: monthHeaderHeight,
+        monthHeaderHeight: nextMonthHeaderHeight)
+      let nextMonthFrame = frameProvider.frameOfMonth(
+        nextMonth,
+        withOrigin: nextMonthOrigin,
+        monthHeaderHeight: monthHeaderHeight)
 
       currentMonth = nextMonth
       currentMonthFrame = nextMonthFrame
@@ -1046,7 +1164,6 @@ private struct VisibleItemsContext {
   var lastVisibleDay: Day?
   var firstVisibleMonth: Month?
   var lastVisibleMonth: Month?
-  var heightsForVisibleMonthHeaders = [Month: CGFloat]()
   var framesForVisibleMonths = [Month: CGRect]()
   var framesForVisibleDays = [Day: CGRect]()
   var framesForDaysForVisibleMonths = [Month: [Day: CGRect]]()
@@ -1057,6 +1174,7 @@ private struct VisibleItemsContext {
   var originsForMonths = [Month: CGPoint]()
   var handledDayRanges = Set<DayRange>()
   var heightOfPinnedContent: CGFloat = 0
+  var maxMonthHeight: CGFloat = 0
 }
 
 // MARK: - VisibleItemsDetails
@@ -1072,6 +1190,11 @@ struct VisibleItemsDetails {
   let contentEndBoundary: CGFloat?
   let heightOfPinnedContent: CGFloat
   let maxMonthHeight: CGFloat
+
+  var intrinsicHeight: CGFloat {
+    maxMonthHeight + heightOfPinnedContent
+  }
+
 }
 
 // MARK: - _DayRangeLayoutContext

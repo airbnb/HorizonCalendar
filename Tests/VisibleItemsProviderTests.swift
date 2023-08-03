@@ -108,7 +108,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 1000, y: 0),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
-      monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-11)), frame: (1000.0, 0.0, 300.0, 50.0)]",
+      monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-11)), frame: (1000.0, 50.0, 300.0, 50.0)]",
       "Unexpected initial month header item.")
 
     let monthHeaderItem2 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
@@ -116,7 +116,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 800, y: 0),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
-      monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-09)), frame: (820.0, 0.0, 300.0, 50.0)]",
+      monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-09)), frame: (820.0, 50.0, 300.0, 50.0)]",
       "Unexpected initial month header item.")
 
     let monthHeaderItem3 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
@@ -124,7 +124,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 500, y: 0),
       scrollPosition: .centered)
     XCTAssert(
-      monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-10)), frame: (510.0, 0.0, 300.0, 50.0)]",
+      monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-10)), frame: (510.0, 50.0, 300.0, 50.0)]",
       "Unexpected initial month header item.")
   }
 
@@ -186,7 +186,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 600, y: 0),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
-      dayItem4.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (733.5, 133.0, 33.0, 32.5)]",
+      dayItem4.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (733.5, 183.0, 33.0, 32.5)]",
       "Unexpected initial day item.")
 
     let dayItem5 = horizontalVisibleItemsProvider.anchorDayItem(
@@ -194,7 +194,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 100, y: 0),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
-      dayItem5.description == "[itemType: .layoutItemType(.day(2020-12-28)), frame: (168.0, 344.5, 32.5, 32.5)]",
+      dayItem5.description == "[itemType: .layoutItemType(.day(2020-12-28)), frame: (168.0, 394.5, 32.5, 32.5)]",
       "Unexpected initial day item.")
   }
 
@@ -262,7 +262,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 300, y: 0),
       scrollPosition: .firstFullyVisiblePosition)
     XCTAssert(
-      dayItem1.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (300.0, 291.5, 33.0, 33.0)]",
+      dayItem1.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (300.0, 341.5, 33.0, 33.0)]",
       "Unexpected initial day item.")
 
     let dayItem2 = horizontalVisibleItemsProvider.anchorDayItem(
@@ -270,7 +270,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 500, y: 0),
       scrollPosition: .lastFullyVisiblePosition)
     XCTAssert(
-      dayItem2.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (787.0, 291.5, 33.0, 33.0)]",
+      dayItem2.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (787.0, 341.5, 33.0, 33.0)]",
       "Unexpected initial day item.")
 
     let dayItem3 = horizontalVisibleItemsProvider.anchorDayItem(
@@ -278,7 +278,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       offset: CGPoint(x: 0, y: 0),
       scrollPosition: .centered)
     XCTAssert(
-      dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (143.5, 291.5, 33.0, 33.0)]",
+      dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (143.5, 341.5, 33.0, 33.0)]",
       "Unexpected initial day item.")
   }
 
@@ -1808,10 +1808,10 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))),
+    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50,
     backgroundColor: nil)
 
   private var verticalShortDayAspectRatioVisibleItemsProvider = VisibleItemsProvider(
@@ -1823,10 +1823,10 @@ final class VisibleItemsProviderTests: XCTestCase {
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())))
       .dayAspectRatio(0.5)
       .dayOfWeekAspectRatio(0.5),
+    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50,
     backgroundColor: nil)
 
   private var verticalPinnedDaysOfWeekVisibleItemsProvider = VisibleItemsProvider(
@@ -1836,10 +1836,10 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))),
+    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50,
     backgroundColor: nil)
 
   private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
@@ -1850,10 +1850,10 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .vertical(
           options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
+    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50,
     backgroundColor: nil)
 
   private var horizontalVisibleItemsProvider = VisibleItemsProvider(
@@ -1864,24 +1864,33 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .horizontal(
           options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64/63)))),
+    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    monthHeaderHeight: 50,
     backgroundColor: nil)
 
   private static var mockCalendarItemModel: AnyCalendarItemModel {
     final class MockView: UIView, CalendarItemViewRepresentable {
+
+      typealias Height = CGFloat
+
       static func makeView(
-        withInvariantViewProperties invariantViewProperties: Int)
+        withInvariantViewProperties height: Height)
         -> MockView
       {
-        MockView()
+        let view = MockView()
+        let heightConstraint = view.heightAnchor.constraint(equalToConstant: height)
+        heightConstraint.priority = .defaultLow
+        heightConstraint.isActive = true
+        return view
       }
+
       static func setContent(_ content: Int, on view: MockView) { }
+
     }
 
-    return MockView.calendarItemModel(invariantViewProperties: 0, content: 0)
+    return MockView.calendarItemModel(invariantViewProperties: 50, content: 0)
   }
 
   private static func makeContent(
