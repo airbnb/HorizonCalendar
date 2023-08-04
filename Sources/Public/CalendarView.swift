@@ -606,7 +606,6 @@ public final class CalendarView: UIView {
       let visibleItemsProvider = VisibleItemsProvider(
         calendar: calendar,
         content: content,
-        reuseManager: reuseManager,
         size: bounds.size,
         layoutMargins: directionalLayoutMargins,
         scale: scale,
@@ -1064,7 +1063,6 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     let visibleItemsProvider = VisibleItemsProvider(
       calendar: calendar,
       content: content,
-      reuseManager: reuseManager,
       size: CGSize(width: calendarWidth, height: calendarHeight),
       layoutMargins: directionalLayoutMargins,
       scale: scale,

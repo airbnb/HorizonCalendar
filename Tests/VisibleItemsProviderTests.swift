@@ -1808,7 +1808,6 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))),
-    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
@@ -1823,7 +1822,6 @@ final class VisibleItemsProviderTests: XCTestCase {
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())))
       .dayAspectRatio(0.5)
       .dayOfWeekAspectRatio(0.5),
-    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
@@ -1836,7 +1834,6 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))),
-    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
@@ -1850,7 +1847,6 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .vertical(
           options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
-    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
@@ -1864,7 +1860,6 @@ final class VisibleItemsProviderTests: XCTestCase {
         visibleDateRange: dateRange,
         monthsLayout: .horizontal(
           options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64/63)))),
-    reuseManager: ItemViewReuseManager(),
     size: size,
     layoutMargins: .zero,
     scale: 2,
