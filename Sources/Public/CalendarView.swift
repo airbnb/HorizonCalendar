@@ -1255,6 +1255,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
   // MARK: Internal
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard let calendarView else { return }
+
     calendarView.preventLargeOverScrollIfNeeded()
 
     let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
@@ -1276,17 +1278,18 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     _ scrollView: UIScrollView,
     willDecelerate decelerate: Bool)
   {
-    guard let visibleDayRange = calendarView.visibleDayRange else { return }
+    guard let calendarView, let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDragging?(visibleDayRange, decelerate)
   }
 
   func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    guard let visibleDayRange = calendarView.visibleDayRange else { return }
+    guard let calendarView, let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDecelerating?(visibleDayRange)
   }
 
   func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
     guard
+      let calendarView,
       case .horizontal(let options) = calendarView.content.monthsLayout,
       case .paginatedScrolling = options.scrollingBehavior
     else
@@ -1308,6 +1311,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     targetContentOffset: UnsafeMutablePointer<CGPoint>)
   {
     guard
+      let calendarView,
       case .horizontal(let options) = calendarView.content.monthsLayout,
       case .paginatedScrolling(let paginationConfiguration) = options.scrollingBehavior
     else
@@ -1342,6 +1346,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
   }
 
   func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+    guard let calendarView else { return false }
+
     if calendarView.content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
       let firstMonth = calendarView.content.monthRange.lowerBound
       let firstDate = calendarView.calendar.firstDate(of: firstMonth)
@@ -1356,7 +1362,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
   // MARK: Private
 
-  private weak var calendarView: CalendarView!
+  private weak var calendarView: CalendarView?
 
 }
 
@@ -1379,6 +1385,8 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
     shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
     -> Bool
   {
+    guard let calendarView else { return false }
+
     let isGestureRecognizerMultiSelectGesture =
       gestureRecognizer === calendarView.multiDaySelectionLongPressGestureRecognizer ||
       gestureRecognizer === calendarView.multiDaySelectionPanGestureRecognizer
@@ -1393,7 +1401,7 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
 
   // MARK: Private
 
-  private weak var calendarView: CalendarView!
+  private weak var calendarView: CalendarView?
 
 }
 
