@@ -75,6 +75,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
 
     calendarView.daySelectionHandler = daySelectionHandler
+    calendarView.dayRangeSelectionHandler = dayRangeSelectionHandler
     calendarView.multiDaySelectionDragHandler = multiDaySelectionDragHandler
     calendarView.didScroll = didScroll
     calendarView.didEndDragging = didEndDragging
@@ -112,6 +113,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
   fileprivate var daySelectionHandler: ((Day) -> Void)?
+  fileprivate var dayRangeSelectionHandler: ((DayRange) -> Void)?
   fileprivate var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)?
   fileprivate var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
   fileprivate var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
@@ -515,6 +517,20 @@ extension CalendarViewRepresentable {
   public func onDaySelection(_ daySelectionHandler: @escaping (Day) -> Void) -> Self {
     var view = self
     view.daySelectionHandler = daySelectionHandler
+    return view
+  }
+
+  /// Configures the day range-selection handler.
+  ///
+  /// It is the responsibility of your feature code to decide what to do with the selected range. For example, you might draw a view using
+  /// the `dayRangeItemProvider` API which when selected stores all days in that range in a selectedDays property, then read that
+  /// property in your `dayItemProvider` closure to add specific "selected" styling to all days in that particular day range.
+  ///
+  /// - Parameters:
+  ///   - dayRangeSelectionHandler: A closure (which is retained) that is invoked whenever a day range is selected.
+  public func onDayRangeSelection(_ dayRangeSelectionHandler: @escaping (DayRange) -> Void) -> Self {
+    var view = self
+    view.dayRangeSelectionHandler = dayRangeSelectionHandler
     return view
   }
 

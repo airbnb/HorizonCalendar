@@ -86,6 +86,12 @@ public final class CalendarView: UIView {
   /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
   public var daySelectionHandler: ((Day) -> Void)?
 
+  /// A closure (which is retained) that is invoked whenever a day range is selected. It is the responsibility of your feature code to decide
+  /// what to do with the selected range. For example, you might draw a view using the `dayRangeItemProvider` API which when
+  /// selected stores all days in that range in a selectedDays property, then read that property in your `dayItemProvider` closure
+  /// to add specific "selected" styling to all days in that particular day range.
+  public var dayRangeSelectionHandler: ((DayRange) -> Void)?
+
   /// A closure (that is retained) that is invoked during a multiple-selection-drag-gesture. Multiple selection is initiated with a long press,
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
   /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
@@ -768,6 +774,10 @@ public final class CalendarView: UIView {
     if case .layoutItemType(.day(let day)) = visibleItem.itemType {
       view.selectionHandler = { [weak self] in
         self?.daySelectionHandler?(day)
+      }
+    } else if case .dayRange(let dayRange) = visibleItem.itemType {
+      view.selectionHandler = { [weak self] in
+        self?.dayRangeSelectionHandler?(dayRange)
       }
     } else {
       view.selectionHandler = nil
