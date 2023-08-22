@@ -762,8 +762,6 @@ public final class CalendarView: UIView {
       view.transform = .identity
     }
 
-    view.isUserInteractionEnabled = visibleItem.itemType.isUserInteractionEnabled
-
     // Set up the selection handler
     if case .layoutItemType(.day(let day)) = visibleItem.itemType {
       view.selectionHandler = { [weak self] in
