@@ -26,7 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the default `HorizontalMonthLayoutOptions` to use a `restingPosition` of `.atLeadingEdgeOfEachMonth`, which is probably what most people want
 - Updated more publicly-exposed types conform to `Hashable`, because why not - maybe API consumers want to stick things in a `Set` or `Dictionary`.
 - Allowed `CalendarItemViewRepresentable` to have no `Content` type if the conforming view does not depend on any variable data
-- Changed `ItemView` to determine user interaction capabilities from its content view's `hitTest` / `pointInside` functions 
+- Changed `ItemView` to determine user interaction capabilities from its content view's `hitTest` / `pointInside` functions
+- Updated content-change animations so that the same scroll offset is maintained throughout the animation
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 

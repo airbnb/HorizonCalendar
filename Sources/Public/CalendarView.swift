@@ -281,7 +281,14 @@ public final class CalendarView: UIView {
       isAnchorLayoutItemValid = false
     }
 
-    if !isAnchorLayoutItemValid {
+    if isAnchorLayoutItemValid {
+      // If we have a valid `anchorLayoutItem`, change it to be the topmost item. Normally, the
+      // `anchorLayoutItem` is the centermost item, but when our content changes, it can make the
+      // transition look better if our layout reference point is at the top of the screen.
+      anchorLayoutItem = visibleItemsDetails?.firstLayoutItem ?? anchorLayoutItem
+    } else {
+      // If the `anchorLayoutItem` is no longer valid (due to it no longer being in the visible day
+      // range), set it to nil. This will force us to find a new `anchorLayoutItem`.
       anchorLayoutItem = nil
     }
 

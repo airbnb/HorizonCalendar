@@ -69,8 +69,8 @@ final class VisibleItemsProvider {
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
   {
-    var context = VisibleItemsContext(
-      centermostLayoutItem: LayoutItem(itemType: .monthHeader(month), frame: .zero))
+    let layoutItem = LayoutItem(itemType: .monthHeader(month), frame: .zero)
+    var context = VisibleItemsContext(centermostLayoutItem: layoutItem, firstLayoutItem: layoutItem)
     let monthHeaderHeight = monthHeaderHeight(for: month, context: &context)
 
     let monthOrigin: CGPoint
@@ -111,8 +111,8 @@ final class VisibleItemsProvider {
     scrollPosition: CalendarViewScrollPosition)
     -> LayoutItem
   {
-    var context = VisibleItemsContext(
-      centermostLayoutItem: LayoutItem(itemType: .day(day), frame: .zero))
+    let layoutItem = LayoutItem(itemType: .day(day), frame: .zero)
+    var context = VisibleItemsContext(centermostLayoutItem: layoutItem, firstLayoutItem: layoutItem)
     let month = day.month
     let monthHeaderHeight = monthHeaderHeight(for: month, context: &context)
 
@@ -162,6 +162,7 @@ final class VisibleItemsProvider {
     // calendar item models.
     var context = VisibleItemsContext(
       centermostLayoutItem: previouslyVisibleLayoutItem,
+      firstLayoutItem: previouslyVisibleLayoutItem,
       calendarItemModelCache: .init(
         minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100))
 
@@ -274,6 +275,7 @@ final class VisibleItemsProvider {
     return VisibleItemsDetails(
       visibleItems: context.visibleItems,
       centermostLayoutItem: context.centermostLayoutItem,
+      firstLayoutItem: context.firstLayoutItem,
       visibleDayRange: visibleDayRange,
       visibleMonthRange: visibleMonthRange,
       framesForVisibleMonths: context.framesForVisibleMonths,
@@ -330,7 +332,9 @@ final class VisibleItemsProvider {
 
     var lastHandledLayoutItemEnumeratingBackwards = previouslyVisibleLayoutItem
     var lastHandledLayoutItemEnumeratingForwards = previouslyVisibleLayoutItem
-    var context = VisibleItemsContext(centermostLayoutItem: previouslyVisibleLayoutItem)
+    var context = VisibleItemsContext(
+      centermostLayoutItem: previouslyVisibleLayoutItem,
+      firstLayoutItem: previouslyVisibleLayoutItem)
 
     layoutItemTypeEnumerator.enumerateItemTypes(
       startingAt: previouslyVisibleLayoutItem.itemType,
@@ -389,6 +393,22 @@ final class VisibleItemsProvider {
     let itemDistance = itemMidpoint.distance(to: boundsMidpoint)
     let otherItemDistance = otherItemMidpoint.distance(to: boundsMidpoint)
     return itemDistance < otherItemDistance ? item : otherItem
+  }
+
+  // Returns the layout item closest to the top/leading edge of `bounds`.
+  private func firstLayoutItem(comparing item: LayoutItem, to otherItem: LayoutItem) -> LayoutItem {
+    let itemOrigin: CGFloat
+    let otherItemOrigin: CGFloat
+    switch content.monthsLayout {
+    case .vertical:
+      itemOrigin = item.frame.minY
+      otherItemOrigin = otherItem.frame.minY
+    case .horizontal:
+      itemOrigin = item.frame.minX
+      otherItemOrigin = otherItem.frame.minX
+    }
+
+    return itemOrigin < otherItemOrigin ? item : otherItem
   }
 
   private func monthOrigin(
@@ -813,10 +833,14 @@ final class VisibleItemsProvider {
           frame: layoutItem.frame)
         context.visibleItems.insert(visibleItem)
 
-        context.centermostLayoutItem = self.centermostLayoutItem(
+        context.centermostLayoutItem = centermostLayoutItem(
           comparing: layoutItem,
           to: context.centermostLayoutItem,
           inBounds: bounds)
+
+        context.firstLayoutItem = firstLayoutItem(
+          comparing: layoutItem,
+          to: context.firstLayoutItem)
       }
     } else {
       shouldStop = true
@@ -1188,6 +1212,7 @@ final class VisibleItemsProvider {
 
 private struct VisibleItemsContext {
   var centermostLayoutItem: LayoutItem
+  var firstLayoutItem: LayoutItem
   var firstVisibleDay: Day?
   var lastVisibleDay: Day?
   var firstVisibleMonth: Month?
@@ -1211,6 +1236,7 @@ private struct VisibleItemsContext {
 struct VisibleItemsDetails {
   let visibleItems: Set<VisibleItem>
   let centermostLayoutItem: LayoutItem
+  let firstLayoutItem: LayoutItem?
   let visibleDayRange: DayRange?
   let visibleMonthRange: MonthRange?
   let framesForVisibleMonths: [Month: CGRect]
