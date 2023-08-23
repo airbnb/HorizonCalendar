@@ -88,21 +88,6 @@ extension VisibleItem {
     case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(OverlaidItemLocation)
-
-    var isUserInteractionEnabled: Bool {
-      switch self {
-      case .layoutItemType: return true
-      case .pinnedDayOfWeek: return true
-      case .pinnedDaysOfWeekRowBackground: return true
-
-      case .dayBackground: return false
-      case .monthBackground: return false
-      case .pinnedDaysOfWeekRowSeparator: return false
-      case .daysOfWeekRowSeparator: return false
-      case .dayRange: return false
-      case .overlayItem: return false
-      }
-    }
   }
 
 }

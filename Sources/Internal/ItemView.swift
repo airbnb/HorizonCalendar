@@ -73,19 +73,33 @@ final class ItemView: UIView {
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
 
+    func isTouchInView(_ touch: UITouch) -> Bool {
+      contentView.bounds.contains(touch.location(in: contentView))
+    }
+
     if touches.first.map(isTouchInView(_:)) ?? false {
       selectionHandler?()
     }
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let view = super.hitTest(point, with: event)
+
+    // If the returned view is `self`, that means that our `contentView` isn't interactive for this
+    // `point`. This can happen if the `contentView` also overrides `hitTest` or `pointInside` to
+    // customize the interaction. It can also happen if our `contentView` has
+    // `isUserInteractionEnabled` set to `false`.
+    if view === self {
+      return nil
+    }
+
+    return view
   }
 
   // MARK: Private
 
   private func updateContent() {
     calendarItemModel._setContent(onViewOfSameType: contentView)
-  }
-
-  private func isTouchInView(_ touch: UITouch) -> Bool {
-    contentView.bounds.contains(touch.location(in: contentView))
   }
 
 }
