@@ -198,7 +198,7 @@ public final class CalendarView: UIView {
 
     guard isReadyForLayout else { return }
 
-    _layoutSubviews()
+    _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
 
     // The layout / update pass has completed, and we can set this back to `false`.
     isAnimatedUpdatePass = false
@@ -216,7 +216,7 @@ public final class CalendarView: UIView {
     isAnimatedUpdatePass = UIView.inheritedAnimationDuration > 0 && UIView.areAnimationsEnabled
     if isAnimatedUpdatePass {
       UIView.performWithoutAnimation {
-        _layoutSubviews()
+        _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
       }
     }
 
@@ -669,7 +669,7 @@ public final class CalendarView: UIView {
   }
 
   // This exists so that we can force a layout ourselves in preparation for an animated update.
-  private func _layoutSubviews() {
+  private func _layoutSubviews(isAnimatedUpdatePass: Bool) {
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.setUpInitialMetricsIfNeeded()
       scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
@@ -697,6 +697,7 @@ public final class CalendarView: UIView {
 
     // Use an extended bounds (3x the viewport size) if we're in an animated update pass, reducing
     // the likelihood of an item popping in / out.
+    let boundsMultiplier = CGFloat(3)
     let offset: CGPoint
     let size: CGSize
     if isAnimatedUpdatePass {
@@ -705,13 +706,13 @@ public final class CalendarView: UIView {
         offset = CGPoint(
           x: scrollView.contentOffset.x,
           y: scrollView.contentOffset.y - bounds.height)
-        size = CGSize(width: bounds.size.width, height: bounds.size.height * 3)
+        size = CGSize(width: bounds.size.width, height: bounds.size.height * boundsMultiplier)
 
       case .horizontal:
         offset = CGPoint(
           x: scrollView.contentOffset.x - bounds.width,
           y: scrollView.contentOffset.y)
-        size = CGSize(width: bounds.size.width * 3, height: bounds.size.height)
+        size = CGSize(width: bounds.size.width * boundsMultiplier, height: bounds.size.height)
       }
     } else {
       offset = scrollView.contentOffset
