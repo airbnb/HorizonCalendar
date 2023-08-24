@@ -155,7 +155,8 @@ final class VisibleItemsProvider {
 
   func detailsForVisibleItems(
     surroundingPreviouslyVisibleLayoutItem previouslyVisibleLayoutItem: LayoutItem,
-    offset: CGPoint)
+    offset: CGPoint,
+    size: CGSize)
     -> VisibleItemsDetails
   {
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of

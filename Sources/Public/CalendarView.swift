@@ -198,60 +198,10 @@ public final class CalendarView: UIView {
 
     guard isReadyForLayout else { return }
 
-    scrollView.performWithoutNotifyingDelegate {
-      scrollMetricsMutator.setUpInitialMetricsIfNeeded()
-      scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
-    }
+    _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
 
-    let anchorLayoutItem: LayoutItem
-    if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
-      anchorLayoutItem = self.anchorLayoutItem(
-        for: scrollToItemContext,
-        visibleItemsProvider: visibleItemsProvider)
-      // Clear the `scrollToItemContext` once we use it. This could happen over the course of
-      // several layout pass attempts since `isReadyForLayout` might be false initially.
-      self.scrollToItemContext = nil
-    } else if let previousAnchorLayoutItem = self.anchorLayoutItem {
-      anchorLayoutItem = previousAnchorLayoutItem
-    } else {
-      let initialScrollToItemContext = ScrollToItemContext(
-        targetItem: .month(content.monthRange.lowerBound),
-        scrollPosition: .firstFullyVisiblePosition,
-        animated: false)
-      anchorLayoutItem = self.anchorLayoutItem(
-        for: initialScrollToItemContext,
-        visibleItemsProvider: visibleItemsProvider)
-    }
-
-    let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
-      surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
-      offset: scrollView.contentOffset)
-    self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
-
-    updateVisibleViews(
-      withVisibleItems: currentVisibleItemsDetails.visibleItems,
-      previouslyVisibleItems: visibleItemsDetails?.visibleItems ?? [])
-
-    visibleItemsDetails = currentVisibleItemsDetails
-
-    let minimumScrollOffset = visibleItemsDetails?.contentStartBoundary.map {
-      ($0 - firstLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
-    }
-    let maximumScrollOffset = visibleItemsDetails?.contentEndBoundary.map {
-      ($0 + lastLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
-    }
-    scrollView.performWithoutNotifyingDelegate {
-      scrollMetricsMutator.updateScrollBoundaries(
-        minimumScrollOffset: minimumScrollOffset,
-        maximumScrollOffset: maximumScrollOffset)
-    }
-
-    cachedAccessibilityElements = nil
-    if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
-      UIAccessibility.post(
-        notification: .screenChanged,
-        argument: visibleViewsForVisibleItems[element.correspondingItem])
-    }
+    // The layout / update pass has completed, and we can set this back to `false`.
+    isAnimatedUpdatePass = false
   }
 
   /// Sets the content of the `CalendarView`, causing it to re-render.
@@ -260,6 +210,15 @@ public final class CalendarView: UIView {
   ///   - content: The content to use when rendering `CalendarView`.
   public func setContent(_ content: CalendarViewContent) {
     let oldContent = self.content
+
+    // Do a preparation layout pass with an extended bounds, if we're animating. This ensures that
+    // views don't pop in if they're animating in from outside the actual bounds.
+    isAnimatedUpdatePass = UIView.inheritedAnimationDuration > 0 && UIView.areAnimationsEnabled
+    if isAnimatedUpdatePass {
+      UIView.performWithoutAnimation {
+        _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
+      }
+    }
 
     _visibleItemsProvider = nil
 
@@ -534,6 +493,8 @@ public final class CalendarView: UIView {
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
 
+  private var isAnimatedUpdatePass = false
+
   private var previousBounds = CGRect.zero
   private var previousLayoutMargins = UIEdgeInsets.zero
 
@@ -711,6 +672,89 @@ public final class CalendarView: UIView {
       } else {
         preconditionFailure("Could not find a corresponding frame for \(day).")
       }
+    }
+  }
+
+  // This exists so that we can force a layout ourselves in preparation for an animated update.
+  private func _layoutSubviews(isAnimatedUpdatePass: Bool) {
+    scrollView.performWithoutNotifyingDelegate {
+      scrollMetricsMutator.setUpInitialMetricsIfNeeded()
+      scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
+    }
+
+    let anchorLayoutItem: LayoutItem
+    if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
+      anchorLayoutItem = self.anchorLayoutItem(
+        for: scrollToItemContext,
+        visibleItemsProvider: visibleItemsProvider)
+      // Clear the `scrollToItemContext` once we use it. This could happen over the course of
+      // several layout pass attempts since `isReadyForLayout` might be false initially.
+      self.scrollToItemContext = nil
+    } else if let previousAnchorLayoutItem = self.anchorLayoutItem {
+      anchorLayoutItem = previousAnchorLayoutItem
+    } else {
+      let initialScrollToItemContext = ScrollToItemContext(
+        targetItem: .month(content.monthRange.lowerBound),
+        scrollPosition: .firstFullyVisiblePosition,
+        animated: false)
+      anchorLayoutItem = self.anchorLayoutItem(
+        for: initialScrollToItemContext,
+        visibleItemsProvider: visibleItemsProvider)
+    }
+
+    // Use an extended bounds (3x the viewport size) if we're in an animated update pass, reducing
+    // the likelihood of an item popping in / out.
+    let boundsMultiplier = CGFloat(3)
+    let offset: CGPoint
+    let size: CGSize
+    if isAnimatedUpdatePass {
+      switch content.monthsLayout {
+      case .vertical:
+        offset = CGPoint(
+          x: scrollView.contentOffset.x,
+          y: scrollView.contentOffset.y - bounds.height)
+        size = CGSize(width: bounds.size.width, height: bounds.size.height * boundsMultiplier)
+
+      case .horizontal:
+        offset = CGPoint(
+          x: scrollView.contentOffset.x - bounds.width,
+          y: scrollView.contentOffset.y)
+        size = CGSize(width: bounds.size.width * boundsMultiplier, height: bounds.size.height)
+      }
+    } else {
+      offset = scrollView.contentOffset
+      size = bounds.size
+    }
+
+    let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
+      surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
+      offset: offset,
+      size: size)
+    self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
+
+    updateVisibleViews(
+      withVisibleItems: currentVisibleItemsDetails.visibleItems,
+      previouslyVisibleItems: visibleItemsDetails?.visibleItems ?? [])
+
+    visibleItemsDetails = currentVisibleItemsDetails
+
+    let minimumScrollOffset = visibleItemsDetails?.contentStartBoundary.map {
+      ($0 - firstLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
+    }
+    let maximumScrollOffset = visibleItemsDetails?.contentEndBoundary.map {
+      ($0 + lastLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
+    }
+    scrollView.performWithoutNotifyingDelegate {
+      scrollMetricsMutator.updateScrollBoundaries(
+        minimumScrollOffset: minimumScrollOffset,
+        maximumScrollOffset: maximumScrollOffset)
+    }
+
+    cachedAccessibilityElements = nil
+    if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
+      UIAccessibility.post(
+        notification: .screenChanged,
+        argument: visibleViewsForVisibleItems[element.correspondingItem])
     }
   }
 
@@ -1071,6 +1115,7 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     } else {
       calendarHeight = bounds.height
     }
+    let size = CGSize(width: calendarWidth, height: calendarHeight)
 
     let visibleItemsProvider = VisibleItemsProvider(
       calendar: calendar,
@@ -1089,7 +1134,8 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
 
     let visibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
-      offset: scrollView.contentOffset)
+      offset: scrollView.contentOffset,
+      size: size)
 
     return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
   }

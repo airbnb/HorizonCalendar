@@ -291,11 +291,13 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 150))
+      offset: CGPoint(x: 0, y: 150),
+      size: verticalVisibleItemsProvider.size)
       .centermostLayoutItem
     let details = verticalShortDayAspectRatioVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
-      offset: CGPoint(x: 0, y: 150))
+      offset: CGPoint(x: 0, y: 150),
+      size: verticalShortDayAspectRatioVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-02-16), frame: (5.0, 165.0, 35.5, 18.0)]",
@@ -387,7 +389,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 150))
+      offset: CGPoint(x: 0, y: 150),
+      size: verticalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-03-11), frame: (142.0, 391.5, 36.0, 35.5)]",
@@ -471,7 +474,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
-      offset: CGPoint(x: 0, y: 450))
+      offset: CGPoint(x: 0, y: 450),
+      size: verticalPinnedDaysOfWeekVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-06-11), frame: (188.0, 585.5, 35.5, 36.0)]",
@@ -549,7 +553,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 150))
+      offset: CGPoint(x: 0, y: 150),
+      size: verticalPartialMonthVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .daysOfWeekRowSeparator(2020-1), frame: (0.0, 314.5, 320.0, 1.0)]",
@@ -599,7 +604,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
         frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
-      offset: CGPoint(x: 100, y: 0))
+      offset: CGPoint(x: 100, y: 0),
+      size: horizontalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-04-11), frame: (197.0, 185.5, 33.0, 33.0)]",
@@ -683,7 +689,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 3000, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 150))
+      offset: CGPoint(x: 0, y: 150),
+      size: verticalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-05-11), frame: (50.5, 220.5, 36.0, 36.0)]",
@@ -763,7 +770,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 2, isInGregorianCalendar: true)),
         frame: CGRect(x: 315, y: 0, width: 300, height: 50)),
-      offset: CGPoint(x: 295, y: 0))
+      offset: CGPoint(x: 295, y: 0),
+      size: horizontalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-02-11), frame: (405.5, 238.5, 33.0, 33.0)]",
@@ -831,7 +839,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: -50))
+      offset: CGPoint(x: 0, y: -50),
+      size: verticalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-01-11), frame: (279.5, 191.5, 35.5, 35.5)]",
@@ -907,7 +916,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 45, width: 320, height: 40)),
-      offset: CGPoint(x: 0, y: 50))
+      offset: CGPoint(x: 0, y: 50),
+      size: verticalPinnedDaysOfWeekVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-01-11), frame: (279.5, 180.5, 35.5, 36.0)]",
@@ -986,7 +996,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 0, y: 690, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 690))
+      offset: CGPoint(x: 0, y: 690),
+      size: verticalPartialMonthVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .daysOfWeekRowSeparator(2020-12), frame: (0.0, 854.5, 320.0, 1.0)]",
@@ -1021,7 +1032,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
         frame: CGRect(x: 1200, y: 0, width: 300, height: 50)),
-      offset: CGPoint(x: 1000, y: 0))
+      offset: CGPoint(x: 1000, y: 0),
+      size: horizontalVisibleItemsProvider.size)
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-11-11), frame: (1018.5, 235.5, 33.0, 33.0)]",
