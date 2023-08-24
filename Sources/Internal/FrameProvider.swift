@@ -387,9 +387,8 @@ final class FrameProvider {
     monthHeaderHeight: CGFloat)
     -> CGFloat
   {
-    let numberOfWeekRows = rowInMonth + 1
-    return dayItemFrame.maxY -
-      heightOfDayContent(forNumberOfWeekRows: numberOfWeekRows) -
+    dayItemFrame.minY -
+      ((daySize.height + content.verticalDayMargin) * CGFloat(rowInMonth)) -
       heightOfDaysOfTheWeekRowInMonth() -
       content.monthDayInsets.top -
       monthHeaderHeight
@@ -460,7 +459,10 @@ final class FrameProvider {
   // For example, the returned height value for 5 week rows will be 5x the `daySize.height`, plus 4x
   // the `content.verticalDayMargin`.
   private func heightOfDayContent(forNumberOfWeekRows numberOfWeekRows: Int) -> CGFloat {
-    (CGFloat(numberOfWeekRows) * daySize.height) +
+    guard numberOfWeekRows > 0 else {
+      fatalError("Cannot calculate the height of day content if `numberOfWeekRows` is <= 0.")
+    }
+    return (CGFloat(numberOfWeekRows) * daySize.height) +
       (CGFloat(numberOfWeekRows - 1) * content.verticalDayMargin)
   }
 
