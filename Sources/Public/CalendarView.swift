@@ -198,25 +198,35 @@ public final class CalendarView: UIView {
 
     guard isReadyForLayout else { return }
 
-    _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
-
-    // The layout / update pass has completed, and we can set this back to `false`.
-    isAnimatedUpdatePass = false
+    _layoutSubviews(isAnimatedUpdatePass: isInAnimationClosure)
   }
 
-  /// Sets the content of the `CalendarView`, causing it to re-render.
+  /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
   ///
   /// - Parameters:
   ///   - content: The content to use when rendering `CalendarView`.
   public func setContent(_ content: CalendarViewContent) {
+    setContent(content, animated: false)
+  }
+
+  /// Sets the content of the `CalendarView`, causing it to re-render, with an optional animation.
+  ///
+  /// If you call this function with `animated` set to `true` in your own animation closure, that animation will be used to perform
+  /// the content update. If you call this function with `animated` set to `true` outside of an animation closure, a default animation
+  /// will be used. Calling this function with `animated` set to `false` will result in a non-animated content update, even if you call
+  /// it from an animation closure.
+  ///
+  /// - Parameters:
+  ///   - content: The content to use when rendering `CalendarView`.
+  ///   - animated: Whether or not the content update should be animated.
+  public func setContent(_ content: CalendarViewContent, animated: Bool) {
     let oldContent = self.content
 
     // Do a preparation layout pass with an extended bounds, if we're animating. This ensures that
     // views don't pop in if they're animating in from outside the actual bounds.
-    isAnimatedUpdatePass = UIView.inheritedAnimationDuration > 0 && UIView.areAnimationsEnabled
-    if isAnimatedUpdatePass {
+    if animated {
       UIView.performWithoutAnimation {
-        _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
+        _layoutSubviews(isAnimatedUpdatePass: isInAnimationClosure)
       }
     }
 
@@ -270,6 +280,17 @@ public final class CalendarView: UIView {
 
     self.content = content
     setNeedsLayout()
+
+    // If we're animating, force layout with the inherited animation closure or with our own default
+    // animation. Forcing layout ensures that frame adjustments happen with an animation.
+    if animated {
+      let animations = { self.layoutIfNeeded() }
+      if isInAnimationClosure {
+        animations()
+      } else {
+        UIView.animate(withDuration: 0.3, animations: animations)
+      }
+    }
   }
 
   /// Returns the accessibility element associated with the specified visible date. If the date is not currently visible, then there will be no
@@ -493,8 +514,6 @@ public final class CalendarView: UIView {
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
 
-  private var isAnimatedUpdatePass = false
-
   private var previousBounds = CGRect.zero
   private var previousLayoutMargins = UIEdgeInsets.zero
 
@@ -531,6 +550,10 @@ public final class CalendarView: UIView {
     // non-zero size once the `frame` is set to something non-zero, either manually or via the
     // Auto Layout engine.
     bounds.size != .zero
+  }
+
+  private var isInAnimationClosure: Bool {
+    UIView.areAnimationsEnabled && UIView.inheritedAnimationDuration > 0
   }
 
   private var scale: CGFloat {

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `multiDaySelectionDragHandler`, enabling developers to implement multiple-day-selection via a drag gesture (similar to multi-select in the iOS Photos app)
 - Added the ability to change the aspect ratio of individual day-of-the-week items
 - Added support for self-sizing month headers
+- Added a new `setContent(_:animated:)` function, allowing people to perform animated content updates
 
 ### Fixed
 - Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled

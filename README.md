@@ -15,8 +15,9 @@ Features:
 
 - Supports all calendars from `Foundation.Calendar` (Gregorian, Japanese, Hebrew, etc.)
 - Display months in a vertically-scrolling or horizontally-scrolling layout
-- Declarative API that enables unidirectional data flow for updating the content of the calendar
+- Declarative API that encourages unidirectional data flow for updating the content of the calendar
 - A custom layout system that enables virtually infinite date ranges without increasing memory usage
+- Animated content updates
 - Pagination for horizontally-scrolling calendars
 - Self-sizing month headers
 - Specify custom views (`UIView` or SwiftUI `View`) for individual days, month headers, and days of the week
