@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled
 - Fixed Storyboard support by removing the `fatalError` in `init?(coder: NSCoder)`
 - Fixed an issue that could cause the calendar to layout unnecessarily due to a trait collection change notification
+- Fixed an issue that could cause off-screen items to appear or disappear instantly, rather than animating in or out during animated content changes
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
