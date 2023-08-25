@@ -80,7 +80,9 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     calendarView.didEndDragging = didEndDragging
     calendarView.didEndDecelerating = didEndDecelerating
 
-    calendarView.setContent(makeContent())
+    // There's no public API for inheriting the `context.transaction.animation`'s properties here so
+    // that we can do an equivalent `UIView` animation.
+    calendarView.setContent(makeContent(), animated: false)
   }
 
   // MARK: Fileprivate
