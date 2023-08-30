@@ -198,7 +198,7 @@ public final class CalendarView: UIView {
 
     guard isReadyForLayout else { return }
 
-    _layoutSubviews(isAnimatedUpdatePass: isInAnimationClosure)
+    _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
   }
 
   /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
@@ -221,6 +221,8 @@ public final class CalendarView: UIView {
   ///   - animated: Whether or not the content update should be animated.
   public func setContent(_ content: CalendarViewContent, animated: Bool) {
     let oldContent = self.content
+
+    let isInAnimationClosure = UIView.areAnimationsEnabled && UIView.inheritedAnimationDuration > 0
 
     // Do a preparation layout pass with an extended bounds, if we're animating. This ensures that
     // views don't pop in if they're animating in from outside the actual bounds.
@@ -284,7 +286,11 @@ public final class CalendarView: UIView {
     // If we're animating, force layout with the inherited animation closure or with our own default
     // animation. Forcing layout ensures that frame adjustments happen with an animation.
     if animated {
-      let animations = { self.layoutIfNeeded() }
+      let animations = {
+        self.isAnimatedUpdatePass = true
+        self.layoutIfNeeded()
+        self.isAnimatedUpdatePass = false
+      }
       if isInAnimationClosure {
         animations()
       } else {
@@ -514,6 +520,8 @@ public final class CalendarView: UIView {
   private var visibleItemsDetails: VisibleItemsDetails?
   private var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
 
+  private var isAnimatedUpdatePass = false
+
   private var previousBounds = CGRect.zero
   private var previousLayoutMargins = UIEdgeInsets.zero
 
@@ -550,10 +558,6 @@ public final class CalendarView: UIView {
     // non-zero size once the `frame` is set to something non-zero, either manually or via the
     // Auto Layout engine.
     bounds.size != .zero
-  }
-
-  private var isInAnimationClosure: Bool {
-    UIView.areAnimationsEnabled && UIView.inheritedAnimationDuration > 0
   }
 
   private var scale: CGFloat {
@@ -725,34 +729,10 @@ public final class CalendarView: UIView {
         visibleItemsProvider: visibleItemsProvider)
     }
 
-    // Use an extended bounds (3x the viewport size) if we're in an animated update pass, reducing
-    // the likelihood of an item popping in / out.
-    let boundsMultiplier = CGFloat(3)
-    let offset: CGPoint
-    let size: CGSize
-    if isAnimatedUpdatePass {
-      switch content.monthsLayout {
-      case .vertical:
-        offset = CGPoint(
-          x: scrollView.contentOffset.x,
-          y: scrollView.contentOffset.y - bounds.height)
-        size = CGSize(width: bounds.size.width, height: bounds.size.height * boundsMultiplier)
-
-      case .horizontal:
-        offset = CGPoint(
-          x: scrollView.contentOffset.x - bounds.width,
-          y: scrollView.contentOffset.y)
-        size = CGSize(width: bounds.size.width * boundsMultiplier, height: bounds.size.height)
-      }
-    } else {
-      offset = scrollView.contentOffset
-      size = bounds.size
-    }
-
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
-      offset: offset,
-      size: size)
+      offset: scrollView.contentOffset,
+      isAnimatedUpdatePass: isAnimatedUpdatePass)
     self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
 
     updateVisibleViews(
@@ -1138,7 +1118,6 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     } else {
       calendarHeight = bounds.height
     }
-    let size = CGSize(width: calendarWidth, height: calendarHeight)
 
     let visibleItemsProvider = VisibleItemsProvider(
       calendar: calendar,
@@ -1158,7 +1137,7 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     let visibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
       offset: scrollView.contentOffset,
-      size: size)
+      isAnimatedUpdatePass: false)
 
     return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
   }

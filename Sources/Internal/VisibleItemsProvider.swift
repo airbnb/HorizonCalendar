@@ -156,7 +156,7 @@ final class VisibleItemsProvider {
   func detailsForVisibleItems(
     surroundingPreviouslyVisibleLayoutItem previouslyVisibleLayoutItem: LayoutItem,
     offset: CGPoint,
-    size: CGSize)
+    isAnimatedUpdatePass: Bool)
     -> VisibleItemsDetails
   {
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of
@@ -166,6 +166,13 @@ final class VisibleItemsProvider {
       firstLayoutItem: previouslyVisibleLayoutItem,
       calendarItemModelCache: .init(
         minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100))
+
+    let bounds: CGRect
+    if isAnimatedUpdatePass {
+      bounds = boundsForAnimatedUpdatePass(atOffset: offset)
+    } else {
+      bounds = CGRect(origin: offset, size: size)
+    }
 
     // `extendedBounds` is used to make sure that we're always laying out a continuous set of items,
     // even if the last anchor item is completely off screen.
@@ -177,7 +184,6 @@ final class VisibleItemsProvider {
     //
     // One can think of `extendedBounds`'s purpose as increasing the layout region to compensate
     // for extremely fast scrolling / large per-frame bounds differences.
-    let bounds = CGRect(origin: offset, size: size)
     let minX = min(bounds.minX, previouslyVisibleLayoutItem.frame.minX)
     let minY = min(bounds.minY, previouslyVisibleLayoutItem.frame.minY)
     let maxX = max(bounds.maxX, previouslyVisibleLayoutItem.frame.maxX)
@@ -242,7 +248,7 @@ final class VisibleItemsProvider {
 
     // Handle pinned day-of-week layout items
     if case .vertical(let options) = content.monthsLayout, options.pinDaysOfWeekToTop {
-      handlePinnedDaysOfWeekIfNeeded(yContentOffset: bounds.minY, context: &context)
+      handlePinnedDaysOfWeekIfNeeded(yContentOffset: offset.y, context: &context)
     }
 
     let visibleDayRange: DayRange?
@@ -410,6 +416,27 @@ final class VisibleItemsProvider {
     }
 
     return itemOrigin < otherItemOrigin ? item : otherItem
+  }
+
+  private func boundsForAnimatedUpdatePass(atOffset offset: CGPoint) -> CGRect {
+    // Use a larger bounds (3x the viewport size) if we're in an animated update pass, reducing the
+    // likelihood of an item popping in / out.
+    let boundsMultiplier = CGFloat(3)
+    switch content.monthsLayout {
+    case .vertical:
+      return CGRect(
+        x: offset.x,
+        y: offset.y - size.height,
+        width: size.width,
+        height: size.height * boundsMultiplier)
+
+    case .horizontal:
+      return CGRect(
+        x: offset.x - size.width,
+        y: offset.y,
+        width: size.width * boundsMultiplier,
+        height: size.height)
+    }
   }
 
   private func monthOrigin(
