@@ -37,6 +37,7 @@ final class TooltipView: UIView {
 
     super.init(frame: .zero)
 
+    isUserInteractionEnabled = false
     addSubview(backgroundView)
     addSubview(label)
   }

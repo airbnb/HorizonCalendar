@@ -437,6 +437,8 @@ final class TooltipView: UIView {
 
   init(backgroundColor: UIColor, borderColor: UIColor, font: UIFont, textColor: UIColor) {
     super.init(frame: .zero)
+    
+    isUserInteractionEnabled = false
 
     backgroundView.backgroundColor = backgroundColor
     backgroundView.layer.borderColor = borderColor
@@ -514,6 +516,8 @@ final class TooltipView: UIView {
 
 }
 ```
+
+Note: An overlay view will have a size that closely matches the `bounds.size` of the calendar. To prevent your overlay view from intercepting touches, set `isUserInteractionEnabled` to `false`.
 
 Next, we need a type that conforms to `CalendarItemViewRepresentable` that knows how to create and update instances of `TooltipView`. To make things easy, we can just make our view conform to this protocol:
 ```swift
