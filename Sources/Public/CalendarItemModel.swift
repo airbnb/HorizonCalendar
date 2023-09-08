@@ -168,10 +168,15 @@ extension View {
   ///
   /// - Warning: Using a SwiftUI view with the calendar will cause `SwiftUIView.HostingController`(s) to be added to the
   /// closest view controller in the responder chain in relation to the `CalendarView`.
-  public var calendarItemModel: CalendarItemModel<SwiftUIWrapperView<Self>> {
-    CalendarItemModel<SwiftUIWrapperView<Self>>(
-      invariantViewProperties: .init(initialContent: self),
-      content: .init(content: self))
+  ///
+  /// - Parameters:
+  ///   - id: An ID that uniquely identifies this item relative to other items in the calendar. For simple cases, this can be a `Day` for
+  ///   day items or a `Month` for month header items, for example.
+  public func calendarItemModel(id: AnyHashable) -> CalendarItemModel<SwiftUIWrapperView<Self>> {
+    let contentAndID = SwiftUIWrapperView.ContentAndID(content: self, id: id)
+    return CalendarItemModel<SwiftUIWrapperView<Self>>(
+      invariantViewProperties: .init(initialContentAndID: contentAndID),
+      content: contentAndID)
   }
 
 }

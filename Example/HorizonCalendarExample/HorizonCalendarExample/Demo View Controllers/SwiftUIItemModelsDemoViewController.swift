@@ -59,13 +59,13 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
           Spacer()
         }
         .padding(.vertical)
-        .calendarItemModel
+        .calendarItemModel(id: month)
       }
 
       .dayItemProvider { [calendar, selectedDate] day in
         let date = calendar.date(from: day.components)
         let isSelected = date == selectedDate
-        return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+        return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel(id: day)
       }
   }
 

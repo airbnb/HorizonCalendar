@@ -30,8 +30,10 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   // MARK: Lifecycle
 
-  public init(content: Content) {
-    self.content = content
+  public init(contentAndID: ContentAndID) {
+    self.contentAndID = contentAndID
+    hostingController = HostingController(
+      rootView: .init(content: contentAndID.content, id: contentAndID.id))
 
     super.init(frame: .zero)
 
@@ -69,16 +71,16 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   // MARK: Fileprivate
 
-  fileprivate var content: Content {
+  fileprivate var contentAndID: ContentAndID {
     didSet {
-      hostingController.rootView = content
+      hostingController.rootView = .init(content: contentAndID.content, id: contentAndID.id)
       configureGestureRecognizers()
     }
   }
 
   // MARK: Private
 
-  private lazy var hostingController = HostingController<Content>(rootView: content)
+  private let hostingController: HostingController<IDWrapperView<Content>>
 
   private weak var hostingControllerView: UIView?
 
@@ -126,8 +128,8 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Lifecycle
 
-    init(initialContent: Content) {
-      self.initialContent = initialContent
+    init(initialContentAndID: ContentAndID) {
+      self.initialContentAndID = initialContentAndID
     }
 
     // MARK: Public
@@ -142,39 +144,44 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Fileprivate
 
-    fileprivate let initialContent: Content
+    fileprivate let initialContentAndID: ContentAndID
 
   }
 
-  public struct ContentWrapper: Equatable {
+  public struct ContentAndID: Equatable {
 
     // MARK: Lifecycle
 
-    public init(content: Content) {
+    public init(content: Content, id: AnyHashable) {
       self.content = content
+      self.id = id
     }
 
     // MARK: Public
 
-    public static func == (_: ContentWrapper, _: ContentWrapper) -> Bool {
+    public static func == (_: ContentAndID, _: ContentAndID) -> Bool {
       false
     }
 
     // MARK: Fileprivate
 
     fileprivate let content: Content
+    fileprivate let id: AnyHashable
 
   }
 
   public static func makeView(
     withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> SwiftUIWrapperView<Content>
+  -> SwiftUIWrapperView<Content>
   {
-    SwiftUIWrapperView<Content>(content: invariantViewProperties.initialContent)
+    SwiftUIWrapperView<Content>(contentAndID: invariantViewProperties.initialContentAndID)
   }
 
-  public static func setContent(_ content: ContentWrapper, on view: SwiftUIWrapperView<Content>) {
-    view.content = content.content
+  public static func setContent(
+    _ contentAndID: ContentAndID,
+    on view: SwiftUIWrapperView<Content>)
+  {
+    view.contentAndID = contentAndID
   }
 
 }
@@ -188,35 +195,48 @@ extension UIResponder {
   }
 }
 
-// MARK: - SwiftUIWrapperView.HostingController
+// MARK: - IDWrapperView
 
+/// A wrapper view that uses the `id(_:)` modifier on the wrapped view so that each one has its own identity, even if it was reused.
 @available(iOS 13.0, *)
-extension SwiftUIWrapperView {
+private struct IDWrapperView<Content: View>: View {
 
-  /// The `UIHostingController` type used by `SwiftUIWrapperView` to embed SwiftUI views in a UIKit view hierarchy.
-  public final class HostingController<Content: View>: UIHostingController<Content> {
+  let content: Content
+  let id: AnyHashable
 
-    // MARK: Lifecycle
+  var body: some View {
+    content
+      .id(id)
+  }
 
-    fileprivate override init(rootView: Content) {
-      super.init(rootView: rootView)
+}
 
-      // This prevents the safe area from affecting layout.
-      _disableSafeArea = true
-    }
+// MARK: - HostingController
 
-    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-    }
+/// The `UIHostingController` type used by `SwiftUIWrapperView` to embed SwiftUI views in a UIKit view hierarchy. This
+/// exists to disable safe area insets and set the background color to clear.
+@available(iOS 13.0, *)
+private final class HostingController<Content: View>: UIHostingController<Content> {
 
-    public override func viewDidLoad() {
-      super.viewDidLoad()
+  // MARK: Lifecycle
 
-      // Override the default `.systemBackground` color since `CalendarView` subviews should be
-      // clear.
-      view.backgroundColor = .clear
-    }
+  override init(rootView: Content) {
+    super.init(rootView: rootView)
 
+    // This prevents the safe area from affecting layout.
+    _disableSafeArea = true
+  }
+
+  @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // Override the default `.systemBackground` color since `CalendarView` subviews should be
+    // clear.
+    view.backgroundColor = .clear
   }
 
 }

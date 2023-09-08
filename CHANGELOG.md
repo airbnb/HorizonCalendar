@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Storyboard support by removing the `fatalError` in `init?(coder: NSCoder)`
 - Fixed an issue that could cause the calendar to layout unnecessarily due to a trait collection change notification
 - Fixed an issue that could cause off-screen items to appear or disappear instantly, rather than animating in or out during animated content changes
+- Fixed an issue (via a breaking API change) that caused a SwiftUI view being used as a calendar item to not receive calls to `onAppear`. Use `calendarItemModel(id:)` to create calendar item models from SwiftUI views. The previous `calendarItemModel` get-only property has been removed.
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
