@@ -148,7 +148,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
   }
 
-  public struct ContentAndID: Equatable {
+  public struct ContentAndID: Equatable, SwiftUIWrapperViewContentIDUpdatable {
 
     // MARK: Lifecycle
 
@@ -163,10 +163,13 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
       false
     }
 
+    // MARK: Internal
+
+    var id: AnyHashable
+
     // MARK: Fileprivate
 
     fileprivate let content: Content
-    fileprivate let id: AnyHashable
 
   }
 
@@ -184,6 +187,12 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
     view.contentAndID = contentAndID
   }
 
+}
+
+// MARK: - SwiftUIWrapperViewContentIDUpdatable
+
+protocol SwiftUIWrapperViewContentIDUpdatable {
+  var id: AnyHashable { get set }
 }
 
 // MARK: UIResponder Next View Controller Helper

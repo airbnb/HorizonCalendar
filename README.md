@@ -267,7 +267,7 @@ Using a SwiftUI view is even easier - simply initialize your SwiftUI view and ca
       Text("\(day.day)")
         .font(.system(size: 18))
         .foregroundColor(Color(UIColor.darkGray))
-        .calendarItemModel(id: day) // Use this to ensure stable and unique view identity
+        .calendarItemModel
     }
 ```
 

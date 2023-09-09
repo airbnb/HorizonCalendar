@@ -82,10 +82,23 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     return content == other.content
   }
 
+  public mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable) {
+    guard
+      var content = content as? SwiftUIWrapperViewContentIDUpdatable,
+      content.id == AnyHashable(PlaceholderID.placeholderID)
+    else {
+      return
+    }
+    content.id = id
+    self.content = content as? ViewRepresentable.Content
+  }
+
   // MARK: Private
 
   private let invariantViewProperties: ViewRepresentable.InvariantViewProperties
-  private let content: ViewRepresentable.Content?
+
+  // This is only mutable because we need to update the ID for `SwiftUIWrapperView`'s content.
+  private var content: ViewRepresentable.Content?
 
 }
 
@@ -168,15 +181,21 @@ extension View {
   ///
   /// - Warning: Using a SwiftUI view with the calendar will cause `SwiftUIView.HostingController`(s) to be added to the
   /// closest view controller in the responder chain in relation to the `CalendarView`.
-  ///
-  /// - Parameters:
-  ///   - id: An ID that uniquely identifies this item relative to other items in the calendar. For simple cases, this can be a `Day` for
-  ///   day items or a `Month` for month header items, for example.
-  public func calendarItemModel(id: AnyHashable) -> CalendarItemModel<SwiftUIWrapperView<Self>> {
-    let contentAndID = SwiftUIWrapperView.ContentAndID(content: self, id: id)
+  public var calendarItemModel: CalendarItemModel<SwiftUIWrapperView<Self>> {
+    let contentAndID = SwiftUIWrapperView.ContentAndID(
+      content: self,
+      id: PlaceholderID.placeholderIDAnyHashable)
     return CalendarItemModel<SwiftUIWrapperView<Self>>(
       invariantViewProperties: .init(initialContentAndID: contentAndID),
       content: contentAndID)
   }
 
+}
+
+// MARK: - PlaceholderID
+
+/// This exists only to facilitate internally updating the ID of a `SwiftUIWrapperView`'s content.
+private enum PlaceholderID: Hashable {
+  case placeholderID
+  static let placeholderIDAnyHashable = AnyHashable(PlaceholderID.placeholderID)
 }

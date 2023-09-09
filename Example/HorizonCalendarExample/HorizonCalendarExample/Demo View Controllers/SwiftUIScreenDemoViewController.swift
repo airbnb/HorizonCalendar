@@ -105,12 +105,12 @@ struct SwiftUIScreenDemo: View {
           Spacer()
         }
         .padding()
-        .calendarItemModel(id: month)
+        .calendarItemModel
       } else {
         return Text(monthHeaderText)
           .font(.title2)
           .padding()
-          .calendarItemModel(id: month)
+          .calendarItemModel
       }
     }
 
@@ -121,8 +121,7 @@ struct SwiftUIScreenDemo: View {
       } else {
         isSelected = false
       }
-      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected)
-        .calendarItemModel(id: day)
+      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
     }
 
     .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in

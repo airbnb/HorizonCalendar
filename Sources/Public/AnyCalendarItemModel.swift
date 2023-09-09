@@ -43,6 +43,8 @@ public protocol AnyCalendarItemModel {
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
   func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool
 
+  mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable)
+
 }
 
 // MARK: - _CalendarItemViewDifferentiator
