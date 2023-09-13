@@ -121,8 +121,7 @@ struct SwiftUIScreenDemo: View {
       } else {
         isSelected = false
       }
-      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected)
-        .calendarItemModel
+      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
     }
 
     .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in

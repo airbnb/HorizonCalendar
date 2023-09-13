@@ -521,4 +521,6 @@ private struct MockCalendarItemModel: AnyCalendarItemModel, Equatable {
     false
   }
 
+  mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable) { }
+
 }
