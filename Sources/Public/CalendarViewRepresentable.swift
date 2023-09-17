@@ -595,11 +595,12 @@ extension CalendarViewRepresentable {
     uiView: CalendarView)
   {
     let children = Mirror(reflecting: proposedSize).children
-    let proposedSize = CGSize(
-      width: children.first { $0.label == "width" }?.value as? CGFloat ?? .infinity,
-      height: children.first { $0.label == "height" }?.value as? CGFloat ?? .infinity)
-
-    size = sizeThatFits(proposedSize, uiView: uiView)
+    let proposedWidth = children.first { $0.label == "width" }?.value as? CGFloat
+    let proposedHeight = children.first { $0.label == "height" }?.value as? CGFloat
+    size = sizeThatFits(
+      proposedWidth: proposedWidth ?? minimumReasonableWidth,
+      proposedHeight: proposedHeight ?? minimumReasonableHeight,
+      uiView: uiView)
   }
 
   // Post-iOS-16 support
@@ -612,17 +613,44 @@ extension CalendarViewRepresentable {
     -> CGSize?
   {
     sizeThatFits(
-      CGSize(width: proposal.width ?? .infinity, height: proposal.height ?? .infinity),
+      proposedWidth: proposal.width ?? minimumReasonableWidth,
+      proposedHeight: proposal.height ?? minimumReasonableHeight,
       uiView: uiView)
   }
   #endif
 
   // MARK: Private
 
-  private func sizeThatFits(_ proposal: CGSize, uiView: CalendarView) -> CGSize {
+  private var minimumReasonableWidth: CGFloat {
+    // Minimum day width of 44, 7 days in a week, 6 margins, leading and trailing layout margins
+    let widthOfDays: CGFloat = 44 * 7
+    let interDayMargins = (horizontalDayMargin ?? 0) * 6
+    let layoutMargins = (layoutMargins?.leading ?? 0) + (layoutMargins?.trailing ?? 0)
+    return widthOfDays + interDayMargins + layoutMargins
+  }
+
+  private var minimumReasonableHeight: CGFloat {
     switch monthsLayout {
     case .vertical:
-      return proposal
+      return minimumReasonableWidth
+
+    case .horizontal(let options):
+      return options.monthWidth(calendarWidth: minimumReasonableWidth, interMonthSpacing: 0)
+    }
+  }
+
+  private func sizeThatFits(
+    proposedWidth: CGFloat,
+    proposedHeight: CGFloat,
+    uiView: CalendarView)
+    -> CGSize
+  {
+    let width = min(proposedWidth, .maxLayoutValue)
+    let height = min(proposedHeight, .maxLayoutValue)
+
+    switch monthsLayout {
+    case .vertical:
+      return CGSize(width: width, height: height)
 
     case .horizontal:
       let _insetsLayoutMarginsFromSafeArea = uiView.insetsLayoutMarginsFromSafeArea
@@ -631,9 +659,6 @@ extension CalendarViewRepresentable {
       // margins. For some reason, this is only an issue in SwiftUI, not UIKit.
       uiView.insetsLayoutMarginsFromSafeArea = false
 
-      let width = min(proposal.width, .maxLayoutValue)
-      let height = min(proposal.height, .maxLayoutValue)
-
       let size = uiView.systemLayoutSizeFitting(
         CGSize(width: width, height: height),
         withHorizontalFittingPriority: .required,
@@ -641,7 +666,7 @@ extension CalendarViewRepresentable {
 
       uiView.insetsLayoutMarginsFromSafeArea = _insetsLayoutMarginsFromSafeArea
 
-      return CGSize(width: proposal.width, height: size.height)
+      return CGSize(width: proposedWidth, height: size.height)
     }
 
   }
