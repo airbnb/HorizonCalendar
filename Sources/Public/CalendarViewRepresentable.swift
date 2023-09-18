@@ -314,7 +314,8 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the month header item provider.
+  /// Configures the month header item provider. Consider using the `monthHeaders(_:)` modifier instead if your custom month
+  /// header views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `monthHeaderItemProvider` for each month in the range of months being
   /// displayed. The `CalendarItemModel`s that you return will be used to create the views for each month header in
@@ -324,8 +325,8 @@ extension CalendarViewRepresentable {
   /// used.
   ///
   /// - Parameters:
-  ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
-  ///   month header.
+  ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a month
+  ///   header.
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A new `CalendarViewRepresentable` with a new month header item provider.
   public func monthHeaderItemProvider(
@@ -337,7 +338,27 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the day-of-week item provider.
+  /// Configures custom month header views with a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each month in the range of months being displayed.
+  ///
+  /// If you don't configure your own month header views via this modifier, then a default month header view will be used.
+  ///
+  /// - Parameters:
+  ///   - content: A view builder that creates a view for a single month header in the calendar.
+  ///   - month: The `Month` for which to provide a month header view.
+  /// - Returns: A new `CalendarViewRepresentable` with custom month header views configured.
+  public func monthHeaders(
+    @ViewBuilder _ content: @escaping (_ month: Month) -> some View)
+    -> CalendarViewRepresentable
+  {
+    monthHeaderItemProvider { month in
+      content(month).calendarItemModel
+    }
+  }
+
+  /// Configures the day-of-week item provider. Consider using the `dayOfWeekHeaders(_:)` modifier instead if your custom
+  /// day-of-week views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `dayOfWeekItemProvider` for each weekday index for the current calendar.
   /// For example, for the en_US locale, 0 is Sunday, 1 is Monday, and 6 is Saturday. This will be different in some other locales. The
@@ -346,8 +367,8 @@ extension CalendarViewRepresentable {
   /// If you don't configure your own day-of-week item provider via this function, then a default day-of-week item provider will be used.
   ///
   /// - Parameters:
-  ///   - dayOfWeekItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
-  ///   day of the week.
+  ///   - dayOfWeekItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a day of the
+  ///   week.
   ///   - month: The month in which the day-of-week item belongs. This parameter will be `nil` if days of the week are pinned to
   ///   the top of the calendar, since in that scenario, they don't belong to any particular month.
   ///   - weekdayIndex: The weekday index for which to provide a `CalendarItemModel`.
@@ -364,18 +385,40 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the day item provider.
+  /// Configures custom day-of-week header views with a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each weekday index for the current calendar.
+  /// For example, for the en_US locale, 0 is Sunday, 1 is Monday, and 6 is Saturday. This will be different in some other locales.
+  ///
+  /// If you don't configure your own day-of-week header views via this modifier, then a default day-of-week header view will be used.
+  ///
+  /// - Parameters:
+  ///   - content: A view builder that creates a view for a single day-of-week header in the calendar.
+  ///   - month: The month in which the day-of-week header view belongs. This parameter will be `nil` if days of the week are
+  ///   pinned to the top of the calendar, since in that scenario, they don't belong to any particular month.
+  ///   - weekdayIndex: The weekday index for which to provide a day-of-week header view.
+  /// - Returns: A new `CalendarViewRepresentable` with custom day-of-week header views configured.
+  public func dayOfWeekHeaders(
+    _ content: @escaping (_ month: Month?, _ weekdayIndex: Int) -> some View)
+    -> Self
+  {
+    dayOfWeekItemProvider { month, weekdayIndex in
+      content(month, weekdayIndex).calendarItemModel
+    }
+  }
+
+  /// Configures the day item provider. Consider using the `days(_:)` modifier instead if your custom day views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `dayItemProvider` for each day being displayed. The
   /// `CalendarItemModel`s that you return will be used to create the views for each day in `CalendarView`. In most cases, this
-  /// view should be some kind of label that tells the user the day number of the month. You can also add other decoration, like a badge
-  /// or background, by including it in the view that your `CalendarItemModel` creates.
+  /// view should be some kind of label that tells the user the day number of the month. You can also add other decoration, like a
+  /// badge or background, by including it in the view that your `CalendarItemModel` creates.
   ///
   /// If you don't configure your own day item provider via this function, then a default day item provider will be used.
   ///
   /// - Parameters:
-  ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day
-  ///   in the calendar.
+  ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day in the
+  ///   calendar.
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day item provider.
   public func dayItemProvider(
@@ -387,13 +430,34 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the day background item provider.
+  /// Configures custom day views with a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each day that's displayed. In most cases, this view should be some kind of
+  /// label that tells the user the day number of the month. You can also add other decoration, like a badge or background.
+  ///
+  /// If you don't configure your own day views via this modifier, then a default day view will be used.
+  ///
+  /// - Parameters:
+  ///   - content: A view builder that creates a view for a single day in the calendar.
+  ///   - day: The `Day` for which to provide a day view.
+  /// - Returns: A new `CalendarViewRepresentable` with custom day views configured.
+  public func days(
+    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
+    -> Self
+  {
+    dayItemProvider { day in
+      content(day).calendarItemModel
+    }
+  }
+
+  /// Configures the day background item provider. Consider using the `dayBackgrounds(_:)` modifier instead if your custom day
+  /// background views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `dayBackgroundItemProvider` for each day being displayed. The
   /// `CalendarItemModel`s that you return will be used to create the background views for each day in `CalendarView`. If a
   /// particular day does not have a background view, return `nil` for that day.
   ///
-  /// If you don't configure a day background item provider via this function, then days will not have additional background decoration.
+  /// If you don't configure a day background item provider via this function, then days will not have any background decoration.
   ///
   /// - Parameters:
   ///   - dayBackgroundItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing the
@@ -409,15 +473,41 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the month background item provider.
+  /// Configures day background views with a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each day that's displayed.
+  ///
+  /// If you don't configure your own day background views via this modifier, then months will not have any background decoration. If
+  /// a particular day doesn't need a background view, return `EmptyView` for that day.
+  ///
+  /// - Parameters:
+  ///   - content: A view builder that creates a view for the background of a single day in the calendar.
+  ///   - day: The `Day` for which to provide a day background view.
+  /// - Returns: A new `CalendarViewRepresentable` with day background views configured.
+  public func dayBackgrounds(
+    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
+    -> Self
+  {
+    dayBackgroundItemProvider { day in
+      let view = content(day)
+      if view is EmptyView {
+        return nil
+      } else {
+        return view.calendarItemModel
+      }
+    }
+  }
+
+  /// Configures the month background item provider. Consider using the `monthBackgrounds(_:)` modifier instead if your
+  /// custom month background views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `monthBackgroundItemProvider` for each month being displayed. The
   /// `CalendarItemModel` that you return for each month will be used to create a view that spans the entire frame of that month,
   /// encapsulating all days, days-of-the-week headers, and the month header. This behavior makes month backgrounds useful for
   /// things like grid lines or colored backgrounds.
   ///
-  /// If you don't configure your own month background item provider via this function, then months will not have additional
-  /// background decoration.
+  /// If you don't configure your own month background item provider via this function, then months will not have any background
+  /// decoration.
   ///
   /// - Parameters:
   ///   - monthBackgroundItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing the
@@ -436,7 +526,36 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the day range item provider.
+  /// Configures month background views using a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each month that's displayed. Each view will span the entire frame of that
+  /// month, encapsulating all days, days-of-the-week headers, and the month header. This behavior makes month backgrounds useful
+  /// for things like grid lines or colored backgrounds.
+  ///
+  /// If you don't configure your own month background views via this modifier, then months will not have any background decoration. If
+  /// a particular month doesn't need a background view, return `EmptyView` for that month.
+  ///
+  /// - Parameters:
+  ///   - content: A view builder that creates a view for the background of a single month in the calendar.
+  ///   - monthLayoutContext: The layout context for the month containing information about the frames of views in that month
+  ///   and the bounds in which your month background will be displayed.
+  /// - Returns: A new `CalendarViewRepresentable` with month background views configured.
+  public func monthBackgrounds(
+    @ViewBuilder _ content: @escaping (_ monthLayoutContext: MonthLayoutContext) -> some View)
+    -> Self
+  {
+    monthBackgroundItemProvider { monthLayoutContext in
+      let view = content(monthLayoutContext)
+      if view is EmptyView {
+        return nil
+      } else {
+        return view.calendarItemModel
+      }
+    }
+  }
+
+  /// Configures the day range item provider. Consider using the `dayRanges(for:_:)` modifier instead if your custom day range
+  /// views are SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `dayRangeItemProvider` for each day range in the `dateRanges` set.
   /// Date ranges will be converted to day ranges by using the `calendar`passed into the `CalendarViewRepresentable`
@@ -449,12 +568,10 @@ extension CalendarViewRepresentable {
   /// The views created by the `CalendarItemModel`s provided by this function will be placed at a lower z-index than the layer of
   /// day items. If you don't configure your own day range item provider via this function, then no day range view will be displayed.
   ///
-  /// If you don't want to show any day range items, pass in an empty set for the `dateRanges` parameter.
-  ///
   /// - Parameters:
   ///   - dateRanges: The date ranges for which `CalendarView` will invoke your day range item provider closure.
-  ///   - dayRangeItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a day
-  ///   range in the calendar.
+  ///   - dayRangeItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a day range
+  ///   in the calendar.
   ///   - dayRangeLayoutContext: The layout context for the day range containing information about the frames of days and
   ///   bounds in which your day range item will be displayed.
   /// - Returns: A new `CalendarViewRepresentable` with a new day range item provider.
@@ -470,7 +587,36 @@ extension CalendarViewRepresentable {
     return view
   }
 
-  /// Configures the overlay item provider.
+  /// Configures day range views with a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each day range in the `dateRanges` set. Date ranges will be converted to
+  /// day ranges by using the `calendar`passed into the `CalendarViewRepresentable` initializer. Each day range view will
+  /// span the entire frame encapsulating all days in that day range. This behavior makes day range views useful for things like day
+  /// range selection indicators that might have specific styling requirements for different parts of the selected day range. For example,
+  /// you might have a cross fade in your day range selection indicator view when a day range spans multiple months, or you might have
+  /// rounded end caps for the start and end of a day range.
+  ///
+  /// Day range views will be placed at a lower z-index than the layer of day items. If you don't configure your own day ranges via this
+  /// modifier, then no day range views will be displayed.
+  ///
+  /// - Parameters:
+  ///   - dateRanges: The date ranges for which `CalendarView` will show a day range view.
+  ///   - content: A view builder that creates a view for a single day range.
+  ///   - dayRangeLayoutContext: The layout context for the day range containing information about the frames of days and
+  ///   bounds in which your day range view will be displayed.
+  /// - Returns: A new `CalendarViewRepresentable` with day range views configured.
+  public func dayRanges(
+    for dateRanges: Set<ClosedRange<Date>>,
+    @ViewBuilder _ content: @escaping (_ dayRangeLayoutContext: DayRangeLayoutContext) -> some View)
+    -> Self
+  {
+    dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
+      content(dayRangeLayoutContext).calendarItemModel
+    }
+  }
+
+  /// Configures the overlay item provider. Consider using the `overlays(_:)` modifier instead if your custom overlay views are
+  /// SwiftUI views.
   ///
   /// `CalendarView` invokes the provided `overlayItemProvider` for each overlaid item location in the
   /// `overlaidItemLocations` set. All of the layout information needed to create an overlay item is provided via the overlay
@@ -481,8 +627,7 @@ extension CalendarViewRepresentable {
   /// - Parameters:
   ///   - overlaidItemLocations: The overlaid item locations for which `CalendarView` will invoke your overlay item
   ///   provider closure.
-  ///   - overlayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing an
-  ///   overlay.
+  ///   - overlayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing an overlay.
   ///   - overlayLayoutContext: The layout context for the overlaid item location containing information about that location's
   ///   frame and the bounds in which your overlay item will be displayed.
   /// - Returns: A new `CalendarViewRepresentable` with a new overlay item provider.
@@ -496,6 +641,29 @@ extension CalendarViewRepresentable {
     var view = self
     view.overlaidItemLocationsAndItemProvider = (overlaidItemLocations, overlayItemProvider)
     return view
+  }
+
+  /// Configures overlay views using a SwiftUI view builder.
+  ///
+  /// The `content` view builder closure is invoked for each overlaid item location in the `overlaidItemLocations` set. All of
+  /// the layout information needed to create an overlay view is provided via the overlay context passed into the content view builder
+  /// closure. Each overlay view will span the visible bounds of the calendar when that overlaid item's location is visible. This behavior
+  /// makes overlay views useful for things like tooltips.
+  ///
+  /// - Parameters:
+  ///   - overlaidItemLocations: The overlaid item locations for which `CalendarView` will show an overlay view.
+  ///   - content: A view builder that creates a view for a single overlaid item location.
+  ///   - overlayLayoutContext: The layout context for the overlaid item location containing information about that location's
+  ///   frame and the bounds in which your overlay view will be displayed.
+  /// - Returns: A new `CalendarViewRepresentable` with overlay views configured.
+  public func overlays(
+    for overlaidItemLocations: Set<OverlaidItemLocation>,
+    @ViewBuilder _ content: @escaping (_ overlayLayoutContext: OverlayLayoutContext) -> some View)
+    -> Self
+  {
+    overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
+      content(overlayLayoutContext).calendarItemModel
+    }
   }
 
 }

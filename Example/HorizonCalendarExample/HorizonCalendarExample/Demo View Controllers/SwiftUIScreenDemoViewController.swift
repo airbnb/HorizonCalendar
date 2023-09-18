@@ -96,32 +96,24 @@ struct SwiftUIScreenDemo: View {
     .verticalDayMargin(8)
     .horizontalDayMargin(8)
 
-    .monthHeaderItemProvider { month in
+    .monthHeaders { month in
       let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
       if case .vertical = monthsLayout {
-        return HStack {
+        HStack {
           Text(monthHeaderText)
             .font(.title2)
           Spacer()
         }
         .padding()
-        .calendarItemModel
       } else {
-        return Text(monthHeaderText)
+        Text(monthHeaderText)
           .font(.title2)
           .padding()
-          .calendarItemModel
       }
     }
 
-    .dayItemProvider { day in
-      let isSelected: Bool
-      if let selectedDayRange {
-        isSelected = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-      } else {
-        isSelected = false
-      }
-      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+    .days { day in
+      SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
     }
 
     .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
@@ -172,7 +164,6 @@ struct SwiftUIScreenDemo: View {
     }
 
     .frame(maxWidth: 375, maxHeight: .infinity)
-
   }
 
   // MARK: Private
@@ -193,6 +184,14 @@ struct SwiftUIScreenDemo: View {
     let selectedStartDate = calendar.date(from: selectedDayRange.lowerBound.components)!
     let selectedEndDate = calendar.date(from: selectedDayRange.upperBound.components)!
     return [selectedStartDate...selectedEndDate]
+  }
+
+  private func isDaySelected(_ day: Day) -> Bool {
+    if let selectedDayRange {
+      return day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
+    } else {
+      return false
+    }
   }
 
 }
