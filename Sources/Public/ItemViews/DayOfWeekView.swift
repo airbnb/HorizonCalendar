@@ -48,7 +48,7 @@ public final class DayOfWeekView: UIView {
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -117,7 +117,7 @@ extension DayOfWeekView {
 
 }
 
-// MARK: - DayView.Content
+// MARK: DayOfWeekView.Content
 
 extension DayOfWeekView {
 
@@ -142,7 +142,7 @@ extension DayOfWeekView {
 
 }
 
-// MARK: - DayOfWeekView.InvariantViewProperties
+// MARK: DayOfWeekView.InvariantViewProperties
 
 extension DayOfWeekView {
 
@@ -214,7 +214,7 @@ extension DayOfWeekView {
 
 }
 
-// MARK: - DayOfWeekView + CalendarItemViewRepresentable
+// MARK: CalendarItemViewRepresentable
 
 extension DayOfWeekView: CalendarItemViewRepresentable {
 

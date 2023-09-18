@@ -107,11 +107,11 @@ final class DemoPickerViewController: UIViewController {
 
 }
 
-// MARK: - UITableViewDataSource
+// MARK: UITableViewDataSource
 
 extension DemoPickerViewController: UITableViewDataSource {
 
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
     monthsLayoutPicker.selectedSegmentIndex == 0
       ? verticalDemoDestinations.count
       : horizontalDemoDestinations.count
@@ -130,11 +130,11 @@ extension DemoPickerViewController: UITableViewDataSource {
 
 }
 
-// MARK: - UITableViewDelegate
+// MARK: UITableViewDelegate
 
 extension DemoPickerViewController: UITableViewDelegate {
 
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
     let demoDestination = monthsLayoutPicker.selectedSegmentIndex == 0
       ? verticalDemoDestinations[indexPath.item]
       : horizontalDemoDestinations[indexPath.item]

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the ability to change the aspect ratio of individual day-of-the-week items
 - Added support for self-sizing month headers
 - Added a new `setContent(_:animated:)` function, enabling developers to perform animated content updates
+- Added Swift format integration to enforce consistent code style
 
 ### Fixed
 - Fixed an issue that could cause the calendar to programmatically scroll to a month or day to which it had previously scrolled
@@ -31,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allowed `CalendarItemViewRepresentable` to have no `Content` type if the conforming view does not depend on any variable data
 - Changed `ItemView` to determine user interaction capabilities from its content view's `hitTest` / `pointInside` functions
 - Updated content-change animations so that the same scroll offset is maintained throughout the animation
+- Changed the Swift version needed to use HorizonCalendar to 5.8
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 

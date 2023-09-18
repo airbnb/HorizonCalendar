@@ -430,9 +430,9 @@ final class ItemViewReuseManagerTests: XCTestCase {
       MockCalendarItemModel.variant1._itemViewDifferentiator: 3,
     ]
     let expectedNewViewCountsForDifferentiators: [_CalendarItemViewDifferentiator: Int] = [
-       MockCalendarItemModel.variant0._itemViewDifferentiator: 1,
-       MockCalendarItemModel.variant1._itemViewDifferentiator: 2,
-       MockCalendarItemModel.variant2._itemViewDifferentiator: 1,
+      MockCalendarItemModel.variant0._itemViewDifferentiator: 1,
+      MockCalendarItemModel.variant1._itemViewDifferentiator: 2,
+      MockCalendarItemModel.variant2._itemViewDifferentiator: 1,
     ]
 
     XCTAssert(
@@ -446,6 +446,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
 
   // MARK: Private
 
+  // swiftlint:disable:next implicitly_unwrapped_optional
   private var reuseManager: ItemViewReuseManager!
 
 }
@@ -515,12 +516,12 @@ private struct MockCalendarItemModel: AnyCalendarItemModel, Equatable {
     UIView()
   }
 
-  func _setContent(onViewOfSameType view: UIView) { }
+  func _setContent(onViewOfSameType _: UIView) { }
 
-  func _isContentEqual(toContentOf other: AnyCalendarItemModel) -> Bool {
+  func _isContentEqual(toContentOf _: AnyCalendarItemModel) -> Bool {
     false
   }
 
-  mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable) { }
+  mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_: AnyHashable) { }
 
 }

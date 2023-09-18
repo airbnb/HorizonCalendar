@@ -16,8 +16,8 @@ final class PartialMonthVisibilityDemoViewController: BaseDemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self else { return }
 
-      self.selectedDate = self.calendar.date(from: day.components)
-      self.calendarView.setContent(self.makeContent())
+      selectedDate = calendar.date(from: day.components)
+      calendarView.setContent(makeContent())
     }
   }
 
@@ -25,7 +25,7 @@ final class PartialMonthVisibilityDemoViewController: BaseDemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 16))!
     let endDate = calendar.date(from: DateComponents(year: 2020, month: 12, day: 05))!
 
-    let selectedDate = self.selectedDate
+    let selectedDate = selectedDate
 
     return CalendarViewContent(
       calendar: calendar,
@@ -59,4 +59,3 @@ final class PartialMonthVisibilityDemoViewController: BaseDemoViewController {
   private var selectedDate: Date?
 
 }
-

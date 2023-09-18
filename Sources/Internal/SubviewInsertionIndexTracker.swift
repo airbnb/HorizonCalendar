@@ -46,7 +46,7 @@ final class SubviewInsertionIndexTracker {
       pinnedDaysOfWeekRowBackgroundEndIndex += 1
       pinnedDayOfWeekItemsEndIndex += 1
       pinnedDaysOfWeekRowSeparatorEndIndex += 1
-    
+
     case .dayRange:
       index = dayRangeItemsEndIndex
       dayRangeItemsEndIndex += 1

@@ -44,7 +44,7 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
     horizontalItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: .horizontal(
-        options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 305/300)),
+        options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 305 / 300)),
       monthRange: monthRange,
       dayRange: dayRange)
 
@@ -125,25 +125,25 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       .day(calendar.day(byAddingDays: 30, to: startDay)),
       .monthHeader(Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .first, 
+        position: .first,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .second, 
+        position: .second,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .third, 
+        position: .third,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .fourth, 
+        position: .fourth,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .fifth, 
+        position: .fifth,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .sixth, 
+        position: .sixth,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
-        position: .last, 
+        position: .last,
         month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .day(calendar.day(byAddingDays: 31, to: startDay)),
       .day(calendar.day(byAddingDays: 32, to: startDay)),
@@ -247,6 +247,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
   private let startDay = Day(
     month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
     day: 1)
+
+  // swiftlint:disable implicitly_unwrapped_optional
 
   private var verticalItemTypeEnumerator: LayoutItemTypeEnumerator!
   private var verticalPinnedDaysOfWeekItemTypeEnumerator: LayoutItemTypeEnumerator!

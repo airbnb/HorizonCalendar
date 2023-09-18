@@ -17,7 +17,7 @@ import UIKit
 
 // MARK: - MonthGridBackgroundView
 
-/// A background grid view that draws separator lines between all days in a month. 
+/// A background grid view that draws separator lines between all days in a month.
 public final class MonthGridBackgroundView: UIView {
 
   // MARK: Lifecycle

@@ -30,13 +30,13 @@ final class DayRangeIndicatorView: UIView {
     backgroundColor = .clear
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Internal
 
-  override func draw(_ rect: CGRect) {
+  override func draw(_: CGRect) {
     let context = UIGraphicsGetCurrentContext()
     context?.setFillColor(indicatorColor.cgColor)
 

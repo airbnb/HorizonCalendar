@@ -55,13 +55,13 @@ final class ScrollMetricsMutator {
   func updateScrollBoundaries(minimumScrollOffset: CGFloat?, maximumScrollOffset: CGFloat?) {
     let originalOffset = scrollMetricsProvider.offset(for: scrollAxis)
 
-    if let minimumScrollOffset = minimumScrollOffset {
+    if let minimumScrollOffset {
       scrollMetricsProvider.setStartInset(to: -minimumScrollOffset, for: scrollAxis)
     } else {
       scrollMetricsProvider.setStartInset(to: Self.BoundlessStartInset, for: scrollAxis)
     }
 
-    if let maximumScrollOffset = maximumScrollOffset {
+    if let maximumScrollOffset {
       let size = scrollMetricsProvider.size(for: scrollAxis)
       scrollMetricsProvider.setEndInset(to: -(size - maximumScrollOffset), for: scrollAxis)
     } else {
@@ -83,7 +83,7 @@ final class ScrollMetricsMutator {
   }
 
   // MARK: Private
-  
+
   // The scrollable region is from (-ContentSize, +ContentSize), which is enough to scroll past over
   // three-billion years in a vertically-scrolling calendar. Increasing this value by another order
   // of magnitude will start to cause rounding in the 3rd digit after the decimal point, due to a
@@ -121,13 +121,13 @@ protocol ScrollMetricsProvider: AnyObject {
 
   func endInset(for scrollAxis: ScrollAxis) -> CGFloat
   func setEndInset(to inset: CGFloat, for scrollAxis: ScrollAxis)
-  
+
   func minimumOffset(for scrollAxis: ScrollAxis) -> CGFloat
   func maximumOffset(for scrollAxis: ScrollAxis) -> CGFloat
 
 }
 
-// MARK: UIScrollView+ScrollMetricsProvider
+// MARK: - UIScrollView + ScrollMetricsProvider
 
 extension UIScrollView: ScrollMetricsProvider {
 
@@ -186,7 +186,7 @@ extension UIScrollView: ScrollMetricsProvider {
     case .horizontal: contentInset.right = inset
     }
   }
-  
+
   func minimumOffset(for scrollAxis: ScrollAxis) -> CGFloat {
     switch scrollAxis {
     case .vertical: return -contentInset.top

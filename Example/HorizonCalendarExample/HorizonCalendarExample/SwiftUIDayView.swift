@@ -16,6 +16,8 @@
 import HorizonCalendar
 import SwiftUI
 
+// MARK: - SwiftUIDayView
+
 struct SwiftUIDayView: View {
 
   let dayNumber: Int
@@ -35,6 +37,8 @@ struct SwiftUIDayView: View {
   }
 
 }
+
+// MARK: - SwiftUIDayView_Previews
 
 struct SwiftUIDayView_Previews: PreviewProvider {
 

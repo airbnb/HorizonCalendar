@@ -1,27 +1,27 @@
 // Created by Cal Stephens on 9/18/23.
 // Copyright © 2023 Airbnb Inc. All rights reserved.
 
-@testable import HorizonCalendar
 import XCTest
+@testable import HorizonCalendar
 
 final class CalendarContentTests: XCTestCase {
 
   func testCanReturnNilFromCalendarContentClosures() {
     _ = CalendarViewContent(
-      visibleDateRange: Date.distantPast...Date.distantFuture, 
+      visibleDateRange: Date.distantPast...Date.distantFuture,
       monthsLayout: .vertical)
-    .monthHeaderItemProvider { _ in
-      nil
-    }
-    .dayOfWeekItemProvider { _, _ in
-      nil
-    }
-    .dayItemProvider { _ in
-      nil
-    }
-    .dayBackgroundItemProvider { _ in
-      nil
-    }
+      .monthHeaderItemProvider { _ in
+        nil
+      }
+      .dayOfWeekItemProvider { _, _ in
+        nil
+      }
+      .dayItemProvider { _ in
+        nil
+      }
+      .dayBackgroundItemProvider { _ in
+        nil
+      }
   }
 
   func testNilDayItemUsesDefaultValue() {

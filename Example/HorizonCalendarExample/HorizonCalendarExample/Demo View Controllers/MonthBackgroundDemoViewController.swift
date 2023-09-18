@@ -51,4 +51,3 @@ final class MonthBackgroundDemoViewController: BaseDemoViewController {
   private var selectedDate: Date?
 
 }
-

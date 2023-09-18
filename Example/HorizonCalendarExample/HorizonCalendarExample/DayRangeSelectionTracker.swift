@@ -39,7 +39,7 @@ enum DayRangeSelectionHelper {
   {
     switch state {
     case .began:
-      if day != existingDayRange?.lowerBound && day != existingDayRange?.upperBound {
+      if day != existingDayRange?.lowerBound, day != existingDayRange?.upperBound {
         existingDayRange = day...day
       }
       initialDayRange = existingDayRange

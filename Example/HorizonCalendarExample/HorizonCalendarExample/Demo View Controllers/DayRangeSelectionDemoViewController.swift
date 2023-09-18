@@ -30,9 +30,9 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
       DayRangeSelectionHelper.updateDayRange(
         afterTapSelectionOf: day,
-        existingDayRange: &self.selectedDayRange)
+        existingDayRange: &selectedDayRange)
 
-      self.calendarView.setContent(self.makeContent())
+      calendarView.setContent(makeContent())
     }
 
     calendarView.multiDaySelectionDragHandler = { [weak self, calendar] day, state in
@@ -40,12 +40,12 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
       DayRangeSelectionHelper.updateDayRange(
         afterDragSelectionOf: day,
-        existingDayRange: &self.selectedDayRange,
-        initialDayRange: &self.selectedDayRangeAtStartOfDrag,
+        existingDayRange: &selectedDayRange,
+        initialDayRange: &selectedDayRangeAtStartOfDrag,
         state: state,
         calendar: calendar)
 
-      self.calendarView.setContent(self.makeContent())
+      calendarView.setContent(makeContent())
     }
   }
 

@@ -39,7 +39,7 @@ public final class DayView: UIView {
       supportsPointerInteraction = false
       highlightLayer = nil
 
-    case let .enabled(_, _supportsPointerInteraction):
+    case .enabled(_, let _supportsPointerInteraction):
       isUserInteractionEnabled = true
       supportsPointerInteraction = _supportsPointerInteraction
 
@@ -74,7 +74,7 @@ public final class DayView: UIView {
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -119,7 +119,7 @@ public final class DayView: UIView {
     setHighlightLayerVisibility(isHidden: false, animated: true)
 
     if
-      case let .enabled(playsHapticsOnTouchDown, _) = invariantViewProperties.interaction,
+      case .enabled(let playsHapticsOnTouchDown, _) = invariantViewProperties.interaction,
       playsHapticsOnTouchDown
     {
       feedbackGenerator = UISelectionFeedbackGenerator()
@@ -162,7 +162,7 @@ public final class DayView: UIView {
   private var feedbackGenerator: UISelectionFeedbackGenerator?
 
   private func setHighlightLayerVisibility(isHidden: Bool, animated: Bool) {
-    guard let highlightLayer = highlightLayer else { return }
+    guard let highlightLayer else { return }
 
     let opacity: Float = isHidden ? 0 : 1
 
@@ -203,7 +203,7 @@ extension DayView: UIPointerInteractionDelegate {
 
   public func pointerInteraction(
     _ interaction: UIPointerInteraction,
-    styleFor region: UIPointerRegion)
+    styleFor _: UIPointerRegion)
     -> UIPointerStyle?
   {
     guard let interactionView = interaction.view else { return nil }
@@ -218,7 +218,7 @@ extension DayView: UIPointerInteractionDelegate {
 
 }
 
-// MARK: - DayView.Content
+// MARK: DayView.Content
 
 extension DayView {
 
@@ -250,7 +250,7 @@ extension DayView {
 
 }
 
-// MARK: - DayView.InvariantViewProperties
+// MARK: DayView.InvariantViewProperties
 
 extension DayView {
 
@@ -343,7 +343,7 @@ extension DayView {
 
 }
 
-// MARK: - DayView + CalendarItemViewRepresentable
+// MARK: CalendarItemViewRepresentable
 
 extension DayView: CalendarItemViewRepresentable {
 

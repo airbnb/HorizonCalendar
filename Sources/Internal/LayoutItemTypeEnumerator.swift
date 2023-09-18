@@ -82,7 +82,7 @@ final class LayoutItemTypeEnumerator {
       let lastDateOfPreviousMonth = calendar.lastDate(of: previousMonth)
       return .day(calendar.day(containing: lastDateOfPreviousMonth))
 
-    case let .dayOfWeekInMonth(position, month):
+    case .dayOfWeekInMonth(let position, let month):
       if position == .first {
         return .monthHeader(month)
       } else {
@@ -114,7 +114,7 @@ final class LayoutItemTypeEnumerator {
         return .dayOfWeekInMonth(position: .first, month: month)
       }
 
-    case let .dayOfWeekInMonth(position, month):
+    case .dayOfWeekInMonth(let position, let month):
       if position == .last {
         return .day(firstDayInRange(in: month))
       } else {

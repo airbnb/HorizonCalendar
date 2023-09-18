@@ -20,10 +20,10 @@ jobs:
         run: xcodebuild clean test -project HorizonCalendar.xcodeproj -scheme HorizonCalendar -destination "name=iPhone 8,OS=16.2"
 
   lint-swift:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v2
       - name: Lint Swift
-        run: swift package format --allow-writing-to-package-directory format --lint
+        run: swift package --allow-writing-to-package-directory format --lint
 
 

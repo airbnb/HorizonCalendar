@@ -49,7 +49,7 @@ public final class MonthHeaderView: UIView {
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -83,7 +83,7 @@ extension MonthHeaderView {
 
 }
 
-// MARK: - DayView.Content
+// MARK: MonthHeaderView.Content
 
 extension MonthHeaderView {
 
@@ -109,7 +109,7 @@ extension MonthHeaderView {
 
 }
 
-// MARK: - MonthHeaderView.InvariantViewProperties
+// MARK: MonthHeaderView.InvariantViewProperties
 
 extension MonthHeaderView {
 
@@ -165,7 +165,7 @@ extension MonthHeaderView {
 
 }
 
-// MARK: - MonthHeaderView + CalendarItemViewRepresentable
+// MARK: CalendarItemViewRepresentable
 
 extension MonthHeaderView: CalendarItemViewRepresentable {
 

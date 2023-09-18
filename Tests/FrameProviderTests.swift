@@ -608,7 +608,7 @@ final class FrameProviderTests: XCTestCase {
     XCTAssert(frameBeforeRightDay == expectedFrameBeforeRightDay, "Incorrect frame for day.")
     XCTAssert(frameAfterRightDay == expectedFrameAfterRightDay, "Incorrect frame for day.")
   }
-  
+
   func testAdjacentDayFrameFloatingPointPrecisionEdgeCase() {
     let frameProvider = FrameProvider(
       content: CalendarViewContent(
@@ -619,7 +619,7 @@ final class FrameProviderTests: XCTestCase {
       size: CGSize(width: 375, height: 275),
       layoutMargins: .init(top: 8, leading: 8, bottom: 8, trailing: 8),
       scale: 3)
-    
+
     let adjacentDayFrame = CGRect(
       x: 10218.857142857141,
       y: 104.4047619047619,
@@ -632,7 +632,7 @@ final class FrameProviderTests: XCTestCase {
         day: 10),
       withFrame: adjacentDayFrame,
       inMonthWithOrigin: CGPoint(x: 10195.5, y: 7.9999999999999964))
-    
+
     XCTAssert(
       frameOfPreviousDay.minY == adjacentDayFrame.minY,
       "1500-02-09 and 1500-02-10 should have the same minY because they're in the same week.")
@@ -835,6 +835,8 @@ final class FrameProviderTests: XCTestCase {
 
   private let calendar = Calendar(identifier: .gregorian)
 
+  // swiftlint:disable implicitly_unwrapped_optional
+
   private var verticalFrameProvider: FrameProvider!
   private var verticalPinnedDaysOfWeekFrameProvider: FrameProvider!
   private var verticalPartialMonthFrameProvider: FrameProvider!
@@ -845,11 +847,11 @@ final class FrameProviderTests: XCTestCase {
 
 // MARK: CGSize Pixel Alignment
 
-private extension CGSize {
+extension CGSize {
 
   // Rounds a `CGSize`'s origin `width` and `height` values so that they're aligned on pixel
   // boundaries for a screen with the provided scale.
-  func alignedToPixels(forScreenWithScale scale: CGFloat) -> CGSize {
+  fileprivate func alignedToPixels(forScreenWithScale scale: CGFloat) -> CGSize {
     CGSize(
       width: width.alignedToPixel(forScreenWithScale: scale),
       height: height.alignedToPixel(forScreenWithScale: scale))

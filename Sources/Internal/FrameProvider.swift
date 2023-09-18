@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import os.log
 import UIKit
 
 /// Provides frame and size information about all core layout items. The calendar is laid out lazily, starting with an initial known layout
@@ -54,7 +55,11 @@ final class FrameProvider {
     dayOfWeekSize = CGSize(width: width, height: dayOfWeekHeight)
 
     if daySize.width <= 0 || daySize.height <= 0 {
-      print("Calendar metrics and size resulted in a negative-or-zero size of (\(daySize.debugDescription) points for each day. If ignored, this will cause incorrect / unexpected layouts.")
+      os_log(
+        "Calendar metrics and size resulted in a negative-or-zero size of (%@ points for each day. If ignored, this will cause incorrect / unexpected layouts.",
+        log: .default,
+        type: .debug,
+        daySize.debugDescription)
     }
   }
 
@@ -215,8 +220,7 @@ final class FrameProvider {
     guard
       day.month == adjacentDay.month,
       abs(distanceFromAdjacentDay) == 1
-    else
-    {
+    else {
       preconditionFailure("\(day) must be adjacent to \(adjacentDay) (one day apart, same month).")
     }
 
@@ -395,7 +399,7 @@ final class FrameProvider {
   }
 
   private func heightOfMonth(_ month: Month, monthHeaderHeight: CGFloat) -> CGFloat {
-    let numberOfWeekRows = self.numberOfWeekRows(in: month)
+    let numberOfWeekRows = numberOfWeekRows(in: month)
     return monthHeaderHeight +
       content.monthDayInsets.top +
       heightOfDaysOfTheWeekRowInMonth() +
@@ -408,9 +412,9 @@ final class FrameProvider {
   private func adjustedRowInMonth(for day: Day) -> Int {
     guard day >= content.dayRange.lowerBound else {
       preconditionFailure("""
-        Cannot get the adjusted row for \(day), which is lower than the first day in the visible day
-        range (\(content.dayRange)).
-      """)
+          Cannot get the adjusted row for \(day), which is lower than the first day in the visible day
+          range (\(content.dayRange)).
+        """)
     }
 
     let missingRows: Int
@@ -431,7 +435,7 @@ final class FrameProvider {
   // boundary month that's only showing a subset of days.
   private func numberOfWeekRows(in month: Month) -> Int {
     let rowOfLastDateInMonth: Int
-    if month == content.monthRange.lowerBound && month == content.monthRange.upperBound {
+    if month == content.monthRange.lowerBound, month == content.monthRange.upperBound {
       let firstDayOfOnlyMonth = content.dayRange.lowerBound
       let lastDayOfOnlyMonth = content.dayRange.upperBound
       let rowOfFirstDayOfOnlyMonth = adjustedRowInMonth(for: firstDayOfOnlyMonth)

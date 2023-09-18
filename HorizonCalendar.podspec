@@ -33,7 +33,7 @@ Features:
   spec.homepage = "https://github.com/airbnb/HorizonCalendar"
   spec.authors = { "Bryan Keller" => "kellerbryan19@gmail.com" }
   spec.social_media_url = "https://twitter.com/BKYourWay19"
-  spec.swift_version = "5.1"
+  spec.swift_version = "5.8"
   spec.ios.deployment_target = '11.0'
   spec.source_files = "Sources/**/*.{swift,h}"
 end

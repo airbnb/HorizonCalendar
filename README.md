@@ -7,6 +7,7 @@ A declarative, performant, calendar UI component that supports use cases ranging
 [![License](https://img.shields.io/cocoapods/l/HorizonCalendar.svg)](https://cocoapods.org/pods/HorizonCalendar)
 [![Platform](https://img.shields.io/cocoapods/p/HorizonCalendar.svg)](https://cocoapods.org/pods/HorizonCalendar)
 ![Swift](https://github.com/airbnb/HorizonCalendar/workflows/Swift/badge.svg)
+[![Swift Package Manager compatible](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2FHorizonCalendar%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/airbnb/HorizonCalendar)
 
 ## Introduction
 `HorizonCalendar` is an interactive calendar component for iOS (compatible with UIKit and SwiftUI). Its declarative API makes updating the calendar straightforward, while also providing many customization points to support a diverse set of designs and use cases.

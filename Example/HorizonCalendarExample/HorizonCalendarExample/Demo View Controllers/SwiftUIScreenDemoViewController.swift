@@ -27,7 +27,7 @@ final class SwiftUIScreenDemoViewController: UIViewController, DemoViewControlle
     super.init(nibName: nil, bundle: nil)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -92,78 +92,78 @@ struct SwiftUIScreenDemo: View {
       dataDependency: selectedDayRange,
       proxy: calendarViewProxy)
 
-    .interMonthSpacing(24)
-    .verticalDayMargin(8)
-    .horizontalDayMargin(8)
+      .interMonthSpacing(24)
+      .verticalDayMargin(8)
+      .horizontalDayMargin(8)
 
-    .monthHeaders { month in
-      let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
-      if case .vertical = monthsLayout {
-        HStack {
+      .monthHeaders { month in
+        let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
+        if case .vertical = monthsLayout {
+          HStack {
+            Text(monthHeaderText)
+              .font(.title2)
+            Spacer()
+          }
+          .padding()
+        } else {
           Text(monthHeaderText)
             .font(.title2)
-          Spacer()
+            .padding()
         }
-        .padding()
-      } else {
-        Text(monthHeaderText)
-          .font(.title2)
-          .padding()
       }
-    }
 
-    .days { day in
-      SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
-    }
+      .days { day in
+        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
+      }
 
-    .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
-      let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
-      // UIKit view
-      return DayRangeIndicatorView.calendarItemModel(
-        invariantViewProperties: .init(),
-        content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
-    }
+      .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
+        let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
+        // UIKit view
+        return DayRangeIndicatorView.calendarItemModel(
+          invariantViewProperties: .init(),
+          content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
+      }
 
-    .onDaySelection { day in
-      DayRangeSelectionHelper.updateDayRange(
-        afterTapSelectionOf: day,
-        existingDayRange: &selectedDayRange)
-    }
-
-    .onMultipleDaySelectionDrag(
-      began: { day in
+      .onDaySelection { day in
         DayRangeSelectionHelper.updateDayRange(
-          afterDragSelectionOf: day,
-          existingDayRange: &selectedDayRange,
-          initialDayRange: &selectedDayRangeAtStartOfDrag,
-          state: .began,
-          calendar: calendar)
-      },
-      changed: { day in
-        DayRangeSelectionHelper.updateDayRange(
-          afterDragSelectionOf: day,
-          existingDayRange: &selectedDayRange,
-          initialDayRange: &selectedDayRangeAtStartOfDrag,
-          state: .changed,
-          calendar: calendar)
-      },
-      ended: { day in
-        DayRangeSelectionHelper.updateDayRange(
-          afterDragSelectionOf: day,
-          existingDayRange: &selectedDayRange,
-          initialDayRange: &selectedDayRangeAtStartOfDrag,
-          state: .ended,
-          calendar: calendar)
-      })
+          afterTapSelectionOf: day,
+          existingDayRange: &selectedDayRange)
+      }
 
-    .onAppear {
-      calendarViewProxy.scrollToDay(
-        containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
-        scrollPosition: .centered,
-        animated: false)
-    }
+      .onMultipleDaySelectionDrag(
+        began: { day in
+          DayRangeSelectionHelper.updateDayRange(
+            afterDragSelectionOf: day,
+            existingDayRange: &selectedDayRange,
+            initialDayRange: &selectedDayRangeAtStartOfDrag,
+            state: .began,
+            calendar: calendar)
+        },
+        changed: { day in
+          DayRangeSelectionHelper.updateDayRange(
+            afterDragSelectionOf: day,
+            existingDayRange: &selectedDayRange,
+            initialDayRange: &selectedDayRangeAtStartOfDrag,
+            state: .changed,
+            calendar: calendar)
+        },
+        ended: { day in
+          DayRangeSelectionHelper.updateDayRange(
+            afterDragSelectionOf: day,
+            existingDayRange: &selectedDayRange,
+            initialDayRange: &selectedDayRangeAtStartOfDrag,
+            state: .ended,
+            calendar: calendar)
+        })
 
-    .frame(maxWidth: 375, maxHeight: .infinity)
+      .onAppear {
+        calendarViewProxy.scrollToDay(
+          containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
+          scrollPosition: .centered,
+          animated: false)
+      }
+
+      .frame(maxWidth: 375, maxHeight: .infinity)
   }
 
   // MARK: Private

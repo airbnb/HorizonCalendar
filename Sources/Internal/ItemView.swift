@@ -15,6 +15,8 @@
 
 import UIKit
 
+// MARK: - ItemView
+
 /// The container view for every visual item that can be displayed in the calendar.
 final class ItemView: UIView {
 
@@ -32,23 +34,29 @@ final class ItemView: UIView {
     updateContent()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Internal
 
+  override class var layerClass: AnyClass {
+    CATransformLayer.self
+  }
+
   let contentView: UIView
 
   var selectionHandler: (() -> Void)?
+
+  var itemType: VisibleItem.ItemType?
 
   var calendarItemModel: AnyCalendarItemModel {
     didSet {
       guard calendarItemModel._itemViewDifferentiator == oldValue._itemViewDifferentiator else {
         preconditionFailure("""
-          Cannot configure a reused `ItemView` with a calendar item model that was created with a
-          different instance of invariant view properties.
-        """)
+            Cannot configure a reused `ItemView` with a calendar item model that was created with a
+            different instance of invariant view properties.
+          """)
       }
 
       // Only update the content if it's different from the old one.
@@ -56,12 +64,6 @@ final class ItemView: UIView {
 
       updateContent()
     }
-  }
-
-  var itemType: VisibleItem.ItemType?
-
-  override class var layerClass: AnyClass {
-    CATransformLayer.self
   }
 
   override func layoutSubviews() {

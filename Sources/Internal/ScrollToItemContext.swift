@@ -23,7 +23,7 @@ struct ScrollToItemContext {
   let animated: Bool
 }
 
-// MARK: - ScrollToItemContext.TargetItem
+// MARK: ScrollToItemContext.TargetItem
 
 extension ScrollToItemContext {
 
@@ -34,7 +34,7 @@ extension ScrollToItemContext {
 
 }
 
-// MARK: - ScrollToItemContext.PositionRelativeToVisibleBounds
+// MARK: ScrollToItemContext.PositionRelativeToVisibleBounds
 
 extension ScrollToItemContext {
 
