@@ -950,11 +950,13 @@ final class VisibleItemsProvider {
       daysAndFrames: dayRangeLayoutContext.daysAndFrames,
       boundingUnionRectOfDayFrames: dayRangeLayoutContext.boundingUnionRectOfDayFrames)
 
-    context.visibleItems.insert(
-      VisibleItem(
-        calendarItemModel: dayRangeItemProvider(dayRangeLayoutContext),
-        itemType: .dayRange(dayRange),
-        frame: frame))
+    if let dayRangeItemModel = dayRangeItemProvider(dayRangeLayoutContext) {
+      context.visibleItems.insert(
+        VisibleItem(
+          calendarItemModel: dayRangeItemModel,
+          itemType: .dayRange(dayRange),
+          frame: frame))
+    }
   }
 
   private func handlePinnedDaysOfWeekIfNeeded(
@@ -1029,7 +1031,8 @@ final class VisibleItemsProvider {
         let layoutContext = overlayLayoutContext(
           for: overlaidItemLocation,
           inBounds: bounds,
-          context: &context)
+          context: &context),
+        let itemModel = itemModelProvider(layoutContext)
       else
       {
         continue
@@ -1037,7 +1040,7 @@ final class VisibleItemsProvider {
 
       context.visibleItems.insert(
         VisibleItem(
-          calendarItemModel: itemModelProvider(layoutContext),
+          calendarItemModel: itemModel,
           itemType: .overlayItem(overlaidItemLocation),
           frame: bounds))
     }
