@@ -98,13 +98,13 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   fileprivate var horizontalDayMargin: CGFloat?
   fileprivate var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
-  fileprivate var monthHeaderItemProvider: ((Month) -> AnyCalendarItemModel)?
+  fileprivate var monthHeaderItemProvider: ((Month) -> AnyCalendarItemModel?)?
   fileprivate var dayOfWeekItemProvider: (
     (
       _ month: Month?,
       _ weekdayIndex: Int)
-      -> AnyCalendarItemModel)?
-  fileprivate var dayItemProvider: ((Day) -> AnyCalendarItemModel)?
+      -> AnyCalendarItemModel?)?
+  fileprivate var dayItemProvider: ((Day) -> AnyCalendarItemModel?)?
   fileprivate var dayBackgroundItemProvider: ((Day) -> AnyCalendarItemModel?)?
   fileprivate var monthBackgroundItemProvider: ((MonthLayoutContext) -> AnyCalendarItemModel?)?
   fileprivate var dateRangesAndItemProvider: (
@@ -322,8 +322,8 @@ extension CalendarViewRepresentable {
   /// displayed. The `CalendarItemModel`s that you return will be used to create the views for each month header in
   /// `CalendarView`.
   ///
-  /// If you don't configure your own month header item provider via this function, then a default month header item provider will be
-  /// used.
+  /// If you don't configure your own month header item provider via this function, or if the `monthHeaderItemProvider` closure
+  /// returns nil, then a default month header item provider will be used.
   ///
   /// - Parameters:
   ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a month
@@ -331,7 +331,7 @@ extension CalendarViewRepresentable {
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A new `CalendarViewRepresentable` with a new month header item provider.
   public func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
+    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -365,7 +365,8 @@ extension CalendarViewRepresentable {
   /// For example, for the en_US locale, 0 is Sunday, 1 is Monday, and 6 is Saturday. This will be different in some other locales. The
   /// `CalendarItemModel`s that you return will be used to create the views for each day-of-week view in `CalendarView`.
   ///
-  /// If you don't configure your own day-of-week item provider via this function, then a default day-of-week item provider will be used.
+  /// If you don't configure your own day-of-week item provider via this function, or if the `dayOfWeekItemProvider` closure
+  /// returns `nil`, then a default day-of-week item provider will be used.
   ///
   /// - Parameters:
   ///   - dayOfWeekItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a day of the
@@ -378,7 +379,7 @@ extension CalendarViewRepresentable {
     _ dayOfWeekItemProvider: @escaping (
       _ month: Month?,
       _ weekdayIndex: Int)
-      -> AnyCalendarItemModel)
+      -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -415,7 +416,8 @@ extension CalendarViewRepresentable {
   /// view should be some kind of label that tells the user the day number of the month. You can also add other decoration, like a
   /// badge or background, by including it in the view that your `CalendarItemModel` creates.
   ///
-  /// If you don't configure your own day item provider via this function, then a default day item provider will be used.
+  /// If you don't configure your own day item provider via this function, or if the `dayItemProvider` closure
+  /// returns nil, then a default day item provider will be used.
   ///
   /// - Parameters:
   ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day in the
@@ -423,7 +425,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day item provider.
   public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
+    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self

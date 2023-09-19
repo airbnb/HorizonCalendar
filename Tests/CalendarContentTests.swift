@@ -4,6 +4,8 @@
 import XCTest
 @testable import HorizonCalendar
 
+// MARK: - CalendarContentTests
+
 final class CalendarContentTests: XCTestCase {
 
   func testCanReturnNilFromCalendarContentClosures() {
@@ -67,3 +69,31 @@ final class CalendarContentTests: XCTestCase {
   }
 
 }
+
+// MARK: - CalendarContentConfigurable
+
+/// Test case demonstrating that `CalendarViewContent` and `CalendarViewRepresentable` both have the same APIs
+/// and can be abstracted behind a single protocol
+protocol CalendarContentConfigurable {
+  func monthHeaderItemProvider(
+    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
+    -> Self
+
+  func dayOfWeekItemProvider(
+    _ dayOfWeekItemProvider: @escaping (
+      _ month: Month?,
+      _ weekdayIndex: Int)
+      -> AnyCalendarItemModel?)
+    -> Self
+
+  func dayItemProvider(_ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?) -> Self
+}
+
+// MARK: - CalendarViewContent + CalendarContentConfigurable
+
+extension CalendarViewContent: CalendarContentConfigurable { }
+
+// MARK: - CalendarViewRepresentable + CalendarContentConfigurable
+
+@available(iOS 13.0, *)
+extension CalendarViewRepresentable: CalendarContentConfigurable { }
