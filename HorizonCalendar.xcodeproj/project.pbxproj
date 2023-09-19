@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */; };
 		9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */; };
 		9321958026EEB6330001C7E9 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957F26EEB6330001C7E9 /* Shape.swift */; };
 		9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */; };
@@ -86,6 +87,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
 		9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekView.swift; sourceTree = "<group>"; };
 		9321957F26EEB6330001C7E9 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingConfig.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */,
 				939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */,
 				9396F3D22483261B008AD306 /* Info.plist */,
+				086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				939E695B2484B22200A8BCC7 /* ScrollMetricsMutatorTests.swift in Sources */,
 				939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */,
 				93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */,
+				086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */,
 				939E69592484B21700A8BCC7 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
 				93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */,
 				932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,

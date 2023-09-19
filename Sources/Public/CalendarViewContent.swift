@@ -54,49 +54,16 @@ public final class CalendarViewContent {
       dayRange = exactDayRange
     }
 
-    let monthHeaderDateFormatter = DateFormatter()
-    monthHeaderDateFormatter.calendar = calendar
-    monthHeaderDateFormatter.locale = calendar.locale
-    monthHeaderDateFormatter.dateFormat = DateFormatter.dateFormat(
-      fromTemplate: "MMMM yyyy",
-      options: 0,
-      locale: calendar.locale ?? Locale.current)
+    // We have to initialize the providers to some value before we can access
+    // the default implementations (which are lazy instance variables).
+    monthHeaderItemProvider = { _ in fatalError("This closure must never be called.") }
+    dayOfWeekItemProvider = { _, _ in fatalError("This closure must never be called.") }
+    dayItemProvider = { _ in fatalError("This closure must never be called.") }
 
-    monthHeaderItemProvider = { month in
-      let firstDateInMonth = calendar.firstDate(of: month)
-      let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
-      let itemModel = MonthHeaderView.calendarItemModel(
-        invariantViewProperties: .base,
-        content: .init(monthText: monthText, accessibilityLabel: monthText))
-      return itemModel
-    }
-
-    dayOfWeekItemProvider = { _, weekdayIndex in
-      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-      let itemModel = DayOfWeekView.calendarItemModel(
-        invariantViewProperties: .base,
-        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
-      return itemModel
-    }
-
-    let dayDateFormatter = DateFormatter()
-    dayDateFormatter.calendar = calendar
-    dayDateFormatter.locale = calendar.locale
-    dayDateFormatter.dateFormat = DateFormatter.dateFormat(
-      fromTemplate: "EEEE, MMM d, yyyy",
-      options: 0,
-      locale: calendar.locale ?? Locale.current)
-
-    dayItemProvider = { day in
-      let date = calendar.startDate(of: day)
-      let itemModel = DayView.calendarItemModel(
-        invariantViewProperties: .baseNonInteractive,
-        content: .init(
-          dayText: "\(day.day)",
-          accessibilityLabel: dayDateFormatter.string(from: date),
-          accessibilityHint: nil))
-      return itemModel
-    }
+    // Now that `self` is fully initialized, we can update the providers to the real default implementations
+    monthHeaderItemProvider = defaultMonthHeaderItemProvider
+    dayOfWeekItemProvider = defaultDayOfWeekItemProvider
+    dayItemProvider = defaultDayItemProvider
   }
 
   // MARK: Public
@@ -208,8 +175,8 @@ public final class CalendarViewContent {
   /// displayed. The `CalendarItemModel`s that you return will be used to create the views for each month header in
   /// `CalendarView`.
   ///
-  /// If you don't configure your own month header item provider via this function, then a default month header item provider will be
-  /// used.
+  /// If you don't configure your own month header item provider via this function, or if the `monthHeaderItemProvider` closure
+  /// returns nil, then a default month header item provider will be used.
   ///
   /// - Parameters:
   ///   - monthHeaderItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
@@ -217,10 +184,18 @@ public final class CalendarViewContent {
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new month header item provider.
   public func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel)
+    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.monthHeaderItemProvider = monthHeaderItemProvider
+    self.monthHeaderItemProvider = { [defaultMonthHeaderItemProvider] month in
+      guard let itemModel = monthHeaderItemProvider(month) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultMonthHeaderItemProvider(month)
+      }
+
+      return itemModel
+    }
+
     return self
   }
 
@@ -230,7 +205,8 @@ public final class CalendarViewContent {
   /// For example, for the en_US locale, 0 is Sunday, 1 is Monday, and 6 is Saturday. This will be different in some other locales. The
   /// `CalendarItemModel`s that you return will be used to create the views for each day-of-week view in `CalendarView`.
   ///
-  /// If you don't configure your own day-of-week item provider via this function, then a default day-of-week item provider will be used.
+  /// If you don't configure your own day-of-week item provider via this function, or if the `dayOfWeekItemProvider` closure
+  /// returns nil, then a default day-of-week item provider will be used.
   ///
   /// - Parameters:
   ///   - dayOfWeekItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a
@@ -243,10 +219,18 @@ public final class CalendarViewContent {
     _ dayOfWeekItemProvider: @escaping (
       _ month: Month?,
       _ weekdayIndex: Int)
-      -> AnyCalendarItemModel)
+      -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.dayOfWeekItemProvider = dayOfWeekItemProvider
+    self.dayOfWeekItemProvider = { [defaultDayOfWeekItemProvider] month, weekdayIndex in
+      guard let itemModel = dayOfWeekItemProvider(month, weekdayIndex) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultDayOfWeekItemProvider(month, weekdayIndex)
+      }
+
+      return itemModel
+    }
+
     return self
   }
 
@@ -257,7 +241,8 @@ public final class CalendarViewContent {
   /// view should be some kind of label that tells the user the day number of the month. You can also add other decoration, like a badge
   /// or background, by including it in the view that your `CalendarItemModel` creates.
   ///
-  /// If you don't configure your own day item provider via this function, then a default day item provider will be used.
+  /// If you don't configure your own day item provider via this function, or if the `dayItemProvider` closure
+  /// returns nil, then a default day item provider will be used.
   ///
   /// - Parameters:
   ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day
@@ -265,10 +250,18 @@ public final class CalendarViewContent {
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day item provider.
   public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel)
+    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
-    self.dayItemProvider = dayItemProvider
+    self.dayItemProvider = { [defaultDayItemProvider] day in
+      guard let itemModel = dayItemProvider(day) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultDayItemProvider(day)
+      }
+
+      return itemModel
+    }
+
     return self
   }
 
@@ -409,5 +402,63 @@ public final class CalendarViewContent {
   private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
+
+  /// The default `monthHeaderItemProvider` if no provider has been configured,
+  /// or if the existing provider returns nil.
+  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [calendar, monthHeaderDateFormatter] month in
+    let firstDateInMonth = calendar.firstDate(of: month)
+    let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
+    let itemModel = MonthHeaderView.calendarItemModel(
+      invariantViewProperties: .base,
+      content: .init(monthText: monthText, accessibilityLabel: monthText))
+    return itemModel
+  }
+
+  /// The default `dayHeaderItemProvider` if no provider has been configured,
+  /// or if the existing provider returns nil.
+  private lazy var defaultDayOfWeekItemProvider: (Month?, Int) -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
+    let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+    let itemModel = DayOfWeekView.calendarItemModel(
+      invariantViewProperties: .base,
+      content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+    return itemModel
+  }
+
+  /// The default `dayItemProvider` if no provider has been configured,
+  /// or if the existing provider returns nil.
+  private lazy var defaultDayItemProvider: (Day) -> AnyCalendarItemModel = { [calendar, dayDateFormatter] day in
+    let date = calendar.startDate(of: day)
+    let itemModel = DayView.calendarItemModel(
+      invariantViewProperties: .baseNonInteractive,
+      content: .init(
+        dayText: "\(day.day)",
+        accessibilityLabel: dayDateFormatter.string(from: date),
+        accessibilityHint: nil))
+    return itemModel
+  }
+
+  private lazy var monthHeaderDateFormatter: DateFormatter = {
+    let monthHeaderDateFormatter = DateFormatter()
+    monthHeaderDateFormatter.calendar = calendar
+    monthHeaderDateFormatter.locale = calendar.locale
+    monthHeaderDateFormatter.dateFormat = DateFormatter.dateFormat(
+      fromTemplate: "MMMM yyyy",
+      options: 0,
+      locale: calendar.locale ?? Locale.current)
+    return monthHeaderDateFormatter
+  }()
+
+  private lazy var dayDateFormatter: DateFormatter = {
+    let dayDateFormatter = DateFormatter()
+    dayDateFormatter.calendar = calendar
+    dayDateFormatter.locale = calendar.locale
+    dayDateFormatter.dateFormat = DateFormatter.dateFormat(
+      fromTemplate: "EEEE, MMM d, yyyy",
+      options: 0,
+      locale: calendar.locale ?? Locale.current)
+    return dayDateFormatter
+  }()
+
+
 
 }
