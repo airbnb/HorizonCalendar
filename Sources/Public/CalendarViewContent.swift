@@ -338,7 +338,7 @@ public final class CalendarViewContent {
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
       _ dayRangeLayoutContext: DayRangeLayoutContext)
-      -> AnyCalendarItemModel?)
+      -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
     let dayRanges = Set(dateRanges.map { DayRange(containing: $0, in: calendar) })
@@ -366,7 +366,7 @@ public final class CalendarViewContent {
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
       _ overlayLayoutContext: OverlayLayoutContext)
-      -> AnyCalendarItemModel?)
+      -> AnyCalendarItemModel)
     -> CalendarViewContent
   {
     overlaidItemLocationsAndItemProvider = (overlaidItemLocations, overlayItemProvider)
@@ -398,10 +398,10 @@ public final class CalendarViewContent {
   private(set) var monthBackgroundItemProvider: ((MonthLayoutContext) -> AnyCalendarItemModel?)?
   private(set) var dayRangesAndItemProvider: (
     dayRanges: Set<DayRange>,
-    dayRangeItemProvider: (DayRangeLayoutContext) -> AnyCalendarItemModel?)?
+    dayRangeItemProvider: (DayRangeLayoutContext) -> AnyCalendarItemModel)?
   private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
-    overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel?)?
+    overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
   /// The default `monthHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.

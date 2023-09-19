@@ -22,12 +22,6 @@ final class CalendarContentTests: XCTestCase {
     .dayBackgroundItemProvider { _ in
       nil
     }
-    .dayRangeItemProvider(for: Set([Date.distantPast...Date.distantFuture])) { _ in
-      nil
-    }
-    .overlayItemProvider(for: Set([.day(containingDate: .distantPast)])) { _ in
-      nil
-    }
   }
 
   func testNilDayItemUsesDefaultValue() {
