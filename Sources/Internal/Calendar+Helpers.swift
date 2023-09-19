@@ -20,7 +20,7 @@ import Foundation
 extension Calendar {
 
   func month(containing date: Date) -> Month {
-    return Month(
+    Month(
       era: component(.era, from: date),
       year: component(.year, from: date),
       month: component(.month, from: date),
@@ -36,7 +36,7 @@ extension Calendar {
   }
 
   func lastDate(of month: Month) -> Date {
-    let firstDate = self.firstDate(of: month)
+    let firstDate = firstDate(of: month)
     guard let numberOfDaysInMonth = range(of: .day, in: .month, for: firstDate)?.count else {
       preconditionFailure("Could not get number of days in month from \(firstDate).")
     }
@@ -59,8 +59,7 @@ extension Calendar {
         byAdding: .month,
         value: numberOfMonths,
         to: firstDate(of: month))
-    else
-    {
+    else {
       preconditionFailure("Failed to advance \(month) by \(numberOfMonths) months.")
     }
 
@@ -93,8 +92,7 @@ extension Calendar {
   func day(byAddingDays numberOfDays: Int, to day: Day) -> Day {
     guard
       let firstDateOfNextDay = date(byAdding: .day, value: numberOfDays, to: startDate(of: day))
-    else
-    {
+    else {
       preconditionFailure("Failed to advance \(day) by \(numberOfDays) days.")
     }
 
@@ -116,8 +114,8 @@ extension Calendar {
 
     guard let dayOfWeekPosition = DayOfWeekPosition(rawValue: weekdayIndex + 1) else {
       preconditionFailure("""
-        Could not find a day of the week position for date \(date) in calendar \(self).
-      """)
+          Could not find a day of the week position for date \(date) in calendar \(self).
+        """)
     }
 
     return dayOfWeekPosition
@@ -149,7 +147,7 @@ extension Calendar {
         isInGregorianCalendar: identifier == .gregorian))
 
     let numberOfPositions = DayOfWeekPosition.numberOfPositions
-    let dayOfWeekPosition = self.dayOfWeekPosition(for: firstDateOfMonth)
+    let dayOfWeekPosition = dayOfWeekPosition(for: firstDateOfMonth)
     let daysFromEndOfWeek = numberOfPositions - (dayOfWeekPosition.rawValue - 1)
     let isFirstDayInFirstWeek = daysFromEndOfWeek >= minimumDaysInFirstWeek
 

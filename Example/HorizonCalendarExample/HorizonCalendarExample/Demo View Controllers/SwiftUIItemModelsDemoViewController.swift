@@ -14,8 +14,8 @@
 // limitations under the License.
 
 import HorizonCalendar
-import UIKit
 import SwiftUI
+import UIKit
 
 final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
 
@@ -29,8 +29,8 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self else { return }
 
-      self.selectedDate = self.calendar.date(from: day.components)
-      self.calendarView.setContent(self.makeContent())
+      selectedDate = calendar.date(from: day.components)
+      calendarView.setContent(makeContent())
     }
   }
 
@@ -38,7 +38,7 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let selectedDate = self.selectedDate
+    let selectedDate = selectedDate
 
     return CalendarViewContent(
       calendar: calendar,

@@ -17,7 +17,7 @@ import XCTest
 @testable import HorizonCalendar
 
 final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
-  
+
   func testMonthWidthOneVisibleMonth() {
     let options = HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 1)
 

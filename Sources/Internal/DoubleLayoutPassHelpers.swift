@@ -41,21 +41,7 @@ import UIKit
 
 extension CalendarView {
 
-  func installDoubleLayoutPassSizingLabel() {
-    doubleLayoutPassSizingLabel.removeFromSuperview()
-    addSubview(doubleLayoutPassSizingLabel)
-    subviews.first.map(doubleLayoutPassSizingLabel.sendSubviewToBack(_:))
-
-    doubleLayoutPassSizingLabel.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      doubleLayoutPassSizingLabel.leadingAnchor.constraint(
-        equalTo: layoutMarginsGuide.leadingAnchor),
-      doubleLayoutPassSizingLabel.trailingAnchor.constraint(
-        equalTo: layoutMarginsGuide.trailingAnchor),
-      doubleLayoutPassSizingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-      doubleLayoutPassSizingLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-    ])
-  }
+  // MARK: Public
 
   public override func invalidateIntrinsicContentSize() {
     doubleLayoutPassSizingLabel.invalidateIntrinsicContentSize()
@@ -73,6 +59,24 @@ extension CalendarView {
     for axis: NSLayoutConstraint.Axis)
   {
     doubleLayoutPassSizingLabel.setContentCompressionResistancePriority(priority, for: axis)
+  }
+
+  // MARK: Internal
+
+  func installDoubleLayoutPassSizingLabel() {
+    doubleLayoutPassSizingLabel.removeFromSuperview()
+    addSubview(doubleLayoutPassSizingLabel)
+    subviews.first.map(doubleLayoutPassSizingLabel.sendSubviewToBack(_:))
+
+    doubleLayoutPassSizingLabel.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      doubleLayoutPassSizingLabel.leadingAnchor.constraint(
+        equalTo: layoutMarginsGuide.leadingAnchor),
+      doubleLayoutPassSizingLabel.trailingAnchor.constraint(
+        equalTo: layoutMarginsGuide.trailingAnchor),
+      doubleLayoutPassSizingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      doubleLayoutPassSizingLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+    ])
   }
 
 }
@@ -110,7 +114,7 @@ final class DoubleLayoutPassSizingLabel: UILabel {
   // MARK: Internal
 
   override var intrinsicContentSize: CGSize {
-    guard let provider = provider else {
+    guard let provider else {
       preconditionFailure(
         "The sizing label's `provider` should not be `nil` for the duration of the its life")
     }
@@ -126,4 +130,3 @@ final class DoubleLayoutPassSizingLabel: UILabel {
   private weak var provider: WidthDependentIntrinsicContentHeightProviding?
 
 }
-

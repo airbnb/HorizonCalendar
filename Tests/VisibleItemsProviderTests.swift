@@ -380,7 +380,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 36.0, 18.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 36.0, 18.0)]",
       "Unexpected centermost layout item.")
   }
 
@@ -462,7 +463,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 36.0, 35.5)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
@@ -541,7 +543,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-06-24)), frame: (142.0, 697.0, 36.0, 36.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-06-24)), frame: (142.0, 697.0, 36.0, 36.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
@@ -592,7 +595,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 36.0, 35.5)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == 200, "Unexpected content start offset.")
@@ -677,7 +681,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-05-10)), frame: (255.0, 238.5, 33.0, 33.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-05-10)), frame: (255.0, 238.5, 33.0, 33.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
@@ -756,7 +761,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-05-27)), frame: (142.0, 332.0, 36.0, 36.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-05-27)), frame: (142.0, 332.0, 36.0, 36.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
@@ -904,7 +910,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-08)), frame: (142.0, 191.5, 36.0, 35.5)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-01-08)), frame: (142.0, 191.5, 36.0, 35.5)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == 0, "Unexpected content start offset.")
@@ -982,7 +989,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-01-22)), frame: (142.0, 292.0, 36.0, 36.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-01-22)), frame: (142.0, 292.0, 36.0, 36.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(
@@ -1018,12 +1026,14 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 875.5, 35.5, 36.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 875.5, 35.5, 36.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(
-      details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 3) == CGFloat(911.4285714285714).alignedToPixel(forScreenWithScale: 3),
+      details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 3) == CGFloat(911.4285714285714)
+        .alignedToPixel(forScreenWithScale: 3),
       "Unexpected content end offset.")
   }
 
@@ -1101,7 +1111,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       "Unexpected visible items.")
 
     XCTAssert(
-      details.centermostLayoutItem.description == "[itemType: .layoutItemType(.day(2020-11-14)), frame: (1147.0, 235.5, 33.0, 33.0)]",
+      details.centermostLayoutItem
+        .description == "[itemType: .layoutItemType(.day(2020-11-14)), frame: (1147.0, 235.5, 33.0, 33.0)]",
       "Unexpected centermost layout item.")
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
@@ -1465,7 +1476,6 @@ final class VisibleItemsProviderTests: XCTestCase {
       "[itemType: .monthBackground(2020-04), frame: (-72.5, -76.5, 315.0, 480.0)]",
       "[itemType: .monthBackground(2020-05), frame: (242.5, -25.0, 315.0, 480.0)]",
       "[itemType: .monthBackground(2020-06), frame: (557.5, -51.5, 315.0, 480.0)]",
-      
     ]
 
     XCTAssert(
@@ -2224,7 +2234,7 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .horizontal(
-          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64/63)))),
+          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64 / 63)))),
     size: size,
     layoutMargins: .zero,
     scale: 2,
@@ -2261,7 +2271,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       .verticalDayMargin(20)
       .horizontalDayMargin(10)
       .daysOfTheWeekRowSeparator(options: .init(height: 1, color: .gray))
-      .monthHeaderItemProvider  { month in
+      .monthHeaderItemProvider { month in
         if month.month % 4 == 0 {
           return mockCalendarItemModel(height: 100)
         } else {
@@ -2273,7 +2283,7 @@ final class VisibleItemsProviderTests: XCTestCase {
       .dayItemProvider { _ in mockCalendarItemModel() }
       .dayBackgroundItemProvider { day in
         // Just test a few backgrounds to make sure they're working correctly
-        if day.day > 10 && day.day < 20 {
+        if day.day > 10, day.day < 20 {
           return mockCalendarItemModel()
         } else {
           return nil
@@ -2283,26 +2293,24 @@ final class VisibleItemsProviderTests: XCTestCase {
         for: [
           calendar.date(from: DateComponents(year: 2020, month: 03, day: 11))!
             ...
-          calendar.date(from: DateComponents(year: 2020, month: 04, day: 05))!,
+            calendar.date(from: DateComponents(year: 2020, month: 04, day: 05))!,
 
           calendar.date(from: DateComponents(year: 2020, month: 04, day: 30))!
             ...
-          calendar.date(from: DateComponents(year: 2020, month: 05, day: 14))!,
-        ],
-        { _ in mockCalendarItemModel() })
+            calendar.date(from: DateComponents(year: 2020, month: 05, day: 14))!,
+        ]) { _ in mockCalendarItemModel() }
       .overlayItemProvider(
         for: [
           .day(
             containingDate: calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!),
           .monthHeader(
             monthContainingDate: calendar.date(from: DateComponents(year: 2020, month: 11))!),
-        ],
-        { _ in mockCalendarItemModel() })
+        ]) { _ in mockCalendarItemModel() }
   }
 
 }
 
-// MARK: VisibleItem+CustomStringConvertible
+// MARK: - VisibleItem + CustomStringConvertible
 
 extension VisibleItem: CustomStringConvertible {
 
@@ -2348,7 +2356,7 @@ extension VisibleItem: CustomStringConvertible {
 
 }
 
-// MARK: LayoutItem+CustomStringConvertible
+// MARK: - LayoutItem + CustomStringConvertible
 
 extension LayoutItem: CustomStringConvertible {
 
@@ -2359,7 +2367,7 @@ extension LayoutItem: CustomStringConvertible {
 
 }
 
-// MARK: LayoutItem.ItemType+CustomStringConvertible
+// MARK: - LayoutItem.ItemType + CustomStringConvertible
 
 extension LayoutItem.ItemType: CustomStringConvertible {
 
@@ -2367,7 +2375,7 @@ extension LayoutItem.ItemType: CustomStringConvertible {
     switch self {
     case .monthHeader(let month):
       return ".layoutItemType(.monthHeader(\(month.description)))"
-    case let .dayOfWeekInMonth(position, month):
+    case .dayOfWeekInMonth(let position, let month):
       return ".layoutItemType(.dayOfWeekInMonth(\(position.description), \(month.description)))"
     case .day(let day):
       return ".layoutItemType(.day(\(day)))"
@@ -2376,7 +2384,7 @@ extension LayoutItem.ItemType: CustomStringConvertible {
 
 }
 
-// MARK: DayOfWeekPosition+CustomStringConvertible
+// MARK: - DayOfWeekPosition + CustomStringConvertible
 
 extension DayOfWeekPosition: CustomStringConvertible {
 

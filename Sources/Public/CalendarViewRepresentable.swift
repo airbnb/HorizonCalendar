@@ -63,14 +63,14 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
   // MARK: Public
 
-  public func makeUIView(context: Context) -> CalendarView {
+  public func makeUIView(context _: Context) -> CalendarView {
     let calendarView = CalendarView(initialContent: makeContent())
     calendarView.directionalLayoutMargins = .zero
     proxy?._calendarView = calendarView
     return calendarView
   }
 
-  public func updateUIView(_ calendarView: CalendarView, context: Context) {
+  public func updateUIView(_ calendarView: CalendarView, context _: Context) {
     calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
     calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
 
@@ -99,10 +99,11 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   fileprivate var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
 
   fileprivate var monthHeaderItemProvider: ((Month) -> AnyCalendarItemModel)?
-  fileprivate var dayOfWeekItemProvider: ((
-    _ month: Month?,
-    _ weekdayIndex: Int)
-    -> AnyCalendarItemModel)?
+  fileprivate var dayOfWeekItemProvider: (
+    (
+      _ month: Month?,
+      _ weekdayIndex: Int)
+      -> AnyCalendarItemModel)?
   fileprivate var dayItemProvider: ((Day) -> AnyCalendarItemModel)?
   fileprivate var dayBackgroundItemProvider: ((Day) -> AnyCalendarItemModel?)?
   fileprivate var monthBackgroundItemProvider: ((MonthLayoutContext) -> AnyCalendarItemModel?)?
@@ -579,7 +580,7 @@ extension CalendarViewRepresentable {
     for dateRanges: Set<ClosedRange<Date>>,
     _ dayRangeItemProvider: @escaping (
       _ dayRangeLayoutContext: DayRangeLayoutContext)
-    -> AnyCalendarItemModel)
+      -> AnyCalendarItemModel)
     -> Self
   {
     var view = self
@@ -635,7 +636,7 @@ extension CalendarViewRepresentable {
     for overlaidItemLocations: Set<OverlaidItemLocation>,
     _ overlayItemProvider: @escaping (
       _ overlayLayoutContext: OverlayLayoutContext)
-    -> AnyCalendarItemModel)
+      -> AnyCalendarItemModel)
     -> Self
   {
     var view = self
@@ -723,7 +724,7 @@ extension CalendarViewRepresentable {
   }
 
   public func onScroll(
-    _ scrollHandler: @escaping (_ visibleDayRange: DayRange,  _ isUserDragging: Bool) -> Void)
+    _ scrollHandler: @escaping (_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)
     -> Self
   {
     var view = self
@@ -836,7 +837,6 @@ extension CalendarViewRepresentable {
 
       return CGSize(width: proposedWidth, height: size.height)
     }
-
   }
 
 }

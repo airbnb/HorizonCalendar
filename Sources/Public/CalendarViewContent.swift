@@ -403,9 +403,14 @@ public final class CalendarViewContent {
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
 
+  // MARK: Private
+
   /// The default `monthHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [calendar, monthHeaderDateFormatter] month in
+  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [
+    calendar,
+    monthHeaderDateFormatter
+  ] month in
     let firstDateInMonth = calendar.firstDate(of: month)
     let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
     let itemModel = MonthHeaderView.calendarItemModel(
@@ -416,13 +421,14 @@ public final class CalendarViewContent {
 
   /// The default `dayHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultDayOfWeekItemProvider: (Month?, Int) -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
-    let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-    let itemModel = DayOfWeekView.calendarItemModel(
-      invariantViewProperties: .base,
-      content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
-    return itemModel
-  }
+  private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
+    -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
+      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+      let itemModel = DayOfWeekView.calendarItemModel(
+        invariantViewProperties: .base,
+        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+      return itemModel
+    }
 
   /// The default `dayItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
@@ -458,7 +464,5 @@ public final class CalendarViewContent {
       locale: calendar.locale ?? Locale.current)
     return dayDateFormatter
   }()
-
-
 
 }

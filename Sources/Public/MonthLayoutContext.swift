@@ -43,7 +43,7 @@ public struct MonthLayoutContext: Hashable {
   public let bounds: CGRect
 
   public static func == (lhs: MonthLayoutContext, rhs: MonthLayoutContext) -> Bool {
-    return lhs.month == rhs.month &&
+    lhs.month == rhs.month &&
       lhs.monthHeaderFrame == rhs.monthHeaderFrame &&
       lhs.dayOfWeekPositionsAndFrames.elementsEqual(
         rhs.dayOfWeekPositionsAndFrames,

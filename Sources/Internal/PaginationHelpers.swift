@@ -16,11 +16,11 @@
 import CoreGraphics
 
 enum PaginationHelpers {
-  
+
   static func closestPageIndex(forOffset offset: CGFloat, pageSize: CGFloat) -> Int {
     Int((offset / pageSize).rounded())
   }
-  
+
   /// Returns the closest valid page offset to the target offset. This function is used when the horizontal pagination resting affinity is
   /// set to `.atPositionsClosestToTargetOffset`.
   static func closestPageOffset(
@@ -33,9 +33,9 @@ enum PaginationHelpers {
     let closestTargetPageIndex = closestPageIndex(forOffset: targetOffset, pageSize: pageSize)
     let proposedFinalOffset = CGFloat(closestTargetPageIndex) * pageSize
 
-    if velocity > 0 && proposedFinalOffset < touchUpOffset {
+    if velocity > 0, proposedFinalOffset < touchUpOffset {
       return proposedFinalOffset + pageSize
-    } else if velocity < 0 && proposedFinalOffset > touchUpOffset {
+    } else if velocity < 0, proposedFinalOffset > touchUpOffset {
       return proposedFinalOffset - pageSize
     } else {
       return proposedFinalOffset
@@ -52,17 +52,17 @@ enum PaginationHelpers {
     -> CGFloat
   {
     let closestTargetPageIndex = closestPageIndex(forOffset: targetOffset, pageSize: pageSize)
-    
+
     let pageIndex: Int
     if velocity > 0 || closestTargetPageIndex > previousPageIndex {
       pageIndex = previousPageIndex + 1
-    } else if velocity < 0 || closestTargetPageIndex < previousPageIndex  {
+    } else if velocity < 0 || closestTargetPageIndex < previousPageIndex {
       pageIndex = previousPageIndex - 1
     } else {
       pageIndex = previousPageIndex
     }
-    
+
     return CGFloat(pageIndex) * pageSize
   }
-  
+
 }

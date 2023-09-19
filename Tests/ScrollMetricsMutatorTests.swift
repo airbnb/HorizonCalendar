@@ -274,30 +274,30 @@ final class ScrollMetricsMutatorTests: XCTestCase {
       initialOffset2 - 1000 == horizontalScrollMetricsProvider.offset(for: .horizontal),
       "Scroll offset does not equal the initial offset - 1000.")
   }
-  
+
   // MARK: Scroll Boundary Offsets
-  
+
   func testVerticalMinimumScrollOffset() {
     verticalScrollMetricsProvider.setStartInset(to: 100, for: .vertical)
     XCTAssert(
       verticalScrollMetricsProvider.minimumOffset(for: .vertical) == -100,
       "The minimum offset should equal the negated top inset.")
   }
-  
+
   func testHorizontalMinimumScrollOffset() {
     horizontalScrollMetricsProvider.setStartInset(to: 300, for: .horizontal)
     XCTAssert(
       horizontalScrollMetricsProvider.minimumOffset(for: .horizontal) == -300,
       "The minimum offset should equal the negated left inset.")
   }
-  
+
   func testVerticalMaximumScrollOffset() {
     verticalScrollMetricsProvider.setEndInset(to: -50, for: .vertical)
     XCTAssert(
       verticalScrollMetricsProvider.maximumOffset(for: .vertical) == 9999999999470.0,
       "The maximum offset should equal the content height plus bottom inset minus bounds height.")
   }
-  
+
   func testHorizontalMaximumScrollOffset() {
     horizontalScrollMetricsProvider.setEndInset(to: -80, for: .horizontal)
     XCTAssert(
@@ -307,12 +307,14 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
   // MARK: Private
 
+  // swiftlint:disable implicitly_unwrapped_optional
+
   private var verticalScrollMetricsProvider: ScrollMetricsProvider!
   private var horizontalScrollMetricsProvider: ScrollMetricsProvider!
 
   private var verticalScrollMetricsMutator: ScrollMetricsMutator!
   private var horizontalScrollMetricsMutator: ScrollMetricsMutator!
-  
+
   private static func mockScrollMetricsProvider() -> ScrollMetricsProvider {
     let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
     scrollView.contentInsetAdjustmentBehavior = .never

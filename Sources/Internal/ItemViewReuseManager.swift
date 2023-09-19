@@ -91,9 +91,9 @@ final class ItemViewReuseManager {
 
         guard let previousView = viewsForVisibleItems[visibleItem] else {
           preconditionFailure("""
-            `viewsForVisibleItems` must have a key for every member in
-            `visibleItemsForItemViewDifferentiators`'s values.
-          """)
+              `viewsForVisibleItems` must have a key for every member in
+              `visibleItemsForItemViewDifferentiators`'s values.
+            """)
         }
 
         view = previousView
@@ -108,9 +108,9 @@ final class ItemViewReuseManager {
 
           guard let previousView = viewsForVisibleItems[previouslyVisibleItem] else {
             preconditionFailure("""
-              `viewsForVisibleItems` must have a key for every member in
-              `visibleItemsForItemViewDifferentiators`'s values.
-            """)
+                `viewsForVisibleItems` must have a key for every member in
+                `visibleItemsForItemViewDifferentiators`'s values.
+              """)
           }
 
           view = previousView
@@ -128,8 +128,7 @@ final class ItemViewReuseManager {
           isReusedViewSameAsPreviousView = false
         }
       }
-    }
-    else {
+    } else {
       // No previously-visible item is available for reuse, so create a new view.
       view = ItemView(initialCalendarItemModel: visibleItem.calendarItemModel)
       previousBackingVisibleItem = nil

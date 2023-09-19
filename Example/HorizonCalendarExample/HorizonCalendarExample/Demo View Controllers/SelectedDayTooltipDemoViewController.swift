@@ -28,8 +28,8 @@ final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self else { return }
 
-      self.selectedDate = self.calendar.date(from: day.components)
-      self.calendarView.setContent(self.makeContent())
+      selectedDate = calendar.date(from: day.components)
+      calendarView.setContent(makeContent())
     }
   }
 
@@ -37,10 +37,10 @@ final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let selectedDate = self.selectedDate
+    let selectedDate = selectedDate
 
     let overlaidItemLocations: Set<OverlaidItemLocation>
-    if let selectedDate = selectedDate {
+    if let selectedDate {
       overlaidItemLocations = [.day(containingDate: selectedDate)]
     } else {
       overlaidItemLocations = []

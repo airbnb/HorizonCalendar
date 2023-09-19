@@ -25,10 +25,10 @@ final class SingleDaySelectionDemoViewController: BaseDemoViewController {
     selectedDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   // MARK: Internal
 
   override func viewDidLoad() {
@@ -39,8 +39,8 @@ final class SingleDaySelectionDemoViewController: BaseDemoViewController {
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self else { return }
 
-      self.selectedDate = self.calendar.date(from: day.components)
-      self.calendarView.setContent(self.makeContent())
+      selectedDate = calendar.date(from: day.components)
+      calendarView.setContent(makeContent())
     }
   }
 
@@ -48,7 +48,7 @@ final class SingleDaySelectionDemoViewController: BaseDemoViewController {
     let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-    let selectedDate = self.selectedDate
+    let selectedDate = selectedDate
 
     return CalendarViewContent(
       calendar: calendar,

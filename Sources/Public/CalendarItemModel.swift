@@ -120,7 +120,7 @@ extension CalendarItemModel where ViewRepresentable.Content == Never {
       invariantViewProperties: invariantViewProperties)
 
     self.invariantViewProperties = invariantViewProperties
-    self.content = nil
+    content = nil
   }
 
 }

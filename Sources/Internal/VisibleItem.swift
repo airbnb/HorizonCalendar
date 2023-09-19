@@ -74,7 +74,7 @@ extension VisibleItem: Hashable {
 
 }
 
-// MARK: - VisibleItem.ItemType
+// MARK: VisibleItem.ItemType
 
 extension VisibleItem {
 

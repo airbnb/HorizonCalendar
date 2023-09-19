@@ -306,8 +306,7 @@ final class VisibleItemsProvider {
     let upperBoundMonth = calendar.month(byAddingMonths: 1, to: visibleMonthRange.upperBound)
     let monthRange = lowerBoundMonth...upperBoundMonth
 
-    let handleItem: (LayoutItem, Bool, inout Bool) -> Void =
-    { layoutItem, isLookingBackwards, shouldStop in
+    let handleItem: (LayoutItem, Bool, inout Bool) -> Void = { layoutItem, isLookingBackwards, shouldStop in
       let month: Month
       let calendarItemModel: AnyCalendarItemModel
       switch layoutItem.itemType {
@@ -504,8 +503,8 @@ final class VisibleItemsProvider {
         monthHeaderHeight: monthHeaderHeight)
     } else {
       preconditionFailure("""
-        Could not determine the origin of the month containing the layout item type \(itemType).
-      """)
+          Could not determine the origin of the month containing the layout item type \(itemType).
+        """)
     }
 
     context.originsForMonths[itemType.month] = monthOrigin
@@ -514,7 +513,7 @@ final class VisibleItemsProvider {
   }
 
   private func monthHeaderHeight(for month: Month, context: inout VisibleItemsContext) -> CGFloat {
-    return context.heightsForVisibleMonthHeaders.value(
+    context.heightsForVisibleMonthHeaders.value(
       for: month,
       missingValueProvider: {
         let monthHeaderItemModel = content.monthHeaderItemProvider(month)
@@ -551,7 +550,7 @@ final class VisibleItemsProvider {
     context: inout VisibleItemsContext)
     -> LayoutItem
   {
-    let monthOrigin = self.monthOrigin(
+    let monthOrigin = monthOrigin(
       for: itemType,
       lastHandledLayoutItem: lastHandledLayoutItem,
       monthHeaderHeight: monthHeaderHeight,
@@ -604,30 +603,29 @@ final class VisibleItemsProvider {
   {
     guard dayRange.contains(day) else {
       preconditionFailure("""
-        Cannot create day range items if the provided `day` (\(day)) is not contained in `dayRange`
-        (\(dayRange)).
-      """)
+          Cannot create day range items if the provided `day` (\(day)) is not contained in `dayRange`
+          (\(dayRange)).
+        """)
     }
 
     var daysAndFrames = [(day: Day, frame: CGRect)]()
     var boundingUnionRectOfDayFrames = frame
-    let handleItem: (LayoutItem, Bool, inout Bool) -> Void =
-      { layoutItem, isLookingBackwards, shouldStop in
-        guard case .day(let day) = layoutItem.itemType else { return }
-        guard dayRange.contains(day) else {
-          shouldStop = true
-          return
-        }
-
-        let frame = layoutItem.frame
-        if isLookingBackwards {
-          daysAndFrames.insert((day, frame), at: 0)
-        } else {
-          daysAndFrames.append((day, frame))
-        }
-
-        boundingUnionRectOfDayFrames = boundingUnionRectOfDayFrames.union(frame)
+    let handleItem: (LayoutItem, Bool, inout Bool) -> Void = { layoutItem, isLookingBackwards, shouldStop in
+      guard case .day(let day) = layoutItem.itemType else { return }
+      guard dayRange.contains(day) else {
+        shouldStop = true
+        return
       }
+
+      let frame = layoutItem.frame
+      if isLookingBackwards {
+        daysAndFrames.insert((day, frame), at: 0)
+      } else {
+        daysAndFrames.append((day, frame))
+      }
+
+      boundingUnionRectOfDayFrames = boundingUnionRectOfDayFrames.union(frame)
+    }
 
     let dayLayoutItem = LayoutItem(itemType: .day(day), frame: frame)
 
@@ -665,8 +663,7 @@ final class VisibleItemsProvider {
       daysAndFrames: daysAndFrames.map {
         (
           $0.day,
-          $0.frame.applying(frameToBoundsTransform).alignedToPixels(forScreenWithScale: scale)
-        )
+          $0.frame.applying(frameToBoundsTransform).alignedToPixels(forScreenWithScale: scale))
       },
       boundingUnionRectOfDayFrames: boundingUnionRectOfDayFrames
         .applying(frameToBoundsTransform)
@@ -715,7 +712,7 @@ final class VisibleItemsProvider {
     _ layoutItem: LayoutItem,
     inBounds bounds: CGRect,
     extendedBounds: CGRect,
-    isLookingBackwards: Bool,
+    isLookingBackwards _: Bool,
     monthHeaderHeight: CGFloat,
     context: inout VisibleItemsContext,
     shouldStop: inout Bool)
@@ -803,7 +800,7 @@ final class VisibleItemsProvider {
                   monthHeaderHeight: monthHeaderHeight)))
           }
 
-        case let .dayOfWeekInMonth(dayOfWeekPosition, month):
+        case .dayOfWeekInMonth(let dayOfWeekPosition, let month):
           calendarItemModel = context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
@@ -826,7 +823,7 @@ final class VisibleItemsProvider {
               previousCalendarItemModelCache?[.dayBackground(day)]
                 ?? content.dayBackgroundItemProvider?(day)
             })
-          if let dayBackgroundItemModel = dayBackgroundItemModel {
+          if let dayBackgroundItemModel {
             context.visibleItems.insert(
               VisibleItem(
                 calendarItemModel: dayBackgroundItemModel,
@@ -913,8 +910,7 @@ final class VisibleItemsProvider {
       guard
         !context.handledDayRanges.contains(dayRange),
         dayRange.contains(day)
-      else
-      {
+      else {
         continue
       }
 
@@ -933,13 +929,12 @@ final class VisibleItemsProvider {
   private func handleDayRange(
     _ dayRange: DayRange,
     with dayRangeLayoutContext: _DayRangeLayoutContext,
-    inBounds bounds: CGRect,
+    inBounds _: CGRect,
     context: inout VisibleItemsContext)
   {
     guard
       let dayRangeItemProvider = content.dayRangesAndItemProvider?.dayRangeItemProvider
-    else
-    {
+    else {
       preconditionFailure(
         "`content.dayRangesAndItemProvider` cannot be nil when handling a day range.")
     }
@@ -1019,8 +1014,7 @@ final class VisibleItemsProvider {
   private func handleOverlayItemsIfNeeded(bounds: CGRect, context: inout VisibleItemsContext) {
     guard
       let (overlaidItemLocations, itemModelProvider) = content.overlaidItemLocationsAndItemProvider
-    else
-    {
+    else {
       return
     }
 
@@ -1030,8 +1024,7 @@ final class VisibleItemsProvider {
           for: overlaidItemLocation,
           inBounds: bounds,
           context: &context)
-      else
-      {
+      else {
         continue
       }
 
@@ -1224,7 +1217,7 @@ final class VisibleItemsProvider {
           .init(translationX: bounds.minX - contentStartBoundary + layoutMargins.leading, y: 0))
       } else if
         let contentEndBoundary = context.contentEndBoundary,
-          contentEndBoundary <= bounds.maxX
+        contentEndBoundary <= bounds.maxX
       {
         return proposedFrame.applying(
           .init(translationX: bounds.maxX - contentEndBoundary - layoutMargins.trailing, y: 0))
@@ -1236,7 +1229,7 @@ final class VisibleItemsProvider {
 
 }
 
-// MARK: VisibleItemsContext
+// MARK: - VisibleItemsContext
 
 private struct VisibleItemsContext {
   var centermostLayoutItem: LayoutItem
@@ -1291,9 +1284,9 @@ private struct _DayRangeLayoutContext {
 
 // MARK: CGPoint Distance Extension
 
-private extension CGPoint {
+extension CGPoint {
 
-  func distance(to otherPoint: CGPoint) -> CGFloat {
+  fileprivate func distance(to otherPoint: CGPoint) -> CGFloat {
     sqrt(pow(otherPoint.x - x, 2) + pow(otherPoint.y - y, 2))
   }
 

@@ -62,13 +62,12 @@ public enum MonthsLayout: Hashable {
     case .horizontal: return true
     }
   }
-  
+
   var isPaginationEnabled: Bool {
     guard
       case .horizontal(let options) = self,
       case .paginatedScrolling = options.scrollingBehavior
-    else
-    {
+    else {
       return false
     }
 
@@ -163,18 +162,18 @@ public struct HorizontalMonthsLayoutOptions: Hashable {
     let visibleInterMonthSpacing = CGFloat(maximumFullyVisibleMonths) * interMonthSpacing
     return (calendarWidth - visibleInterMonthSpacing) / CGFloat(maximumFullyVisibleMonths)
   }
-  
+
   func pageSize(calendarWidth: CGFloat, interMonthSpacing: CGFloat) -> CGFloat {
     guard case .paginatedScrolling(let configuration) = scrollingBehavior else {
       preconditionFailure(
         "Cannot get a page size for a calendar that does not have horizontal pagination enabled.")
     }
-    
+
     switch configuration.restingPosition {
     case .atIncrementsOfCalendarWidth:
       return calendarWidth
     case .atLeadingEdgeOfEachMonth:
-      let monthWidth = self.monthWidth(
+      let monthWidth = monthWidth(
         calendarWidth: calendarWidth,
         interMonthSpacing: interMonthSpacing)
       return monthWidth + interMonthSpacing
@@ -183,52 +182,52 @@ public struct HorizontalMonthsLayoutOptions: Hashable {
 
 }
 
-// MARK: - HorizontalMonthsLayoutOptions.ScrollingBehavior
+// MARK: HorizontalMonthsLayoutOptions.ScrollingBehavior
 
 extension HorizontalMonthsLayoutOptions {
-  
+
   /// The scrolling behavior of the horizontally-scrolling calendar: either paginated-scrolling or free-scrolling.
   public enum ScrollingBehavior: Hashable {
-    
+
     /// The calendar will come to a rest at specific scroll positions, defined by the `PaginationConfiguration`.
     case paginatedScrolling(PaginationConfiguration)
-    
+
     /// The calendar will come to a rest at any scroll position.
     case freeScrolling
   }
 
 }
 
-// MARK: - HorizontalMonthsLayoutOptions.PaginationConfiguration
+// MARK: HorizontalMonthsLayoutOptions.PaginationConfiguration
 
 extension HorizontalMonthsLayoutOptions {
-  
+
   /// The pagination behavior's configurable options.
   public struct PaginationConfiguration: Hashable {
-    
+
     // MARK: Lifecycle
-    
+
     public init(restingPosition: RestingPosition, restingAffinity: RestingAffinity) {
       self.restingPosition = restingPosition
       self.restingAffinity = restingAffinity
     }
-    
+
     // MARK: Public
-    
+
     /// The position at which the calendar will come to a rest when paginating.
     public let restingPosition: RestingPosition
-    
+
     /// The calendar's affinity for stopping at a resting position.
     public let restingAffinity: RestingAffinity
 
   }
-  
+
 }
 
 extension HorizontalMonthsLayoutOptions.PaginationConfiguration {
-  
+
   // MARK: - HorizontalMonthsLayoutOptions.PaginationConfiguration.RestingPosition
-  
+
   /// The position at which the calendar will come to a rest when paginating.
   public enum RestingPosition: Hashable {
 
@@ -239,20 +238,20 @@ extension HorizontalMonthsLayoutOptions.PaginationConfiguration {
     case atIncrementsOfCalendarWidth
 
   }
-  
+
   // MARK: - HorizontalMonthsLayoutOptions.PaginationConfiguration.RestingAffinity
-  
+
   /// The calendar's affinity for stopping at a resting position.
   public enum RestingAffinity: Hashable {
-    
+
     /// The calendar will come to a rest at the position adjacent to the previous resting position, regardless of how fast the user
     /// swipes.
     case atPositionsAdjacentToPrevious
-    
+
     /// The calendar will come to a rest at the closest position to the target scroll offset, potentially skipping over many valid resting
     /// positions depending on how fast the user swipes.
     case atPositionsClosestToTargetOffset
 
   }
-  
+
 }

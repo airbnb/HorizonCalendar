@@ -41,7 +41,7 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
     layoutMargins = .zero
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -62,8 +62,8 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   public override func systemLayoutSizeFitting(
     _ targetSize: CGSize,
-    withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
-    verticalFittingPriority: UILayoutPriority)
+    withHorizontalFittingPriority _: UILayoutPriority,
+    verticalFittingPriority _: UILayoutPriority)
     -> CGSize
   {
     hostingController.sizeThatFits(in: targetSize)
@@ -134,13 +134,13 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Public
 
-    public static func == (lhs: InvariantViewProperties, rhs: InvariantViewProperties) -> Bool {
+    public static func == (_: InvariantViewProperties, _: InvariantViewProperties) -> Bool {
       // Always true since two `SwiftUIWrapperView`'s with the same `Content` view are considered to
       // have the same "invariant view properties."
       true
     }
 
-    public func hash(into hasher: inout Hasher) { }
+    public func hash(into _: inout Hasher) { }
 
     // MARK: Fileprivate
 
@@ -175,7 +175,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
   public static func makeView(
     withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-  -> SwiftUIWrapperView<Content>
+    -> SwiftUIWrapperView<Content>
   {
     SwiftUIWrapperView<Content>(contentAndID: invariantViewProperties.initialContentAndID)
   }
@@ -236,9 +236,12 @@ private final class HostingController<Content: View>: UIHostingController<Conten
     _disableSafeArea = true
   }
 
-  @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+  @MainActor
+  required dynamic init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()

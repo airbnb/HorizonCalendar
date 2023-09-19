@@ -16,7 +16,7 @@
 import XCTest
 @testable import HorizonCalendar
 
-// MARK: - SubviewsManagerTests
+// MARK: - SubviewInsertionIndexTrackerTests
 
 final class SubviewInsertionIndexTrackerTests: XCTestCase {
 

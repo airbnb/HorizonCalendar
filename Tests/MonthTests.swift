@@ -20,6 +20,8 @@ import XCTest
 
 final class MonthTests: XCTestCase {
 
+  // MARK: Internal
+
   // MARK: - Advancing Months Tests
 
   func testAdvancingByNothing() {

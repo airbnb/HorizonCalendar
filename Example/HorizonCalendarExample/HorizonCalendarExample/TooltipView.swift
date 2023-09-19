@@ -42,7 +42,7 @@ final class TooltipView: UIView {
     addSubview(label)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -51,7 +51,7 @@ final class TooltipView: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    guard let frameOfTooltippedItem = frameOfTooltippedItem else { return }
+    guard let frameOfTooltippedItem else { return }
 
     label.sizeToFit()
     let labelSize = CGSize(

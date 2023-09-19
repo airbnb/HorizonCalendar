@@ -57,34 +57,21 @@ public final class CalendarView: UIView {
     commonInit()
   }
 
-  private func commonInit() {
-    if #available(iOS 13.0, *) {
-      backgroundColor = .systemBackground
-    } else {
-      backgroundColor = .white
-    }
-
-    // Must be the first subview so that `UINavigationController` can monitor its scroll position
-    // and make navigation bars opaque on scroll.
-    insertSubview(scrollView, at: 0)
-
-    installDoubleLayoutPassSizingLabel()
-
-    setContent(content)
-
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(accessibilityElementFocused(_:)),
-      name: UIAccessibility.elementFocusedNotification,
-    object: nil)
-  }
-
   // MARK: Public
 
   /// A closure (that is retained) that is invoked whenever a day is selected. It is the responsibility of your feature code to decide what to
   /// do with each day. For example, you might store the most recent day in a selected day property, then read that property in your
   /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
   public var daySelectionHandler: ((Day) -> Void)?
+
+  /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
+  public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
+
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
+  public var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
+
+  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
+  public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
 
   /// A closure (that is retained) that is invoked during a multiple-selection-drag-gesture. Multiple selection is initiated with a long press,
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
@@ -95,15 +82,6 @@ public final class CalendarView: UIView {
       configureMultiDaySelectionPanGestureRecognizer()
     }
   }
-
-  /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
-  public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
-
-  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
-  public var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
-
-  /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
-  public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
 
   /// Whether or not the calendar's scroll view is currently over-scrolling, i.e, whether the rubber-banding or bouncing effect is in
   /// progress.
@@ -312,7 +290,7 @@ public final class CalendarView: UIView {
   /// - Returns: An accessibility element associated with the specified `date`, or `nil` if one cannot be found.
   public func accessibilityElementForVisibleDate(_ date: Date) -> Any? {
     let day = calendar.day(containing: date)
-    guard let visibleDayRange = visibleDayRange, visibleDayRange.contains(day) else { return nil }
+    guard let visibleDayRange, visibleDayRange.contains(day) else { return nil }
 
     for (visibleItem, visibleView) in visibleViewsForVisibleItems {
       guard case .layoutItemType(.day(day)) = visibleItem.itemType else { continue }
@@ -341,9 +319,9 @@ public final class CalendarView: UIView {
     let month = calendar.month(containing: dateInTargetMonth)
     guard content.monthRange.contains(month) else {
       assertionFailure("""
-        Attempted to scroll to month \(month), which is out of bounds of the total date range
-        \(content.monthRange).
-      """)
+          Attempted to scroll to month \(month), which is out of bounds of the total date range
+          \(content.monthRange).
+        """)
       return
     }
 
@@ -382,9 +360,9 @@ public final class CalendarView: UIView {
     let day = calendar.day(containing: dateInTargetDay)
     guard content.dayRange.contains(day) else {
       assertionFailure("""
-        Attempted to scroll to day \(day), which is out of bounds of the total date range
-        \(content.dayRange).
-      """)
+          Attempted to scroll to day \(day), which is out of bounds of the total date range
+          \(content.dayRange).
+        """)
       return
     }
 
@@ -498,7 +476,7 @@ public final class CalendarView: UIView {
       newOffset = nil
     }
 
-    if let newOffset = newOffset {
+    if let newOffset {
       scrollView.performWithoutNotifyingDelegate {
         // Passing `false` for `animated` is necessary to stop the in-flight deceleration animation
         UIView.animate(withDuration: 0.4, delay: 0, options: [.curveEaseOut], animations: {
@@ -539,7 +517,7 @@ public final class CalendarView: UIView {
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
-  
+
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
@@ -548,10 +526,9 @@ public final class CalendarView: UIView {
         return true
       }
     }
-    
+
     return false
   }()
-
 
   private var isReadyForLayout: Bool {
     // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
@@ -638,6 +615,28 @@ public final class CalendarView: UIView {
     }
   }
 
+  private func commonInit() {
+    if #available(iOS 13.0, *) {
+      backgroundColor = .systemBackground
+    } else {
+      backgroundColor = .white
+    }
+
+    // Must be the first subview so that `UINavigationController` can monitor its scroll position
+    // and make navigation bars opaque on scroll.
+    insertSubview(scrollView, at: 0)
+
+    installDoubleLayoutPassSizingLabel()
+
+    setContent(content)
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(accessibilityElementFocused(_:)),
+      name: UIAccessibility.elementFocusedNotification,
+      object: nil)
+  }
+
   private func anchorLayoutItem(
     for scrollToItemContext: ScrollToItemContext,
     visibleItemsProvider: VisibleItemsProvider)
@@ -673,7 +672,7 @@ public final class CalendarView: UIView {
     for targetItem: ScrollToItemContext.TargetItem)
     -> ScrollToItemContext.PositionRelativeToVisibleBounds?
   {
-    guard let visibleItemsDetails = visibleItemsDetails else { return nil }
+    guard let visibleItemsDetails else { return nil }
 
     switch targetItem {
     case .month(let month):
@@ -710,7 +709,7 @@ public final class CalendarView: UIView {
     }
 
     let anchorLayoutItem: LayoutItem
-    if let scrollToItemContext = scrollToItemContext, !scrollToItemContext.animated {
+    if let scrollToItemContext, !scrollToItemContext.animated {
       anchorLayoutItem = self.anchorLayoutItem(
         for: scrollToItemContext,
         visibleItemsProvider: visibleItemsProvider)
@@ -763,7 +762,7 @@ public final class CalendarView: UIView {
 
   private func updateVisibleViews(
     withVisibleItems visibleItems: Set<VisibleItem>,
-    previouslyVisibleItems: Set<VisibleItem>)
+    previouslyVisibleItems _: Set<VisibleItem>)
   {
     var viewsToHideForVisibleItems = visibleViewsForVisibleItems
     visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
@@ -785,7 +784,7 @@ public final class CalendarView: UIView {
 
         visibleViewsForVisibleItems[visibleItem] = view
 
-        if let previousBackingVisibleItem = previousBackingVisibleItem {
+        if let previousBackingVisibleItem {
           // Don't hide views that were reused
           viewsToHideForVisibleItems.removeValue(forKey: previousBackingVisibleItem)
         }
@@ -858,14 +857,13 @@ public final class CalendarView: UIView {
   @objc
   private func scrollToItemDisplayLinkFired() {
     guard
-      let scrollToItemContext = scrollToItemContext,
+      let scrollToItemContext,
       let animationStartTime = scrollToItemAnimationStartTime
-    else
-    {
+    else {
       preconditionFailure("""
-        Expected `scrollToItemContext`, `animationStartTime`, and `scrollMetricsMutator` to be
-        non-nil when animating toward an item.
-      """)
+          Expected `scrollToItemContext`, `animationStartTime`, and `scrollMetricsMutator` to be
+          non-nil when animating toward an item.
+        """)
     }
 
     guard scrollToItemContext.animated else {
@@ -941,8 +939,7 @@ public final class CalendarView: UIView {
       let framesForVisibleMonths = visibleItemsDetails?.framesForVisibleMonths,
       let firstVisibleMonth = visibleMonthRange?.lowerBound,
       let frameOfFirstVisibleMonth = framesForVisibleMonths[firstVisibleMonth]
-    else
-    {
+    else {
       return
     }
 
@@ -1000,7 +997,7 @@ public final class CalendarView: UIView {
 
     switch gestureRecognizer.state {
     case .ended, .cancelled, .failed:
-      if let lastmultiDaySelectionDay = lastmultiDaySelectionDay {
+      if let lastmultiDaySelectionDay {
         multiDaySelectionDragHandler?(lastmultiDaySelectionDay, gestureRecognizer.state)
       }
       lastmultiDaySelectionDay = nil
@@ -1021,8 +1018,7 @@ public final class CalendarView: UIView {
         let itemView = subview as? ItemView,
         case .layoutItemType(.day(let day)) = itemView.itemType,
         itemView.frame.contains(locationInScrollView)
-      else
-      {
+      else {
         continue
       }
       intersectedDay = day
@@ -1150,6 +1146,8 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
 
 extension CalendarView {
 
+  // MARK: Public
+
   public override var isAccessibilityElement: Bool {
     get { false }
     set { }
@@ -1161,10 +1159,9 @@ extension CalendarView {
         return cachedAccessibilityElements
       }
       guard
-        let visibleItemsDetails = visibleItemsDetails,
-        let visibleMonthRange = visibleMonthRange
-      else
-      {
+        let visibleItemsDetails,
+        let visibleMonthRange
+      else {
         return nil
       }
 
@@ -1176,9 +1173,9 @@ extension CalendarView {
       for visibleItem in visibleItems {
         guard case .layoutItemType = visibleItem.itemType else {
           assertionFailure("""
-            Only visible calendar items with itemType == .layoutItemType should be considered for
-            use as an accessibility element.
-          """)
+              Only visible calendar items with itemType == .layoutItemType should be considered for
+              use as an accessibility element.
+            """)
           continue
         }
         let element: Any
@@ -1189,8 +1186,7 @@ extension CalendarView {
             let accessibilityElement = OffScreenCalendarItemAccessibilityElement(
               correspondingItem: visibleItem,
               scrollViewContainer: scrollView)
-          else
-          {
+          else {
             continue
           }
 
@@ -1223,8 +1219,7 @@ extension CalendarView {
         from: firstVisibleMonthDate,
         to: lastVisibleMonthDate)
         .month
-    else
-    {
+    else {
       return false
     }
 
@@ -1267,12 +1262,14 @@ extension CalendarView {
     return true
   }
 
+  // MARK: Private
+
   @objc
   private func accessibilityElementFocused(_ notification: NSNotification) {
     guard let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] else {
       return
     }
-    
+
     focusedAccessibilityElement = element
 
     if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
@@ -1330,14 +1327,14 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
   }
 
   func scrollViewDidEndDragging(
-    _ scrollView: UIScrollView,
+    _: UIScrollView,
     willDecelerate decelerate: Bool)
   {
     guard let calendarView, let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDragging?(visibleDayRange, decelerate)
   }
 
-  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+  func scrollViewDidEndDecelerating(_: UIScrollView) {
     guard let calendarView, let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDecelerating?(visibleDayRange)
   }
@@ -1347,8 +1344,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
       let calendarView,
       case .horizontal(let options) = calendarView.content.monthsLayout,
       case .paginatedScrolling = options.scrollingBehavior
-    else
-    {
+    else {
       return
     }
 
@@ -1369,8 +1365,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
       let calendarView,
       case .horizontal(let options) = calendarView.content.monthsLayout,
       case .paginatedScrolling(let paginationConfiguration) = options.scrollingBehavior
-    else
-    {
+    else {
       return
     }
 
@@ -1382,8 +1377,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     case .atPositionsAdjacentToPrevious:
       guard let previousPageIndex = calendarView.previousPageIndex else {
         preconditionFailure("""
-          `previousPageIndex` was accessed before being set in `scrollViewWillBeginDragging`.
-        """)
+            `previousPageIndex` was accessed before being set in `scrollViewWillBeginDragging`.
+          """)
       }
       targetContentOffset.pointee.x = PaginationHelpers.adjacentPageOffset(
         toPreviousPageIndex: previousPageIndex,
@@ -1400,7 +1395,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
     }
   }
 
-  func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+  func scrollViewShouldScrollToTop(_: UIScrollView) -> Bool {
     guard let calendarView else { return false }
 
     if calendarView.content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
@@ -1475,7 +1470,7 @@ private final class NoContentInsetAdjustmentScrollView: UIScrollView {
     contentInsetAdjustmentBehavior = .never
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -1491,10 +1486,10 @@ private final class NoContentInsetAdjustmentScrollView: UIScrollView {
 
 // MARK: Scroll View Silent Updating
 
-private extension UIScrollView {
+extension UIScrollView {
 
-  func performWithoutNotifyingDelegate(_ operations: () -> Void) {
-    let delegate = self.delegate
+  fileprivate func performWithoutNotifyingDelegate(_ operations: () -> Void) {
+    let delegate = delegate
     self.delegate = nil
 
     operations()
