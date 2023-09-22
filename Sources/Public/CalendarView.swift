@@ -258,6 +258,10 @@ public final class CalendarView: UIView {
       invalidateIntrinsicContentSize()
     }
 
+    // Clear this so that we don't return early in our next layout pass even though our layout
+    // region might not have changed.
+    layoutRegion = nil
+
     self.content = content
     setNeedsLayout()
 
@@ -496,6 +500,7 @@ public final class CalendarView: UIView {
   private var anchorLayoutItem: LayoutItem?
   private var _visibleItemsProvider: VisibleItemsProvider?
   private var visibleItemsDetails: VisibleItemsDetails?
+  private var layoutRegion: ClosedRange<LayoutItem.ItemType>?
   private var visibleViewsForVisibleItems = [VisibleItem: ItemView]()
 
   private var isAnimatedUpdatePass = false
@@ -734,11 +739,14 @@ public final class CalendarView: UIView {
       isAnimatedUpdatePass: isAnimatedUpdatePass)
     self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
 
-    updateVisibleViews(
-      withVisibleItems: currentVisibleItemsDetails.visibleItems,
-      previouslyVisibleItems: visibleItemsDetails?.visibleItems ?? [])
+    // If our first / last layout item hasn't changed, then we haven't scrolled enough to trigger
+    // an update of visible views. This short-circuit greatly improves scroll performance.
+    if currentVisibleItemsDetails.layoutRegion != layoutRegion {
+      updateVisibleViews(withVisibleItems: currentVisibleItemsDetails.visibleItems)
+    }
 
     visibleItemsDetails = currentVisibleItemsDetails
+    layoutRegion = currentVisibleItemsDetails.layoutRegion
 
     let minimumScrollOffset = visibleItemsDetails?.contentStartBoundary.map {
       ($0 - firstLayoutMarginValue).alignedToPixel(forScreenWithScale: scale)
@@ -760,10 +768,7 @@ public final class CalendarView: UIView {
     }
   }
 
-  private func updateVisibleViews(
-    withVisibleItems visibleItems: Set<VisibleItem>,
-    previouslyVisibleItems _: Set<VisibleItem>)
-  {
+  private func updateVisibleViews(withVisibleItems visibleItems: Set<VisibleItem>) {
     var viewsToHideForVisibleItems = visibleViewsForVisibleItems
     visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
 
@@ -1158,10 +1163,7 @@ extension CalendarView {
       guard cachedAccessibilityElements == nil else {
         return cachedAccessibilityElements
       }
-      guard
-        let visibleItemsDetails,
-        let visibleMonthRange
-      else {
+      guard let visibleItemsDetails, let visibleMonthRange else {
         return nil
       }
 

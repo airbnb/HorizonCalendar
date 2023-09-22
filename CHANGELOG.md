@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `ItemView` to determine user interaction capabilities from its content view's `hitTest` / `pointInside` functions
 - Updated content-change animations so that the same scroll offset is maintained throughout the animation
 - Changed the Swift version needed to use HorizonCalendar to 5.8
+- Optimized `layoutSubviews` to avoid doing unnecessary work updating views in some cases
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 

@@ -70,7 +70,10 @@ final class VisibleItemsProvider {
     -> LayoutItem
   {
     let layoutItem = LayoutItem(itemType: .monthHeader(month), frame: .zero)
-    var context = VisibleItemsContext(centermostLayoutItem: layoutItem, firstLayoutItem: layoutItem)
+    var context = VisibleItemsContext(
+      centermostLayoutItem: layoutItem,
+      firstLayoutItem: layoutItem,
+      lastLayoutItem: layoutItem)
     let monthHeaderHeight = monthHeaderHeight(for: month, context: &context)
 
     let monthOrigin: CGPoint
@@ -112,7 +115,10 @@ final class VisibleItemsProvider {
     -> LayoutItem
   {
     let layoutItem = LayoutItem(itemType: .day(day), frame: .zero)
-    var context = VisibleItemsContext(centermostLayoutItem: layoutItem, firstLayoutItem: layoutItem)
+    var context = VisibleItemsContext(
+      centermostLayoutItem: layoutItem,
+      firstLayoutItem: layoutItem,
+      lastLayoutItem: layoutItem)
     let month = day.month
     let monthHeaderHeight = monthHeaderHeight(for: month, context: &context)
 
@@ -164,6 +170,7 @@ final class VisibleItemsProvider {
     var context = VisibleItemsContext(
       centermostLayoutItem: previouslyVisibleLayoutItem,
       firstLayoutItem: previouslyVisibleLayoutItem,
+      lastLayoutItem: previouslyVisibleLayoutItem,
       calendarItemModelCache: .init(
         minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100))
 
@@ -283,6 +290,7 @@ final class VisibleItemsProvider {
       visibleItems: context.visibleItems,
       centermostLayoutItem: context.centermostLayoutItem,
       firstLayoutItem: context.firstLayoutItem,
+      lastLayoutItem: context.lastLayoutItem,
       visibleDayRange: visibleDayRange,
       visibleMonthRange: visibleMonthRange,
       framesForVisibleMonths: context.framesForVisibleMonths,
@@ -340,7 +348,8 @@ final class VisibleItemsProvider {
     var lastHandledLayoutItemEnumeratingForwards = previouslyVisibleLayoutItem
     var context = VisibleItemsContext(
       centermostLayoutItem: previouslyVisibleLayoutItem,
-      firstLayoutItem: previouslyVisibleLayoutItem)
+      firstLayoutItem: previouslyVisibleLayoutItem,
+      lastLayoutItem: previouslyVisibleLayoutItem)
 
     layoutItemTypeEnumerator.enumerateItemTypes(
       startingAt: previouslyVisibleLayoutItem.itemType,
@@ -415,6 +424,22 @@ final class VisibleItemsProvider {
     }
 
     return itemOrigin < otherItemOrigin ? item : otherItem
+  }
+
+  // Returns the layout item closest to the bottom/trailing edge of `bounds`.
+  private func lastLayoutItem(comparing item: LayoutItem, to otherItem: LayoutItem) -> LayoutItem {
+    let itemOrigin: CGFloat
+    let otherItemOrigin: CGFloat
+    switch content.monthsLayout {
+    case .vertical:
+      itemOrigin = item.frame.maxY
+      otherItemOrigin = otherItem.frame.maxY
+    case .horizontal:
+      itemOrigin = item.frame.maxX
+      otherItemOrigin = otherItem.frame.maxX
+    }
+
+    return itemOrigin > otherItemOrigin ? item : otherItem
   }
 
   private func boundsForAnimatedUpdatePass(atOffset offset: CGPoint) -> CGRect {
@@ -866,6 +891,9 @@ final class VisibleItemsProvider {
         context.firstLayoutItem = firstLayoutItem(
           comparing: layoutItem,
           to: context.firstLayoutItem)
+        context.lastLayoutItem = lastLayoutItem(
+          comparing: layoutItem,
+          to: context.lastLayoutItem)
       }
     } else {
       shouldStop = true
@@ -1234,6 +1262,7 @@ final class VisibleItemsProvider {
 private struct VisibleItemsContext {
   var centermostLayoutItem: LayoutItem
   var firstLayoutItem: LayoutItem
+  var lastLayoutItem: LayoutItem
   var firstVisibleDay: Day?
   var lastVisibleDay: Day?
   var firstVisibleMonth: Month?
@@ -1258,6 +1287,7 @@ struct VisibleItemsDetails {
   let visibleItems: Set<VisibleItem>
   let centermostLayoutItem: LayoutItem
   let firstLayoutItem: LayoutItem?
+  let lastLayoutItem: LayoutItem?
   let visibleDayRange: DayRange?
   let visibleMonthRange: MonthRange?
   let framesForVisibleMonths: [Month: CGRect]
@@ -1269,6 +1299,11 @@ struct VisibleItemsDetails {
 
   var intrinsicHeight: CGFloat {
     maxMonthHeight + heightOfPinnedContent
+  }
+
+  var layoutRegion: ClosedRange<LayoutItem.ItemType>? {
+    guard let firstLayoutItem, let lastLayoutItem else { return nil }
+    return firstLayoutItem.itemType...lastLayoutItem.itemType
   }
 
 }
