@@ -392,26 +392,24 @@ public final class CalendarViewContent {
 
   /// The default `monthHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = 
-    { [unowned self] month in
-      let firstDateInMonth = calendar.firstDate(of: month)
-      let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
-      let itemModel = MonthHeaderView.calendarItemModel(
-        invariantViewProperties: .base,
-        content: .init(monthText: monthText, accessibilityLabel: monthText))
-      return itemModel
-    }
+  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [unowned self] month in
+    let firstDateInMonth = calendar.firstDate(of: month)
+    let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
+    let itemModel = MonthHeaderView.calendarItemModel(
+      invariantViewProperties: .base,
+      content: .init(monthText: monthText, accessibilityLabel: monthText))
+    return itemModel
+  }
 
   /// The default `dayHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultDayOfWeekItemProvider: (Month?, Int) -> AnyCalendarItemModel = 
-    { [unowned self] _, weekdayIndex in
-      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-      let itemModel = DayOfWeekView.calendarItemModel(
-        invariantViewProperties: .base,
-        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
-      return itemModel
-    }
+  private lazy var defaultDayOfWeekItemProvider: (Month?, Int) -> AnyCalendarItemModel = { [unowned self] _, weekdayIndex in
+    let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+    let itemModel = DayOfWeekView.calendarItemModel(
+      invariantViewProperties: .base,
+      content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+    return itemModel
+  }
 
   /// The default `dayItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
