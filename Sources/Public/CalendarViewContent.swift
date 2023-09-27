@@ -188,7 +188,12 @@ public final class CalendarViewContent {
     -> CalendarViewContent
   {
     self.monthHeaderItemProvider = { [defaultMonthHeaderItemProvider] month in
-      monthHeaderItemProvider(month) ?? defaultMonthHeaderItemProvider(month)
+      guard let itemModel = monthHeaderItemProvider(month) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultMonthHeaderItemProvider(month)
+      }
+
+      return itemModel
     }
 
     return self
@@ -218,7 +223,12 @@ public final class CalendarViewContent {
     -> CalendarViewContent
   {
     self.dayOfWeekItemProvider = { [defaultDayOfWeekItemProvider] month, weekdayIndex in
-      dayOfWeekItemProvider(month, weekdayIndex) ?? defaultDayOfWeekItemProvider(month, weekdayIndex)
+      guard let itemModel = dayOfWeekItemProvider(month, weekdayIndex) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultDayOfWeekItemProvider(month, weekdayIndex)
+      }
+
+      return itemModel
     }
 
     return self
@@ -244,7 +254,12 @@ public final class CalendarViewContent {
     -> CalendarViewContent
   {
     self.dayItemProvider = { [defaultDayItemProvider] day in
-      dayItemProvider(day) ?? defaultDayItemProvider(day)
+      guard let itemModel = dayItemProvider(day) else {
+        // If the caller returned nil, fall back to the default item provider
+        return defaultDayItemProvider(day)
+      }
+
+      return itemModel
     }
 
     return self
@@ -392,7 +407,10 @@ public final class CalendarViewContent {
 
   /// The default `monthHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [unowned self] month in
+  private lazy var defaultMonthHeaderItemProvider: (Month) -> AnyCalendarItemModel = { [
+    calendar,
+    monthHeaderDateFormatter
+  ] month in
     let firstDateInMonth = calendar.firstDate(of: month)
     let monthText = monthHeaderDateFormatter.string(from: firstDateInMonth)
     let itemModel = MonthHeaderView.calendarItemModel(
@@ -403,17 +421,18 @@ public final class CalendarViewContent {
 
   /// The default `dayHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultDayOfWeekItemProvider: (Month?, Int) -> AnyCalendarItemModel = { [unowned self] _, weekdayIndex in
-    let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
-    let itemModel = DayOfWeekView.calendarItemModel(
-      invariantViewProperties: .base,
-      content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
-    return itemModel
-  }
+  private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
+    -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
+      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+      let itemModel = DayOfWeekView.calendarItemModel(
+        invariantViewProperties: .base,
+        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+      return itemModel
+    }
 
   /// The default `dayItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
-  private lazy var defaultDayItemProvider: (Day) -> AnyCalendarItemModel = { [unowned self] day in
+  private lazy var defaultDayItemProvider: (Day) -> AnyCalendarItemModel = { [calendar, dayDateFormatter] day in
     let date = calendar.startDate(of: day)
     let itemModel = DayView.calendarItemModel(
       invariantViewProperties: .baseNonInteractive,
