@@ -1259,6 +1259,13 @@ extension CalendarView {
     let accessibilityScrollText = targetMonthView.accessibilityLabel
     UIAccessibility.post(notification: .pageScrolled, argument: accessibilityScrollText)
 
+    // ensure that scrolling related callbacks are still fired when performing scrolling via accessibility
+    if let visibleDayRange {
+      didEndDecelerating?(visibleDayRange)
+      didEndDragging?(visibleDayRange, false)
+      didScroll?(visibleDayRange, true)
+    }
+
     return true
   }
 
