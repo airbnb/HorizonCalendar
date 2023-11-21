@@ -1261,9 +1261,9 @@ extension CalendarView {
 
     // ensure that scrolling related callbacks are still fired when performing scrolling via accessibility
     if let visibleDayRange {
+      didScroll?(visibleDayRange, false)
+      didEndDragging?(visibleDayRange, true)
       didEndDecelerating?(visibleDayRange)
-      didEndDragging?(visibleDayRange, false)
-      didScroll?(visibleDayRange, true)
     }
 
     return true
