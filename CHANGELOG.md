@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue that could cause the calendar to layout unnecessarily due to a trait collection change notification
 - Fixed an issue that could cause off-screen items to appear or disappear instantly, rather than animating in or out during animated content changes
 - Fixed an issue that caused a SwiftUI view being used as a calendar item to not receive calls to `onAppear`
+- Fixed an accessibility issue that prevented scrolling callbacks from firing when scrolling via voiceover.
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
