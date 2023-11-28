@@ -156,7 +156,7 @@ final class VisibleItemsProvider {
   func detailsForVisibleItems(
     surroundingPreviouslyVisibleLayoutItem previouslyVisibleLayoutItem: LayoutItem,
     offset: CGPoint,
-    isAnimatedUpdatePass: Bool)
+    extendLayoutRegion: Bool)
     -> VisibleItemsDetails
   {
     // Default the initial capacity to 100, which is approximately enough room for 3 months worth of
@@ -168,8 +168,8 @@ final class VisibleItemsProvider {
         minimumCapacity: previousCalendarItemModelCache?.capacity ?? 100))
 
     let bounds: CGRect
-    if isAnimatedUpdatePass {
-      bounds = boundsForAnimatedUpdatePass(atOffset: offset)
+    if extendLayoutRegion {
+      bounds = boundsForExtendedRegionUpdatePass(atOffset: offset)
     } else {
       bounds = CGRect(origin: offset, size: size)
     }
@@ -293,81 +293,6 @@ final class VisibleItemsProvider {
       maxMonthHeight: context.maxMonthHeight)
   }
 
-  func visibleItemsForAccessibilityElements(
-    surroundingPreviouslyVisibleLayoutItem previouslyVisibleLayoutItem: LayoutItem,
-    visibleMonthRange: MonthRange)
-    -> [VisibleItem]
-  {
-    var visibleItems = [VisibleItem]()
-
-    // Look behind / ahead by 1 month to ensure that users can navigate by heading, even if an
-    // adjacent month header is off-screen.
-    let lowerBoundMonth = calendar.month(byAddingMonths: -1, to: visibleMonthRange.lowerBound)
-    let upperBoundMonth = calendar.month(byAddingMonths: 1, to: visibleMonthRange.upperBound)
-    let monthRange = lowerBoundMonth...upperBoundMonth
-
-    let handleItem: (LayoutItem, Bool, inout Bool) -> Void = { layoutItem, isLookingBackwards, shouldStop in
-      let month: Month
-      let calendarItemModel: AnyCalendarItemModel
-      switch layoutItem.itemType {
-      case .monthHeader(let _month):
-        month = _month
-        calendarItemModel = self.content.monthHeaderItemProvider(month)
-      case .day(let day):
-        month = day.month
-        calendarItemModel = self.content.dayItemProvider(day)
-      case .dayOfWeekInMonth:
-        return
-      }
-
-      guard monthRange.contains(month) else {
-        shouldStop = true
-        return
-      }
-
-      let item = VisibleItem(
-        calendarItemModel: calendarItemModel,
-        itemType: .layoutItemType(layoutItem.itemType),
-        frame: layoutItem.frame)
-      if isLookingBackwards {
-        visibleItems.insert(item, at: 0)
-      } else {
-        visibleItems.append(item)
-      }
-    }
-
-    var lastHandledLayoutItemEnumeratingBackwards = previouslyVisibleLayoutItem
-    var lastHandledLayoutItemEnumeratingForwards = previouslyVisibleLayoutItem
-    var context = VisibleItemsContext(
-      centermostLayoutItem: previouslyVisibleLayoutItem,
-      firstLayoutItem: previouslyVisibleLayoutItem)
-
-    layoutItemTypeEnumerator.enumerateItemTypes(
-      startingAt: previouslyVisibleLayoutItem.itemType,
-      itemTypeHandlerLookingBackwards: { itemType, shouldStop in
-        let layoutItem = self.layoutItem(
-          for: itemType,
-          lastHandledLayoutItem: lastHandledLayoutItemEnumeratingBackwards,
-          monthHeaderHeight: monthHeaderHeight(for: itemType.month, context: &context),
-          context: &context)
-        lastHandledLayoutItemEnumeratingBackwards = layoutItem
-
-        handleItem(layoutItem, true, &shouldStop)
-      },
-      itemTypeHandlerLookingForwards: { itemType, shouldStop in
-        let layoutItem = self.layoutItem(
-          for: itemType,
-          lastHandledLayoutItem: lastHandledLayoutItemEnumeratingForwards,
-          monthHeaderHeight: monthHeaderHeight(for: itemType.month, context: &context),
-          context: &context)
-        lastHandledLayoutItemEnumeratingForwards = layoutItem
-
-        handleItem(layoutItem, false, &shouldStop)
-      })
-
-    return visibleItems
-  }
-
   // MARK: Private
 
   private let layoutItemTypeEnumerator: LayoutItemTypeEnumerator
@@ -417,9 +342,10 @@ final class VisibleItemsProvider {
     return itemOrigin < otherItemOrigin ? item : otherItem
   }
 
-  private func boundsForAnimatedUpdatePass(atOffset offset: CGPoint) -> CGRect {
-    // Use a larger bounds (3x the viewport size) if we're in an animated update pass, reducing the
-    // likelihood of an item popping in / out.
+  private func boundsForExtendedRegionUpdatePass(atOffset offset: CGPoint) -> CGRect {
+    // Use a larger bounds (3x the viewport size) if we're in an animated update pass or voiceover
+    // is on, reducing the likelihood of an item popping in / out or an accessibility element being
+    // too far off screen to be focusable.
     let boundsMultiplier = CGFloat(3)
     switch content.monthsLayout {
     case .vertical:
