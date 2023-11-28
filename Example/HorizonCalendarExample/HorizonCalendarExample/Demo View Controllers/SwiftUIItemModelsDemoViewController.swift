@@ -59,6 +59,7 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
           Spacer()
         }
         .padding(.vertical)
+        .accessibilityAddTraits(.isHeader)
         .calendarItemModel
       }
 

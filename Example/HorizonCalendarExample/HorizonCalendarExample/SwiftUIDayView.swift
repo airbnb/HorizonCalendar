@@ -34,6 +34,7 @@ struct SwiftUIDayView: View {
         .aspectRatio(1, contentMode: .fill)
       Text("\(dayNumber)").foregroundColor(Color(UIColor.label))
     }
+    .accessibilityAddTraits(.isButton)
   }
 
 }
