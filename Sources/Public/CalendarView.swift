@@ -1222,7 +1222,7 @@ extension CalendarView {
 
   @objc
   private func accessibilityElementFocused(_ notification: NSNotification) {
-    guard 
+    guard
       let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] as? UIResponder,
       let itemView = element.nextItemView()
     else {

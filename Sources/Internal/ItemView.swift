@@ -44,16 +44,16 @@ final class ItemView: UIView {
     CATransformLayer.self
   }
 
-  override var isAccessibilityElement: Bool {
-    get { false }
-    set { }
-  }
-
   let contentView: UIView
 
   var selectionHandler: (() -> Void)?
 
   var itemType: VisibleItem.ItemType?
+
+  override var isAccessibilityElement: Bool {
+    get { false }
+    set { }
+  }
 
   var calendarItemModel: AnyCalendarItemModel {
     didSet {
