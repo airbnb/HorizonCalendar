@@ -176,7 +176,9 @@ public final class CalendarView: UIView {
 
     guard isReadyForLayout else { return }
 
-    _layoutSubviews(isAnimatedUpdatePass: isAnimatedUpdatePass)
+    // Layout with an extended bounds if Voice Over is running, reducing the likelihood of a
+    // Voice Over user experiencing "No heading found" when navigating by heading.
+    _layoutSubviews(extendLayoutRegion: UIAccessibility.isVoiceOverRunning)
   }
 
   /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
@@ -206,7 +208,7 @@ public final class CalendarView: UIView {
     // views don't pop in if they're animating in from outside the actual bounds.
     if animated {
       UIView.performWithoutAnimation {
-        _layoutSubviews(isAnimatedUpdatePass: isInAnimationClosure)
+        _layoutSubviews(extendLayoutRegion: isInAnimationClosure)
       }
     }
 
@@ -273,6 +275,12 @@ public final class CalendarView: UIView {
         animations()
       } else {
         UIView.animate(withDuration: 0.3, animations: animations)
+      }
+    }
+
+    if UIAccessibility.isVoiceOverRunning {
+      DispatchQueue.main.async {
+        self.restoreAccessibilityFocusIfNeeded()
       }
     }
   }
@@ -392,8 +400,8 @@ public final class CalendarView: UIView {
 
   fileprivate var previousPageIndex: Int?
 
-  fileprivate lazy var scrollView: NoContentInsetAdjustmentScrollView = {
-    let scrollView = NoContentInsetAdjustmentScrollView()
+  fileprivate lazy var scrollView: CalendarScrollView = {
+    let scrollView = CalendarScrollView()
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.delegate = scrollViewDelegate
@@ -509,11 +517,9 @@ public final class CalendarView: UIView {
   private weak var autoScrollDisplayLink: CADisplayLink?
   private var autoScrollOffset: CGFloat?
 
-  private var cachedAccessibilityElements: [Any]?
-  private var focusedAccessibilityElement: Any?
   private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
 
-  private var lastmultiDaySelectionDay: Day?
+  private var lastMultiDaySelectionDay: Day?
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
@@ -635,6 +641,12 @@ public final class CalendarView: UIView {
       selector: #selector(accessibilityElementFocused(_:)),
       name: UIAccessibility.elementFocusedNotification,
       object: nil)
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(setNeedsLayout),
+      name: UIAccessibility.voiceOverStatusDidChangeNotification,
+      object: nil)
   }
 
   private func anchorLayoutItem(
@@ -702,7 +714,7 @@ public final class CalendarView: UIView {
   }
 
   // This exists so that we can force a layout ourselves in preparation for an animated update.
-  private func _layoutSubviews(isAnimatedUpdatePass: Bool) {
+  private func _layoutSubviews(extendLayoutRegion: Bool) {
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.setUpInitialMetricsIfNeeded()
       scrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(viewportSize: bounds.size)
@@ -731,12 +743,10 @@ public final class CalendarView: UIView {
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
       offset: scrollView.contentOffset,
-      isAnimatedUpdatePass: isAnimatedUpdatePass)
+      extendLayoutRegion: extendLayoutRegion)
     self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
 
-    updateVisibleViews(
-      withVisibleItems: currentVisibleItemsDetails.visibleItems,
-      previouslyVisibleItems: visibleItemsDetails?.visibleItems ?? [])
+    updateVisibleViews(withVisibleItems: currentVisibleItemsDetails.visibleItems)
 
     visibleItemsDetails = currentVisibleItemsDetails
 
@@ -752,18 +762,10 @@ public final class CalendarView: UIView {
         maximumScrollOffset: maximumScrollOffset)
     }
 
-    cachedAccessibilityElements = nil
-    if let element = focusedAccessibilityElement as? OffScreenCalendarItemAccessibilityElement {
-      UIAccessibility.post(
-        notification: .screenChanged,
-        argument: visibleViewsForVisibleItems[element.correspondingItem])
-    }
+    scrollView.cachedAccessibilityElements = nil
   }
 
-  private func updateVisibleViews(
-    withVisibleItems visibleItems: Set<VisibleItem>,
-    previouslyVisibleItems _: Set<VisibleItem>)
-  {
+  private func updateVisibleViews(withVisibleItems visibleItems: Set<VisibleItem>) {
     var viewsToHideForVisibleItems = visibleViewsForVisibleItems
     visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
 
@@ -787,14 +789,6 @@ public final class CalendarView: UIView {
         if let previousBackingVisibleItem {
           // Don't hide views that were reused
           viewsToHideForVisibleItems.removeValue(forKey: previousBackingVisibleItem)
-        }
-
-        if
-          UIAccessibility.isVoiceOverRunning,
-          itemTypeOfFocusedAccessibilityElement == visibleItem.itemType
-        {
-          // Preserve the focused accessibility element even after views are reused
-          UIAccessibility.post(notification: .screenChanged, argument: view.contentView)
         }
       })
 
@@ -997,10 +991,10 @@ public final class CalendarView: UIView {
 
     switch gestureRecognizer.state {
     case .ended, .cancelled, .failed:
-      if let lastmultiDaySelectionDay {
-        multiDaySelectionDragHandler?(lastmultiDaySelectionDay, gestureRecognizer.state)
+      if let lastMultiDaySelectionDay {
+        multiDaySelectionDragHandler?(lastMultiDaySelectionDay, gestureRecognizer.state)
       }
-      lastmultiDaySelectionDay = nil
+      lastMultiDaySelectionDay = nil
 
     default:
       break
@@ -1025,8 +1019,8 @@ public final class CalendarView: UIView {
       break
     }
 
-    if let intersectedDay, intersectedDay != lastmultiDaySelectionDay {
-      lastmultiDaySelectionDay = intersectedDay
+    if let intersectedDay, intersectedDay != lastMultiDaySelectionDay {
+      lastMultiDaySelectionDay = intersectedDay
       multiDaySelectionDragHandler?(intersectedDay, gestureRecognizer.state)
     } else if gestureRecognizer.state == .began {
       // If the gesture doesn't intersect a day in the `began` state, cancel it
@@ -1135,7 +1129,7 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
     let visibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
       offset: scrollView.contentOffset,
-      isAnimatedUpdatePass: false)
+      extendLayoutRegion: false)
 
     return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
   }
@@ -1150,61 +1144,6 @@ extension CalendarView {
 
   public override var isAccessibilityElement: Bool {
     get { false }
-    set { }
-  }
-
-  public override var accessibilityElements: [Any]? {
-    get {
-      guard cachedAccessibilityElements == nil else {
-        return cachedAccessibilityElements
-      }
-      guard
-        let visibleItemsDetails,
-        let visibleMonthRange
-      else {
-        return nil
-      }
-
-      let visibleItems = visibleItemsProvider.visibleItemsForAccessibilityElements(
-        surroundingPreviouslyVisibleLayoutItem: visibleItemsDetails.centermostLayoutItem,
-        visibleMonthRange: visibleMonthRange)
-
-      var elements = [Any]()
-      for visibleItem in visibleItems {
-        guard case .layoutItemType = visibleItem.itemType else {
-          assertionFailure("""
-              Only visible calendar items with itemType == .layoutItemType should be considered for
-              use as an accessibility element.
-            """)
-          continue
-        }
-        let element: Any
-        if let visibleView = visibleViewsForVisibleItems[visibleItem] {
-          element = visibleView
-        } else {
-          guard
-            let accessibilityElement = OffScreenCalendarItemAccessibilityElement(
-              correspondingItem: visibleItem,
-              scrollViewContainer: scrollView)
-          else {
-            continue
-          }
-
-          accessibilityElement.accessibilityFrameInContainerSpace = CGRect(
-            x: visibleItem.frame.minX - scrollView.contentOffset.x,
-            y: visibleItem.frame.minY - scrollView.contentOffset.y,
-            width: visibleItem.frame.width,
-            height: visibleItem.frame.height)
-          element = accessibilityElement
-        }
-
-        elements.append(element)
-      }
-
-      cachedAccessibilityElements = elements
-
-      return elements
-    }
     set { }
   }
 
@@ -1271,20 +1210,49 @@ extension CalendarView {
 
   // MARK: Private
 
+  private func restoreAccessibilityFocusIfNeeded() {
+    let itemView = visibleViewsForVisibleItems.values.first {
+      $0.itemType == itemTypeOfFocusedAccessibilityElement
+    }
+    guard let itemView else { return }
+
+    // Preserve the focused accessibility element after views are reused due to a content update
+    UIAccessibility.post(notification: .screenChanged, argument: itemView.contentView)
+  }
+
   @objc
   private func accessibilityElementFocused(_ notification: NSNotification) {
-    guard let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] else {
+    guard
+      let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] as? UIResponder,
+      let itemView = element.nextItemView()
+    else {
       return
     }
 
-    focusedAccessibilityElement = element
+    itemTypeOfFocusedAccessibilityElement = itemView.itemType
 
-    if let contentView = element as? UIView, let itemView = contentView.superview as? ItemView {
-      itemTypeOfFocusedAccessibilityElement = itemView.itemType
+    // If the accessibility element is not fully in view programmatically scroll it to be centered.
+    let isElementFullyVisible: Bool
+    let viewFrameInCalendarView = convert(itemView.bounds, from: itemView)
+    switch scrollMetricsMutator.scrollAxis {
+    case .vertical:
+      let verticalBounds = CGRect(
+        x: 0,
+        y: layoutMargins.top,
+        width: bounds.width,
+        height: bounds.height - layoutMargins.top - layoutMargins.bottom)
+      isElementFullyVisible = !verticalBounds.contains(viewFrameInCalendarView)
+    case .horizontal:
+      let horizontalBounds = CGRect(
+        x: layoutMargins.left,
+        y: 0,
+        width: bounds.width - layoutMargins.left - layoutMargins.right,
+        height: bounds.height)
+      isElementFullyVisible = !horizontalBounds.contains(viewFrameInCalendarView)
     }
 
-    if let offScreenElement = element as? OffScreenCalendarItemAccessibilityElement {
-      switch offScreenElement.correspondingItem.itemType {
+    if isElementFullyVisible {
+      switch itemView.itemType {
       case .layoutItemType(.monthHeader(let month)):
         let dateInTargetMonth = calendar.firstDate(of: month)
         scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
@@ -1462,35 +1430,6 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
 
 }
 
-// MARK: - NoContentInsetAdjustmentScrollView
-
-/// A scroll view that forces `contentInsetAdjustmentBehavior == .never`.
-///
-/// The main thing this prevents is the situation where the view hierarchy is traversed to find a scroll view, and attempts are made to
-/// change that scroll view's `contentInsetAdjustmentBehavior`.
-private final class NoContentInsetAdjustmentScrollView: UIScrollView {
-
-  // MARK: Lifecycle
-
-  init() {
-    super.init(frame: .zero)
-    contentInsetAdjustmentBehavior = .never
-  }
-
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: Internal
-
-  override var contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior {
-    didSet {
-      super.contentInsetAdjustmentBehavior = .never
-    }
-  }
-
-}
-
 // MARK: Scroll View Silent Updating
 
 extension UIScrollView {
@@ -1502,6 +1441,16 @@ extension UIScrollView {
     operations()
 
     self.delegate = delegate
+  }
+
+}
+
+// MARK: `UIResponder` Next `ItemView`
+
+extension UIResponder {
+
+  fileprivate func nextItemView() -> ItemView? {
+    self as? ItemView ?? next?.nextItemView()
   }
 
 }

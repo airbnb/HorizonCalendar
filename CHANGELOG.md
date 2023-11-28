@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue that could cause off-screen items to appear or disappear instantly, rather than animating in or out during animated content changes
 - Fixed an issue that caused a SwiftUI view being used as a calendar item to not receive calls to `onAppear`
 - Fixed an accessibility issue that prevented scrolling callbacks from firing when scrolling via voiceover.
+- Fixed an issue that caused Voice Over users to be unable to reliably navigate by heading
 
 ### Changed
 - Removed all deprecated code, simplifying the public API in preparation for a 2.0 release
@@ -34,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `ItemView` to determine user interaction capabilities from its content view's `hitTest` / `pointInside` functions
 - Updated content-change animations so that the same scroll offset is maintained throughout the animation
 - Changed the Swift version needed to use HorizonCalendar to 5.8
+- Simplified accessibility (Voice Over) support so that it works consistently for calendars containing UIKit and SwiftUI views
+
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30
 

@@ -50,6 +50,11 @@ final class ItemView: UIView {
 
   var itemType: VisibleItem.ItemType?
 
+  override var isAccessibilityElement: Bool {
+    get { false }
+    set { }
+  }
+
   var calendarItemModel: AnyCalendarItemModel {
     didSet {
       guard calendarItemModel._itemViewDifferentiator == oldValue._itemViewDifferentiator else {
@@ -102,17 +107,6 @@ final class ItemView: UIView {
 
   private func updateContent() {
     calendarItemModel._setContent(onViewOfSameType: contentView)
-  }
-
-}
-
-// MARK: UIAccessibility
-
-extension ItemView {
-
-  override var isAccessibilityElement: Bool {
-    get { false }
-    set { }
   }
 
 }

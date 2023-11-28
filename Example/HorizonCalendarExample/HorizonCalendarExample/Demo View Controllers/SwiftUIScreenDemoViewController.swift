@@ -98,18 +98,21 @@ struct SwiftUIScreenDemo: View {
 
       .monthHeaders { month in
         let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
-        if case .vertical = monthsLayout {
-          HStack {
+        Group {
+          if case .vertical = monthsLayout {
+            HStack {
+              Text(monthHeaderText)
+                .font(.title2)
+              Spacer()
+            }
+            .padding()
+          } else {
             Text(monthHeaderText)
               .font(.title2)
-            Spacer()
+              .padding()
           }
-          .padding()
-        } else {
-          Text(monthHeaderText)
-            .font(.title2)
-            .padding()
         }
+        .accessibilityAddTraits(.isHeader)
       }
 
       .days { day in

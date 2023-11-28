@@ -35,6 +35,7 @@ public final class DayOfWeekView: UIView {
     label.font = invariantViewProperties.font
     label.textAlignment = invariantViewProperties.textAlignment
     label.textColor = invariantViewProperties.textColor
+    label.isAccessibilityElement = false
 
     super.init(frame: .zero)
 
@@ -106,7 +107,7 @@ public final class DayOfWeekView: UIView {
 extension DayOfWeekView {
 
   public override var isAccessibilityElement: Bool {
-    get { true }
+    get { invariantViewProperties.isAccessibilityElement }
     set { }
   }
 

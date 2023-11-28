@@ -47,6 +47,11 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   // MARK: Public
 
+  public override var isAccessibilityElement: Bool {
+    get { false }
+    set { }
+  }
+
   public override func didMoveToWindow() {
     super.didMoveToWindow()
 
