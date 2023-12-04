@@ -210,7 +210,6 @@ extension DayOfWeekView {
       hasher.combine(isAccessibilityElement)
       hasher.combine(accessibilityTraits)
     }
-
     public static func == (lhs: DayOfWeekView.InvariantViewProperties, rhs: DayOfWeekView.InvariantViewProperties) -> Bool {
             lhs.isAccessibilityElement == rhs.isAccessibilityElement
     }
@@ -238,7 +237,7 @@ extension UIColor {
     static let blackD1 = UIColor(red: 15 / 255.0, green: 15 / 255.0, blue: 15 / 255.0, alpha: 1.0)
     static let whiteD2 = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1.0)
     static let globalBackgroundColor = color(light: whiteD2, dark: blackD1)
-    
+
     static func color(light: UIColor, dark: UIColor) -> UIColor {
         if #available(iOS 13.0, *) {
             return UIColor.init { traitCollection in
