@@ -177,8 +177,12 @@ public final class CalendarView: UIView {
     guard isReadyForLayout else { return }
 
     // Layout with an extended bounds if Voice Over is running, reducing the likelihood of a
-    // Voice Over user experiencing "No heading found" when navigating by heading.
-    _layoutSubviews(extendLayoutRegion: UIAccessibility.isVoiceOverRunning)
+    // Voice Over user experiencing "No heading found" when navigating by heading. We also check to
+    // make sure an accessibility element has already been focused, otherwise the first
+    // accessibility element will be off-screen when a user first focuses into the calendar view.
+    let extendLayoutRegion = UIAccessibility.isVoiceOverRunning &&
+      itemTypeOfFocusedAccessibilityElement != nil
+    _layoutSubviews(extendLayoutRegion: extendLayoutRegion)
   }
 
   /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
@@ -517,8 +521,6 @@ public final class CalendarView: UIView {
   private weak var autoScrollDisplayLink: CADisplayLink?
   private var autoScrollOffset: CGFloat?
 
-  private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType?
-
   private var lastMultiDaySelectionDay: Day?
 
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
@@ -535,6 +537,18 @@ public final class CalendarView: UIView {
 
     return false
   }()
+
+  private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType? {
+    didSet {
+      switch (oldValue, itemTypeOfFocusedAccessibilityElement) {
+      case (.none, .some), (.some, .none):
+        setNeedsLayout()
+        layoutIfNeeded()
+      default:
+        break
+      }
+    }
+  }
 
   private var isReadyForLayout: Bool {
     // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
@@ -1226,6 +1240,7 @@ extension CalendarView {
       let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] as? UIResponder,
       let itemView = element.nextItemView()
     else {
+      itemTypeOfFocusedAccessibilityElement = nil
       return
     }
 
