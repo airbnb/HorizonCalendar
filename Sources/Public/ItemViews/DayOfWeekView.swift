@@ -214,7 +214,6 @@ extension DayOfWeekView {
             lhs.isAccessibilityElement == rhs.isAccessibilityElement
     }
   }
-
 }
 
 // MARK: CalendarItemViewRepresentable
@@ -233,6 +232,7 @@ extension DayOfWeekView: CalendarItemViewRepresentable {
   }
 
 }
+
 extension UIColor {
     static let blackD1 = UIColor(red: 15 / 255.0, green: 15 / 255.0, blue: 15 / 255.0, alpha: 1.0)
     static let whiteD2 = UIColor(red: 246 / 255.0, green: 246 / 255.0, blue: 246 / 255.0, alpha: 1.0)
