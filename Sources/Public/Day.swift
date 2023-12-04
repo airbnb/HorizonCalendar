@@ -23,7 +23,7 @@ public struct Day: Hashable {
 
   // MARK: Lifecycle
 
-  init(month: Month, day: Int) {
+  public init(month: Month, day: Int) {
     self.month = month
     self.day = day
   }
