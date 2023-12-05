@@ -42,7 +42,7 @@ public final class DayOfWeekView: UIView {
 
     isUserInteractionEnabled = false
 
-    backgroundColor = invariantViewProperties.backgroundColor
+    backgroundColor = UIColor.globalBackgroundColor.cgColor
 
     layer.addSublayer(backgroundLayer)
 
