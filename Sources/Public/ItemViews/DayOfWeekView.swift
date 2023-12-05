@@ -62,7 +62,7 @@ public final class DayOfWeekView: UIView {
     let edgeInsets = invariantViewProperties.edgeInsets
     let insetBounds = bounds.inset(
       by: UIEdgeInsets(
-        top: edgeInsets.top,
+        top: 0,
         left: edgeInsets.leading,
         bottom: edgeInsets.bottom,
         right: edgeInsets.trailing))
