@@ -423,7 +423,7 @@ public final class CalendarViewContent {
   /// or if the existing provider returns nil.
   private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
     -> AnyCalendarItemModel = { [dayDateFormatter] _, weekdayIndex in
-      let dayOfWeekText = self.symbolsFor("cccccc")[weekdayIndex]
+      let dayOfWeekText = self?.symbolsFor("cccccc")[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
