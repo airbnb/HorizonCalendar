@@ -47,7 +47,7 @@ public final class DayOfWeekView: UIView {
     backgroundColor = UIColor.globalBackgroundColor
 
     layer.addSublayer(backgroundLayer)
-    layer.backgroundColor = UIColor.globalBackgroundColor
+    layer.backgroundColor = UIColor.globalBackgroundColor.cgColor
 
     addSubview(label)
   }
