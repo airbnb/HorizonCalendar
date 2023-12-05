@@ -456,12 +456,12 @@ public final class CalendarViewContent {
 
   private func symbolsFor(_ format: String) -> [String] {
         let df = DateFormatter()
-        df.locale = self.locale
-        df.calendar = self
+        df.calendar = calendar
+        df.locale = calendar.locale
         df.dateFormat = format
-        let weekdays = self.range(of: .weekday, in: .year, for: Date())!
+        let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
         return weekdays.map {
-            let date = self.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
+            let date = calendar.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
             return df.string(from: date)
         }
     }
