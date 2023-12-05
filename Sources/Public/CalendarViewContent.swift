@@ -441,7 +441,7 @@ public final class CalendarViewContent {
         // df.dateFormat = format
         // let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
                                
-      let dayOfWeekText = self.symbolsFor("cccccc")[weekdayIndex]
+      let dayOfWeekText = self?.symbolsFor("cccccc")[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
