@@ -32,6 +32,8 @@ public final class DayOfWeekView: UIView {
     backgroundLayer.strokeColor = backgroundShapeDrawingConfig.borderColor.cgColor
     backgroundLayer.lineWidth = backgroundShapeDrawingConfig.borderWidth
 
+    backgroundLayer = CAShapeLayer()
+
     label = UILabel()
     label.font = invariantViewProperties.font
     label.textAlignment = invariantViewProperties.textAlignment
@@ -45,6 +47,7 @@ public final class DayOfWeekView: UIView {
     backgroundColor = UIColor.globalBackgroundColor
 
     layer.addSublayer(backgroundLayer)
+    layer.backgroundColor = UIColor.globalBackgroundColor
 
     addSubview(label)
   }
