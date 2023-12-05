@@ -422,8 +422,8 @@ public final class CalendarViewContent {
   /// The default `dayHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
   private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
-    -> AnyCalendarItemModel = { [monthHeaderDateFormatter] _, weekdayIndex in
-      let dayOfWeekText = monthHeaderDateFormatter.veryShortStandaloneWeekdaySymbols[weekdayIndex]
+    -> AnyCalendarItemModel = { [dayDateFormatter] _, weekdayIndex in
+      let dayOfWeekText = symbolsFor("cccccc")[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
@@ -453,6 +453,28 @@ public final class CalendarViewContent {
       locale: calendar.locale ?? Locale.current)
     return monthHeaderDateFormatter
   }()
+
+  private func symbolsFor(_ format: String) -> [String] {
+        let df = DateFormatter()
+        df.locale = self.locale
+        df.calendar = self
+        df.dateFormat = format
+        let weekdays = self.range(of: .weekday, in: .year, for: Date())!
+        return weekdays.map {
+            let date = self.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
+            return df.string(from: date)
+        }
+    }
+  // private lazy var dayOfWeakDateFormatter: DateFormatter = {
+  //       let dayOfWeakDateFormatter = DateFormatter()
+  //       dayOfWeakDateFormatter.calendar = calendar
+  //       dayOfWeakDateFormatter.locale = calendar.locale
+  //       dayOfWeakDateFormatter.dateFormat = DateFormatter.dateFormat(
+  //           fromTemplate: "cccccc",
+  //           options: 0,
+  //           locale: calendar.locale ?? Locale.current)
+  //       return dayOfWeakDateFormatter
+  //   }()
 
   private lazy var dayDateFormatter: DateFormatter = {
     let dayDateFormatter = DateFormatter()
