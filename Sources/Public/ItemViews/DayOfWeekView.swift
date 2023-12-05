@@ -27,7 +27,7 @@ public final class DayOfWeekView: UIView {
 
     backgroundLayer = CAShapeLayer()
     let backgroundShapeDrawingConfig = invariantViewProperties.backgroundShapeDrawingConfig
-    backgroundLayer.fillColor = UIColor.globalBackgroundColor
+    backgroundLayer.fillColor = UIColor.globalBackgroundColor.cgColor
     backgroundLayer.strokeColor = backgroundShapeDrawingConfig.borderColor.cgColor
     backgroundLayer.lineWidth = backgroundShapeDrawingConfig.borderWidth
 
