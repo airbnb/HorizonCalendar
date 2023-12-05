@@ -435,30 +435,12 @@ public final class CalendarViewContent {
   /// or if the existing provider returns nil.
   private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
     -> AnyCalendarItemModel = { [weak self] _, weekdayIndex in
-        // let df = DateFormatter()
-        // df.calendar = calendar
-        // df.locale = calendar.locale
-        // df.dateFormat = format
-        // let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
-                               
       let dayOfWeekText = self?.symbolsFor("cccccc")[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
-        content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
+        content: .init(dayOfWeekText: dayOfWeekText ?? "", accessibilityLabel: dayOfWeekText))
       return itemModel
     }
-
-   // public func symbolsFor(_ format: String) -> [String] {
-   //      let df = DateFormatter()
-   //      df.calendar = calendar
-   //      df.locale = calendar.locale
-   //      df.dateFormat = format
-   //      let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
-   //      return weekdays.map {
-   //          let date = calendar.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
-   //          return df.string(from: date)
-   //      }
-   //  }
 
   /// The default `dayItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
