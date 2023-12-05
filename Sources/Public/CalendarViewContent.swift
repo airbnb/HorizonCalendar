@@ -346,6 +346,18 @@ public final class CalendarViewContent {
     return self
   }
 
+    public func symbolsFor(_ format: String) -> [String] {
+        let df = DateFormatter()
+        df.calendar = calendar
+        df.locale = calendar.locale
+        df.dateFormat = format
+        let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
+        return weekdays.map {
+            let date = calendar.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
+            return df.string(from: date)
+        }
+    }
+
   /// Configures the overlay item provider.
   ///
   /// `CalendarView` invokes the provided `overlayItemProvider` for each overlaid item location in the
@@ -422,13 +434,31 @@ public final class CalendarViewContent {
   /// The default `dayHeaderItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
   private lazy var defaultDayOfWeekItemProvider: (Month?, Int)
-    -> AnyCalendarItemModel = { [dayDateFormatter] _, weekdayIndex in
-      let dayOfWeekText = self?.symbolsFor("cccccc")[weekdayIndex]
+    -> AnyCalendarItemModel = { [weak self] _, weekdayIndex in
+        // let df = DateFormatter()
+        // df.calendar = calendar
+        // df.locale = calendar.locale
+        // df.dateFormat = format
+        // let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
+                               
+      let dayOfWeekText = self.symbolsFor("cccccc")[weekdayIndex]
       let itemModel = DayOfWeekView.calendarItemModel(
         invariantViewProperties: .base,
         content: .init(dayOfWeekText: dayOfWeekText, accessibilityLabel: dayOfWeekText))
       return itemModel
     }
+
+   // public func symbolsFor(_ format: String) -> [String] {
+   //      let df = DateFormatter()
+   //      df.calendar = calendar
+   //      df.locale = calendar.locale
+   //      df.dateFormat = format
+   //      let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
+   //      return weekdays.map {
+   //          let date = calendar.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
+   //          return df.string(from: date)
+   //      }
+   //  }
 
   /// The default `dayItemProvider` if no provider has been configured,
   /// or if the existing provider returns nil.
@@ -453,18 +483,7 @@ public final class CalendarViewContent {
       locale: calendar.locale ?? Locale.current)
     return monthHeaderDateFormatter
   }()
-
-  private func symbolsFor(_ format: String) -> [String] {
-        let df = DateFormatter()
-        df.calendar = calendar
-        df.locale = calendar.locale
-        df.dateFormat = format
-        let weekdays = calendar.range(of: .weekday, in: .year, for: Date())!
-        return weekdays.map {
-            let date = calendar.nextDate(after: Date(), matching: DateComponents(weekday: $0), matchingPolicy: .strict)!
-            return df.string(from: date)
-        }
-    }
+  
   // private lazy var dayOfWeakDateFormatter: DateFormatter = {
   //       let dayOfWeakDateFormatter = DateFormatter()
   //       dayOfWeakDateFormatter.calendar = calendar
