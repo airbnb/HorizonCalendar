@@ -17,20 +17,25 @@ import Foundation
 
 // MARK: - Day
 
-/// Represents the components of a day (with a corresponding year and month) in a particular calendar. All days are assumed to have
-/// been instantiated with the same `Calendar`, which is enforced throughout the implementation.
-public struct Day: Hashable {
+typealias Day = DayComponents
+
+// MARK: - DayComponents
+
+/// Represents the components of a day. This type is created internally, then vended to you via the public API. All `DayComponents`
+/// instances that are vended to you are created using the `Calendar` instance that you provide when initializing your
+/// `CalendarView`.
+public struct DayComponents: Hashable {
 
   // MARK: Lifecycle
 
-  init(month: Month, day: Int) {
+  init(month: MonthComponents, day: Int) {
     self.month = month
     self.day = day
   }
 
   // MARK: Public
 
-  public let month: Month
+  public let month: MonthComponents
   public let day: Int
 
   public var components: DateComponents {
@@ -41,7 +46,7 @@ public struct Day: Hashable {
 
 // MARK: CustomStringConvertible
 
-extension Day: CustomStringConvertible {
+extension DayComponents: CustomStringConvertible {
 
   public var description: String {
     let yearDescription = String(format: "%04d", month.year)
@@ -54,9 +59,9 @@ extension Day: CustomStringConvertible {
 
 // MARK: Comparable
 
-extension Day: Comparable {
+extension DayComponents: Comparable {
 
-  public static func < (lhs: Day, rhs: Day) -> Bool {
+  public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
     guard lhs.month == rhs.month else { return lhs.month < rhs.month }
     return lhs.day < rhs.day
   }

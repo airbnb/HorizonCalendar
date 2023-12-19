@@ -331,7 +331,7 @@ extension CalendarViewRepresentable {
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A new `CalendarViewRepresentable` with a new month header item provider.
   public func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
+    _ monthHeaderItemProvider: @escaping (_ month: MonthComponents) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -350,7 +350,7 @@ extension CalendarViewRepresentable {
   ///   - month: The `Month` for which to provide a month header view.
   /// - Returns: A new `CalendarViewRepresentable` with custom month header views configured.
   public func monthHeaders(
-    @ViewBuilder _ content: @escaping (_ month: Month) -> some View)
+    @ViewBuilder _ content: @escaping (_ month: MonthComponents) -> some View)
     -> CalendarViewRepresentable
   {
     monthHeaderItemProvider { month in
@@ -377,7 +377,7 @@ extension CalendarViewRepresentable {
   /// - Returns: A new `CalendarViewRepresentable` with a new day-of-week item provider.
   public func dayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (
-      _ month: Month?,
+      _ month: MonthComponents?,
       _ weekdayIndex: Int)
       -> AnyCalendarItemModel?)
     -> Self
@@ -401,7 +401,7 @@ extension CalendarViewRepresentable {
   ///   - weekdayIndex: The weekday index for which to provide a day-of-week header view.
   /// - Returns: A new `CalendarViewRepresentable` with custom day-of-week header views configured.
   public func dayOfWeekHeaders(
-    _ content: @escaping (_ month: Month?, _ weekdayIndex: Int) -> some View)
+    _ content: @escaping (_ month: MonthComponents?, _ weekdayIndex: Int) -> some View)
     -> Self
   {
     dayOfWeekItemProvider { month, weekdayIndex in
@@ -425,7 +425,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day item provider.
   public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+    _ dayItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -445,7 +445,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day view.
   /// - Returns: A new `CalendarViewRepresentable` with custom day views configured.
   public func days(
-    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
+    @ViewBuilder _ content: @escaping (_ day: DayComponents) -> some View)
     -> Self
   {
     dayItemProvider { day in
@@ -468,7 +468,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day background item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day background item provider.
   public func dayBackgroundItemProvider(
-    _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+    _ dayBackgroundItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -488,7 +488,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day background view.
   /// - Returns: A new `CalendarViewRepresentable` with day background views configured.
   public func dayBackgrounds(
-    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
+    @ViewBuilder _ content: @escaping (_ day: DayComponents) -> some View)
     -> Self
   {
     dayBackgroundItemProvider { day in
@@ -685,7 +685,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - daySelectionHandler: A closure (that is retained) that is invoked whenever a day is selected.
-  public func onDaySelection(_ daySelectionHandler: @escaping (Day) -> Void) -> Self {
+  public func onDaySelection(_ daySelectionHandler: @escaping (DayComponents) -> Void) -> Self {
     var view = self
     view.daySelectionHandler = daySelectionHandler
     return view
@@ -704,9 +704,9 @@ extension CalendarViewRepresentable {
   ///   - changed: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture intersects a new day.
   ///   - ended: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture ends.
   public func onMultipleDaySelectionDrag(
-    began: @escaping (Day) -> Void,
-    changed: @escaping (Day) -> Void,
-    ended: @escaping (Day) -> Void)
+    began: @escaping (DayComponents) -> Void,
+    changed: @escaping (DayComponents) -> Void,
+    ended: @escaping (DayComponents) -> Void)
     -> Self
   {
     var view = self
@@ -726,7 +726,7 @@ extension CalendarViewRepresentable {
   }
 
   public func onScroll(
-    _ scrollHandler: @escaping (_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)
+    _ scrollHandler: @escaping (_ visibleDayRange: DayComponentsRange, _ isUserDragging: Bool) -> Void)
     -> Self
   {
     var view = self
@@ -735,7 +735,7 @@ extension CalendarViewRepresentable {
   }
 
   public func onDragEnd(
-    _ dragEndHandler: @escaping (_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)
+    _ dragEndHandler: @escaping (_ visibleDayRange: DayComponentsRange, _ willDecelerate: Bool) -> Void)
     -> Self
   {
     var view = self
@@ -744,7 +744,7 @@ extension CalendarViewRepresentable {
   }
 
   public func onDeceleratingEnd(
-    _ deceleratingEndHandler: @escaping (_ visibleDayRange: DayRange) -> Void)
+    _ deceleratingEndHandler: @escaping (_ visibleDayRange: DayComponentsRange) -> Void)
     -> Self
   {
     var view = self

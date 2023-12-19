@@ -17,7 +17,11 @@ import Foundation
 
 // MARK: - MonthRange
 
-public typealias MonthRange = ClosedRange<Month>
+typealias MonthRange = MonthComponentsRange
+
+// MARK: - MonthComponentsRange
+
+public typealias MonthComponentsRange = ClosedRange<MonthComponents>
 
 extension MonthRange {
 

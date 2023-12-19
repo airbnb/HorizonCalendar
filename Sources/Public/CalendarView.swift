@@ -62,22 +62,22 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked whenever a day is selected. It is the responsibility of your feature code to decide what to
   /// do with each day. For example, you might store the most recent day in a selected day property, then read that property in your
   /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
-  public var daySelectionHandler: ((Day) -> Void)?
+  public var daySelectionHandler: ((DayComponents) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
-  public var didScroll: ((_ visibleDayRange: DayRange, _ isUserDragging: Bool) -> Void)?
+  public var didScroll: ((_ visibleDayRange: DayComponentsRange, _ isUserDragging: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDragging(_: willDecelerate:)`.
-  public var didEndDragging: ((_ visibleDayRange: DayRange, _ willDecelerate: Bool) -> Void)?
+  public var didEndDragging: ((_ visibleDayRange: DayComponentsRange, _ willDecelerate: Bool) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidEndDecelerating(_:)`.
-  public var didEndDecelerating: ((_ visibleDayRange: DayRange) -> Void)?
+  public var didEndDecelerating: ((_ visibleDayRange: DayComponentsRange) -> Void)?
 
   /// A closure (that is retained) that is invoked during a multiple-selection-drag-gesture. Multiple selection is initiated with a long press,
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
   /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
   /// `Date` instances and use them as input to the `dayRangeItemProvider`.
-  public var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
+  public var multiDaySelectionDragHandler: ((DayComponents, UIGestureRecognizer.State) -> Void)? {
     didSet {
       configureMultiDaySelectionPanGestureRecognizer()
     }
@@ -94,12 +94,12 @@ public final class CalendarView: UIView {
   }
 
   /// The range of months that are partially of fully visible.
-  public var visibleMonthRange: MonthRange? {
+  public var visibleMonthRange: MonthComponentsRange? {
     visibleItemsDetails?.visibleMonthRange
   }
 
   /// The range of days that are partially or fully visible.
-  public var visibleDayRange: DayRange? {
+  public var visibleDayRange: DayComponentsRange? {
     visibleItemsDetails?.visibleDayRange
   }
 
