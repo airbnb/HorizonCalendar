@@ -196,7 +196,7 @@ private func makeContent() -> CalendarViewContent {
 }
 ```
 
-The `dayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `Day`.
+The `dayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `DayComponents`.
 
 `CalendarItemModel` is a type that abstracts away the creation and configuration of a view displayed in the calendar. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view, we'll need to create a type that knows how to create and update that label. Here's a simple example:
 ```swift
@@ -213,7 +213,7 @@ struct DayLabel: CalendarItemViewRepresentable {
 
   /// Properties that will vary depending on the particular date being displayed.
   struct Content: Equatable {
-    let day: Day
+    let day: DayComponents
   }
 
   static func makeView(
@@ -298,7 +298,7 @@ After building and running your app, you should see a much less cramped layout:
 #### Adding a day range indicator
 Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `dayRangeItemProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
 
-First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `Day`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
+First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `DayComponents`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
 ```swift
   let lowerDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 20))!
   let upperDate = calendar.date(from: DateComponents(year: 2020, month: 02, day: 07))!
@@ -609,10 +609,10 @@ calendarView.daySelectionHandler = { [weak self] day in
 ```
 
 ```swift
-private var selectedDay: Day?
+private var selectedDay: DayComponents?
 ```
 
-The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `Day` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item model that looks different for the selected day:
+The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `DayComponents` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item model that looks different for the selected day:
 ```swift
   let selectedDay = self.selectedDay
 
