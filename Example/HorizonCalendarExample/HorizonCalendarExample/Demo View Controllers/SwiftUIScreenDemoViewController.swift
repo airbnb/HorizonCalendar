@@ -179,8 +179,8 @@ struct SwiftUIScreenDemo: View {
 
   @StateObject private var calendarViewProxy = CalendarViewProxy()
 
-  @State private var selectedDayRange: DayRange?
-  @State private var selectedDayRangeAtStartOfDrag: DayRange?
+  @State private var selectedDayRange: DayComponentsRange?
+  @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
 
   private var selectedDateRanges: Set<ClosedRange<Date>> {
     guard let selectedDayRange else { return [] }
@@ -189,7 +189,7 @@ struct SwiftUIScreenDemo: View {
     return [selectedStartDate...selectedEndDate]
   }
 
-  private func isDaySelected(_ day: Day) -> Bool {
+  private func isDaySelected(_ day: DayComponents) -> Bool {
     if let selectedDayRange {
       return day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
     } else {
