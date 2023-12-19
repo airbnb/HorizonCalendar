@@ -17,9 +17,14 @@ import Foundation
 
 // MARK: - Month
 
-/// Represents the components of a month (with a corresponding year) in a particular calendar. All months are assumed to have been
-/// instantiated with the same `Calendar`, which is enforced throughout the implementation.
-public struct Month: Hashable {
+typealias Month = MonthComponents
+
+// MARK: - MonthComponents
+
+/// Represents the components of a month. This type is created internally, then vended to you via the public API. All
+/// `MonthComponents` instances that are vended to you are created using the `Calendar` instance that you provide when
+/// initializing your `CalendarView`.
+public struct MonthComponents: Hashable {
 
   // MARK: Lifecycle
 
@@ -50,7 +55,7 @@ public struct Month: Hashable {
 
 // MARK: CustomStringConvertible
 
-extension Month: CustomStringConvertible {
+extension MonthComponents: CustomStringConvertible {
 
   public var description: String {
     "\(String(format: "%04d", year))-\(String(format: "%02d", month))"
@@ -60,9 +65,9 @@ extension Month: CustomStringConvertible {
 
 // MARK: Comparable
 
-extension Month: Comparable {
+extension MonthComponents: Comparable {
 
-  public static func < (lhs: Month, rhs: Month) -> Bool {
+  public static func < (lhs: MonthComponents, rhs: MonthComponents) -> Bool {
     guard lhs.era == rhs.era else { return lhs.era < rhs.era }
 
     let lhsCorrectedYear = lhs.isInGregorianCalendar && lhs.era == 0 ? -lhs.year : lhs.year

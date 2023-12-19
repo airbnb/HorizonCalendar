@@ -15,11 +15,15 @@
 
 import Foundation
 
-// MARK: - DayRange
+// MARK: DayRange
 
-public typealias DayRange = ClosedRange<Day>
+typealias DayRange = DayComponentsRange
 
-extension DayRange {
+// MARK: - DayComponentsRange
+
+public typealias DayComponentsRange = ClosedRange<DayComponents>
+
+extension DayComponentsRange {
 
   /// Instantiates a `DayRange` that encapsulates the `dateRange` in the `calendar` as closely as possible. For example,
   /// a date range of [2020-05-20T23:59:59, 2021-01-01T00:00:00] will result in a day range of [2020-05-20, 2021-01-01].

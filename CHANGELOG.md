@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated content-change animations so that the same scroll offset is maintained throughout the animation
 - Changed the Swift version needed to use HorizonCalendar to 5.8
 - Simplified accessibility (Voice Over) support so that it works consistently for calendars containing UIKit and SwiftUI views
+- Renamed `Day` to `DayComponents` and `Month` to `MonthComponents` to clarify their intended use
 
 
 ## [v1.16.0](https://github.com/airbnb/HorizonCalendar/compare/v1.15.0...v1.16.0) - 2023-01-30

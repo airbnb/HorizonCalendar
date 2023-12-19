@@ -109,7 +109,7 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
   // MARK: Private
 
-  private var selectedDayRange: DayRange?
-  private var selectedDayRangeAtStartOfDrag: DayRange?
+  private var selectedDayRange: DayComponentsRange?
+  private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
 
 }

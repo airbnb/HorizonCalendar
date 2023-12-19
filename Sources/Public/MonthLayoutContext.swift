@@ -21,7 +21,7 @@ import CoreGraphics
 public struct MonthLayoutContext: Hashable {
 
   /// The month that this layout context describes.
-  public let month: Month
+  public let month: MonthComponents
 
   /// The frame of the month header in the coordinate system of `bounds`.
   public let monthHeaderFrame: CGRect
@@ -36,7 +36,7 @@ public struct MonthLayoutContext: Hashable {
   /// An ordered list of tuples containing day and day frame pairs.
   ///
   /// Each frame represents the frame of an individual day in the month in the coordinate system of `bounds`.
-  public let daysAndFrames: [(day: Day, frame: CGRect)]
+  public let daysAndFrames: [(day: DayComponents, frame: CGRect)]
 
   /// The bounds into which a background can be drawn without getting clipped. Additionally, all other frames in this type are in the
   /// coordinate system of this.

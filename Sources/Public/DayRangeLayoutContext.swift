@@ -19,14 +19,14 @@ import CoreGraphics
 /// of those frames. This can be used in a custom day range view to draw the day range in the correct location.
 public struct DayRangeLayoutContext: Hashable {
   /// The day range that this layout context describes.
-  public let dayRange: DayRange
+  public let dayRange: DayComponentsRange
 
   /// An ordered list of tuples containing day and day frame pairs.
   ///
   /// Each frame represents the frame of an individual day in the day range in the coordinate system of
   /// `boundingUnionRectOfDayFrames`. If a day range extends beyond the `visibleDateRange`, this array will only
   /// contain the day-frame pairs for the visible portion of the day range.
-  public let daysAndFrames: [(day: Day, frame: CGRect)]
+  public let daysAndFrames: [(day: DayComponents, frame: CGRect)]
 
   /// A rectangle that perfectly contains all day frames in `daysAndFrames`. In other words, it is the union of all day frames in
   /// `daysAndFrames`.

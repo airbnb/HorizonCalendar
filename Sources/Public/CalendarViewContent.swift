@@ -184,7 +184,7 @@ public final class CalendarViewContent {
   ///   - month: The `Month` for which to provide a month header item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new month header item provider.
   public func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
+    _ monthHeaderItemProvider: @escaping (_ month: MonthComponents) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
     self.monthHeaderItemProvider = { [defaultMonthHeaderItemProvider] month in
@@ -217,7 +217,7 @@ public final class CalendarViewContent {
   /// - Returns: A mutated `CalendarViewContent` instance with a new day-of-week item provider.
   public func dayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (
-      _ month: Month?,
+      _ month: MonthComponents?,
       _ weekdayIndex: Int)
       -> AnyCalendarItemModel?)
     -> CalendarViewContent
@@ -250,7 +250,7 @@ public final class CalendarViewContent {
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day item provider.
   public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+    _ dayItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
     self.dayItemProvider = { [defaultDayItemProvider] day in
@@ -279,7 +279,7 @@ public final class CalendarViewContent {
   ///   - day: The `Day` for which to provide a day background item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day background item provider.
   public func dayBackgroundItemProvider(
-    _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+    _ dayBackgroundItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
     self.dayBackgroundItemProvider = dayBackgroundItemProvider
