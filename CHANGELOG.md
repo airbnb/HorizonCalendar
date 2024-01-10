@@ -4,7 +4,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...HEAD)
+## [Unreleased](https://github.com/airbnb/HorizonCalendar/compare/v2.0.0...HEAD)
+
+### Added
+- Added support for disabling touch handling on SwiftUI views via the `allowsHitTesting` modifier
+
+## [v2.0.0](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...v2.0.0) - 2023-12-19
 
 ### Added
 - Added `MonthsLayout.vertical` and `MonthsLayout.horizontal` as more concise alternatives to `MonthsLayout.vertical(options: .init())` and `MonthsLayout.horizontal(options: .init())`, respectively
