@@ -1016,8 +1016,6 @@ public final class CalendarView: UIView {
   }
 
   private func updateSelectedDayRange(gestureRecognizer: UIGestureRecognizer) {
-    let locationInScrollView = gestureRecognizer.location(in: scrollView)
-
     // Find the intersected day
     var intersectedDay: Day?
     for subview in scrollView.subviews {
@@ -1025,7 +1023,7 @@ public final class CalendarView: UIView {
         !subview.isHidden,
         let itemView = subview as? ItemView,
         case .layoutItemType(.day(let day)) = itemView.itemType,
-        itemView.frame.contains(locationInScrollView)
+        itemView.hitTest(gestureRecognizer.location(in: itemView), with: nil) != nil
       else {
         continue
       }

@@ -60,6 +60,20 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
     }
   }
 
+  public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    // `_UIHostingView`'s `isUserInteractionEnabled` is not affected by the `allowsHitTesting`
+    // modifier. Its first subview's `isUserInteractionEnabled` _does_ appear to be affected by the
+    // `allowsHitTesting` modifier, enabling us to properly ignore touch handling.
+    if
+      let firstSubview = hostingController.view.subviews.first,
+      !firstSubview.isUserInteractionEnabled
+    {
+      return false
+    } else {
+      return super.point(inside: point, with: event)
+    }
+  }
+
   public override func layoutSubviews() {
     super.layoutSubviews()
     hostingControllerView?.frame = bounds
