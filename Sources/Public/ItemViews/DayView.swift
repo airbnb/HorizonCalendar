@@ -122,8 +122,10 @@ public final class DayView: UIView {
       case .enabled(let playsHapticsOnTouchDown, _) = invariantViewProperties.interaction,
       playsHapticsOnTouchDown
     {
+#if os(iOS)
       feedbackGenerator = UISelectionFeedbackGenerator()
       feedbackGenerator?.prepare()
+#endif
     }
   }
 
@@ -131,16 +133,19 @@ public final class DayView: UIView {
     super.touchesEnded(touches, with: event)
 
     setHighlightLayerVisibility(isHidden: true, animated: true)
-
+#if os(iOS)
     feedbackGenerator?.selectionChanged()
     feedbackGenerator = nil
+#endif
   }
 
   public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
 
     setHighlightLayerVisibility(isHidden: true, animated: true)
+#if os(iOS)
     feedbackGenerator = nil
+#endif
   }
 
   // MARK: Fileprivate
@@ -159,8 +164,10 @@ public final class DayView: UIView {
   private let highlightLayer: CAShapeLayer?
   private let label: UILabel
 
+#if os(iOS)
   private var feedbackGenerator: UISelectionFeedbackGenerator?
-
+#endif
+    
   private func setHighlightLayerVisibility(isHidden: Bool, animated: Bool) {
     guard let highlightLayer else { return }
 
