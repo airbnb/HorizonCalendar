@@ -180,8 +180,8 @@ public final class CalendarView: UIView {
     // Voice Over user experiencing "No heading found" when navigating by heading. We also check to
     // make sure an accessibility element has already been focused, otherwise the first
     // accessibility element will be off-screen when a user first focuses into the calendar view.
-    let extendLayoutRegion = UIAccessibility.isVoiceOverRunning &&
-      itemTypeOfFocusedAccessibilityElement != nil
+    let extendLayoutRegion = UIAccessibility.isVoiceOverRunning && initialItemViewWasFocused
+
     _layoutSubviews(extendLayoutRegion: extendLayoutRegion)
   }
 
@@ -279,12 +279,6 @@ public final class CalendarView: UIView {
         animations()
       } else {
         UIView.animate(withDuration: 0.3, animations: animations)
-      }
-    }
-
-    if UIAccessibility.isVoiceOverRunning {
-      DispatchQueue.main.async {
-        self.restoreAccessibilityFocusIfNeeded()
       }
     }
   }
@@ -526,6 +520,14 @@ public final class CalendarView: UIView {
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
 
+  private var initialItemViewWasFocused = false {
+    didSet {
+      guard initialItemViewWasFocused != oldValue else { return }
+      setNeedsLayout()
+      layoutIfNeeded()
+    }
+  }
+
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
@@ -537,18 +539,6 @@ public final class CalendarView: UIView {
 
     return false
   }()
-
-  private var itemTypeOfFocusedAccessibilityElement: VisibleItem.ItemType? {
-    didSet {
-      switch (oldValue, itemTypeOfFocusedAccessibilityElement) {
-      case (.none, .some), (.some, .none):
-        setNeedsLayout()
-        layoutIfNeeded()
-      default:
-        break
-      }
-    }
-  }
 
   private var isReadyForLayout: Bool {
     // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
@@ -785,6 +775,7 @@ public final class CalendarView: UIView {
 
     reuseManager.viewsForVisibleItems(
       visibleItems,
+      recycleUnusedViews: !UIAccessibility.isVoiceOverRunning,
       viewHandler: { view, visibleItem, previousBackingVisibleItem, isReusedViewSameAsPreviousView in
         UIView.conditionallyPerformWithoutAnimation(when: !isReusedViewSameAsPreviousView) {
           if view.superview == nil {
@@ -807,8 +798,14 @@ public final class CalendarView: UIView {
       })
 
     // Hide any old views that weren't reused. This is faster than adding / removing subviews.
-    for (_, viewToHide) in viewsToHideForVisibleItems {
-      viewToHide.isHidden = true
+    // If VoiceOver is running, we remove the view to save memory (since views aren't reused).
+    for (visibleItem, viewToHide) in viewsToHideForVisibleItems {
+      if UIAccessibility.isVoiceOverRunning {
+        viewToHide.removeFromSuperview()
+        subviewInsertionIndexTracker.removedSubview(withCorrespondingItemType: visibleItem.itemType)
+      } else {
+        viewToHide.isHidden = true
+      }
     }
   }
 
@@ -1222,31 +1219,20 @@ extension CalendarView {
 
   // MARK: Private
 
-  private func restoreAccessibilityFocusIfNeeded() {
-    let itemView = visibleViewsForVisibleItems.values.first {
-      $0.itemType == itemTypeOfFocusedAccessibilityElement
-    }
-    guard let itemView else { return }
-
-    // Preserve the focused accessibility element after views are reused due to a content update
-    UIAccessibility.post(notification: .screenChanged, argument: itemView.contentView)
-  }
-
   @objc
   private func accessibilityElementFocused(_ notification: NSNotification) {
     guard
       let element = notification.userInfo?[UIAccessibility.focusedElementUserInfoKey] as? UIResponder,
       let itemView = element.nextItemView()
     else {
-      itemTypeOfFocusedAccessibilityElement = nil
       return
     }
 
-    itemTypeOfFocusedAccessibilityElement = itemView.itemType
+    initialItemViewWasFocused = true
 
-    // If the accessibility element is not fully in view programmatically scroll it to be centered.
+    // If the accessibility element is not fully in view, programmatically scroll it to be centered.
     let isElementFullyVisible: Bool
-    let viewFrameInCalendarView = convert(itemView.bounds, from: itemView)
+    let viewFrameInCalendarView = itemView.convert(itemView.bounds, to: self)
     switch scrollMetricsMutator.scrollAxis {
     case .vertical:
       let verticalBounds = CGRect(
@@ -1254,22 +1240,26 @@ extension CalendarView {
         y: layoutMargins.top,
         width: bounds.width,
         height: bounds.height - layoutMargins.top - layoutMargins.bottom)
-      isElementFullyVisible = !verticalBounds.contains(viewFrameInCalendarView)
+      isElementFullyVisible = verticalBounds.contains(viewFrameInCalendarView)
     case .horizontal:
       let horizontalBounds = CGRect(
         x: layoutMargins.left,
         y: 0,
         width: bounds.width - layoutMargins.left - layoutMargins.right,
         height: bounds.height)
-      isElementFullyVisible = !horizontalBounds.contains(viewFrameInCalendarView)
+      isElementFullyVisible = horizontalBounds.contains(viewFrameInCalendarView)
     }
 
-    if isElementFullyVisible {
-      switch itemView.itemType {
-      case .layoutItemType(.monthHeader(let month)):
+    if
+      !isElementFullyVisible,
+      let itemType = itemView.itemType,
+      case .layoutItemType(let layoutItemType) = itemType
+    {
+      switch layoutItemType {
+      case .monthHeader(let month):
         let dateInTargetMonth = calendar.firstDate(of: month)
         scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
-      case .layoutItemType(.day(let day)):
+      case .day(let day):
         let dateInTargetDay = calendar.startDate(of: day)
         scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
       default:

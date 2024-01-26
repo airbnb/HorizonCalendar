@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for disabling touch handling on SwiftUI views via the `allowsHitTesting` modifier
 
+### Fixed
+- Fixed an issue that could cause accessibility focus to shift unexpectedly
+
+### Changed
+- Rewrote accessibility code to avoid posting notifications, which causes poor Voice Over performance and odd focus bugs
+
 ## [v2.0.0](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...v2.0.0) - 2023-12-19
 
 ### Added

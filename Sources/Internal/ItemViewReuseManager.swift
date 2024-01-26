@@ -25,7 +25,7 @@ final class ItemViewReuseManager {
 
   func viewsForVisibleItems(
     _ visibleItems: Set<VisibleItem>,
-    recycleOldViews: Bool,
+    recycleUnusedViews: Bool,
     viewHandler: (
       ItemView,
       VisibleItem,
@@ -57,7 +57,7 @@ final class ItemViewReuseManager {
 
       let context = reusedViewContext(
         for: visibleItem,
-        recycleOldViews: recycleOldViews,
+        recycleUnusedViews: recycleUnusedViews,
         unusedPreviouslyVisibleItems: &visibleItemsDifference)
       viewHandler(
         context.view,
@@ -78,7 +78,7 @@ final class ItemViewReuseManager {
 
   private func reusedViewContext(
     for visibleItem: VisibleItem,
-    recycleOldViews: Bool,
+    recycleUnusedViews: Bool,
     unusedPreviouslyVisibleItems: inout Set<VisibleItem>)
     -> ReusedViewContext
   {
@@ -106,7 +106,7 @@ final class ItemViewReuseManager {
         visibleItemsForItemViewDifferentiators[differentiator]?.remove(visibleItem)
         viewsForVisibleItems.removeValue(forKey: visibleItem)
       } else {
-        if recycleOldViews, let previouslyVisibleItem = unusedPreviouslyVisibleItems.first {
+        if recycleUnusedViews, let previouslyVisibleItem = unusedPreviouslyVisibleItems.first {
           // An unused, previously-visible item is available, so reuse it.
 
           guard let previousView = viewsForVisibleItems[previouslyVisibleItem] else {

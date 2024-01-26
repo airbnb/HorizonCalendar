@@ -58,7 +58,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
 
     reuseManager.viewsForVisibleItems(
       visibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, _, previousBackingItem, isReusedViewSameAsPreviousView in
         XCTAssert(
           previousBackingItem == nil,
@@ -104,13 +104,13 @@ final class ItemViewReuseManagerTests: XCTestCase {
     // Populate the reuse manager with the initial visible items
     reuseManager.viewsForVisibleItems(
       initialVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, _, _, _ in })
 
     // Ensure all views are reused by using the exact same previous views
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, item, previousBackingItem, isReusedViewSameAsPreviousView in
         XCTAssert(
           item == previousBackingItem,
@@ -186,13 +186,13 @@ final class ItemViewReuseManagerTests: XCTestCase {
     // Populate the reuse manager with the initial visible items
     reuseManager.viewsForVisibleItems(
       initialVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, _, _, _ in })
 
     // Ensure all views are reused given the subsequent visible items
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, item, previousBackingItem, _ in
         XCTAssert(
           item.calendarItemModel._itemViewDifferentiator == previousBackingItem?.calendarItemModel._itemViewDifferentiator,
@@ -281,13 +281,13 @@ final class ItemViewReuseManagerTests: XCTestCase {
     // Populate the reuse manager with the initial visible items
     reuseManager.viewsForVisibleItems(
       initialVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, _, _, _ in })
 
     // Ensure the correct subset of views are reused given the subsequent visible items
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, item, previousBackingItem, isReusedViewSameAsPreviousView in
         guard let itemModel = item.calendarItemModel as? MockCalendarItemModel else {
           preconditionFailure(
@@ -423,7 +423,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
     // Populate the reuse manager with the initial visible items
     reuseManager.viewsForVisibleItems(
       initialVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, _, _, _ in })
 
     // Ensure the correct subset of views are reused given the subsequent visible items
@@ -431,7 +431,7 @@ final class ItemViewReuseManagerTests: XCTestCase {
     var newViewCountsForDifferentiators = [_CalendarItemViewDifferentiator: Int]()
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      recycleOldViews: true,
+      recycleUnusedViews: true,
       viewHandler: { _, item, previousBackingItem, _ in
         if previousBackingItem != nil {
           let reuseCount = (reuseCountsForDifferentiators[item.calendarItemModel._itemViewDifferentiator] ?? 0) + 1
@@ -539,13 +539,13 @@ final class ItemViewReuseManagerTests: XCTestCase {
     // Populate the reuse manager with the initial visible items
     reuseManager.viewsForVisibleItems(
       initialVisibleItems,
-      recycleOldViews: false,
+      recycleUnusedViews: false,
       viewHandler: { _, _, _, _ in })
 
     // Ensure the correct subset of views are reused given the subsequent visible items
     reuseManager.viewsForVisibleItems(
       subsequentVisibleItems,
-      recycleOldViews: false,
+      recycleUnusedViews: false,
       viewHandler: { _, item, previousBackingItem, isReusedViewSameAsPreviousView in
         guard let itemModel = item.calendarItemModel as? MockCalendarItemModel else {
           preconditionFailure(
