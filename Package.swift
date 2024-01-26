@@ -1,11 +1,10 @@
-// swift-tools-version:5.8
-
+// swift-tools-version: 5.8.1
 import PackageDescription
 
 let package = Package(
   name: "HorizonCalendar",
   platforms: [
-    .iOS(.v11),
+    .iOS(.v12),
   ],
   products: [
     .library(name: "HorizonCalendar", targets: ["HorizonCalendar"]),

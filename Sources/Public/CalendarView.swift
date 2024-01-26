@@ -520,14 +520,6 @@ public final class CalendarView: UIView {
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
 
-  private var initialItemViewWasFocused = false {
-    didSet {
-      guard initialItemViewWasFocused != oldValue else { return }
-      setNeedsLayout()
-      layoutIfNeeded()
-    }
-  }
-
   // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
   // and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
@@ -539,6 +531,14 @@ public final class CalendarView: UIView {
 
     return false
   }()
+
+  private var initialItemViewWasFocused = false {
+    didSet {
+      guard initialItemViewWasFocused != oldValue else { return }
+      setNeedsLayout()
+      layoutIfNeeded()
+    }
+  }
 
   private var isReadyForLayout: Bool {
     // There's no reason to attempt layout unless we have a non-zero `bounds.size`. We'll have a
