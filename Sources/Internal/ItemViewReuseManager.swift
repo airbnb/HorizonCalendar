@@ -25,6 +25,7 @@ final class ItemViewReuseManager {
 
   func viewsForVisibleItems(
     _ visibleItems: Set<VisibleItem>,
+    recycleOldViews: Bool,
     viewHandler: (
       ItemView,
       VisibleItem,
@@ -56,6 +57,7 @@ final class ItemViewReuseManager {
 
       let context = reusedViewContext(
         for: visibleItem,
+        recycleOldViews: recycleOldViews,
         unusedPreviouslyVisibleItems: &visibleItemsDifference)
       viewHandler(
         context.view,
@@ -76,6 +78,7 @@ final class ItemViewReuseManager {
 
   private func reusedViewContext(
     for visibleItem: VisibleItem,
+    recycleOldViews: Bool,
     unusedPreviouslyVisibleItems: inout Set<VisibleItem>)
     -> ReusedViewContext
   {
@@ -103,7 +106,7 @@ final class ItemViewReuseManager {
         visibleItemsForItemViewDifferentiators[differentiator]?.remove(visibleItem)
         viewsForVisibleItems.removeValue(forKey: visibleItem)
       } else {
-        if let previouslyVisibleItem = unusedPreviouslyVisibleItems.first {
+        if recycleOldViews, let previouslyVisibleItem = unusedPreviouslyVisibleItems.first {
           // An unused, previously-visible item is available, so reuse it.
 
           guard let previousView = viewsForVisibleItems[previouslyVisibleItem] else {
@@ -122,7 +125,8 @@ final class ItemViewReuseManager {
           visibleItemsForItemViewDifferentiators[differentiator]?.remove(previouslyVisibleItem)
           viewsForVisibleItems.removeValue(forKey: previouslyVisibleItem)
         } else {
-          // No previously-visible item is available for reuse, so create a new view.
+          // No previously-visible item is available for reuse (or view recycling is disabled), so
+          // create a new view.
           view = ItemView(initialCalendarItemModel: visibleItem.calendarItemModel)
           previousBackingVisibleItem = nil
           isReusedViewSameAsPreviousView = false
