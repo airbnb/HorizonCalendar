@@ -27,77 +27,31 @@ final class SubviewInsertionIndexTracker {
     switch itemType {
     case .monthBackground:
       index = monthBackgroundItemsEndIndex
-      monthBackgroundItemsEndIndex += 1
-      dayRangeItemsEndIndex += 1
-      mainItemsEndIndex += 1
-      daysOfWeekRowSeparatorItemsEndIndex += 1
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .dayBackground:
       index = dayBackgroundItemsEndIndex
-      dayBackgroundItemsEndIndex += 1
-      dayRangeItemsEndIndex += 1
-      mainItemsEndIndex += 1
-      daysOfWeekRowSeparatorItemsEndIndex += 1
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .dayRange:
       index = dayRangeItemsEndIndex
-      dayRangeItemsEndIndex += 1
-      mainItemsEndIndex += 1
-      daysOfWeekRowSeparatorItemsEndIndex += 1
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .layoutItemType:
       index = mainItemsEndIndex
-      mainItemsEndIndex += 1
-      daysOfWeekRowSeparatorItemsEndIndex += 1
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .daysOfWeekRowSeparator:
       index = daysOfWeekRowSeparatorItemsEndIndex
-      daysOfWeekRowSeparatorItemsEndIndex += 1
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .overlayItem:
       index = overlayItemsEndIndex
-      overlayItemsEndIndex += 1
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .pinnedDaysOfWeekRowBackground:
       index = pinnedDaysOfWeekRowBackgroundEndIndex
-      pinnedDaysOfWeekRowBackgroundEndIndex += 1
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .pinnedDayOfWeek:
       index = pinnedDayOfWeekItemsEndIndex
-      pinnedDayOfWeekItemsEndIndex += 1
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
-
     case .pinnedDaysOfWeekRowSeparator:
       index = pinnedDaysOfWeekRowSeparatorEndIndex
-      pinnedDaysOfWeekRowSeparatorEndIndex += 1
     }
 
+    addValue(1, toItemTypesAffectedBy: itemType)
+
     return index
+  }
+
+  func removedSubview(withCorrespondingItemType itemType: VisibleItem.ItemType) {
+    addValue(-1, toItemTypesAffectedBy: itemType)
   }
 
   // MARK: Private
@@ -111,5 +65,71 @@ final class SubviewInsertionIndexTracker {
   private var pinnedDaysOfWeekRowBackgroundEndIndex = 0
   private var pinnedDayOfWeekItemsEndIndex = 0
   private var pinnedDaysOfWeekRowSeparatorEndIndex = 0
+
+  private func addValue(_ value: Int, toItemTypesAffectedBy itemType: VisibleItem.ItemType) {
+    switch itemType {
+    case .monthBackground:
+      monthBackgroundItemsEndIndex += value
+      dayRangeItemsEndIndex += value
+      mainItemsEndIndex += value
+      daysOfWeekRowSeparatorItemsEndIndex += value
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .dayBackground:
+      dayBackgroundItemsEndIndex += value
+      dayRangeItemsEndIndex += value
+      mainItemsEndIndex += value
+      daysOfWeekRowSeparatorItemsEndIndex += value
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .dayRange:
+      dayRangeItemsEndIndex += value
+      mainItemsEndIndex += value
+      daysOfWeekRowSeparatorItemsEndIndex += value
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .layoutItemType:
+      mainItemsEndIndex += value
+      daysOfWeekRowSeparatorItemsEndIndex += value
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .daysOfWeekRowSeparator:
+      daysOfWeekRowSeparatorItemsEndIndex += value
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .overlayItem:
+      overlayItemsEndIndex += value
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .pinnedDaysOfWeekRowBackground:
+      pinnedDaysOfWeekRowBackgroundEndIndex += value
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .pinnedDayOfWeek:
+      pinnedDayOfWeekItemsEndIndex += value
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+
+    case .pinnedDaysOfWeekRowSeparator:
+      pinnedDaysOfWeekRowSeparatorEndIndex += value
+    }
+  }
 
 }
