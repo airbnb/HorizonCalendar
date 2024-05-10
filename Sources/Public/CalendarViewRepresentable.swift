@@ -401,7 +401,7 @@ extension CalendarViewRepresentable {
   ///   - weekdayIndex: The weekday index for which to provide a day-of-week header view.
   /// - Returns: A new `CalendarViewRepresentable` with custom day-of-week header views configured.
   public func dayOfWeekHeaders(
-    _ content: @escaping (_ month: MonthComponents?, _ weekdayIndex: Int) -> some View)
+    @ViewBuilder _ content: @escaping (_ month: MonthComponents?, _ weekdayIndex: Int) -> some View)
     -> Self
   {
     dayOfWeekItemProvider { month, weekdayIndex in
