@@ -53,6 +53,12 @@ public struct MonthComponents: Hashable {
 
 }
 
+extension MonthComponents {
+    public init(from date: Date, calendar: Calendar = Calendar.current) {
+     self = calendar.month(containing: date)
+  }
+}
+
 // MARK: CustomStringConvertible
 
 extension MonthComponents: CustomStringConvertible {
