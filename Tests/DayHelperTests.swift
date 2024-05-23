@@ -138,6 +138,23 @@ final class DayHelperTests: XCTestCase {
       "Expected January 1, 02 - 1 = December 31, 01.")
   }
 
+  func testCreateDayFromDate() {
+    var components = DateComponents()
+    components.era = 1
+    components.year = 2020
+    components.month = 03
+    components.day = 02
+    guard let date = gregorianCalendar.date(from: components) else {
+      XCTFail("Expected a date created from components")
+      return
+    }
+    let day = Day(from: date)
+    XCTAssert(
+      day == Day(month: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true), day: 02),
+      "Expected 2020-03."
+    )
+  }
+
   // MARK: Private
 
   private lazy var gregorianCalendar = Calendar(identifier: .gregorian)

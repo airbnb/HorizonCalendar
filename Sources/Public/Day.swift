@@ -44,6 +44,16 @@ public struct DayComponents: Hashable {
 
 }
 
+// MARK: Public init from date
+
+extension DayComponents {
+    public init(from date: Date, calendar: Calendar = Calendar.current) {
+        let month = Month(from: date, calendar: calendar)
+        let day = calendar.component(.day, from: date)
+        self = Day(month: month, day: day)
+    }
+}
+
 // MARK: CustomStringConvertible
 
 extension DayComponents: CustomStringConvertible {
