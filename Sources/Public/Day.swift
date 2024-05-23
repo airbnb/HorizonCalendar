@@ -44,6 +44,8 @@ public struct DayComponents: Hashable {
 
 }
 
+// MARK: Public init from date
+
 extension DayComponents {
     public init(from date: Date, calendar: Calendar = Calendar.current) {
         let month = Month(from: date, calendar: calendar)
