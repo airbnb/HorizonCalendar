@@ -1,5 +1,5 @@
 # HorizonCalendar
-A declarative, performant, calendar UI component that supports use cases ranging from simple date pickers all the way up to fully-featured calendar apps.
+A declarative and performant calendar UI component that supports use cases ranging from simple date pickers all the way up to fully-featured calendar apps.
 
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -10,22 +10,23 @@ A declarative, performant, calendar UI component that supports use cases ranging
 [![Swift Package Manager compatible](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2FHorizonCalendar%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/airbnb/HorizonCalendar)
 
 ## Introduction
-`HorizonCalendar` is an interactive calendar component for iOS (compatible with UIKit and SwiftUI). Its declarative API makes updating the calendar straightforward, while also providing many customization points to support a diverse set of designs and use cases.
+`HorizonCalendar` is a declarative and performant calendar UI component for iOS. It provides many customization points to support a diverse range of designs and use cases, and is used used to implement every calendar and date picker in the Airbnb iOS app.
 
 Features:
 
-- Supports all calendars from `Foundation.Calendar` (Gregorian, Japanese, Hebrew, etc.)
-- Display months in a vertically-scrolling or horizontally-scrolling layout
+- SwiftUI and UIKit support
+- Vertical and horizontal month layouts
+- Paging for horizontal month layout
+- Right-to-left layout support
 - Declarative API that encourages unidirectional data flow for updating the content of the calendar
-- A custom layout system that enables virtually infinite date ranges without increasing memory usage
+- Supports displaying large (virtually-infinite) date ranges
 - Animated content updates
-- Pagination for horizontally-scrolling calendars
-- Self-sizing month headers
-- Specify custom views (`UIView` or SwiftUI `View`) for individual days, month headers, and days of the week
-- Specify custom views (`UIView` or SwiftUI `View`) to highlight date ranges
-- Specify custom views (`UIView` or SwiftUI `View`) to overlay parts of the calendar, enabling features like tooltips
-- Specify custom views (`UIView` or SwiftUI `View`) for month background decorations (colors, grids, etc.)
-- Specify custom views (`UIView` or SwiftUI `View`) for day background decorations (colors, patterns, etc.)
+- Customizable default views for days, month headers, and days of the week, and a month grid background
+- Specify custom views for individual days, month headers, and days of the week
+- Specify custom views to highlight date ranges
+- Specify custom views to overlay parts of the calendar, enabling features like tooltips
+- Specify custom views for month background decorations (colors, grids, etc.)
+- Specify custom views for day background decorations (colors, patterns, etc.)
 - A day selection handler to monitor when a day is tapped
 - A multi-day selection handler to monitor when multiple days are selected via a drag gesture
 - Customizable layout metrics
@@ -35,9 +36,7 @@ Features:
 - Robust accessibility support
 - Inset the content without affecting the scrollable region using layout margins
 - Separator below the days-of-the-week row
-- Right-to-left layout support
-
-`HorizonCalendar` serves as the foundation for the date pickers and calendars used in Airbnb's highest trafficked flows.
+- Supports all calendars from `Foundation.Calendar` (Gregorian, Japanese, Hebrew, etc.)
 
 | Search | Stays Availability Calendar | Wish List | Experience Reservation | Experience Host Calendar Management |
 | --- | --- | --- | --- | --- |
@@ -55,15 +54,15 @@ Features:
   - [Installation](#installation)
     - [Carthage](#carthage)
     - [CocoaPods](#cocoapods)
-  - [Building a `CalendarView`](#building-a-calendarView)
+  - [Creating a calendar](#creating-a-calendar)
     - [Basic Setup](#basic-setup)
       - [Importing `HorizonCalendar`](#importing-horizoncalendar)
-      - [Initializing a `CalendarView` with `CalendarViewContent`](#initializing-a-calendarview-with-calendarviewcontent)
-    - [Customizing `CalendarView`](#customizing-calendarview)
+      - [Instantiating the view](#instantiating-the-view)
+      - [Adding the view](#adding-the-view)
+    - [Customization](#customization)
       - [Providing a custom view for each day](#providing-a-custom-view-for-each-day)
       - [Adjusting layout metrics](#adjusting-layout-metrics)
       - [Adding a day range indicator](#adding-a-day-range-indicator)
-      - [Adding a tooltip](#adding-a-tooltip)
       - [Adding grid lines](#adding-grid-lines)
     - [Responding to day selection](#responding-to-day-selection)
 - [Technical Details](#technical-details)
@@ -123,199 +122,308 @@ To install `HorizonCalendar` using [CocoaPods](http://cocoapods.org), add
 `pod 'HorizonCalendar'` to your Podfile, then follow the integration tutorial [here](https://guides.cocoapods.org/using/using-cocoapods.html).
 
 
-## Building a `CalendarView`
+## Creating a calendar
 Once you've installed `HorizonCalendar` into your project, getting a basic calendar working is just a few steps.
 
 ### Basic Setup
 
 #### Importing `HorizonCalendar`
-At the top of the file where you'd like to use `HorizonCalendar` (likely a `UIView` or `UIViewController` subclass), import `HorizonCalendar`:
+At the top of the file where you'd like to use `HorizonCalendar`, import `HorizonCalendar`:
 ```swift
 import HorizonCalendar 
 ```
 
-#### Initializing a `CalendarView` with `CalendarViewContent`
-`CalendarView` is the `UIView` subclass that renders the calendar. All visual aspects of `CalendarView` are controlled through a single type - `CalendarViewContent`. To create a basic `CalendarView`, you initialize one with an initial `CalendarViewContent`:
-```swift
-let calendarView = CalendarView(initialContent: makeContent())
-```
+#### Instantiating the view
 
-```swift
-private func makeContent() -> CalendarViewContent {
+<details>
+  <summary>SwiftUI</summary>
+  
+  `CalendarViewRepresentable` is the SwiftUI view type that represents the calendar. Like other SwiftUI views, all customization is done through initializer parameters and modifiers. To create a basic calendar, you initialize a `CalendarViewRepresentable` with some initial data:
+  
+  ```swift
   let calendar = Calendar.current
 
   let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
   let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
 
-  return CalendarViewContent(
+  CalendarViewRepresentable(
     calendar: calendar,
     visibleDateRange: startDate...endDate,
-    monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
-}
-```
+    monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()),
+    dataDependency: nil)
+  ```
+  
+</details>
 
-At a minimum, `CalendarViewContent` must be initialized with a `Calendar`, a visible date range, and a months layout (either vertical or horizontal). The visible date range will be interpreted as a range of days using the `Calendar` instance passed in for the `calendar` parameter.
+<details>
+  <summary>UIKit</summary>
+  
+  `CalendarView` is the `UIView` subclass that renders the calendar. All visual aspects of `CalendarView` are controlled through a single type - `CalendarViewContent`. To create a basic `CalendarView`, you initialize one with an initial `CalendarViewContent`:
+  ```swift
+  let calendarView = CalendarView(initialContent: makeContent())
+  ```
+
+  ```swift
+  private func makeContent() -> CalendarViewContent {
+    let calendar = Calendar.current
+
+    let startDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 01))!
+    let endDate = calendar.date(from: DateComponents(year: 2021, month: 12, day: 31))!
+
+    return CalendarViewContent(
+      calendar: calendar,
+      visibleDateRange: startDate...endDate,
+      monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))
+  }
+  ```
+
+  At a minimum, `CalendarViewContent` must be initialized with a `Calendar`, a visible date range, and a months layout (either vertical or horizontal). The visible date range will be interpreted as a range of days using the `Calendar` instance passed in for the `calendar` parameter.
+
+  For this example, we're using a Gregorian calendar, a date range of 2020-01-01 to 2021-12-31, and a vertical months layout.
+
+  Make sure to add `calendarView` as a subview, then give it a valid frame either using Auto Layout or by manually setting its `frame` property. If you're using Auto Layout, note that `CalendarView` does not have an intrinsic content size.
+  ```swift
+  view.addSubview(calendarView)
+
+  calendarView.translatesAutoresizingMaskIntoConstraints = false
+
+  NSLayoutConstraint.activate([
+    calendarView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+    calendarView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+    calendarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+    calendarView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+  ])
+  ```
+  
+</details>
+  
+At a minimum, you need to provide a `Calendar`, a visible date range, and a months layout (either vertical or horizontal). The visible date range will be interpreted as a range of days using the `Calendar` instance passed in for the `calendar` parameter.
 
 For this example, we're using a Gregorian calendar, a date range of 2020-01-01 to 2021-12-31, and a vertical months layout.
+  
+#### Adding the view
 
-Make sure to add `calendarView` as a subview, then give it a valid frame either using Auto Layout or by manually setting its `frame` property. If you're using Auto Layout, note that `CalendarView` does not have an intrinsic content size.
-```swift
-view.addSubview(calendarView)
+Next, we'll add the calendar to the view hierarchy.
 
-calendarView.translatesAutoresizingMaskIntoConstraints = false
+<details>
+  <summary>SwiftUI</summary>
+  
+  Add your calendar to the view hierarchy like any other SwiftUI view. Since the calendar doesn't have an intrinsic content size, you'll need to use the `frame` modifier to tell SwiftUI that it should consume all vertical and horizontal space. Optionally, use the `layoutMargins` modifier to apply internal padding, and the normal SwiftUI `padding` modifier to apply some external padding from the parent's edges.
+  ```swift
+  var body: some View {
+    CalendarViewRepresentable(...)
+      .layoutMargins(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
+      .padding(.horizontal, 16)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+  ```
+  
+</details>
 
-NSLayoutConstraint.activate([
-  calendarView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-  calendarView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-  calendarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-  calendarView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
-])
-```
+<details>
+  <summary>UIKit</summary>
+  
+  Add your calendar as a subview, then give it a valid frame either using Auto Layout or by manually setting its `frame` property. If you're using Auto Layout, note that `CalendarView` does not have an intrinsic content size.
+  ```swift
+  view.addSubview(calendarView)
+
+  calendarView.translatesAutoresizingMaskIntoConstraints = false
+
+  NSLayoutConstraint.activate([
+    calendarView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+    calendarView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+    calendarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+    calendarView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+  ])
+  ```
+  
+</details>
 
 At this point, building and running your app should result in something that looks like this:
 
-![Basic Calendar](Docs/Images/tutorial_setup.png)
+<img width="250" alt="Basic Calendar Screenshot" src="Docs/Images/tutorial_setup.png">
 
-
-### Customizing `CalendarView`
+### Customization
 
 #### Providing a custom view for each day
 `HorizonCalendar` comes with default views for month headers, day of week items, and day items. You can also provide custom views for each of these item types, enabling you to display whatever custom content makes sense for your app.
 
-Since all visual aspects of `CalendarView` are configured through `CalendarViewContent`, we'll expand on our `makeContent` function. Let's start by providing a custom view for each day in the calendar:
-```swift
-private func makeContent() -> CalendarViewContent {
-  return CalendarViewContent(
-    calendar: calendar,
-    visibleDateRange: today...endDate,
-    monthsLayout: .vertical(VerticalMonthsLayoutOptions()))
-    
-    .dayItemProvider { day in
-      // Return a `CalendarItemModel` representing the view for each day
+Let's start by customizing the view used for each day:
+
+<details>
+  <summary>SwiftUI</summary>
+  
+  Since all visual aspects of `CalendarViewRepresentable` are configured through modifiers, we'll use the `days` modifier to provide a custom view with a rounded border for each day in the calendar:
+  
+  ```swift
+  CalendarViewRepresentable(...)
+  
+    .days { day in
+      Text("\(day.day)")
+        .font(.system(size: 18))
+        .foregroundColor(Color(UIColor.label))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+          RoundedRectangle(cornerRadius: 12)
+            .stroke(Color(UIColor.systemBlue), lineWidth: 1)
+        }
     }
-}
-```
+  ```
+  
+  To use a UIKit view, wrap it using `UIViewRepresentable` and return it from the same function.
+  
+  > **Note**
+  > 
+  > View-provider closures are invoked lazily as parts of the calendar come into view. If you read any view state in any of your view-provider closures, make sure you capture it explicitly using a capture list. If you don't, SwiftUI will fail to identify that state as a dependency of your view unless it was read during the initial body evaluation of your view. This will lead to missed updates when your state changes.
+  
+</details>
 
-The `dayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `DayComponents`.
+<details>
+  <summary>UIKit</summary>
 
-`CalendarItemModel` is a type that abstracts away the creation and configuration of a view displayed in the calendar. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view, we'll need to create a type that knows how to create and update that label. Here's a simple example:
-```swift
-import HorizonCalendar
-
-struct DayLabel: CalendarItemViewRepresentable {
-
-  /// Properties that are set once when we initialize the view.
-  struct InvariantViewProperties: Hashable {
-    let font: UIFont
-    let textColor: UIColor
-    let backgroundColor: UIColor
+  Since all visual aspects of `CalendarView` are configured through `CalendarViewContent`, we'll expand on our `makeContent` function. Let's start by providing a custom view for each day in the calendar:
+  ```swift
+  private func makeContent() -> CalendarViewContent {
+    return CalendarViewContent(...)
+      .dayItemProvider { day in
+        // Return a `CalendarItemModel` representing the view for each day
+      }
   }
+  ```
+  
+  The `dayItemProvider(_:)` function on `CalendarViewContent` returns a new `CalendarViewContent` instance with the custom day item model provider configured. This function takes a single parameter - a provider closure that returns a `CalendarItemModel` for a given `DayComponents`.
+  
+  `CalendarItemModel` is a type that abstracts away the creation and configuration of a view displayed in the calendar. It's generic over a `ViewRepresentable` type, which can be any type conforming to `CalendarItemViewRepresentable`. You can think of `CalendarItemViewRepresentable` as a blueprint for creating and updating instances of a particular type of view to be displayed in the calendar. For example, if we want to use a `UILabel` for our custom day view with a rounded border, we'll need to create a type that knows how to create and update that label. Here's a simple example:
+  ```swift
+  import HorizonCalendar
 
-  /// Properties that will vary depending on the particular date being displayed.
-  struct Content: Equatable {
-    let day: DayComponents
+  struct DayLabel: CalendarItemViewRepresentable {
+
+    /// Properties that are set once when we initialize the view.
+    struct InvariantViewProperties: Hashable {
+      let font: UIFont
+      let textColor: UIColor
+      let borderColor: UIColor
+    }
+
+    /// Properties that will vary depending on the particular date being displayed.
+    struct Content: Equatable {
+      let day: DayComponents
+    }
+
+    static func makeView(
+      withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+      -> UILabel
+    {
+      let label = UILabel()
+      
+      label.isUserInteractionEnabled = true
+      label.layer.borderWidth = 1
+      label.layer.borderColor = invariantViewProperties.borderColor.cgColor
+      label.font = invariantViewProperties.font
+      label.textColor = invariantViewProperties.textColor
+
+      label.textAlignment = .center
+      label.clipsToBounds = true
+      label.layer.cornerRadius = 12
+      
+      return label
+    }
+
+    static func setContent(_ content: Content, on view: UILabel) {
+      view.text = "\(content.day.day)"
+    }
+
   }
+  ```
 
-  static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> UILabel
-  {
-    let label = UILabel()
+  `CalendarItemViewRepresentable` requires us to implement a `static` `makeView` function, which should create and return a view given a set of invariant view properties. We want our label to have a configurable font and text color, so we've made those configurable via the `InvariantViewProperties` type. In our `makeView` function, we use those invariant view properties to create and configure an instance of our label.
 
-    label.backgroundColor = invariantViewProperties.backgroundColor
-    label.font = invariantViewProperties.font
-    label.textColor = invariantViewProperties.textColor
+  `CalendarItemViewRepresentable` also requires us to implement a `static` `setContent` function, which should update all data-dependent properties (like the day text) on the provided view.
 
-    label.textAlignment = .center
-    label.clipsToBounds = true
-    label.layer.cornerRadius = 12
-    
-    return label
-  }
+  Now that we have a type conforming to `CalendarItemViewRepresentable`, we can use it to create a `CalendarItemModel` to return from the day item model provider:
 
-  static func setContent(_ content: Content, on view: UILabel) {
-    view.text = "\(content.day.day)"
-  }
-
-}
-```
-
-`CalendarItemViewRepresentable` requires us to implement a `static` `makeView` function, which should create and return a view given a set of invariant view properties. We want our label to have a configurable font and text color, so we've made those configurable via the `InvariantViewProperties` type. In our `makeView` function, we use those invariant view properties to create and configure an instance of our label.
-
-`CalendarItemViewRepresentable` also requires us to implement a `static` `setContent` function, which should update all data-dependent properties (like the day text) on the provided view.
-
-Now that we have a type conforming to `CalendarItemViewRepresentable`, we can use it to create a `CalendarItemModel` to return from the day item model provider:
-
-```swift
+  ```swift
   return CalendarViewContent(...)
 
     .dayItemProvider { day in
       DayLabel.calendarItemModel(
         invariantViewProperties: .init(
-          font: UIFont.systemFont(ofSize: 18), 
-          textColor: .darkGray,
-          backgroundColor: .clear),
+          font: .systemFont(ofSize: 18), 
+          textColor: .label,
+          borderColor: .systemBlue),
         content: .init(day: day))
     }
-```
+  ```
+  
+  Using a SwiftUI view is even easier - simply initialize your SwiftUI view and call `.calendarItemModel` on it. There's no need to create a custom type conforming to `CalendarItemViewRepresentable` like we had to do with the UIKit example above, or have separate concepts for invariant and variant (content) view properties.
 
-Using a SwiftUI view is even easier - simply initialize your SwiftUI view and call `.calendarItemModel` on it. There's no need to create a custom type conforming to `CalendarItemViewRepresentable` like we had to do with the UIKit example above.
-
-```swift
+  ```swift
   return CalendarViewContent(...)
 
     .dayItemProvider { day in
       Text("\(day.day)")
         .font(.system(size: 18))
-        .foregroundColor(Color(UIColor.darkGray))
+        .foregroundColor(Color(UIColor.label))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+          RoundedRectangle(cornerRadius: 12)
+            .stroke(Color(UIColor.systemBlue), lineWidth: 1)
+        }
         .calendarItemModel
     }
-```
+  ```
 
-Similar item model provider functions are available to customize the views used for month headers, day-of-the-week items, and more.
+</details>
+
+Similar item-provider functions are available to customize the views used for month headers, day-of-the-week items, and more.
 
 If you build and run your app, it should now look like this:
 
-![Custom Day Views](Docs/Images/tutorial_day.png)
+<img width="250" alt="Custom Day Views Screenshot" src="Docs/Images/tutorial_day.png">
 
 #### Adjusting layout metrics
-We can also use `CalendarViewContent` to adjust layout metrics. We can improve the layout of our current `CalendarView` by adding some additional spacing between individual days and months:
-```swift
+We can improve the layout of our current calendar by adding some additional spacing between individual days and months:
+
+<details>
+  <summary>SwiftUI</summary>
+  
+  ```swift
+  CalendarViewRepresentable(...)
+    .days { ... }
+
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+```
+  
+</details>
+
+<details>
+  <summary>UIKit</summary>
+  
+  ```swift
   return CalendarViewContent(...)
     .dayItemProvider { ... }
 
     .interMonthSpacing(24)
     .verticalDayMargin(8)
     .horizontalDayMargin(8)
-```
-
-Just like when we configured a custom day view via the day item provider, changes to layout metrics are also done through `CalendarViewContent`. `interMonthSpacing(_:)`, `verticalDayMargin(_:)`, and `horizontalDayMargin(_:)` each return a mutated `CalendarViewContent` with the corresponding layout metric value updated, enabling you to chain function calls together to produce a final content instance.
+  ```
+  
+  Just like when we configured a custom day view via the day provider, changes to layout metrics are also done through `CalendarViewContent`. `interMonthSpacing(_:)`, `verticalDayMargin(_:)`, and `horizontalDayMargin(_:)` each return a mutated `CalendarViewContent` with the corresponding layout metric value updated, enabling you to chain function calls together to produce a final content instance.
+  
+</details>
 
 After building and running your app, you should see a much less cramped layout:
 
-![Custom Layout Metrics](Docs/Images/tutorial_layout_metrics.png)
+<img width="250" alt="Custom Layout Metrics Screenshot" src="Docs/Images/tutorial_layout_metrics.png">
 
 #### Adding a day range indicator
-Day range indicators are useful for date pickers that need to highlight not just individual days, but ranges of days. `HorizonCalendar` offers an API to do exactly this via the `CalendarViewContent` function `dayRangeItemProvider(for:_:)`. Similar to what we did for our custom day item model provider, for day ranges, we need to provide a `CalendarItemModel` for each day range we want to highlight.
+Day range indicators are useful for calendars that need to highlight not just individual days, but ranges of days. To do this, we can create a custom view that represents the entire highlighted region, and then provide that view to the calendar for day ranges that we care about.
 
-First, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to provide a `CalendarItemModel`. The `Date`s in our range will be interpreted as `DayComponents`s using the `Calendar` instance with which we initialized our `CalendarViewContent`.
-```swift
-  let lowerDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 20))!
-  let upperDate = calendar.date(from: DateComponents(year: 2020, month: 02, day: 07))!
-  let dateRangeToHighlight = lowerDate...upperDate
-```
+First, we need to create our custom day range indicator view. This view is responsible for drawing the entire highlighted region for a particular day range, which can potentially span multiple weeks, months, or even years. We'll use UIKit and Core Graphics to implement this, but it can easily be done in SwiftUI as well:
 
-Next, we need to invoke the `dayRangeItemProvider(for:_:)` on our `CalendarViewContent`:
-```swift
-  return CalendarViewContent(...)
-    ...
-    
-    .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in 
-      // Return a `CalendarItemModel` representing the view that highlights the entire day range
-    }
-```
-
-For each day range derived from the `Set<ClosedRange<Date>>` passed into this function, our day range item model provider closure will be invoked with a context instance that contains all of the information needed for us to render a view to be used to highlight a particular day range. Here is an example implementation of such a view:
 ```swift
 import UIKit
 
@@ -325,7 +433,7 @@ final class DayRangeIndicatorView: UIView {
 
   init(indicatorColor: UIColor) {
     self.indicatorColor = indicatorColor
-    super.init(frame: frame)
+    super.init(frame: .zero)
     backgroundColor = .clear
   }
 
@@ -366,290 +474,274 @@ final class DayRangeIndicatorView: UIView {
 }
 ```
 
-Next, we need a type that conforms to `CalendarItemViewRepresentable` that knows how to create and update instances of `DayRangeIndicatorView`. To make things easy, we can just make our view conform to this protocol:
+Next, we need to create a `ClosedRange<Date>` that represents the day range for which we'd like to display our day range indicator view. The `Date`s in our range will be interpreted as `DayComponents`s using the `Calendar` instance that we used when initially setting up our calendar.
 ```swift
-import HorizonCalendar
-
-extension DayRangeIndicatorView: CalendarItemViewRepresentable {
-
-  struct InvariantViewProperties: Hashable {
-    let indicatorColor = UIColor.blue.withAlphaComponent(0.15)
-  }
-
-  struct Content: Equatable {
-    let framesOfDaysToHighlight: [CGRect]
-  }
-
-  static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> DayRangeIndicatorView
-  {
-    DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
-  }
-
-  static func setContent(_ content: Content, on view: DayRangeIndicatorView) {
-    view.framesOfDaysToHighlight = content.framesOfDaysToHighlight
-  }
-
-}
-
+let lowerDate = calendar.date(from: DateComponents(year: 2020, month: 01, day: 20))!
+let upperDate = calendar.date(from: DateComponents(year: 2020, month: 02, day: 07))!
+let dateRangeToHighlight = lowerDate...upperDate
 ```
 
-Last, we need to return a `CalendarItemModel` representing our `DayRangeIndicatorView` from the day range item model provider closure:
-```swift
-  return CalendarViewContent(...)
+<details>
+  <summary>SwiftUI</summary>
+  
+  Next, we'll use the `dayRanges` modifier on our `CalendarViewRepresentable`:
+  ```swift
+  CalendarViewRepresentable(...)
     ...
     
-    .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
-      DayRangeIndicatorView.calendarItemModel(
-        invariantViewProperties: .init(indicatorColor: UIColor.blue.withAlphaComponent(0.15)),
-        content: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
+    .dayRanges(for: [dateRangeToHighlight]) { dayRangeLayoutContext in 
+      DayRangeIndicatorViewRepresentable(
+        framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame })
     }
-```
+  ```
+
+  For each day range derived from the `Set<ClosedRange<Date>>` passed into this modifier, our day range provider closure will be invoked with a context instance that contains all of the information needed for us to create a view to be used to highlight a particular day range. Since `DayRangeIndicatorView` is a `UIView`, we need to bridge it to SwiftUI using `UIViewRepresentable`:
+
+  ```swift
+  struct DayRangeIndicatorViewRepresentable: UIViewRepresentable {
+
+    let framesOfDaysToHighlight: [CGRect]
+
+    func makeUIView(context: Context) -> DayRangeIndicatorView {
+      DayRangeIndicatorView(indicatorColor: UIColor.systemBlue.withAlphaComponent(0.15))
+    }
+
+    func updateUIView(_ uiView: DayRangeIndicatorView, context: Context) {
+      uiView.framesOfDaysToHighlight = framesOfDaysToHighlight
+    }
+
+  }
+  ```
+  
+  > **Note**
+  > 
+  > When wrapping a `UIKit` view in a `UIViewRepresentable`, there is no equivalent concept of invariant view properties; all customizable properties must be updated in `updateUIView` to prevent view-reuse issues.
+  
+</details>
+
+<details>
+  <summary>UIKit</summary>
+  
+  Next, we need to invoke the `dayRangeItemProvider(for:_:)` on our `CalendarViewContent`:
+  ```swift
+    return CalendarViewContent(...)
+      ...
+      
+      .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in 
+        // Return a `CalendarItemModel` representing the view that highlights the entire day range
+      }
+  ```
+
+  For each day range derived from the `Set<ClosedRange<Date>>` passed into this function, our day range item model provider closure will be invoked with a context instance that contains all of the information needed for us to render a view to be used to highlight a particular day range. Here is an example implementation of such a view:
+
+
+  Next, we need a type that conforms to `CalendarItemViewRepresentable` that knows how to create and update instances of `DayRangeIndicatorView`. To make things easy, we can just make our view conform to this protocol:
+  ```swift
+  import HorizonCalendar
+
+  extension DayRangeIndicatorView: CalendarItemViewRepresentable {
+
+    struct InvariantViewProperties: Hashable {
+      let indicatorColor: UIColor
+    }
+
+    struct Content: Equatable {
+      let framesOfDaysToHighlight: [CGRect]
+    }
+
+    static func makeView(
+      withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
+      -> DayRangeIndicatorView
+    {
+      DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
+    }
+
+    static func setContent(_ content: Content, on view: DayRangeIndicatorView) {
+      view.framesOfDaysToHighlight = content.framesOfDaysToHighlight
+    }
+
+  }
+  ```
+
+  Last, we need to return a `CalendarItemModel` representing our `DayRangeIndicatorView` from the day range item model provider closure:
+  ```swift
+    return CalendarViewContent(...)
+      ...
+      
+      .dayRangeItemProvider(for: [dateRangeToHighlight]) { dayRangeLayoutContext in
+        DayRangeIndicatorView.calendarItemModel(
+          invariantViewProperties: .init(indicatorColor: UIColor.blue.withAlphaComponent(0.15)),
+          content: .init(framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
+      }
+  ```
+  
+</details>
 
 If you build and run the app, you should see a day range indicator view that highlights 2020-01-20 to 2020-02-07:
 
-![Day Range Indicator](Docs/Images/tutorial_day_range.png)
-
-#### Adding a tooltip
-`HorizonCalendar` provides an API to overlay parts of the calendar with custom views. One use case that this enables is adding tooltips to certain days - a feature that's used in the Airbnb app to inform users when their checkout date must be a certain number of days in the future from their check-in date.
-
-First, we need to decide on the locations of the items that we'd like to overlay with our own custom view. We can overlay a `day` or a `monthHeader` - the two cases available on `CalendarViewContent.OverlaidItemLocation`. Let's overlay the day at 2020-01-15:
-```swift
-  let dateToOverlay = calendar.date(from: DateComponents(year: 2020, month: 01, day: 15))!
-  let overlaidItemLocation: CalendarViewContent.OverlaidItemLocation = .day(containingDate: dateToOverlay) 
-```
-
-Like all other customizations, we'll add an overlay by calling a function on our `CalendarViewContent` instance that configures an overlay item model provider closure:
-```swift
-  return CalendarViewContent(...)
-    ...
-    
-    .overlayItemProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
-      // Return a `CalendarItemModel` representing the view to use as an overlay for the overlaid item location
-    }
-```
-
-For each overlaid item location in the `Set<CalendarViewContent.OverlaidItemLocation>` passed into this function, our overlay item model provider closure will be invoked with a context instance that contains all of the information needed for us to render a view to be used as an overlay for a particular overlaid item location. Here is an example implementation of a tooltip overlay view:
-```swift
-import UIKit
-
-final class TooltipView: UIView {
-
-  init(backgroundColor: UIColor, borderColor: UIColor, font: UIFont, textColor: UIColor) {
-    super.init(frame: .zero)
-    
-    isUserInteractionEnabled = false
-
-    backgroundView.backgroundColor = backgroundColor
-    backgroundView.layer.borderColor = borderColor
-    addSubview(backgroundView)
-
-    label.font = font
-    label.textColor = textColor
-    addSubview(label)
-  }
-
-  required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-  
-  var text: String {
-    get { label.text ?? "" }
-    set { label.text = newValue }
-  }
-
-  var frameOfTooltippedItem: CGRect? {
-    didSet {
-      guard frameOfTooltippedItem != oldValue else { return }
-      setNeedsLayout()
-    }
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    guard let frameOfTooltippedItem = frameOfTooltippedItem else { return }
-
-    label.sizeToFit()
-    let labelSize = CGSize(
-      width: min(label.bounds.size.width, bounds.width),
-      height: label.bounds.size.height)
-
-    let backgroundSize = CGSize(width: labelSize.width + 16, height: labelSize.height + 16)
-
-    let proposedFrame = CGRect(
-      x: frameOfTooltippedItem.midX - (backgroundSize.width / 2),
-      y: frameOfTooltippedItem.minY - backgroundSize.height - 4,
-      width: backgroundSize.width,
-      height: backgroundSize.height)
-
-    let frame: CGRect
-    if proposedFrame.maxX > bounds.width {
-      frame = proposedFrame.applying(.init(translationX: bounds.width - proposedFrame.maxX, y: 0))
-    } else if proposedFrame.minX < 0 {
-      frame = proposedFrame.applying(.init(translationX: -proposedFrame.minX, y: 0))
-    } else {
-      frame = proposedFrame
-    }
-
-    backgroundView.frame = frame
-    label.center = backgroundView.center
-  }
-
-  // MARK: Private
-
-  private lazy var backgroundView: UIView = {
-    let view = UIView()
-    view.layer.borderWidth = 1
-    view.layer.cornerRadius = 6
-    view.layer.shadowColor = UIColor.black.cgColor
-    view.layer.shadowOpacity = 0.8
-    view.layer.shadowOffset = .zero
-    view.layer.shadowRadius = 8
-    return view
-  }()
-
-  private lazy var label: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    label.lineBreakMode = .byTruncatingTail
-    return label
-  }()
-
-}
-```
-
-Note: An overlay view will have a size that closely matches the `bounds.size` of the calendar. To prevent your overlay view from intercepting touches, set `isUserInteractionEnabled` to `false`.
-
-Next, we need a type that conforms to `CalendarItemViewRepresentable` that knows how to create and update instances of `TooltipView`. To make things easy, we can just make our view conform to this protocol:
-```swift
-import HorizonCalendar
-
-extension TooltipView: CalendarItemViewRepresentable {
-
-  struct InvariantViewProperties: Hashable {
-    let backgroundColor: UIColor
-    let borderColor: UIColor
-    let font: UIFont
-    let textColor: UIColor
-  }
-
-  struct Content: Equatable {
-    let frameOfTooltippedItem: CGRect?
-    let text: String
-  }
-
-  static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> TooltipView
-  {
-  TooltipView(
-    borderColor: invariantViewProperties.borderColor, 
-    font: invariantViewProperties.font, 
-    textColor: invariantViewProperties.textColor)
-  }
-
-  static func setContent(_ content: Content, on view: TooltipView) {
-    view.frameOfTooltippedItem = content.frameOfTooltippedItem
-    view.text = content.text
-  }
-
-}
-```
-
-Last, we need to return a `CalendarItemModel` representing our `TooltipView` from the overlay item model provider closure:
-```swift
-  return CalendarViewContent(...)
-    ...
-    
-    .overlayItemProvider(for: [overlaidItemLocation]) { overlayLayoutContext in
-      TooltipView.calendarItemModel(
-        invariantViewProperties: .init(
-          backgroundColor: .white, 
-          borderColor: .black, 
-          font: UIFont.systemFont(ofSize: 16), 
-          textColor: .black),
-        content: .init(
-          frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame, 
-          text: "Dr. Martin Luther King Jr.'s Birthday"))
-    }
-```
-
-If you build and run the app, you should see a tooltip view hovering above 2020-01-15:
-
-![Tooltip View](Docs/Images/tutorial_tooltip.png)
+<img width="250" alt="Day Range Indicator Screenshot" src="Docs/Images/tutorial_day_range.png">
 
 #### Adding grid lines
-`HorizonCalendar` provides an API to add a decorative background behind each month. By using the included `MonthGridBackgroundView` with the `monthBackgroundItemProvider`, we can easily add grid lines to each of the months in the calendar:
+`HorizonCalendar` provides an API to add a decorative background behind each month. By using the included `MonthGridBackgroundView`, we can easily add grid lines to each of the months in the calendar:
 
-```swift
+<details>
+  <summary>SwiftUI</summary>
+  
+  ```swift
+  CalendarViewRepresentable(...)
+
+    .monthBackgrounds { monthLayoutContext in
+      MonthGridBackgroundViewRepresentable(
+        framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame })
+    }
+  ```
+  
+  Since `MonthGridBackgroundView` is a `UIView`, we need to bridge it to SwiftUI using `UIViewRepresentable`:
+
+  ```swift
+  struct MonthGridBackgroundViewRepresentable: UIViewRepresentable {
+
+    let framesOfDays: [CGRect]
+
+    func makeUIView(context: Context) -> MonthGridBackgroundView {
+      MonthGridBackgroundView(
+        invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8))
+    }
+
+    func updateUIView(_ uiView: MonthGridBackgroundView, context: Context) {
+      uiView.framesOfDays = framesOfDays
+    }
+
+  }
+  ```
+  
+  > **Note**
+  > 
+  > When wrapping a `UIKit` view in a `UIViewRepresentable`, there is no equivalent concept of invariant view properties; all customizable properties must be updated in `updateUIView` to prevent view-reuse issues. 
+  
+</details>
+
+<details>
+  <summary>UIKit</summary>
+  
+  ```swift
   return CalendarViewContent(...)
-    ...
-    
-    .horizontalDayMargin(8)
-    .verticalDayMargin(8)
     
     .monthBackgroundItemProvider { monthLayoutContext in
       MonthGridBackgroundView.calendarItemModel(
         invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
         content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
     }
-```
+  ```
+  
+</details>
 
-The month background item provider works similarly to the overlay item provider and day range item provider; for each month in the calendar, the item provider closure will be invoked with a layout context. This layout context contains information about the size and positions of elements in the month. Using this information, you can draw grid lines, borders, backgrounds, and more.
+The month background provider works similarly to the overlay provider and day range provider; for each month in the calendar, the provider closure will be invoked with a layout context. This layout context contains information about the size and positions of elements in the month. Using this information, you can draw grid lines, borders, backgrounds, and more.
 
-![Tooltip View](Docs/Images/tutorial_grid.png)
+<img width="250" alt="Grid Background Screenshot" src="Docs/Images/tutorial_grid.png">
 
 
 ### Responding to day selection
-If you're building a date picker, you'll most likely need to respond to the user tapping on days in the calendar. To do this, provide a day selection handler closure via `CalendarView`'s `daySelectionHandler`:
-```swift
-calendarView.daySelectionHandler = { [weak self] day in
-  self?.selectedDay = day
-}
-```
+If you're building a date picker, you'll most likely need to respond to the user tapping on days in the calendar.
 
-```swift
-private var selectedDay: DayComponents?
-```
+<details>
+  <summary>SwiftUI</summary>
+  
+  In SwiftUI, responding to day selection is easy.
+  
+  First, define a state property for the current selected date:
+  ```swift
+  @State var selectedDate: Date?
+  ```
+  
+  Then, update the selected date using the `onDaySelection` modifier:
+  ```swift
+  CalendarViewRepresentable(...)
+    ...
+    
+    .onDaySelection { day in
+      selectedDate = calendar.date(from: day.components)
+    }
+  ```
+  
+  Last, return a different view in your day provider closure:
+  ```swift
+  CalendarViewRepresentable(...)
+    ...
+    
+    .days { [selectedDate] day in
+      let date = calendar.date(from: day.components)
+      let borderColor: UIColor = date == selectedDate ? .systemRed : .systemBlue
+      
+      Text("\(day.day)")
+        .font(.system(size: 18))
+        .foregroundColor(Color(UIColor.label))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+          RoundedRectangle(cornerRadius: 12)
+            .stroke(Color(borderColor), lineWidth: 1)
+        }
+    }
+  ```
+  
+  > **Note**
+  > 
+  > View-provider closures are invoked lazily as parts of the calendar come into view. If you read any view state in any of your view-provider closures, make sure you capture it explicitly using a capture list. If you don't, SwiftUI will fail to identify that state as a dependency of your view unless it was read during the initial body evaluation of your view. This will lead to missed updates when your state changes.
+  
+</details>
 
-The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `DayComponents` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item model that looks different for the selected day:
-```swift
+<details>
+  <summary>UIKit</summary>
+  
+  In UIKit, provide a day selection handler closure by setting `CalendarView`'s `daySelectionHandler`:
+  
+  ```swift
+  calendarView.daySelectionHandler = { [weak self] day in
+    self?.selectedDate = calendar.date(from: day.components)
+  }
+  ```
+  
+  ```swift
+  private var selectedDate: Date?
+  ```
+  
+  The day selection handler closure is invoked whenever a day in the calendar is selected. You're provided with a `DayComponents` instance for the day that was selected. If we want to highlight the selected day once its been tapped, we'll need to create a new `CalendarViewContent` with a day calendar item model that looks different for the selected day:
+  ```swift
   let selectedDay = self.selectedDay
 
   return CalendarViewContent(...)
+    ...
 
-    .dayItemProvider { day in
-      var invariantViewProperties = DayLabel.InvariantViewProperties(
-        font: UIFont.systemFont(ofSize: 18), 
-        textColor: .darkGray,
-        backgroundColor: .clear)
+    .dayItemProvider { [selectedDate] day in
+      let date = calendar.date(from: day.components)
+      let borderColor: UIColor = date == selectedDate ? .systemRed : .systemBlue
 
-      if day == selectedDay {
-        invariantViewProperties.textColor = .white
-        invariantViewProperties.backgroundColor = .blue
-      }
-      
       return DayLabel.calendarItemModel(
-        invariantViewProperties: invariantViewProperties,
+        invariantViewProperties: .init(
+          font: .systemFont(ofSize: 18),
+          textColor: .label,
+          borderColor: borderColor),
         content: .init(day: day))
-  }
-```
+    }
+  ```
 
-Last, we'll change our day selection handler so that it not only stores the selected day, but also sets an updated content instance on `calendarView`:
-```swift
-calendarView.daySelectionHandler = { [weak self] day in
-  guard let self else { return }
+  Last, we'll change our day selection handler so that it not only stores the selected date, but also sets an updated content instance on `calendarView`:
+  ```swift
+  calendarView.daySelectionHandler = { [weak self] day in
+    guard let self else { return }
+
+    selectedDate = calendar.date(from: day.components)
+
+    let newContent = makeContent()
+    calendarView.setContent(newContent)
+  }
+  ```
   
-  self.selectedDay = day
-  
-  let newContent = self.makeContent()
-  self.calendarView.setContent(newContent)
-}
-```
+</details>
 
 After building and running the app, tapping days should cause them to turn blue:
 
-![Day Selection](Docs/Images/tutorial_day_selection.png)
+<img width="250" alt="Day Selection Screenshot" src="Docs/Images/tutorial_day_selection.png">
 
 ## Technical Details
 If you'd like to learn about how `HorizonCalendar` was implemented, check out the [Technical Details](Docs/TECHNICAL_DETAILS.md) document. It provides an overview of `HorizonCalendar`'s architecture, along with information about why it's not implemented using `UICollectionView`. 
