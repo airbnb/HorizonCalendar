@@ -528,10 +528,10 @@ final class FrameProviderTests: XCTestCase {
       height: 34.857142857142854)
       .alignedToPixels(forScreenWithScale: 3)
     let expectedFrameAfterMiddleDay = CGRect(
-      x: 187.33333333333334,
+      x: 187.66666666666666,
       y: 374.3333333333333,
-      width: 34.857142857142854,
-      height: 34.857142857142854)
+      width: 35,
+      height: 35)
       .alignedToPixels(forScreenWithScale: 3)
     XCTAssert(frameBeforeMiddleDay == expectedFrameBeforeMiddleDay, "Incorrect frame for day.")
     XCTAssert(frameAfterMiddleDay == expectedFrameAfterMiddleDay, "Incorrect frame for day.")
