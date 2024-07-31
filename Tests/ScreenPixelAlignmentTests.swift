@@ -108,7 +108,7 @@ final class ScreenPixelAlignmentTests: XCTestCase {
 
   func test2xScaleRectAlignment() {
     let rect = CGRect(x: 5.299999, y: -19.1994, width: 20.25, height: 0.76)
-    let expectedRect = CGRect(x: 5.5, y: -19, width: 20, height: 0.5)
+    let expectedRect = CGRect(x: 5.5, y: -19, width: 20.5, height: 1)
     XCTAssert(
       rect.alignedToPixels(forScreenWithScale: 2) == expectedRect,
       "Incorrect screen pixel alignment")
@@ -116,7 +116,7 @@ final class ScreenPixelAlignmentTests: XCTestCase {
 
   func test3xScaleRectAlignment() {
     let rect = CGRect(x: 71.13, y: 71.19, width: 20.25, height: 2)
-    let expectedRect = CGRect(x: 71, y: 71.33333333333333, width: 20.33333333333333, height: 2)
+    let expectedRect = CGRect(x: 71, y: 71.33333333333333, width: 20.333333333333332, height: 2)
     XCTAssert(
       rect.alignedToPixels(forScreenWithScale: 3) == expectedRect,
       "Incorrect screen pixel alignment")
@@ -125,17 +125,11 @@ final class ScreenPixelAlignmentTests: XCTestCase {
   // MARK: CGFloat Approximate Comparison Tests
 
   func testApproximateEquality() {
-    XCTAssert(CGFloat(1.48).isEqual(to: 1.52, threshold: 0.05))
-    XCTAssert(!CGFloat(1.48).isEqual(to: 1.53, threshold: 0.05))
-
-    XCTAssert(CGFloat(1).isEqual(to: 10, threshold: 9))
-    XCTAssert(!CGFloat(1).isEqual(to: 11, threshold: 9))
-
-    XCTAssert(CGFloat(1).isEqual(to: 10, threshold: 9))
-    XCTAssert(!CGFloat(1).isEqual(to: 11, threshold: 9))
-
-    XCTAssert(CGFloat(1.333).isEqual(to: 1.666, threshold: 1 / 3))
-    XCTAssert(!CGFloat(1.332).isEqual(to: 1.666, threshold: 1 / 3))
+    XCTAssert(CGFloat(1.48).isEqual(to: 1.52, screenScale: 2))
+    XCTAssert(!CGFloat(1).isEqual(to: 10, screenScale: 9))
+    XCTAssert(!CGFloat(1).isEqual(to: 10, screenScale: 9))
+    XCTAssert(!CGFloat(1).isEqual(to: 9, screenScale: 9))
+    XCTAssert(!CGFloat(1.333).isEqual(to: 1.666, screenScale: 3))
   }
 
 }
