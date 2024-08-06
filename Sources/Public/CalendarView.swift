@@ -773,29 +773,30 @@ public final class CalendarView: UIView {
     var viewsToHideForVisibleItems = visibleViewsForVisibleItems
     visibleViewsForVisibleItems.removeAll(keepingCapacity: true)
 
-    reuseManager.viewsForVisibleItems(
-      visibleItems,
-      recycleUnusedViews: !UIAccessibility.isVoiceOverRunning,
-      viewHandler: { view, visibleItem, previousBackingVisibleItem, isReusedViewSameAsPreviousView in
-        UIView.conditionallyPerformWithoutAnimation(when: !isReusedViewSameAsPreviousView) {
-          if view.superview == nil {
-            let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
-              forSubviewWithCorrespondingItemType: visibleItem.itemType)
-            scrollView.insertSubview(view, at: insertionIndex)
-          }
+    let contexts = reuseManager.reusedViewContexts(
+      visibleItems: visibleItems,
+      reuseUnusedViews: !UIAccessibility.isVoiceOverRunning)
 
-          view.isHidden = false
-
-          configureView(view, with: visibleItem)
+    for context in contexts {
+      UIView.conditionallyPerformWithoutAnimation(when: !context.isReusedViewSameAsPreviousView) {
+        if context.view.superview == nil {
+          let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
+            forSubviewWithCorrespondingItemType: context.visibleItem.itemType)
+          scrollView.insertSubview(context.view, at: insertionIndex)
         }
 
-        visibleViewsForVisibleItems[visibleItem] = view
+        context.view.isHidden = false
 
-        if let previousBackingVisibleItem {
-          // Don't hide views that were reused
-          viewsToHideForVisibleItems.removeValue(forKey: previousBackingVisibleItem)
-        }
-      })
+        configureView(context.view, with: context.visibleItem)
+      }
+
+      visibleViewsForVisibleItems[context.visibleItem] = context.view
+
+      if context.isViewReused {
+        // Don't hide views that were reused
+        viewsToHideForVisibleItems.removeValue(forKey: context.visibleItem)
+      }
+    }
 
     // Hide any old views that weren't reused. This is faster than adding / removing subviews.
     // If VoiceOver is running, we remove the view to save memory (since views aren't reused).

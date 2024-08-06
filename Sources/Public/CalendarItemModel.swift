@@ -46,8 +46,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     content: ViewRepresentable.Content)
   {
     _itemViewDifferentiator = _CalendarItemViewDifferentiator(
-      viewRepresentableTypeDescription: String(reflecting: ViewRepresentable.self),
-      viewTypeDescription: String(reflecting: ViewRepresentable.ViewType.self),
+      viewType: ObjectIdentifier(ViewRepresentable.self),
       invariantViewProperties: invariantViewProperties)
 
     self.invariantViewProperties = invariantViewProperties
@@ -115,8 +114,7 @@ extension CalendarItemModel where ViewRepresentable.Content == Never {
   ///   and `font`, assuming none of those values change in response to `content` updates.
   public init(invariantViewProperties: ViewRepresentable.InvariantViewProperties) {
     _itemViewDifferentiator = _CalendarItemViewDifferentiator(
-      viewRepresentableTypeDescription: String(reflecting: ViewRepresentable.self),
-      viewTypeDescription: String(reflecting: ViewRepresentable.ViewType.self),
+      viewType: ObjectIdentifier(ViewRepresentable.self),
       invariantViewProperties: invariantViewProperties)
 
     self.invariantViewProperties = invariantViewProperties

@@ -54,7 +54,6 @@ public protocol AnyCalendarItemModel {
 ///
 /// - Note: There is no reason to create an instance of this enum from your feature code; it should only be invoked internally.
 public struct _CalendarItemViewDifferentiator: Hashable {
-  let viewRepresentableTypeDescription: String
-  let viewTypeDescription: String
+  let viewType: ObjectIdentifier
   let invariantViewProperties: AnyHashable
 }
