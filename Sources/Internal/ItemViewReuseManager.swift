@@ -37,25 +37,26 @@ final class ItemViewReuseManager {
       let viewDifferentiator = visibleItem.calendarItemModel._itemViewDifferentiator
 
       let context: ReusedViewContext =
-        if let view = previousViewsForVisibleItems.removeValue(forKey: visibleItem) {
-          ReusedViewContext(
-            view: view,
-            visibleItem: visibleItem,
-            isViewReused: true,
-            isReusedViewSameAsPreviousView: true)
-        } else if !(unusedViewsForViewDifferentiators[viewDifferentiator]?.isEmpty ?? true) {
-          ReusedViewContext(
-            view: unusedViewsForViewDifferentiators[viewDifferentiator]!.remove(at: 0),
-            visibleItem: visibleItem,
-            isViewReused: true,
-            isReusedViewSameAsPreviousView: false)
-        } else {
-          ReusedViewContext(
-            view: ItemView(initialCalendarItemModel: visibleItem.calendarItemModel),
-            visibleItem: visibleItem,
-            isViewReused: false,
-            isReusedViewSameAsPreviousView: false)
-        }
+        if let view = previousViewsForVisibleItems.removeValue(forKey: visibleItem)
+      {
+        ReusedViewContext(
+          view: view,
+          visibleItem: visibleItem,
+          isViewReused: true,
+          isReusedViewSameAsPreviousView: true)
+      } else if !(unusedViewsForViewDifferentiators[viewDifferentiator]?.isEmpty ?? true) {
+        ReusedViewContext(
+          view: unusedViewsForViewDifferentiators[viewDifferentiator]!.remove(at: 0),
+          visibleItem: visibleItem,
+          isViewReused: true,
+          isReusedViewSameAsPreviousView: false)
+      } else {
+        ReusedViewContext(
+          view: ItemView(initialCalendarItemModel: visibleItem.calendarItemModel),
+          visibleItem: visibleItem,
+          isViewReused: false,
+          isReusedViewSameAsPreviousView: false)
+      }
 
       contexts.append(context)
 

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Rewrote accessibility code to avoid posting notifications, which causes poor Voice Over performance and odd focus bugs
+- Rewrote `ItemViewReuseManager` to perform fewer set operations, improving CPU usage by ~15% when scrolling quickly on an iPhone XR
 
 ## [v2.0.0](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...v2.0.0) - 2023-12-19
 
