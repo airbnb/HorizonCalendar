@@ -54,6 +54,19 @@ final class MonthTests: XCTestCase {
       to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true))
     XCTAssert(month2 == Month(era: 1, year: 2018, month: 05, isInGregorianCalendar: true), "Expected 2018-05.")
   }
+    
+    func testCreateMonthFromDate() {
+        var components = DateComponents()
+        components.era = 1
+        components.year = 2020
+        components.month = 03
+        guard let date = calendar.date(from: components) else {
+            XCTFail("Expected a date created from components")
+            return
+        }
+        let month = Month(from: date)
+        XCTAssert(month == Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true), "Expected 2020-03.")
+    }
 
   // MARK: Private
 
