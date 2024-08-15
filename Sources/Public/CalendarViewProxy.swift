@@ -31,7 +31,7 @@ public final class CalendarViewProxy: ObservableObject {
     calendarView.visibleMonthRange
   }
 
-  /// The range of months that are partially of fully visible.
+  /// The range of months that are partially or fully visible.
   public var visibleDayRange: DayComponentsRange? {
     calendarView.visibleDayRange
   }
