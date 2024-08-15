@@ -26,6 +26,16 @@ public final class CalendarViewProxy: ObservableObject {
 
   // MARK: Public
 
+  /// The range of months that are partially or fully visible.
+  public var visibleMonthRange: MonthComponentsRange? {
+    calendarView.visibleMonthRange
+  }
+
+  /// The range of months that are partially or fully visible.
+  public var visibleDayRange: DayComponentsRange? {
+    calendarView.visibleDayRange
+  }
+
   /// Scrolls the calendar to the specified month with the specified position.
   ///
   /// If the calendar has a non-zero frame, this function will scroll to the specified month immediately. Otherwise the scroll-to-month
