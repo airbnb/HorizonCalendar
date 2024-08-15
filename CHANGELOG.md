@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for disabling touch handling on SwiftUI views via the `allowsHitTesting` modifier
 - Added SwiftUI documentation to the README.md
+- Added properties to `CalendarViewProxy` for getting the `visibleMonthRange` and `visibleDayRange` 
 
 ### Fixed
 - Fixed an issue that could cause accessibility focus to shift unexpectedly
