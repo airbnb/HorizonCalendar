@@ -480,7 +480,7 @@ extension CalendarViewRepresentable {
   ///
   /// The `content` view builder closure is invoked for each day that's displayed.
   ///
-  /// If you don't configure your own day background views via this modifier, then months will not have any background decoration. If
+  /// If you don't configure your own day background views via this modifier, then days will not have any background decoration. If
   /// a particular day doesn't need a background view, return `EmptyView` for that day.
   ///
   /// - Parameters:

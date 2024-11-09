@@ -22,9 +22,6 @@ import SwiftUI
 /// Consider using the `calendarItemModel` property, defined as an extension on SwiftUI's`View`, to avoid needing to work with
 /// this wrapper view directly.
 /// e.g. `Text("\(dayNumber)").calendarItemModel`
-///
-/// - Warning: Using a SwiftUI view with the calendar will cause `SwiftUIView.HostingController`(s) to be added to the
-/// closest view controller in the responder chain in relation to the `CalendarView`.
 @available(iOS 13.0, *)
 public final class SwiftUIWrapperView<Content: View>: UIView {
 
@@ -32,13 +29,16 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   public init(contentAndID: ContentAndID) {
     self.contentAndID = contentAndID
-    hostingController = HostingController(
-      rootView: .init(content: contentAndID.content, id: contentAndID.id))
+    hostingController = UIHostingController(rootView: AnyView(contentAndID.content))
+    hostingController._disableSafeArea = true
 
     super.init(frame: .zero)
 
     insetsLayoutMarginsFromSafeArea = false
     layoutMargins = .zero
+
+    hostingControllerView.backgroundColor = .clear
+    addSubview(hostingControllerView)
   }
 
   required init?(coder _: NSCoder) {
@@ -47,16 +47,20 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   // MARK: Public
 
+  public override class var layerClass: AnyClass {
+    CATransformLayer.self
+  }
+
   public override var isAccessibilityElement: Bool {
     get { false }
     set { }
   }
 
-  public override func didMoveToWindow() {
-    super.didMoveToWindow()
-
-    if window != nil {
-      setUpHostingControllerIfNeeded()
+  public override var isHidden: Bool {
+    didSet {
+      if isHidden {
+        hostingController.rootView = AnyView(EmptyView())
+      }
     }
   }
 
@@ -65,7 +69,7 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
     // modifier. Its first subview's `isUserInteractionEnabled` _does_ appear to be affected by the
     // `allowsHitTesting` modifier, enabling us to properly ignore touch handling.
     if
-      let firstSubview = hostingController.view.subviews.first,
+      let firstSubview = hostingControllerView.subviews.first,
       !firstSubview.isUserInteractionEnabled
     {
       return false
@@ -76,62 +80,42 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   public override func layoutSubviews() {
     super.layoutSubviews()
-    hostingControllerView?.frame = bounds
+    hostingControllerView.frame = bounds
   }
 
   public override func systemLayoutSizeFitting(
     _ targetSize: CGSize,
-    withHorizontalFittingPriority _: UILayoutPriority,
-    verticalFittingPriority _: UILayoutPriority)
+    withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+    verticalFittingPriority: UILayoutPriority)
     -> CGSize
   {
-    hostingController.sizeThatFits(in: targetSize)
+    hostingControllerView.systemLayoutSizeFitting(
+      targetSize,
+      withHorizontalFittingPriority: horizontalFittingPriority,
+      verticalFittingPriority: verticalFittingPriority)
   }
 
   // MARK: Fileprivate
 
   fileprivate var contentAndID: ContentAndID {
     didSet {
-      hostingController.rootView = .init(content: contentAndID.content, id: contentAndID.id)
+      hostingController.rootView = AnyView(contentAndID.content)
       configureGestureRecognizers()
     }
   }
 
   // MARK: Private
 
-  private let hostingController: HostingController<IDWrapperView<Content>>
+  private let hostingController: UIHostingController<AnyView>
 
-  private weak var hostingControllerView: UIView?
-
-  private func setUpHostingControllerIfNeeded() {
-    guard let closestViewController = closestViewController() else {
-      assertionFailure(
-        "Could not find a view controller to which the `UIHostingController` could be added.")
-      return
-    }
-
-    guard hostingController.parent !== closestViewController else { return }
-
-    if hostingController.parent != nil {
-      hostingController.willMove(toParent: nil)
-      hostingController.view.removeFromSuperview()
-      hostingController.removeFromParent()
-      hostingController.didMove(toParent: nil)
-    }
-
-    hostingController.willMove(toParent: closestViewController)
-    closestViewController.addChild(hostingController)
-    hostingControllerView = hostingController.view
-    addSubview(hostingController.view)
-    hostingController.didMove(toParent: closestViewController)
-
-    setNeedsLayout()
+  private var hostingControllerView: UIView {
+    hostingController.view
   }
 
   // This allows touches to be passed to `ItemView` even if the SwiftUI `View` has a gesture
   // recognizer.
   private func configureGestureRecognizers() {
-    for gestureRecognizer in hostingControllerView?.gestureRecognizers ?? [] {
+    for gestureRecognizer in hostingControllerView.gestureRecognizers ?? [] {
       gestureRecognizer.cancelsTouchesInView = false
     }
   }
@@ -167,13 +151,13 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
   }
 
-  public struct ContentAndID: Equatable, SwiftUIWrapperViewContentIDUpdatable {
+  public struct ContentAndID: Equatable {
 
     // MARK: Lifecycle
 
-    public init(content: Content, id: AnyHashable) {
+    // TODO: Remove `id` and rename this type in the next major release.
+    public init(content: Content, id _: AnyHashable) {
       self.content = content
-      self.id = id
     }
 
     // MARK: Public
@@ -181,10 +165,6 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
     public static func == (_: ContentAndID, _: ContentAndID) -> Bool {
       false
     }
-
-    // MARK: Internal
-
-    var id: AnyHashable
 
     // MARK: Fileprivate
 
@@ -204,70 +184,6 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
     on view: SwiftUIWrapperView<Content>)
   {
     view.contentAndID = contentAndID
-  }
-
-}
-
-// MARK: - SwiftUIWrapperViewContentIDUpdatable
-
-protocol SwiftUIWrapperViewContentIDUpdatable {
-  var id: AnyHashable { get set }
-}
-
-// MARK: UIResponder Next View Controller Helper
-
-extension UIResponder {
-  /// Recursively traverses up the responder chain to find the closest view controller.
-  fileprivate func closestViewController() -> UIViewController? {
-    self as? UIViewController ?? next?.closestViewController()
-  }
-}
-
-// MARK: - IDWrapperView
-
-/// A wrapper view that uses the `id(_:)` modifier on the wrapped view so that each one has its own identity, even if it was reused.
-@available(iOS 13.0, *)
-private struct IDWrapperView<Content: View>: View {
-
-  let content: Content
-  let id: AnyHashable
-
-  var body: some View {
-    content
-      .id(id)
-  }
-
-}
-
-// MARK: - HostingController
-
-/// The `UIHostingController` type used by `SwiftUIWrapperView` to embed SwiftUI views in a UIKit view hierarchy. This
-/// exists to disable safe area insets and set the background color to clear.
-@available(iOS 13.0, *)
-private final class HostingController<Content: View>: UIHostingController<Content> {
-
-  // MARK: Lifecycle
-
-  override init(rootView: Content) {
-    super.init(rootView: rootView)
-
-    // This prevents the safe area from affecting layout.
-    _disableSafeArea = true
-  }
-
-  @MainActor
-  required dynamic init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: Internal
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    // Override the default `.systemBackground` color since `CalendarView` subviews should be
-    // clear.
-    view.backgroundColor = .clear
   }
 
 }

@@ -811,8 +811,7 @@ public final class CalendarView: UIView {
   }
 
   private func configureView(_ view: ItemView, with visibleItem: VisibleItem) {
-    var calendarItemModel = visibleItem.calendarItemModel
-    calendarItemModel._setSwiftUIWrapperViewContentIDIfNeeded(visibleItem.itemType)
+    let calendarItemModel = visibleItem.calendarItemModel
     view.calendarItemModel = calendarItemModel
     view.itemType = visibleItem.itemType
     view.frame = visibleItem.frame.alignedToPixels(forScreenWithScale: scale)
