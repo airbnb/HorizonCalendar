@@ -55,6 +55,11 @@ final class ItemView: UIView {
     set { }
   }
 
+  override var isHidden: Bool {
+    get { contentView.isHidden }
+    set { contentView.isHidden = newValue }
+  }
+
   var calendarItemModel: AnyCalendarItemModel {
     didSet {
       guard calendarItemModel._itemViewDifferentiator == oldValue._itemViewDifferentiator else {

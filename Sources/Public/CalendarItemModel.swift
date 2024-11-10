@@ -81,16 +81,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     return content == other.content
   }
 
-  public mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_ id: AnyHashable) {
-    guard
-      var content = content as? SwiftUIWrapperViewContentIDUpdatable,
-      content.id == AnyHashable(PlaceholderID.placeholderID)
-    else {
-      return
-    }
-    content.id = id
-    self.content = content as? ViewRepresentable.Content
-  }
+  public mutating func _setSwiftUIWrapperViewContentIDIfNeeded(_: AnyHashable) { }
 
   // MARK: Private
 
@@ -176,24 +167,11 @@ extension View {
   ///
   /// This is equivalent to manually creating a
   /// `CalendarItemModel<SwiftUIWrapperView<YourView>>`, where `YourView` is some SwiftUI `View`.
-  ///
-  /// - Warning: Using a SwiftUI view with the calendar will cause `SwiftUIView.HostingController`(s) to be added to the
-  /// closest view controller in the responder chain in relation to the `CalendarView`.
   public var calendarItemModel: CalendarItemModel<SwiftUIWrapperView<Self>> {
-    let contentAndID = SwiftUIWrapperView.ContentAndID(
-      content: self,
-      id: PlaceholderID.placeholderIDAnyHashable)
+    let contentAndID = SwiftUIWrapperView.ContentAndID(content: self, id: 0)
     return CalendarItemModel<SwiftUIWrapperView<Self>>(
       invariantViewProperties: .init(initialContentAndID: contentAndID),
       content: contentAndID)
   }
 
-}
-
-// MARK: - PlaceholderID
-
-/// This exists only to facilitate internally updating the ID of a `SwiftUIWrapperView`'s content.
-private enum PlaceholderID: Hashable {
-  case placeholderID
-  static let placeholderIDAnyHashable = AnyHashable(PlaceholderID.placeholderID)
 }
