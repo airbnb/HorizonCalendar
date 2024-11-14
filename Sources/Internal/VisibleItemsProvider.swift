@@ -277,6 +277,7 @@ final class VisibleItemsProvider {
     // Handle background items
     handleMonthBackgroundItemsIfNeeded(context: &context)
 
+    previousHeightsForVisibleMonthHeaders = context.heightsForVisibleMonthHeaders
     previousCalendarItemModelCache = context.calendarItemModelCache
 
     return VisibleItemsDetails(
@@ -301,10 +302,8 @@ final class VisibleItemsProvider {
   private var sizingMonthHeaderViewsForViewDifferentiators = [
     _CalendarItemViewDifferentiator: UIView
   ]()
-
-  private var previousCalendarItemModelCache: [
-    VisibleItem.ItemType: AnyCalendarItemModel
-  ]?
+  private var previousHeightsForVisibleMonthHeaders: [Month: CGFloat]?
+  private var previousCalendarItemModelCache: [VisibleItem.ItemType: AnyCalendarItemModel]?
 
   private var calendar: Calendar {
     content.calendar
@@ -442,31 +441,35 @@ final class VisibleItemsProvider {
     context.heightsForVisibleMonthHeaders.value(
       for: month,
       missingValueProvider: {
-        let monthHeaderItemModel = content.monthHeaderItemProvider(month)
-        let monthHeaderView = sizingMonthHeaderViewsForViewDifferentiators.value(
-          for: monthHeaderItemModel._itemViewDifferentiator,
-          missingValueProvider: {
-            monthHeaderItemModel._makeView()
-          })
-        monthHeaderItemModel._setContent(onViewOfSameType: monthHeaderView)
-
-        let monthWidth: CGFloat
-        switch content.monthsLayout {
-        case .vertical:
-          monthWidth = size.width
-        case .horizontal(let options):
-          monthWidth = options.monthWidth(
-            calendarWidth: size.width,
-            interMonthSpacing: content.interMonthSpacing)
-        }
-
-        let size = monthHeaderView.systemLayoutSizeFitting(
-          CGSize(width: monthWidth, height: UIView.layoutFittingCompressedSize.height),
-          withHorizontalFittingPriority: .required,
-          verticalFittingPriority: .fittingSizeLevel)
-
-        return size.height
+        previousHeightsForVisibleMonthHeaders?[month] ?? monthHeaderHeight(for: month)
       })
+  }
+
+  private func monthHeaderHeight(for month: Month) -> CGFloat {
+    let monthHeaderItemModel = content.monthHeaderItemProvider(month)
+    let monthHeaderView = sizingMonthHeaderViewsForViewDifferentiators.value(
+      for: monthHeaderItemModel._itemViewDifferentiator,
+      missingValueProvider: {
+        monthHeaderItemModel._makeView()
+      })
+    monthHeaderItemModel._setContent(onViewOfSameType: monthHeaderView)
+
+    let monthWidth: CGFloat
+    switch content.monthsLayout {
+    case .vertical:
+      monthWidth = size.width
+    case .horizontal(let options):
+      monthWidth = options.monthWidth(
+        calendarWidth: size.width,
+        interMonthSpacing: content.interMonthSpacing)
+    }
+
+    let size = monthHeaderView.systemLayoutSizeFitting(
+      CGSize(width: monthWidth, height: UIView.layoutFittingCompressedSize.height),
+      withHorizontalFittingPriority: .required,
+      verticalFittingPriority: .fittingSizeLevel)
+
+    return size.height
   }
 
   private func layoutItem(
@@ -698,8 +701,7 @@ final class VisibleItemsProvider {
           calendarItemModel = context.calendarItemModelCache.value(
             for: itemType,
             missingValueProvider: {
-              previousCalendarItemModelCache?[itemType]
-                ?? content.monthHeaderItemProvider(month)
+              previousCalendarItemModelCache?[itemType] ?? content.monthHeaderItemProvider(month)
             })
 
           // Create a visible item for the separator view, if needed.
@@ -871,10 +873,15 @@ final class VisibleItemsProvider {
       daysAndFrames: dayRangeLayoutContext.daysAndFrames,
       boundingUnionRectOfDayFrames: dayRangeLayoutContext.boundingUnionRectOfDayFrames)
 
+    let itemType = VisibleItem.ItemType.dayRange(dayRange)
     context.visibleItems.insert(
       VisibleItem(
-        calendarItemModel: dayRangeItemProvider(dayRangeLayoutContext),
-        itemType: .dayRange(dayRange),
+        calendarItemModel: context.calendarItemModelCache.value(
+          for: itemType,
+          missingValueProvider: {
+            previousCalendarItemModelCache?[itemType] ?? dayRangeItemProvider(dayRangeLayoutContext)
+          }),
+        itemType: itemType,
         frame: frame))
   }
 
@@ -1027,10 +1034,18 @@ final class VisibleItemsProvider {
         dayOfWeekPositionsAndFrames: dayOfWeekPositionsAndFrames,
         daysAndFrames: daysAndFrames.sorted(by: { $0.day < $1.day }),
         bounds: CGRect(origin: .zero, size: expandedMonthFrame.size))
-      if let itemModel = monthBackgroundItemProvider(monthLayoutContext) {
+
+      let itemType = VisibleItem.ItemType.monthBackground(month)
+      let itemModel = context.calendarItemModelCache.optionalValue(
+        for: itemType,
+        missingValueProvider: {
+          previousCalendarItemModelCache?[itemType] ??
+            monthBackgroundItemProvider(monthLayoutContext)
+        })
+      if let itemModel {
         let visibleItem = VisibleItem(
           calendarItemModel: itemModel,
-          itemType: .monthBackground(month),
+          itemType: itemType,
           frame: expandedMonthFrame)
         context.visibleItems.insert(visibleItem)
       }
