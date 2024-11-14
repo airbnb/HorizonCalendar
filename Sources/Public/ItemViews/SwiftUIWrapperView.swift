@@ -29,7 +29,7 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   public init(contentAndID: ContentAndID) {
     self.contentAndID = contentAndID
-    hostingController = UIHostingController(rootView: AnyView(contentAndID.content))
+    hostingController = UIHostingController(rootView: contentAndID.content)
     hostingController._disableSafeArea = true
 
     super.init(frame: .zero)
@@ -59,7 +59,9 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
   public override var isHidden: Bool {
     didSet {
       if isHidden {
-        hostingController.rootView = AnyView(EmptyView())
+        hostingControllerView.removeFromSuperview()
+      } else {
+        addSubview(hostingControllerView)
       }
     }
   }
@@ -99,14 +101,14 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   fileprivate var contentAndID: ContentAndID {
     didSet {
-      hostingController.rootView = AnyView(contentAndID.content)
+      hostingController.rootView = contentAndID.content
       configureGestureRecognizers()
     }
   }
 
   // MARK: Private
 
-  private let hostingController: UIHostingController<AnyView>
+  private let hostingController: UIHostingController<Content>
 
   private var hostingControllerView: UIView {
     hostingController.view
