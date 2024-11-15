@@ -10,7 +10,7 @@ A declarative and performant calendar UI component that supports use cases rangi
 [![Swift Package Manager compatible](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2FHorizonCalendar%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/airbnb/HorizonCalendar)
 
 ## Introduction
-`HorizonCalendar` is a declarative and performant calendar UI component for iOS. It provides many customization points to support a diverse range of designs and use cases, and is used used to implement every calendar and date picker in the Airbnb iOS app.
+`HorizonCalendar` is a declarative and performant calendar UI component for iOS. It provides many customization points to support a diverse range of designs and use cases, and is used to implement every calendar and date picker in the Airbnb iOS app.
 
 Features:
 
