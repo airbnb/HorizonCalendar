@@ -246,7 +246,8 @@ public final class CalendarViewContent {
   /// or background, by including it in the view that your `CalendarItemModel` creates.
   ///
   /// If you don't configure your own day item provider via this function, or if the `dayItemProvider` closure
-  /// returns nil, then a default day item provider will be used.
+  /// returns nil, then a default day item provider will be used. If a day is invalid, an emptyDayView is provided.
+  ///
   ///
   /// - Parameters:
   ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day
