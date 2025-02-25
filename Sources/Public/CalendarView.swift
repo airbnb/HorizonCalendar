@@ -47,6 +47,7 @@ public final class CalendarView: UIView {
     content = initialContent
     super.init(frame: .zero)
     commonInit()
+      
   }
 
   required init?(coder: NSCoder) {
@@ -114,7 +115,7 @@ public final class CalendarView: UIView {
         right: max(newValue.right, 0))
     }
   }
-
+    
   /// `CalendarView` only supports positive values for `directionalLayoutMargins`. Negative values will be changed to
   /// `0`.
   public override var directionalLayoutMargins: NSDirectionalEdgeInsets {
