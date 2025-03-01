@@ -116,7 +116,7 @@ struct SwiftUIScreenDemo: View {
       }
 
       .days { day in
-        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
+          SwiftUIDayView(day: day, isSelected: isDaySelected(day))
       }
 
       .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in

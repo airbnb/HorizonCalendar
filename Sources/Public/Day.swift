@@ -17,12 +17,19 @@ import Foundation
 
 // MARK: - Day
 
+public protocol DayAvailabilityProvider {
+    func isEnabled(_ day: DayComponents) -> Bool
+}
+
 /// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to DayComponents.
 public struct Day: Hashable {
     // MARK: - Private
     private let _dayComponents: DayComponents
     
     // MARK: - Public
+    
+    // Reference to the availability provider
+    public static var availabilityProvider: DayAvailabilityProvider?
     
     /// Forwarding to support existing codebase
     public var components: DateComponents {
@@ -39,14 +46,9 @@ public struct Day: Hashable {
     
     public var isEnabled: Bool
     
-    init(_ components: DayComponents, isEnabled: Bool = true) {
-        self._dayComponents = components
-        self.isEnabled = isEnabled
-    }
-    
-    init(month: MonthComponents, day: Int, isEnabled: Bool = true) {
+    init(month: MonthComponents, day: Int) {
         self._dayComponents = DayComponents(month: month, day: day)
-        self.isEnabled = isEnabled
+        self.isEnabled = Day.availabilityProvider?.isEnabled(self._dayComponents) ?? true
     }
  }
 

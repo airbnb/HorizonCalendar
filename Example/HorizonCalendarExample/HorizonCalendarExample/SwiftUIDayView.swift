@@ -25,10 +25,10 @@ struct SwiftUIDayView: View {
     let isEnabled: Bool
     
     // MARK: - Lifecycle
-    init(dayNumber: Int, isSelected: Bool, isEnabled: Bool = true) {
-        self.dayNumber = dayNumber
+    init(day: Day, isSelected: Bool) {
+        self.dayNumber = day.day
         self.isSelected = isSelected
-        self.isEnabled = isEnabled
+        self.isEnabled = day.isEnabled
     }
     
     var body: some View {
@@ -64,9 +64,9 @@ struct SwiftUIDayView_Previews: PreviewProvider {
 
   static var previews: some View {
     Group {
-      SwiftUIDayView(dayNumber: 1, isSelected: false)
-      SwiftUIDayView(dayNumber: 19, isSelected: false)
-      SwiftUIDayView(dayNumber: 27, isSelected: true)
+//        SwiftUIDayView(dayNumber: 1, isSelected: false, isEnabled: true)
+//        SwiftUIDayView(dayNumber: 19, isSelected: false, isEnabled: false)
+//        SwiftUIDayView(dayNumber: 27, isSelected: true, isEnabled: true)
     }
     .frame(width: 50, height: 50)
   }
