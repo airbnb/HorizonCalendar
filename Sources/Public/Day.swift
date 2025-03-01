@@ -18,52 +18,18 @@ import Foundation
 // MARK: - Day
 
 typealias Day = DayComponents
-
-// MARK: - DayComponents
-
-/// Represents the components of a day. This type is created internally, then vended to you via the public API. All `DayComponents`
-/// instances that are vended to you are created using the `Calendar` instance that you provide when initializing your
-/// `CalendarView`.
-public struct DayComponents: Hashable {
-
-  // MARK: Lifecycle
-
-  init(month: MonthComponents, day: Int) {
-    self.month = month
-    self.day = day
-  }
-
-  // MARK: Public
-
-  public let month: MonthComponents
-  public let day: Int
-
-  public var components: DateComponents {
-    DateComponents(era: month.era, year: month.year, month: month.month, day: day)
-  }
-
-}
-
-// MARK: CustomStringConvertible
-
-extension DayComponents: CustomStringConvertible {
-
-  public var description: String {
-    let yearDescription = String(format: "%04d", month.year)
-    let monthDescription = String(format: "%02d", month.month)
-    let dayDescription = String(format: "%02d", day)
-    return "\(yearDescription)-\(monthDescription)-\(dayDescription)"
-  }
-
-}
-
-// MARK: Comparable
-
-extension DayComponents: Comparable {
-
-  public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
-    guard lhs.month == rhs.month else { return lhs.month < rhs.month }
-    return lhs.day < rhs.day
-  }
-
-}
+/// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to DayComponents.
+public struct Day: Hashable {
+    
+    // MARK: - Public
+    public let components: DayComponents
+    public var day: DayComponents {
+        return components
+    }
+    public var isEnabled: Bool
+    
+    init(month: MonthComponents, day: Int, isEnabled: Bool = true) {
+        self.components = DayComponents(month: month, day: day)
+        self.isEnabled = isEnabled
+    }
+ }
