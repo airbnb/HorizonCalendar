@@ -17,19 +17,50 @@ import Foundation
 
 // MARK: - Day
 
-typealias Day = DayComponents
 /// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to DayComponents.
 public struct Day: Hashable {
+    // MARK: - Private
+    private let _dayComponents: DayComponents
     
     // MARK: - Public
-    public let components: DayComponents
-    public var day: DayComponents {
-        return components
+    
+    /// Forwarding to support existing codebase
+    public var components: DateComponents {
+        return _dayComponents.components
     }
+    
+    public var month: MonthComponents {
+        return _dayComponents.month
+    }
+    
+    public var day: Int {
+        return _dayComponents.day
+    }
+    
     public var isEnabled: Bool
     
+    init(_ components: DayComponents, isEnabled: Bool = true) {
+        self._dayComponents = components
+        self.isEnabled = isEnabled
+    }
+    
     init(month: MonthComponents, day: Int, isEnabled: Bool = true) {
-        self.components = DayComponents(month: month, day: day)
+        self._dayComponents = DayComponents(month: month, day: day)
         self.isEnabled = isEnabled
     }
  }
+
+extension Day: Comparable {
+    public static func < (lhs: Day, rhs: Day) -> Bool {
+        return lhs._dayComponents < rhs._dayComponents
+    }
+    
+    public static func > (lhs: Day, rhs: Day) -> Bool {
+        return lhs._dayComponents > rhs._dayComponents
+    }
+    
+    public static func == (lhs: Day, rhs: Day) -> Bool {
+        return lhs._dayComponents == rhs._dayComponents
+    }
+    
+}

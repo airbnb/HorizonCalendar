@@ -19,7 +19,7 @@ import UIKit
 enum DayRangeSelectionHelper {
 
   static func updateDayRange(
-    afterTapSelectionOf day: DayComponents,
+    afterTapSelectionOf day: Day,
     existingDayRange: inout DayComponentsRange?)
   {
     if
@@ -34,7 +34,7 @@ enum DayRangeSelectionHelper {
   }
 
   static func updateDayRange(
-    afterDragSelectionOf day: DayComponents,
+    afterDragSelectionOf day: Day,
     existingDayRange: inout DayComponentsRange?,
     initialDayRange: inout DayComponentsRange?,
     state: UIGestureRecognizer.State,

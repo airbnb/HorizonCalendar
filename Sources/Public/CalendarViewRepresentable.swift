@@ -173,7 +173,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     }
 
     if let dayBackgroundItemProvider {
-      content = content.dayBackgroundItemProvider(dayBackgroundItemProvider)
+        content = (content.dayBackgroundItemProvider)(dayBackgroundItemProvider)
     }
 
     if let monthBackgroundItemProvider {
@@ -425,7 +425,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day item provider.
   public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
+    _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -445,7 +445,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day view.
   /// - Returns: A new `CalendarViewRepresentable` with custom day views configured.
   public func days(
-    @ViewBuilder _ content: @escaping (_ day: DayComponents) -> some View)
+    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
     -> Self
   {
     dayItemProvider { day in
@@ -468,7 +468,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day background item.
   /// - Returns: A new `CalendarViewRepresentable` with a new day background item provider.
   public func dayBackgroundItemProvider(
-    _ dayBackgroundItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
+    _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> Self
   {
     var view = self
@@ -488,7 +488,7 @@ extension CalendarViewRepresentable {
   ///   - day: The `Day` for which to provide a day background view.
   /// - Returns: A new `CalendarViewRepresentable` with day background views configured.
   public func dayBackgrounds(
-    @ViewBuilder _ content: @escaping (_ day: DayComponents) -> some View)
+    @ViewBuilder _ content: @escaping (_ day: Day) -> some View)
     -> Self
   {
     dayBackgroundItemProvider { day in
@@ -685,7 +685,7 @@ extension CalendarViewRepresentable {
   ///
   /// - Parameters:
   ///   - daySelectionHandler: A closure (that is retained) that is invoked whenever a day is selected.
-  public func onDaySelection(_ daySelectionHandler: @escaping (DayComponents) -> Void) -> Self {
+  public func onDaySelection(_ daySelectionHandler: @escaping (Day) -> Void) -> Self {
     var view = self
     view.daySelectionHandler = daySelectionHandler
     return view
@@ -704,9 +704,9 @@ extension CalendarViewRepresentable {
   ///   - changed: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture intersects a new day.
   ///   - ended: A closure (that is retained) that is invoked when the multiple-day-selection drag gesture ends.
   public func onMultipleDaySelectionDrag(
-    began: @escaping (DayComponents) -> Void,
-    changed: @escaping (DayComponents) -> Void,
-    ended: @escaping (DayComponents) -> Void)
+    began: @escaping (Day) -> Void,
+    changed: @escaping (Day) -> Void,
+    ended: @escaping (Day) -> Void)
     -> Self
   {
     var view = self

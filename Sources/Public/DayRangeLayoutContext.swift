@@ -26,7 +26,7 @@ public struct DayRangeLayoutContext: Hashable {
   /// Each frame represents the frame of an individual day in the day range in the coordinate system of
   /// `boundingUnionRectOfDayFrames`. If a day range extends beyond the `visibleDateRange`, this array will only
   /// contain the day-frame pairs for the visible portion of the day range.
-  public let daysAndFrames: [(day: DayComponents, frame: CGRect)]
+  public let daysAndFrames: [(day: Day, frame: CGRect)]
 
   /// A rectangle that perfectly contains all day frames in `daysAndFrames`. In other words, it is the union of all day frames in
   /// `daysAndFrames`.
