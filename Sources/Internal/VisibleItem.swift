@@ -88,6 +88,9 @@ extension VisibleItem {
     case daysOfWeekRowSeparator(Month)
     case dayRange(DayRange)
     case overlayItem(OverlaidItemLocation)
+    case weekNumber(weekNumber: Int, month: MonthComponents)
   }
 
 }
+
+

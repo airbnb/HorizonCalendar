@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		645FFF022D73B86A002EE721 /* WeekNumberDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */; };
 		9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */; };
 		9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */; };
 		938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberDemoViewController.swift; sourceTree = "<group>"; };
 		9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPickerViewController.swift; sourceTree = "<group>"; };
 		9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToDayWithAnimationDemoViewController.swift; sourceTree = "<group>"; };
 		938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionDemoViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				938176A6249B85CE00E18FA3 /* DemoViewController.swift */,
+				645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */,
 				939E696E2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift */,
 				938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */,
 				938176A2249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift */,
@@ -221,6 +224,7 @@
 				938176A7249B85CE00E18FA3 /* DemoViewController.swift in Sources */,
 				9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */,
 				93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */,
+				645FFF022D73B86A002EE721 /* WeekNumberDemoViewController.swift in Sources */,
 				938176A5249B828600E18FA3 /* LargeDayRangeDemoViewController.swift in Sources */,
 				FDD8EE7429885AF500F6EC9D /* MonthBackgroundDemoViewController.swift in Sources */,
 				FD55C5D7298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift in Sources */,

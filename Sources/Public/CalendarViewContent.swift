@@ -87,6 +87,28 @@ public final class CalendarViewContent {
       validAspectRatioRange.upperBound)
     return self
   }
+    /// Configures whether week numbers should be displayed.
+    ///
+    /// - Parameters:
+    ///   - show: Whether to show week numbers to the left of each week.
+    ///   - textColor: The text color of the week numbers.
+    ///   - width: The width allocated for week numbers.
+    /// - Returns: A copy of this `CalendarViewContent` instance with week number settings updated.
+    public func showWeekNumbers(_ show: Bool, textColor: UIColor = .gray, width: CGFloat = 25) -> CalendarViewContent {
+        var content = self
+        content.showWeekNumbers = show
+        content.weekNumberTextColor = textColor
+        content.weekNumberWidth = width
+        
+        // If we're showing week numbers, make sure there's enough left margin
+        if show {
+            var updatedInsets = content.monthDayInsets
+            updatedInsets.leading = max(updatedInsets.leading, width + 5)
+            content.monthDayInsets = updatedInsets
+        }
+        
+        return content
+    }
 
   /// Configures the aspect ratio of each day of the week.
   ///
@@ -374,6 +396,7 @@ public final class CalendarViewContent {
   }
 
   // MARK: Internal
+    
 
   let calendar: Calendar
   let dayRange: DayRange
@@ -402,7 +425,12 @@ public final class CalendarViewContent {
   private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
+  private(set) var showWeekNumbers: Bool = false
+  private(set) var weekNumberTextColor: UIColor = .gray
+  private(set) var weekNumberWidth: CGFloat = 25
 
+    
+    
   // MARK: Private
 
   /// The default `monthHeaderItemProvider` if no provider has been configured,

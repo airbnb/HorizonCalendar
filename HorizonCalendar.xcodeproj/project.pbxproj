@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */; };
+		645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */; };
 		9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */; };
 		9321958026EEB6330001C7E9 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957F26EEB6330001C7E9 /* Shape.swift */; };
 		9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */; };
@@ -88,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
+		645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberView.swift; sourceTree = "<group>"; };
 		9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekView.swift; sourceTree = "<group>"; };
 		9321957F26EEB6330001C7E9 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingConfig.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */,
 				9321957F26EEB6330001C7E9 /* Shape.swift */,
 				FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */,
+				645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */,
 			);
 			path = ItemViews;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
 				939E693024837E0300A8BCC7 /* FrameProvider.swift in Sources */,
 				939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */,
+				645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */,
 				938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */,
 				9321958026EEB6330001C7E9 /* Shape.swift in Sources */,
 				939E692924837E0300A8BCC7 /* VisibleItem.swift in Sources */,
