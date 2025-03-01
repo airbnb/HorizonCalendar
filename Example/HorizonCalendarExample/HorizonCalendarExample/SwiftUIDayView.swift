@@ -19,24 +19,41 @@ import SwiftUI
 // MARK: - SwiftUIDayView
 
 struct SwiftUIDayView: View {
-
-  let dayNumber: Int
-  let isSelected: Bool
-
-  var body: some View {
-    ZStack(alignment: .center) {
-      Circle()
-        .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
-        .background {
-          Circle()
-            .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
-        }
-        .aspectRatio(1, contentMode: .fill)
-      Text("\(dayNumber)").foregroundColor(Color(UIColor.label))
+    
+    let dayNumber: Int
+    let isSelected: Bool
+    let isEnabled: Bool
+    
+    // MARK: - Lifecycle
+    init(dayNumber: Int, isSelected: Bool, isEnabled: Bool = true) {
+        self.dayNumber = dayNumber
+        self.isSelected = isSelected
+        self.isEnabled = isEnabled
     }
-    .accessibilityAddTraits(.isButton)
-  }
-
+    
+    var body: some View {
+        ZStack(alignment: .center) {
+            Circle()
+                .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
+                .background {
+                    if (isEnabled) {
+                        Circle()
+                            .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
+                    } else {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .foregroundColor(.secondary)
+                            .opacity(0.3)
+                            .padding(6)
+                    }
+                }
+                .aspectRatio(1, contentMode: .fill)
+            Text("\(dayNumber)").foregroundColor(isEnabled ? Color(UIColor.label) : Color(UIColor.lightText))
+        }
+        .accessibilityAddTraits(.isButton)
+    }
+    
 }
 
 // MARK: - SwiftUIDayView_Previews
