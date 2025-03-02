@@ -13,12 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import HorizonCalendar
-import UIKit
+import Foundation
 
-enum DayRangeSelectionHelper {
+public enum DayRangeSelectionHelper {
     
-    private static func getInvalidDateSet(_ day: Day,
+    public static func getInvalidDateSet(_ day: Day,
                                      _ dayRange: DayComponentsRange?,
                                      _ calendar: Calendar) -> Set<Date> {
         var invalidDates: Set<Date> = []
@@ -48,7 +47,7 @@ enum DayRangeSelectionHelper {
         return invalidDates
     }
     
-    static func updateDayRange(
+    public static func updateDayRange(
         afterTapSelectionOf day: Day,
         existingDayRange: inout DayComponentsRange?) -> Set<Date>
     {
@@ -106,48 +105,11 @@ enum DayRangeSelectionHelper {
         }
     }
     
-    private static func performUpdateRange(_ state: UIGestureRecognizer.State,
-                                           _ day: Day,
+    public static func performUpdateRange(_ day: Day,
                                            _ existingDayRange: inout ClosedRange<Day>?,
                                            _ initialDayRange: inout ClosedRange<Day>?,
                                            _ calendar: Calendar) {
-        switch state {
-        case .began:
-            if day != existingDayRange?.lowerBound, day != existingDayRange?.upperBound {
-                existingDayRange = day...day
-            }
-            initialDayRange = existingDayRange
-            
-        case .changed, .ended:
-            guard initialDayRange != nil else {
-                fatalError("`initialDayRange` should not be `nil`")
-            }
-            
-            performUpdateRangeHelper(day, &existingDayRange, &((initialDayRange)!), calendar)
-            
-        default:
-            existingDayRange = nil
-            initialDayRange = nil
-        }
-    }
-    
-    static func updateDayRange(
-        afterDragSelectionOf day: Day,
-        existingDayRange: inout DayComponentsRange?,
-        initialDayRange: inout DayComponentsRange?,
-        state: UIGestureRecognizer.State,
-        calendar: Calendar) -> Set<Date> {
-        let invalidDates = getInvalidDateSet(day, existingDayRange, calendar)
-        
-        guard invalidDates == [] else { return invalidDates }
-            
-        performUpdateRange(state,
-                           day,
-                           &existingDayRange,
-                           &initialDayRange,
-                           calendar)
-        
-        return []
+        performUpdateRangeHelper(day, &existingDayRange, &((initialDayRange)!), calendar)
     }
     
 }
