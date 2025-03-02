@@ -19,6 +19,7 @@ import Foundation
 
 public protocol DayAvailabilityProvider {
     func isEnabled(_ day: DayComponents) -> Bool
+    func isEnabled(_ day: Date) -> Bool
 }
 
 /// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to DayComponents.

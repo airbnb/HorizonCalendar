@@ -28,6 +28,15 @@ public struct DayComponents: Hashable {
     self.month = month
     self.day = day
   }
+    
+    public init(date: Date) {
+        let comps = Calendar.current.dateComponents([.era, .year, .month, .day], from: date)
+        self.month = Month(era: comps.era!,
+                           year: comps.year!,
+                           month: comps.month!,
+                           isInGregorianCalendar: Calendar.current.identifier == .gregorian)
+        self.day = comps.day!
+    }
 
   // MARK: Public
 
