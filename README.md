@@ -101,6 +101,11 @@ The example app has several demo view controllers to try, with both vertical and
 | ---- | ---- |
 | ![Scroll to Day with Animation Vertical](Docs/Images/scroll_to_day_with_animation_vertical.gif) | ![Scroll to Day with Animation Horizontal](Docs/Images/scroll_to_day_with_animation_horizontal.gif) |
 
+#### Disable days of the week
+| Vertical | Horizontal |
+| ---- | ---- |
+| ![Scroll to Day with Animation Vertical](Docs/Images/scroll_to_day_with_animation_vertical.gif) | ![Scroll to Day with Animation Horizontal](Docs/Images/scroll_to_day_with_animation_horizontal.gif) |
+
 ## Integration Tutorial
 
 ### Requirements

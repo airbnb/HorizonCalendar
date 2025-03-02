@@ -69,6 +69,7 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
+      
 
       .interMonthSpacing(24)
       .verticalDayMargin(8)

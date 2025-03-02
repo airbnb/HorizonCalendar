@@ -68,6 +68,7 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
+      ("Weekday Only Calendar", WeekdayOnlyDemoViewController.self),
       ("SwiftUI Disabled Day", SwiftUIDisabledDayDemoViewController.self),
     ]
 
@@ -81,6 +82,7 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
+      ("Weekday Only Calendar", WeekdayOnlyDemoViewController.self),
     ]
 
   private lazy var tableView: UITableView = {

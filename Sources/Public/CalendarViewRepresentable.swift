@@ -52,13 +52,16 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     visibleDateRange: ClosedRange<Date>,
     monthsLayout: MonthsLayout,
     dataDependency: Any?,
-    proxy: CalendarViewProxy? = nil)
+    proxy: CalendarViewProxy? = nil,
+    visibleWeekdays: Set<Int>? = nil)
   {
     self.calendar = calendar
     self.visibleDateRange = visibleDateRange
     self.monthsLayout = monthsLayout
     self.dataDependency = dataDependency
     self.proxy = proxy
+      self.visibleWeekdays = visibleWeekdays ?? Set(1...7)
+    
   }
 
   // MARK: Public
@@ -124,6 +127,7 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
 
   private let calendar: Calendar
   private let visibleDateRange: ClosedRange<Date>
+private let visibleWeekdays: Set<Int>
   private let monthsLayout: MonthsLayout
   private let dataDependency: Any?
   private let proxy: CalendarViewProxy?
@@ -132,7 +136,8 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
     var content = CalendarViewContent(
       calendar: calendar,
       visibleDateRange: visibleDateRange,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout,
+      visibleWeekdays : visibleWeekdays)
 
     if let dayAspectRatio {
       content = content.dayAspectRatio(dayAspectRatio)
