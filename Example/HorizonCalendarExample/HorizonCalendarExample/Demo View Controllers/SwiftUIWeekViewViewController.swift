@@ -80,38 +80,39 @@ struct SwiftUIWeekViewDemo: View {
     // MARK: Internal
 
     @State private var showErrorMessage: Bool = false
-
+    @Environment(\.window) var window: UIWindow?
+    
     var body: some View {
         ZStack {
-          CalendarViewRepresentable(
-            calendar: calendar,
-            visibleDateRange: visibleDateRange,
-            monthsLayout: monthsLayout,
-            dataDependency: selectedDayRange,
-            proxy: calendarViewProxy)
-
-            .interMonthSpacing(24)
-            .verticalDayMargin(24)
-            .horizontalDayMargin(8)
+            CalendarViewRepresentable(
+                calendar: calendar,
+                visibleDateRange: visibleDateRange,
+                monthsLayout: monthsLayout,
+                dataDependency: selectedDayRange,
+                proxy: calendarViewProxy)
             
+            .interMonthSpacing((self.window?.windowScene?.screen.bounds.height ?? 400) - 100)
+            .verticalDayMargin((self.window?.windowScene?.screen.bounds.height ?? 400) - 100)
+            .horizontalDayMargin(10)
+
 
             .monthHeaders { month in
-              let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
-              Group {
-                if case .vertical = monthsLayout {
-                  HStack {
-                    Text(monthHeaderText)
-                      .font(.title2)
-                    Spacer()
-                  }
-                  .padding()
-                } else {
-                  Text(monthHeaderText)
-                    .font(.title2)
-                    .padding()
+                let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
+                Group {
+                    if case .vertical = monthsLayout {
+                        HStack {
+                            Text(monthHeaderText)
+                                .font(.title2)
+                            Spacer()
+                        }
+                        .padding()
+                    } else {
+                        Text(monthHeaderText)
+                            .font(.title2)
+                            .padding()
+                    }
                 }
-              }
-              .accessibilityAddTraits(.isHeader)
+                .accessibilityAddTraits(.isHeader)
             }
 
             .days { day in
@@ -119,30 +120,24 @@ struct SwiftUIWeekViewDemo: View {
             }
 
             .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
-              let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
-              // UIKit view
-              return DayRangeIndicatorView.calendarItemModel(
-                invariantViewProperties: .init(),
-                content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
+                let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
+                // UIKit view
+                return DayRangeIndicatorView.calendarItemModel(
+                    invariantViewProperties: .init(),
+                    content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
             }
 
             .onDaySelection { day in
                 DayRangeSelectionHelper.updateDayRange(
-                afterTapSelectionOf: day,
-                existingDayRange: &selectedDayRange)
+                    afterTapSelectionOf: day,
+                    existingDayRange: &selectedDayRange)
             }
-
             .onAppear {
-              calendarViewProxy.scrollToDay(
-                containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
-                scrollPosition: .centered,
-                animated: false)
+                calendarViewProxy.scrollToDay(
+                    containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
+                    scrollPosition: .centered,
+                    animated: false)
             }
-
-            .onDisappear {
-                
-            }
-
             .frame(maxWidth: 375, maxHeight: .infinity)
         }
     }
@@ -186,5 +181,11 @@ struct SwiftUIWeekViewDemo: View {
         } else {
             return false
         }
+    }
+}
+
+extension EnvironmentValues {
+    var window: UIWindow? {
+        return UIApplication.shared.windows.first { $0.isKeyWindow }
     }
 }
