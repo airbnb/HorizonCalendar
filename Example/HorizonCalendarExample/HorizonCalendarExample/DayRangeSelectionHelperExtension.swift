@@ -18,6 +18,7 @@ import UIKit
 
 extension DayRangeSelectionHelper {
     
+    @discardableResult
     static func updateDayRange(afterDragSelectionOf day: Day,
                                existingDayRange: inout DayComponentsRange?,
                                initialDayRange: inout DayComponentsRange?,
