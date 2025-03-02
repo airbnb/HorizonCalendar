@@ -184,6 +184,17 @@ public final class CalendarView: UIView {
 
     _layoutSubviews(extendLayoutRegion: extendLayoutRegion)
   }
+  /// Scrolls the calendar to show today's date.
+  ///
+  /// If the calendar has a non-zero frame, this function will scroll to today immediately. Otherwise the scroll-to-day
+  /// action will be queued and executed once the calendar has a non-zero frame.
+  ///
+  /// - Parameters:
+  ///   - scrollPosition: The final position at which today should be situated in the scroll view.
+  ///   - animated: Whether the scroll should be animated (from the current position).
+  public func scrollToToday(scrollPosition: CalendarViewScrollPosition = .centered, animated: Bool = true) {
+        scroll(toDayContaining: Date(), scrollPosition: scrollPosition, animated: animated)
+  }
 
   /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
   ///
