@@ -115,7 +115,6 @@ extension TooltipView: CalendarItemViewRepresentable {
     struct Content: Equatable {
         let frameOfTooltippedItem: CGRect?
         let text: String
-        let customView: UIView
     }
 
     static func makeView(
