@@ -92,15 +92,14 @@ enum DayRangeSelectionHelper {
             from: selectedDate,
             to: startingUpperDate).day!
         
-        if
-            abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
-                day < initialDayRange.lowerBound
-        {
+        if abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
+                day < initialDayRange.lowerBound {
+
             existingDayRange = day...initialDayRange.upperBound
-        } else if
-            abs(numberOfDaysToLowerDate) > abs(numberOfDaysToUpperDate) ||
-                day > initialDayRange.upperBound
-        {
+
+        } else if abs(numberOfDaysToLowerDate) > abs(numberOfDaysToUpperDate) ||
+                    day > initialDayRange.upperBound {
+            
             existingDayRange = initialDayRange.lowerBound...day
         } else {
             existingDayRange = day...day
@@ -137,8 +136,7 @@ enum DayRangeSelectionHelper {
         existingDayRange: inout DayComponentsRange?,
         initialDayRange: inout DayComponentsRange?,
         state: UIGestureRecognizer.State,
-        calendar: Calendar) -> Set<Date>
-    {
+        calendar: Calendar) -> Set<Date> {
         let invalidDates = getInvalidDateSet(day, existingDayRange, calendar)
         
         guard invalidDates == [] else { return invalidDates }
