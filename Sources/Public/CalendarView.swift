@@ -63,7 +63,7 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked whenever a day is selected. It is the responsibility of your feature code to decide what to
   /// do with each day. For example, you might store the most recent day in a selected day property, then read that property in your
   /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
-  public var daySelectionHandler: ((DayComponents) -> Void)?
+  public var daySelectionHandler: ((Day) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
   public var didScroll: ((_ visibleDayRange: DayComponentsRange, _ isUserDragging: Bool) -> Void)?
@@ -78,7 +78,7 @@ public final class CalendarView: UIView {
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
   /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
   /// `Date` instances and use them as input to the `dayRangeItemProvider`.
-  public var multiDaySelectionDragHandler: ((DayComponents, UIGestureRecognizer.State) -> Void)? {
+  public var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
     didSet {
       configureMultiDaySelectionPanGestureRecognizer()
     }

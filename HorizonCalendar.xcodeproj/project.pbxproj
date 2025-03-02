@@ -57,6 +57,10 @@
 		93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */; };
 		93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */; };
 		93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */; };
+		AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BD612D73A7FF0076E283 /* DayComponents.swift */; };
+		AA92BD9F2D73F9C50076E283 /* DayComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */; };
+		AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */; };
+		AA92BDA52D741F510076E283 /* DayRangeSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */; };
 		FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */; };
 		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
@@ -140,6 +144,10 @@
 		93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
 		93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
 		93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
+		AA92BD612D73A7FF0076E283 /* DayComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayComponents.swift; sourceTree = "<group>"; };
+		AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayComponentsTests.swift; sourceTree = "<group>"; };
+		AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelper.swift; sourceTree = "<group>"; };
+		AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelper.swift; sourceTree = "<group>"; };
 		FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewProxy.swift; sourceTree = "<group>"; };
 		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -230,7 +238,9 @@
 				93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */,
 				93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */,
 				939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */,
+				AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */,
 				932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */,
+				AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */,
 				93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */,
 				939E694C2484B14400A8BCC7 /* LayoutItemTypeEnumeratorTests.swift */,
 				93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */,
@@ -260,10 +270,12 @@
 				FD6E1D192991C50100B480A6 /* CalendarViewRepresentable.swift */,
 				939E693324837E8700A8BCC7 /* CalendarViewScrollPosition.swift */,
 				939E693F24846A8C00A8BCC7 /* Day.swift */,
+				AA92BD612D73A7FF0076E283 /* DayComponents.swift */,
 				FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */,
 				939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */,
 				939E694124846EB400A8BCC7 /* DayRange.swift */,
 				FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */,
+				AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */,
 				939E693D24846A6600A8BCC7 /* Month.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
 				FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */,
@@ -433,6 +445,7 @@
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
 				939E693024837E0300A8BCC7 /* FrameProvider.swift in Sources */,
 				939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */,
+				AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */,
 				938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */,
 				9321958026EEB6330001C7E9 /* Shape.swift in Sources */,
 				939E692924837E0300A8BCC7 /* VisibleItem.swift in Sources */,
@@ -463,6 +476,7 @@
 				939E692624837E0300A8BCC7 /* ScrollMetricsMutator.swift in Sources */,
 				939E694224846EB400A8BCC7 /* DayRange.swift in Sources */,
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
+				AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */,
 				FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */,
 				FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
@@ -481,8 +495,10 @@
 				93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */,
 				93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */,
 				939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */,
+				AA92BDA52D741F510076E283 /* DayRangeSelectionHelper.swift in Sources */,
 				939E695A2484B21E00A8BCC7 /* ScreenPixelAlignmentTests.swift in Sources */,
 				93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */,
+				AA92BD9F2D73F9C50076E283 /* DayComponentsTests.swift in Sources */,
 				939E695B2484B22200A8BCC7 /* ScrollMetricsMutatorTests.swift in Sources */,
 				939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */,
 				93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */,

@@ -116,7 +116,7 @@ struct SwiftUIScreenDemo: View {
       }
 
       .days { day in
-        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
+          SwiftUIDayView(day: day, isSelected: isDaySelected(day))
       }
 
       .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
@@ -189,7 +189,7 @@ struct SwiftUIScreenDemo: View {
     return [selectedStartDate...selectedEndDate]
   }
 
-  private func isDaySelected(_ day: DayComponents) -> Bool {
+  private func isDaySelected(_ day: Day) -> Bool {
     if let selectedDayRange {
       return day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
     } else {
