@@ -60,7 +60,6 @@
 		AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BD612D73A7FF0076E283 /* DayComponents.swift */; };
 		AA92BD9F2D73F9C50076E283 /* DayComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */; };
 		AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */; };
-		AA92BDA52D741F510076E283 /* DayRangeSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */; };
 		FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */; };
 		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
@@ -147,7 +146,6 @@
 		AA92BD612D73A7FF0076E283 /* DayComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayComponents.swift; sourceTree = "<group>"; };
 		AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayComponentsTests.swift; sourceTree = "<group>"; };
 		AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelper.swift; sourceTree = "<group>"; };
-		AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelper.swift; sourceTree = "<group>"; };
 		FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewProxy.swift; sourceTree = "<group>"; };
 		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -238,7 +236,6 @@
 				93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */,
 				93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */,
 				939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */,
-				AA92BDA42D741F510076E283 /* DayRangeSelectionHelper.swift */,
 				932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */,
 				AA92BD9E2D73F9C50076E283 /* DayComponentsTests.swift */,
 				93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */,
@@ -495,7 +492,6 @@
 				93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */,
 				93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */,
 				939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */,
-				AA92BDA52D741F510076E283 /* DayRangeSelectionHelper.swift in Sources */,
 				939E695A2484B21E00A8BCC7 /* ScreenPixelAlignmentTests.swift in Sources */,
 				93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */,
 				AA92BD9F2D73F9C50076E283 /* DayComponentsTests.swift in Sources */,
