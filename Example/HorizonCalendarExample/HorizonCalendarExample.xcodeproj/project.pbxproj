@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		645FFF022D73B86A002EE721 /* WeekNumberDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */; };
+		645FFEFC2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFEFB2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift */; };
 		9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */; };
 		9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */; };
 		938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */; };
@@ -23,7 +24,8 @@
 		939E69942484D55200A8BCC7 /* HorizonCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 939E69912484D11000A8BCC7 /* HorizonCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		93A7258E24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */; };
 		93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */; };
-		FD53899F299476AD007D56EB /* DayRangeSelectionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD53899E299476AD007D56EB /* DayRangeSelectionTracker.swift */; };
+		AA79A7D12D74319B00C07DD0 /* SwiftUIDisabledDayDemoViewController 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA79A7D02D74319B00C07DD0 /* SwiftUIDisabledDayDemoViewController 2.swift */; };
+		AA79A7D52D74346200C07DD0 /* DayRangeSelectionHelperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA79A7D42D74346200C07DD0 /* DayRangeSelectionHelperExtension.swift */; };
 		FD55C5D7298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD55C5D6298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift */; };
 		FDA0FB3528F5EFD90066DEFA /* SwiftUIDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */; };
 		FDA0FB3728F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */; };
@@ -46,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		645FFF012D73B86A002EE721 /* WeekNumberDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberDemoViewController.swift; sourceTree = "<group>"; };
+		645FFEFB2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayOnlyDemoViewController.swift; sourceTree = "<group>"; };
 		9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPickerViewController.swift; sourceTree = "<group>"; };
 		9381769E249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToDayWithAnimationDemoViewController.swift; sourceTree = "<group>"; };
 		938176A0249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionDemoViewController.swift; sourceTree = "<group>"; };
@@ -62,7 +65,8 @@
 		939E69912484D11000A8BCC7 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A7258D24A1F26C00B4F08F /* PartialMonthVisibilityDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialMonthVisibilityDemoViewController.swift; sourceTree = "<group>"; };
 		93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeIndicatorView.swift; sourceTree = "<group>"; };
-		FD53899E299476AD007D56EB /* DayRangeSelectionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionTracker.swift; sourceTree = "<group>"; };
+		AA79A7D02D74319B00C07DD0 /* SwiftUIDisabledDayDemoViewController 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUIDisabledDayDemoViewController 2.swift"; sourceTree = "<group>"; };
+		AA79A7D42D74346200C07DD0 /* DayRangeSelectionHelperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelperExtension.swift; sourceTree = "<group>"; };
 		FD55C5D6298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIScreenDemoViewController.swift; sourceTree = "<group>"; };
 		FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIDayView.swift; sourceTree = "<group>"; };
 		FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIItemModelsDemoViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 				FDD8EE7329885AF500F6EC9D /* MonthBackgroundDemoViewController.swift */,
 				FDA0FB3628F5EFF60066DEFA /* SwiftUIItemModelsDemoViewController.swift */,
 				FD55C5D6298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift */,
+				645FFEFB2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift */,
+				AA79A7D02D74319B00C07DD0 /* SwiftUIDisabledDayDemoViewController 2.swift */,
 			);
 			path = "Demo View Controllers";
 			sourceTree = "<group>";
@@ -122,8 +128,8 @@
 				939E696A2484CD8E00A8BCC7 /* AppDelegate.swift */,
 				9381769B249B74BB00E18FA3 /* DemoPickerViewController.swift */,
 				9381769D249B79CB00E18FA3 /* Demo View Controllers */,
-				FD53899E299476AD007D56EB /* DayRangeSelectionTracker.swift */,
 				93AF5544248DCC8900BDB0FF /* DayRangeIndicatorView.swift */,
+				AA79A7D42D74346200C07DD0 /* DayRangeSelectionHelperExtension.swift */,
 				FDA0FB3428F5EFD90066DEFA /* SwiftUIDayView.swift */,
 				939853512498992E0022A3A1 /* TooltipView.swift */,
 				939E69732484CD9000A8BCC7 /* Assets.xcassets */,
@@ -217,10 +223,11 @@
 				939E696F2484CD8E00A8BCC7 /* SingleDaySelectionDemoViewController.swift in Sources */,
 				938176A3249B7F0800E18FA3 /* SelectedDayTooltipDemoViewController.swift in Sources */,
 				FDA0FB3528F5EFD90066DEFA /* SwiftUIDayView.swift in Sources */,
+				645FFEFC2D6D5E61002EE721 /* WeekdayOnlyDemoViewController.swift in Sources */,
 				938176A1249B7CE600E18FA3 /* DayRangeSelectionDemoViewController.swift in Sources */,
-				FD53899F299476AD007D56EB /* DayRangeSelectionTracker.swift in Sources */,
 				9381769C249B74BB00E18FA3 /* DemoPickerViewController.swift in Sources */,
 				939853522498992E0022A3A1 /* TooltipView.swift in Sources */,
+				AA79A7D52D74346200C07DD0 /* DayRangeSelectionHelperExtension.swift in Sources */,
 				938176A7249B85CE00E18FA3 /* DemoViewController.swift in Sources */,
 				9381769F249B79DC00E18FA3 /* ScrollToDayWithAnimationDemoViewController.swift in Sources */,
 				93AF5545248DCC8900BDB0FF /* DayRangeIndicatorView.swift in Sources */,
@@ -228,6 +235,7 @@
 				938176A5249B828600E18FA3 /* LargeDayRangeDemoViewController.swift in Sources */,
 				FDD8EE7429885AF500F6EC9D /* MonthBackgroundDemoViewController.swift in Sources */,
 				FD55C5D7298B138A00A9B5D6 /* SwiftUIScreenDemoViewController.swift in Sources */,
+				AA79A7D12D74319B00C07DD0 /* SwiftUIDisabledDayDemoViewController 2.swift in Sources */,
 				939E696B2484CD8E00A8BCC7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

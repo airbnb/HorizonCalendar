@@ -20,22 +20,46 @@ import SwiftUI
 
 struct SwiftUIDayView: View {
 
-  let dayNumber: Int
-  let isSelected: Bool
+    let dayNumber: Int
+    let isSelected: Bool
+    let isEnabled: Bool
 
-  var body: some View {
-    ZStack(alignment: .center) {
-      Circle()
-        .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
-        .background {
-          Circle()
-            .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
-        }
-        .aspectRatio(1, contentMode: .fill)
-      Text("\(dayNumber)").foregroundColor(Color(UIColor.label))
+    // MARK: - Lifecycle
+    init(day: Day, isSelected: Bool) {
+        self.dayNumber = day.day
+        self.isSelected = isSelected
+        self.isEnabled = day.isEnabled
     }
-    .accessibilityAddTraits(.isButton)
-  }
+
+    /// Backwards compatible
+    init(dayNumber: Int, isSelected: Bool, isEnabled: Bool = true) {
+        self.dayNumber = dayNumber
+        self.isSelected = isSelected
+        self.isEnabled = isEnabled
+    }
+
+    var body: some View {
+        ZStack(alignment: .center) {
+            Circle()
+                .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
+                .background {
+                    if isEnabled {
+                        Circle()
+                            .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
+                    } else {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .foregroundColor(.secondary)
+                            .opacity(0.3)
+                            .padding(6)
+                    }
+                }
+                .aspectRatio(1, contentMode: .fill)
+            Text("\(dayNumber)").foregroundColor(isEnabled ? Color(UIColor.label) : Color(UIColor.lightText))
+        }
+        .accessibilityAddTraits(.isButton)
+    }
 
 }
 
@@ -47,9 +71,9 @@ struct SwiftUIDayView_Previews: PreviewProvider {
 
   static var previews: some View {
     Group {
-      SwiftUIDayView(dayNumber: 1, isSelected: false)
-      SwiftUIDayView(dayNumber: 19, isSelected: false)
-      SwiftUIDayView(dayNumber: 27, isSelected: true)
+        SwiftUIDayView(dayNumber: 1, isSelected: false, isEnabled: true)
+        SwiftUIDayView(dayNumber: 19, isSelected: false, isEnabled: false)
+        SwiftUIDayView(dayNumber: 27, isSelected: true, isEnabled: true)
     }
     .frame(width: 50, height: 50)
   }
