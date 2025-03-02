@@ -17,6 +17,12 @@ import Foundation
 
 public enum DayRangeSelectionHelper {
     
+    /// - Description: Check all dates in the new range and update the range if there are no blacked out dates.
+    /// - Parameters:
+    ///   - day: The day object selected by the user
+    ///   - dayRange: Current range selected by user
+    ///   - calendar: The calendar to calculate dates with
+    /// - Returns: A set of blacked out dates
     public static func getInvalidDateSet(_ day: Day,
                                      _ dayRange: DayComponentsRange?,
                                      _ calendar: Calendar) -> Set<Date> {
@@ -26,10 +32,7 @@ public enum DayRangeSelectionHelper {
         
         var newRange: ClosedRange<Day>?
         
-        performUpdateRangeHelper(day,
-                                 &newRange,
-                                 &dayRange,
-                                 calendar)
+        performUpdateRangeHelper(day, &newRange, &dayRange, calendar)
         
         var currentDate = calendar.date(from: newRange!.lowerBound.components)!
         let endDate = calendar.date(from: newRange!.upperBound.components)!
@@ -47,13 +50,17 @@ public enum DayRangeSelectionHelper {
         return invalidDates
     }
     
-    public static func updateDayRange(
-        afterTapSelectionOf day: Day,
-        existingDayRange: inout DayComponentsRange?) -> Set<Date>
-    {
-        if (day.isEnabled) {
-            if
-                let _existingDayRange = existingDayRange,
+    /// - Description: Update the day range, if it is a valid selection. If the day slected is blacked out, the
+    /// range will not change. If the day selected generates a range which contains blacked out days, the range
+    /// will be the selected day.
+    /// - Parameters:
+    ///   - afterTapSelectionOf: The day selected by the user
+    ///   - existingDayRange: The range to be updated
+    /// - Returns: The set of invalid dates. Empty represents no invalid dates.
+    public static func updateDayRange(afterTapSelectionOf day: Day,
+                                      existingDayRange: inout DayComponentsRange?) -> Set<Date> {
+        if day.isEnabled {
+            if let _existingDayRange = existingDayRange,
                 _existingDayRange.lowerBound == _existingDayRange.upperBound,
                 day > _existingDayRange.lowerBound
             {
@@ -73,6 +80,14 @@ public enum DayRangeSelectionHelper {
         return []
     }
     
+    /// - Description: An assistant to the performUpdateRange function. Will create a range from the lower or
+    /// upper bound to the selected day, based on the nearest distance.
+    /// - SeeAlso: performUpdateRange(\_:\_:\_:\_:)
+    /// - Parameters:
+    ///   - day: The day selected by the user
+    ///   - existingDayRange: The range to be returned
+    ///   - initalDayRange: The range prior to user selection
+    ///   - calendar: The calendar to calculate days on
     private static func performUpdateRangeHelper(_ day: Day,
                                                  _ existingDayRange: inout ClosedRange<Day>?,
                                                  _ initialDayRange: inout ClosedRange<Day>,
@@ -82,14 +97,14 @@ public enum DayRangeSelectionHelper {
         let startingUpperDate = calendar.date(from: initialDayRange.upperBound.components)!
         let selectedDate = calendar.date(from: day.components)!
         
-        let numberOfDaysToLowerDate = calendar.dateComponents(
-            [.day],
-            from: selectedDate,
-            to: startingLowerDate).day!
-        let numberOfDaysToUpperDate = calendar.dateComponents(
-            [.day],
-            from: selectedDate,
-            to: startingUpperDate).day!
+        let numberOfDaysToLowerDate = calendar
+            .dateComponents([.day],
+                            from: selectedDate,
+                            to: startingLowerDate).day!
+        let numberOfDaysToUpperDate = calendar
+            .dateComponents([.day],
+                            from: selectedDate,
+                            to: startingUpperDate).day!
         
         if abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
                 day < initialDayRange.lowerBound {
@@ -105,6 +120,13 @@ public enum DayRangeSelectionHelper {
         }
     }
     
+    /// - Description: Will create a range from the lower or upper bound to the selected day, based on the nearest distance.
+    /// - SeeAlso: performUpdateRangeHelper(\_:\_:\_:\_:)
+    /// - Parameters:
+    ///   - day: The day selected by the user
+    ///   - existingDayRange: The range to be returned
+    ///   - initalDayRange: The range prior to user selection
+    ///   - calendar: The calendar to calculate days on
     public static func performUpdateRange(_ day: Day,
                                            _ existingDayRange: inout ClosedRange<Day>?,
                                            _ initialDayRange: inout ClosedRange<Day>?,
