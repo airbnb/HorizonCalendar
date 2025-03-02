@@ -17,8 +17,9 @@ import Foundation
 
 // MARK: - DayComponents
 
-/// Represents the components of a day. This type is created internally, then vended to you via the public API. All `DayComponents`
-/// instances that are vended to you are created using the `Calendar` instance that you provide when initializing your
+/// Represents the components of a day. This type is created internally, then vended to you via the public API. All
+/// `DayComponents` instances that are vended to you are created using the `Calendar` instance that you
+/// provide when initializing your
 /// `CalendarView`.
 public struct DayComponents: Hashable {
 
@@ -28,7 +29,7 @@ public struct DayComponents: Hashable {
     self.month = month
     self.day = day
   }
-    
+
     public init(date: Date) {
         let comps = Calendar.current.dateComponents([.era, .year, .month, .day], from: date)
         self.month = Month(era: comps.era!,
