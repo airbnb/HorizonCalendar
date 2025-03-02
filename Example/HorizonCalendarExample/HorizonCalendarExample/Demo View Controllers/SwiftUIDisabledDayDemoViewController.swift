@@ -43,7 +43,7 @@ final class SwiftUIDisabledDayDemoViewController: UIViewController, DemoViewCont
         hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-        hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
       ])
 
       hostingController.didMove(toParent: self)
@@ -60,12 +60,12 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
         }
 
         let calendar = Calendar.current
-        let yr = dateComponents.year ?? 0
+        let year = dateComponents.year ?? 0
         let mth = dateComponents.month ?? 0
         let day = dateComponents.day ?? 0
 
         // Disable the 18th
-        if (day == 18) {
+        if day == 18 {
             return false
         }
 
@@ -75,7 +75,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
         }
 
         // Disable the first week in Feb. every 4 years
-        if mth == 2 && (yr % 4 == 0) && day <= 7 {
+        if mth == 2 && (year % 4 == 0) && day <= 7 {
             return false
         }
 
@@ -105,9 +105,9 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
         }
 
         let federalHolidays: [Date] = [
-            Calendar.current.date(from: DateComponents(year: yr, month: 1, day: 1))!,
-            Calendar.current.date(from: DateComponents(year: yr, month: 7, day: 4))!,
-            Calendar.current.date(from: DateComponents(year: yr, month: 12, day: 25))!
+            Calendar.current.date(from: DateComponents(year: year, month: 1, day: 1))!,
+            Calendar.current.date(from: DateComponents(year: year, month: 7, day: 4))!,
+            Calendar.current.date(from: DateComponents(year: year, month: 12, day: 25))!
         ]
 
         if federalHolidays.contains(where: { Calendar.current.isDate($0, inSameDayAs: date) }) {
