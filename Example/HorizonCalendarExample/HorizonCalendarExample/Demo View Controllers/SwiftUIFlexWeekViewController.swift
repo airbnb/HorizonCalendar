@@ -133,7 +133,7 @@ struct SwiftUIFlexWeekDemo: View {
             .onAppear {
                 calendarViewProxy.scrollToDay(
                     containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
-                    scrollPosition: .centered,
+                    scrollPosition: .firstFullyVisiblePosition(padding: 50),
                     animated: true
                 )
             }
