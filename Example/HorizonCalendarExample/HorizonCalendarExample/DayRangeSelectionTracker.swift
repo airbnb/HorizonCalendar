@@ -18,9 +18,40 @@ import UIKit
 
 enum DayRangeSelectionHelper {
     
+    private static func getInvalidDateSet(_ day: Day,
+                                     _ dayRange: DayComponentsRange?,
+                                     _ calendar: Calendar) -> Set<Date> {
+        var invalidDates: Set<Date> = []
+        
+        guard var dayRange else { return invalidDates }
+        
+        var newRange: ClosedRange<Day>?
+        
+        performUpdateRangeHelper(day,
+                                 &newRange,
+                                 &dayRange,
+                                 calendar)
+        
+        var currentDate = calendar.date(from: newRange!.lowerBound.components)!
+        let endDate = calendar.date(from: newRange!.upperBound.components)!
+        
+        while currentDate <= endDate {
+            print(currentDate) // Print the current date
+            let isEnabled = Day.availabilityProvider?.isEnabled(currentDate) ?? true
+            
+            if !isEnabled {
+                invalidDates.insert(currentDate)
+            }
+            
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+        
+        return invalidDates
+    }
+    
     static func updateDayRange(
         afterTapSelectionOf day: Day,
-        existingDayRange: inout DayComponentsRange?)
+        existingDayRange: inout DayComponentsRange?) -> Set<Date>
     {
         if (day.isEnabled) {
             print("Enabled", day)
@@ -29,12 +60,79 @@ enum DayRangeSelectionHelper {
                 _existingDayRange.lowerBound == _existingDayRange.upperBound,
                 day > _existingDayRange.lowerBound
             {
+                // Ensure date range is valid only if it will not create single-node range
+                let invalidRange = getInvalidDateSet(day, existingDayRange, Calendar.current)
+                guard invalidRange.isEmpty else {
+                    existingDayRange = day...day
+                    return invalidRange
+                }
+                
                 existingDayRange = _existingDayRange.lowerBound...day
             } else {
                 existingDayRange = day...day
             }
         } else {
             print("Disabled", day)
+        }
+        
+        return []
+    }
+    
+    private static func performUpdateRangeHelper(_ day: Day,
+                                                 _ existingDayRange: inout ClosedRange<Day>?,
+                                                 _ initialDayRange: inout ClosedRange<Day>,
+                                                 _ calendar: Calendar) {
+        
+        let startingLowerDate = calendar.date(from: initialDayRange.lowerBound.components)!
+        let startingUpperDate = calendar.date(from: initialDayRange.upperBound.components)!
+        let selectedDate = calendar.date(from: day.components)!
+        
+        let numberOfDaysToLowerDate = calendar.dateComponents(
+            [.day],
+            from: selectedDate,
+            to: startingLowerDate).day!
+        let numberOfDaysToUpperDate = calendar.dateComponents(
+            [.day],
+            from: selectedDate,
+            to: startingUpperDate).day!
+        
+        if
+            abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
+                day < initialDayRange.lowerBound
+        {
+            existingDayRange = day...initialDayRange.upperBound
+        } else if
+            abs(numberOfDaysToLowerDate) > abs(numberOfDaysToUpperDate) ||
+                day > initialDayRange.upperBound
+        {
+            existingDayRange = initialDayRange.lowerBound...day
+        } else {
+            existingDayRange = day...day
+        }
+    }
+    
+    private static func performUpdateRange(_ state: UIGestureRecognizer.State,
+                                           _ day: Day,
+                                           _ existingDayRange: inout ClosedRange<Day>?,
+                                           _ initialDayRange: inout ClosedRange<Day>?,
+                                           _ calendar: Calendar) {
+        switch state {
+        case .began:
+            if day != existingDayRange?.lowerBound, day != existingDayRange?.upperBound {
+                existingDayRange = day...day
+            }
+            initialDayRange = existingDayRange
+            
+        case .changed, .ended:
+            guard initialDayRange != nil else {
+                fatalError("`initialDayRange` should not be `nil`")
+            }
+            
+            performUpdateRangeHelper(day, &existingDayRange, &((initialDayRange)!), calendar)
+            
+        default:
+            existingDayRange = nil
+            initialDayRange = nil
         }
     }
     
@@ -43,51 +141,19 @@ enum DayRangeSelectionHelper {
         existingDayRange: inout DayComponentsRange?,
         initialDayRange: inout DayComponentsRange?,
         state: UIGestureRecognizer.State,
-        calendar: Calendar)
+        calendar: Calendar) -> Set<Date>
     {
-        if day.isEnabled {
-            switch state {
-            case .began:
-                if day != existingDayRange?.lowerBound, day != existingDayRange?.upperBound {
-                    existingDayRange = day...day
-                }
-                initialDayRange = existingDayRange
-                
-            case .changed, .ended:
-                guard let initialDayRange else {
-                    fatalError("`initialDayRange` should not be `nil`")
-                }
-                
-                let startingLowerDate = calendar.date(from: initialDayRange.lowerBound.components)!
-                let startingUpperDate = calendar.date(from: initialDayRange.upperBound.components)!
-                let selectedDate = calendar.date(from: day.components)!
-                
-                let numberOfDaysToLowerDate = calendar.dateComponents(
-                    [.day],
-                    from: selectedDate,
-                    to: startingLowerDate).day!
-                let numberOfDaysToUpperDate = calendar.dateComponents(
-                    [.day],
-                    from: selectedDate,
-                    to: startingUpperDate).day!
-                
-                if
-                    abs(numberOfDaysToLowerDate) < abs(numberOfDaysToUpperDate) ||
-                        day < initialDayRange.lowerBound
-                {
-                    existingDayRange = day...initialDayRange.upperBound
-                } else if
-                    abs(numberOfDaysToLowerDate) > abs(numberOfDaysToUpperDate) ||
-                        day > initialDayRange.upperBound
-                {
-                    existingDayRange = initialDayRange.lowerBound...day
-                }
-                
-            default:
-                existingDayRange = nil
-                initialDayRange = nil
-            }
-        }
+        let invalidDates = getInvalidDateSet(day, existingDayRange, calendar)
+        
+        guard invalidDates == [] else { return invalidDates }
+            
+        performUpdateRange(state,
+                           day,
+                           &existingDayRange,
+                           &initialDayRange,
+                           calendar)
+        
+        return []
     }
     
 }
