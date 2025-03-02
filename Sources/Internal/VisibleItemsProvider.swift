@@ -280,6 +280,12 @@ final class VisibleItemsProvider {
     previousHeightsForVisibleMonthHeaders = context.heightsForVisibleMonthHeaders
     previousCalendarItemModelCache = context.calendarItemModelCache
 
+      
+      // Add week numbers if enabled
+      if content.showWeekNumbers {
+        addWeekNumbersIfNeeded(context: &context)
+      }
+      
     return VisibleItemsDetails(
       visibleItems: context.visibleItems,
       centermostLayoutItem: context.centermostLayoutItem,
@@ -968,7 +974,59 @@ final class VisibleItemsProvider {
           frame: bounds))
     }
   }
+    
 
+
+    private func addWeekNumbersIfNeeded(context: inout VisibleItemsContext) {
+        guard content.showWeekNumbers else { return }
+        let calendar = content.calendar
+        
+        // Group days by week to find the first day of each week
+        var firstDaysOfWeek = [Day: CGRect]()
+        
+        // Loop through all visible days
+        for (day, frame) in context.framesForVisibleDays {
+            guard let date = calendar.date(from: day.components) else { continue }
+            
+            // Check if this is the first day of the week
+            if calendar.component(.weekday, from: date) == calendar.firstWeekday {
+                firstDaysOfWeek[day] = frame
+            }
+        }
+        
+        // Create week number items for each first day of week
+        for (day, frame) in firstDaysOfWeek {
+            guard let date = calendar.date(from: day.components) else { continue }
+            
+            // Calculate week number
+            let weekNumber = calendar.component(.weekOfYear, from: date)
+            
+            // Create a frame for the week number
+            let weekNumberFrame = CGRect(
+                x: frame.minX - content.weekNumberWidth - 5,
+                y: frame.minY,
+                width: content.weekNumberWidth,
+                height: frame.height)
+            
+            // Create week number item
+            let weekNumberItemType = VisibleItem.ItemType.weekNumber(weekNumber: weekNumber, month: day.month)
+            let weekNumberCalendarItemModel = context.calendarItemModelCache.value(
+                for: weekNumberItemType,
+                missingValueProvider: {
+                    previousCalendarItemModelCache?[weekNumberItemType] ??
+                    WeekNumberView.calendarItemModel(
+                        invariantViewProperties: .init(textColor: content.weekNumberTextColor),
+                        content: .init(weekNumber: weekNumber))
+                })
+            
+            context.visibleItems.insert(
+                VisibleItem(
+                    calendarItemModel: weekNumberCalendarItemModel,
+                    itemType: weekNumberItemType,
+                    frame: weekNumberFrame))
+        }
+    }
+    
   private func handleMonthBackgroundItemsIfNeeded(context: inout VisibleItemsContext) {
     guard let monthBackgroundItemProvider = content.monthBackgroundItemProvider else { return }
 

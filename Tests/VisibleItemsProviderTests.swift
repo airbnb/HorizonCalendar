@@ -1655,6 +1655,8 @@ extension VisibleItem: CustomStringConvertible {
       itemTypeText = ".dayBackground(\(day))"
     case .monthBackground(let month):
       itemTypeText = ".monthBackground(\(month.description))"
+    case .weekNumber(let weekNumber, let month):
+          itemTypeText = ".weekNumber(\(weekNumber), \(month.description))"
     case .overlayItem(let overlaidItemLocation):
       let calendar = Calendar(identifier: .gregorian)
       let itemLocationText: String

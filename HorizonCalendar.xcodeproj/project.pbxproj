@@ -8,6 +8,59 @@
 
 /* Begin PBXBuildFile section */
 		086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */; };
+		645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */; };
+		645FFF042D743602002EE721 /* WeekNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF032D743602002EE721 /* WeekNumberTests.swift */; };
+		645FFF172D7437C8002EE721 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF062D7437C8002EE721 /* DayOfWeekPositionTests.swift */; };
+		645FFF182D7437C8002EE721 /* WeekNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF072D7437C8002EE721 /* WeekNumberTests.swift */; };
+		645FFF192D7437C8002EE721 /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF082D7437C8002EE721 /* MonthTests.swift */; };
+		645FFF1A2D7437C8002EE721 /* FrameProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF092D7437C8002EE721 /* FrameProviderTests.swift */; };
+		645FFF1B2D7437C8002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0A2D7437C8002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */; };
+		645FFF1C2D7437C8002EE721 /* ScrollMetricsMutatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0B2D7437C8002EE721 /* ScrollMetricsMutatorTests.swift */; };
+		645FFF1D2D7437C8002EE721 /* ItemViewReuseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0C2D7437C8002EE721 /* ItemViewReuseManagerTests.swift */; };
+		645FFF1E2D7437C8002EE721 /* PaginationHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0D2D7437C8002EE721 /* PaginationHelpersTests.swift */; };
+		645FFF1F2D7437C8002EE721 /* VisibleItemsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0E2D7437C8002EE721 /* VisibleItemsProviderTests.swift */; };
+		645FFF202D7437C8002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF0F2D7437C8002EE721 /* LayoutItemTypeEnumeratorTests.swift */; };
+		645FFF212D7437C8002EE721 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF102D7437C8002EE721 /* MonthRowTests.swift */; };
+		645FFF222D7437C8002EE721 /* ScreenPixelAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF112D7437C8002EE721 /* ScreenPixelAlignmentTests.swift */; };
+		645FFF232D7437C8002EE721 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF122D7437C8002EE721 /* SubviewsManagerTests.swift */; };
+		645FFF242D7437C8002EE721 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF132D7437C8002EE721 /* DayHelperTests.swift */; };
+		645FFF252D7437C8002EE721 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 645FFF142D7437C8002EE721 /* Info.plist */; };
+		645FFF262D7437C8002EE721 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF152D7437C8002EE721 /* CalendarContentTests.swift */; };
+		645FFF272D7437C8002EE721 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF162D7437C8002EE721 /* MonthHelperTests.swift */; };
+		645FFF3A2D7437DB002EE721 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF292D7437DB002EE721 /* DayOfWeekPositionTests.swift */; };
+		645FFF3B2D7437DB002EE721 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF292D7437DB002EE721 /* DayOfWeekPositionTests.swift */; };
+		645FFF3C2D7437DB002EE721 /* WeekNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2A2D7437DB002EE721 /* WeekNumberTests.swift */; };
+		645FFF3D2D7437DB002EE721 /* WeekNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2A2D7437DB002EE721 /* WeekNumberTests.swift */; };
+		645FFF3E2D7437DB002EE721 /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2B2D7437DB002EE721 /* MonthTests.swift */; };
+		645FFF3F2D7437DB002EE721 /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2B2D7437DB002EE721 /* MonthTests.swift */; };
+		645FFF402D7437DB002EE721 /* FrameProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2C2D7437DB002EE721 /* FrameProviderTests.swift */; };
+		645FFF412D7437DB002EE721 /* FrameProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2C2D7437DB002EE721 /* FrameProviderTests.swift */; };
+		645FFF422D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2D2D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */; };
+		645FFF432D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2D2D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */; };
+		645FFF442D7437DB002EE721 /* ScrollMetricsMutatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2E2D7437DB002EE721 /* ScrollMetricsMutatorTests.swift */; };
+		645FFF452D7437DB002EE721 /* ScrollMetricsMutatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2E2D7437DB002EE721 /* ScrollMetricsMutatorTests.swift */; };
+		645FFF462D7437DB002EE721 /* ItemViewReuseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2F2D7437DB002EE721 /* ItemViewReuseManagerTests.swift */; };
+		645FFF472D7437DB002EE721 /* ItemViewReuseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF2F2D7437DB002EE721 /* ItemViewReuseManagerTests.swift */; };
+		645FFF482D7437DB002EE721 /* PaginationHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF302D7437DB002EE721 /* PaginationHelpersTests.swift */; };
+		645FFF492D7437DB002EE721 /* PaginationHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF302D7437DB002EE721 /* PaginationHelpersTests.swift */; };
+		645FFF4A2D7437DB002EE721 /* VisibleItemsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF312D7437DB002EE721 /* VisibleItemsProviderTests.swift */; };
+		645FFF4B2D7437DB002EE721 /* VisibleItemsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF312D7437DB002EE721 /* VisibleItemsProviderTests.swift */; };
+		645FFF4C2D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF322D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift */; };
+		645FFF4D2D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF322D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift */; };
+		645FFF4E2D7437DB002EE721 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF332D7437DB002EE721 /* MonthRowTests.swift */; };
+		645FFF4F2D7437DB002EE721 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF332D7437DB002EE721 /* MonthRowTests.swift */; };
+		645FFF502D7437DB002EE721 /* ScreenPixelAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF342D7437DB002EE721 /* ScreenPixelAlignmentTests.swift */; };
+		645FFF512D7437DB002EE721 /* ScreenPixelAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF342D7437DB002EE721 /* ScreenPixelAlignmentTests.swift */; };
+		645FFF522D7437DB002EE721 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF352D7437DB002EE721 /* SubviewsManagerTests.swift */; };
+		645FFF532D7437DB002EE721 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF352D7437DB002EE721 /* SubviewsManagerTests.swift */; };
+		645FFF542D7437DB002EE721 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF362D7437DB002EE721 /* DayHelperTests.swift */; };
+		645FFF552D7437DB002EE721 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF362D7437DB002EE721 /* DayHelperTests.swift */; };
+		645FFF562D7437DB002EE721 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 645FFF372D7437DB002EE721 /* Info.plist */; };
+		645FFF572D7437DB002EE721 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 645FFF372D7437DB002EE721 /* Info.plist */; };
+		645FFF582D7437DB002EE721 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF382D7437DB002EE721 /* CalendarContentTests.swift */; };
+		645FFF592D7437DB002EE721 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF382D7437DB002EE721 /* CalendarContentTests.swift */; };
+		645FFF5A2D7437DB002EE721 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF392D7437DB002EE721 /* MonthHelperTests.swift */; };
+		645FFF5B2D7437DB002EE721 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFF392D7437DB002EE721 /* MonthHelperTests.swift */; };
 		9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */; };
 		9321958026EEB6330001C7E9 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957F26EEB6330001C7E9 /* Shape.swift */; };
 		9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */; };
@@ -91,6 +144,42 @@
 
 /* Begin PBXFileReference section */
 		086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
+		645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberView.swift; sourceTree = "<group>"; };
+		645FFF032D743602002EE721 /* WeekNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberTests.swift; sourceTree = "<group>"; };
+		645FFF062D7437C8002EE721 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
+		645FFF072D7437C8002EE721 /* WeekNumberTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekNumberTests.swift; sourceTree = "<group>"; };
+		645FFF082D7437C8002EE721 /* MonthTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
+		645FFF092D7437C8002EE721 /* FrameProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameProviderTests.swift; sourceTree = "<group>"; };
+		645FFF0A2D7437C8002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
+		645FFF0B2D7437C8002EE721 /* ScrollMetricsMutatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollMetricsMutatorTests.swift; sourceTree = "<group>"; };
+		645FFF0C2D7437C8002EE721 /* ItemViewReuseManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewReuseManagerTests.swift; sourceTree = "<group>"; };
+		645FFF0D2D7437C8002EE721 /* PaginationHelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaginationHelpersTests.swift; sourceTree = "<group>"; };
+		645FFF0E2D7437C8002EE721 /* VisibleItemsProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibleItemsProviderTests.swift; sourceTree = "<group>"; };
+		645FFF0F2D7437C8002EE721 /* LayoutItemTypeEnumeratorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutItemTypeEnumeratorTests.swift; sourceTree = "<group>"; };
+		645FFF102D7437C8002EE721 /* MonthRowTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
+		645FFF112D7437C8002EE721 /* ScreenPixelAlignmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignmentTests.swift; sourceTree = "<group>"; };
+		645FFF122D7437C8002EE721 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
+		645FFF132D7437C8002EE721 /* DayHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
+		645FFF142D7437C8002EE721 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		645FFF152D7437C8002EE721 /* CalendarContentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
+		645FFF162D7437C8002EE721 /* MonthHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthHelperTests.swift; sourceTree = "<group>"; };
+		645FFF292D7437DB002EE721 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
+		645FFF2A2D7437DB002EE721 /* WeekNumberTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekNumberTests.swift; sourceTree = "<group>"; };
+		645FFF2B2D7437DB002EE721 /* MonthTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
+		645FFF2C2D7437DB002EE721 /* FrameProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameProviderTests.swift; sourceTree = "<group>"; };
+		645FFF2D2D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
+		645FFF2E2D7437DB002EE721 /* ScrollMetricsMutatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollMetricsMutatorTests.swift; sourceTree = "<group>"; };
+		645FFF2F2D7437DB002EE721 /* ItemViewReuseManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewReuseManagerTests.swift; sourceTree = "<group>"; };
+		645FFF302D7437DB002EE721 /* PaginationHelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaginationHelpersTests.swift; sourceTree = "<group>"; };
+		645FFF312D7437DB002EE721 /* VisibleItemsProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibleItemsProviderTests.swift; sourceTree = "<group>"; };
+		645FFF322D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutItemTypeEnumeratorTests.swift; sourceTree = "<group>"; };
+		645FFF332D7437DB002EE721 /* MonthRowTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
+		645FFF342D7437DB002EE721 /* ScreenPixelAlignmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignmentTests.swift; sourceTree = "<group>"; };
+		645FFF352D7437DB002EE721 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
+		645FFF362D7437DB002EE721 /* DayHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
+		645FFF372D7437DB002EE721 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		645FFF382D7437DB002EE721 /* CalendarContentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
+		645FFF392D7437DB002EE721 /* MonthHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthHelperTests.swift; sourceTree = "<group>"; };
 		9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekView.swift; sourceTree = "<group>"; };
 		9321957F26EEB6330001C7E9 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingConfig.swift; sourceTree = "<group>"; };
@@ -184,6 +273,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		645FFF052D7437C8002EE721 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				645FFF062D7437C8002EE721 /* DayOfWeekPositionTests.swift */,
+				645FFF072D7437C8002EE721 /* WeekNumberTests.swift */,
+				645FFF082D7437C8002EE721 /* MonthTests.swift */,
+				645FFF092D7437C8002EE721 /* FrameProviderTests.swift */,
+				645FFF0A2D7437C8002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */,
+				645FFF0B2D7437C8002EE721 /* ScrollMetricsMutatorTests.swift */,
+				645FFF0C2D7437C8002EE721 /* ItemViewReuseManagerTests.swift */,
+				645FFF0D2D7437C8002EE721 /* PaginationHelpersTests.swift */,
+				645FFF0E2D7437C8002EE721 /* VisibleItemsProviderTests.swift */,
+				645FFF0F2D7437C8002EE721 /* LayoutItemTypeEnumeratorTests.swift */,
+				645FFF102D7437C8002EE721 /* MonthRowTests.swift */,
+				645FFF112D7437C8002EE721 /* ScreenPixelAlignmentTests.swift */,
+				645FFF122D7437C8002EE721 /* SubviewsManagerTests.swift */,
+				645FFF132D7437C8002EE721 /* DayHelperTests.swift */,
+				645FFF142D7437C8002EE721 /* Info.plist */,
+				645FFF152D7437C8002EE721 /* CalendarContentTests.swift */,
+				645FFF162D7437C8002EE721 /* MonthHelperTests.swift */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		645FFF282D7437DB002EE721 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				645FFF292D7437DB002EE721 /* DayOfWeekPositionTests.swift */,
+				645FFF2A2D7437DB002EE721 /* WeekNumberTests.swift */,
+				645FFF2B2D7437DB002EE721 /* MonthTests.swift */,
+				645FFF2C2D7437DB002EE721 /* FrameProviderTests.swift */,
+				645FFF2D2D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift */,
+				645FFF2E2D7437DB002EE721 /* ScrollMetricsMutatorTests.swift */,
+				645FFF2F2D7437DB002EE721 /* ItemViewReuseManagerTests.swift */,
+				645FFF302D7437DB002EE721 /* PaginationHelpersTests.swift */,
+				645FFF312D7437DB002EE721 /* VisibleItemsProviderTests.swift */,
+				645FFF322D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift */,
+				645FFF332D7437DB002EE721 /* MonthRowTests.swift */,
+				645FFF342D7437DB002EE721 /* ScreenPixelAlignmentTests.swift */,
+				645FFF352D7437DB002EE721 /* SubviewsManagerTests.swift */,
+				645FFF362D7437DB002EE721 /* DayHelperTests.swift */,
+				645FFF372D7437DB002EE721 /* Info.plist */,
+				645FFF382D7437DB002EE721 /* CalendarContentTests.swift */,
+				645FFF392D7437DB002EE721 /* MonthHelperTests.swift */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
 		932FC00F26ED51B6005E39A6 /* ItemViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +331,7 @@
 				9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */,
 				9321957F26EEB6330001C7E9 /* Shape.swift */,
 				FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */,
+				645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */,
 			);
 			path = ItemViews;
 			sourceTree = "<group>";
@@ -248,6 +386,9 @@
 				939E694E2484B14500A8BCC7 /* ScrollMetricsMutatorTests.swift */,
 				FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */,
 				939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */,
+				645FFF032D743602002EE721 /* WeekNumberTests.swift */,
+				645FFF052D7437C8002EE721 /* Tests */,
+				645FFF282D7437DB002EE721 /* Tests */,
 				9396F3D22483261B008AD306 /* Info.plist */,
 				086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */,
 			);
@@ -413,6 +554,7 @@
 			files = (
 				93E24A70249D915900B856F7 /* CONTRIBUTING.md in Resources */,
 				FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */,
+				645FFF562D7437DB002EE721 /* Info.plist in Resources */,
 				9396F3DF248327C2008AD306 /* LICENSE in Resources */,
 				9396F3DD24832715008AD306 /* README.md in Resources */,
 				93E24A71249D915900B856F7 /* TECHNICAL_DETAILS.md in Resources */,
@@ -423,6 +565,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				645FFF572D7437DB002EE721 /* Info.plist in Resources */,
+				645FFF252D7437C8002EE721 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,17 +580,25 @@
 				932FC00E26ED5191005E39A6 /* DayView.swift in Sources */,
 				939E692A24837E0300A8BCC7 /* ItemViewReuseManager.swift in Sources */,
 				FD9CDA90293B5E4D00A77188 /* SubviewInsertionIndexTracker.swift in Sources */,
+				645FFF3A2D7437DB002EE721 /* DayOfWeekPositionTests.swift in Sources */,
 				939E692524837E0300A8BCC7 /* LayoutItemTypeEnumerator.swift in Sources */,
 				938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */,
 				FD6E1CFD298D94DC00B480A6 /* OverlaidItemLocation.swift in Sources */,
+				645FFF522D7437DB002EE721 /* SubviewsManagerTests.swift in Sources */,
+				645FFF4E2D7437DB002EE721 /* MonthRowTests.swift in Sources */,
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
 				939E693024837E0300A8BCC7 /* FrameProvider.swift in Sources */,
+				645FFF042D743602002EE721 /* WeekNumberTests.swift in Sources */,
+				645FFF582D7437DB002EE721 /* CalendarContentTests.swift in Sources */,
 				939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */,
+				645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */,
 				AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */,
 				938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */,
+				645FFF462D7437DB002EE721 /* ItemViewReuseManagerTests.swift in Sources */,
 				9321958026EEB6330001C7E9 /* Shape.swift in Sources */,
 				939E692924837E0300A8BCC7 /* VisibleItem.swift in Sources */,
 				939E693C2483824600A8BCC7 /* MonthRange.swift in Sources */,
+				645FFF502D7437DB002EE721 /* ScreenPixelAlignmentTests.swift in Sources */,
 				9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */,
 				93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */,
 				939E693E24846A6600A8BCC7 /* Month.swift in Sources */,
@@ -457,30 +609,40 @@
 				9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */,
 				939E692D24837E0300A8BCC7 /* LayoutItem.swift in Sources */,
 				939E693A24837E8700A8BCC7 /* CalendarViewContent.swift in Sources */,
+				645FFF542D7437DB002EE721 /* DayHelperTests.swift in Sources */,
 				FD6E1D1A2991C50100B480A6 /* CalendarViewRepresentable.swift in Sources */,
 				FDD8EE6E2984C08A00F6EC9D /* ColorViewRepresentable.swift in Sources */,
 				FDE2893C28F8A6D50020EBF1 /* SwiftUIWrapperView.swift in Sources */,
 				939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */,
+				645FFF3C2D7437DB002EE721 /* WeekNumberTests.swift in Sources */,
 				FD6E1CFB298D94DC00B480A6 /* OverlayLayoutContext.swift in Sources */,
 				FD33BADE2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift in Sources */,
 				FDA33E8C2B16660D00DCB8EB /* CalendarScrollView.swift in Sources */,
 				933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */,
 				939E694024846A8C00A8BCC7 /* Day.swift in Sources */,
+				645FFF5A2D7437DB002EE721 /* MonthHelperTests.swift in Sources */,
 				939E692424837E0300A8BCC7 /* CalendarView.swift in Sources */,
+				645FFF422D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
 				939E693924837E8700A8BCC7 /* MonthsLayout.swift in Sources */,
+				645FFF4C2D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
+				645FFF442D7437DB002EE721 /* ScrollMetricsMutatorTests.swift in Sources */,
+				645FFF3E2D7437DB002EE721 /* MonthTests.swift in Sources */,
 				939E692B24837E0300A8BCC7 /* Dictionary+MutatingValueForKey.swift in Sources */,
 				FD6E1CFE298D94DC00B480A6 /* DayRangeLayoutContext.swift in Sources */,
 				939E692624837E0300A8BCC7 /* ScrollMetricsMutator.swift in Sources */,
 				939E694224846EB400A8BCC7 /* DayRange.swift in Sources */,
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
+				645FFF402D7437DB002EE721 /* FrameProviderTests.swift in Sources */,
 				AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */,
 				FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */,
+				645FFF4A2D7437DB002EE721 /* VisibleItemsProviderTests.swift in Sources */,
 				FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
 				FD8CF37A2988A06C00D0482D /* MonthGridBackgroundView.swift in Sources */,
 				FD6E1CFA298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift in Sources */,
 				9391F15625C097DF001D14A2 /* PaginationHelpers.swift in Sources */,
 				FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */,
+				645FFF482D7437DB002EE721 /* PaginationHelpersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,22 +650,54 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				645FFF1C2D7437C8002EE721 /* ScrollMetricsMutatorTests.swift in Sources */,
+				645FFF1A2D7437C8002EE721 /* FrameProviderTests.swift in Sources */,
+				645FFF5B2D7437DB002EE721 /* MonthHelperTests.swift in Sources */,
+				645FFF472D7437DB002EE721 /* ItemViewReuseManagerTests.swift in Sources */,
+				645FFF1D2D7437C8002EE721 /* ItemViewReuseManagerTests.swift in Sources */,
 				939E69582484B21400A8BCC7 /* FrameProviderTests.swift in Sources */,
+				645FFF492D7437DB002EE721 /* PaginationHelpersTests.swift in Sources */,
+				645FFF3F2D7437DB002EE721 /* MonthTests.swift in Sources */,
+				645FFF182D7437C8002EE721 /* WeekNumberTests.swift in Sources */,
+				645FFF192D7437C8002EE721 /* MonthTests.swift in Sources */,
+				645FFF432D7437DB002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
 				93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */,
+				645FFF532D7437DB002EE721 /* SubviewsManagerTests.swift in Sources */,
 				93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */,
 				939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */,
+				645FFF262D7437C8002EE721 /* CalendarContentTests.swift in Sources */,
 				939E695A2484B21E00A8BCC7 /* ScreenPixelAlignmentTests.swift in Sources */,
+				645FFF272D7437C8002EE721 /* MonthHelperTests.swift in Sources */,
 				93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */,
 				AA92BD9F2D73F9C50076E283 /* DayComponentsTests.swift in Sources */,
 				939E695B2484B22200A8BCC7 /* ScrollMetricsMutatorTests.swift in Sources */,
+				645FFF512D7437DB002EE721 /* ScreenPixelAlignmentTests.swift in Sources */,
+				645FFF3D2D7437DB002EE721 /* WeekNumberTests.swift in Sources */,
 				939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */,
+				645FFF1B2D7437C8002EE721 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
+				645FFF412D7437DB002EE721 /* FrameProviderTests.swift in Sources */,
+				645FFF1E2D7437C8002EE721 /* PaginationHelpersTests.swift in Sources */,
+				645FFF452D7437DB002EE721 /* ScrollMetricsMutatorTests.swift in Sources */,
+				645FFF212D7437C8002EE721 /* MonthRowTests.swift in Sources */,
 				93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */,
+				645FFF202D7437C8002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
+				645FFF1F2D7437C8002EE721 /* VisibleItemsProviderTests.swift in Sources */,
 				086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */,
 				939E69592484B21700A8BCC7 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
+				645FFF552D7437DB002EE721 /* DayHelperTests.swift in Sources */,
+				645FFF242D7437C8002EE721 /* DayHelperTests.swift in Sources */,
 				93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */,
+				645FFF4B2D7437DB002EE721 /* VisibleItemsProviderTests.swift in Sources */,
+				645FFF4D2D7437DB002EE721 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
 				932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
 				FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */,
+				645FFF222D7437C8002EE721 /* ScreenPixelAlignmentTests.swift in Sources */,
+				645FFF172D7437C8002EE721 /* DayOfWeekPositionTests.swift in Sources */,
 				9325F43825C1054600E3BFB8 /* PaginationHelpersTests.swift in Sources */,
+				645FFF4F2D7437DB002EE721 /* MonthRowTests.swift in Sources */,
+				645FFF3B2D7437DB002EE721 /* DayOfWeekPositionTests.swift in Sources */,
+				645FFF232D7437C8002EE721 /* SubviewsManagerTests.swift in Sources */,
+				645FFF592D7437DB002EE721 /* CalendarContentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
