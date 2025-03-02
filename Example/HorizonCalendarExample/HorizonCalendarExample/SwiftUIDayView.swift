@@ -19,31 +19,31 @@ import SwiftUI
 // MARK: - SwiftUIDayView
 
 struct SwiftUIDayView: View {
-    
+
     let dayNumber: Int
     let isSelected: Bool
     let isEnabled: Bool
-    
+
     // MARK: - Lifecycle
     init(day: Day, isSelected: Bool) {
         self.dayNumber = day.day
         self.isSelected = isSelected
         self.isEnabled = day.isEnabled
     }
-    
+
     /// Backwards compatible
     init(dayNumber: Int, isSelected: Bool, isEnabled: Bool = true) {
         self.dayNumber = dayNumber
         self.isSelected = isSelected
         self.isEnabled = isEnabled
     }
-    
+
     var body: some View {
         ZStack(alignment: .center) {
             Circle()
                 .strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2)
                 .background {
-                    if (isEnabled) {
+                    if isEnabled {
                         Circle()
                             .foregroundColor(isSelected ? Color(UIColor.systemBackground) : .clear)
                     } else {
@@ -60,7 +60,7 @@ struct SwiftUIDayView: View {
         }
         .accessibilityAddTraits(.isButton)
     }
-    
+
 }
 
 // MARK: - SwiftUIDayView_Previews
