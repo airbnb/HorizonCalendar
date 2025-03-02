@@ -22,10 +22,23 @@ public protocol DayAvailabilityProvider {
     func isEnabled(_ day: Date) -> Bool
 }
 
+public protocol DayProtcol: Hashable {
+    static var availabilityProvider: DayAvailabilityProvider? { get set }
+
+    var components: DateComponents { get }
+
+    var month: MonthComponents { get }
+
+    var day: Int { get }
+
+    var isEnabled: Bool { get }
+}
+
 /// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to
 /// DayComponents.
-public struct Day: Hashable {
+public struct Day: DayProtcol {
     // MARK: - Private
+
     private let _dayComponents: DayComponents
 
     // MARK: - Public
@@ -35,35 +48,35 @@ public struct Day: Hashable {
 
     /// Forwarding to support existing codebase
     public var components: DateComponents {
-        return _dayComponents.components
+        _dayComponents.components
     }
 
     public var month: MonthComponents {
-        return _dayComponents.month
+        _dayComponents.month
     }
 
     public var day: Int {
-        return _dayComponents.day
+        _dayComponents.day
     }
 
     public var isEnabled: Bool
 
     init(month: MonthComponents, day: Int) {
-        self._dayComponents = DayComponents(month: month, day: day)
-        self.isEnabled = Day.availabilityProvider?.isEnabled(self._dayComponents) ?? true
+        _dayComponents = DayComponents(month: month, day: day)
+        isEnabled = Day.availabilityProvider?.isEnabled(_dayComponents) ?? true
     }
- }
+}
 
 extension Day: Comparable {
     public static func < (lhs: Day, rhs: Day) -> Bool {
-        return lhs._dayComponents < rhs._dayComponents
+        lhs._dayComponents < rhs._dayComponents
     }
 
     public static func > (lhs: Day, rhs: Day) -> Bool {
-        return lhs._dayComponents > rhs._dayComponents
+        lhs._dayComponents > rhs._dayComponents
     }
 
     public static func == (lhs: Day, rhs: Day) -> Bool {
-        return lhs._dayComponents == rhs._dayComponents
+        lhs._dayComponents == rhs._dayComponents
     }
 }
