@@ -17,7 +17,7 @@ struct DayComponentTests {
         let early = DayComponents(date: createDate(year: 2025, month: 01, day: 01))
         let late = DayComponents(date: createDate(year: 2025, month: 01, day: 02))
 
-        #expect(late > early)
+        #expect(early < late)
     }
 
     @available(iOS 13.0.0, *)
@@ -25,7 +25,7 @@ struct DayComponentTests {
         let early = DayComponents(date: createDate(year: 2025, month: 01, day: 01))
         let late = DayComponents(date: createDate(year: 2025, month: 01, day: 02))
 
-        #expect((early > late) == false)
+        #expect((late < early) == false)
     }
     
     @available(iOS 13.0.0, *)
@@ -33,7 +33,7 @@ struct DayComponentTests {
         let early = DayComponents(date: createDate(year: 2025, month: 01, day: 01))
         let late = DayComponents(date: createDate(year: 2025, month: 01, day: 01))
 
-        #expect((early > late) == false)
+        #expect((late < early) == false)
     }
 
     @available(iOS 13.0.0, *)

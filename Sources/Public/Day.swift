@@ -66,5 +66,4 @@ extension Day: Comparable {
     public static func == (lhs: Day, rhs: Day) -> Bool {
         return lhs._dayComponents == rhs._dayComponents
     }
-
 }
