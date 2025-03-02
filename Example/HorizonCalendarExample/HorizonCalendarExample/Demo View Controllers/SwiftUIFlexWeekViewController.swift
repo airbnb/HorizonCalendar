@@ -1,5 +1,5 @@
 //
-//  SwiftUIWeekViewViewController.swift
+//  SwiftUIFlexWeekViewController.swift
 //  HorizonCalendarExample
 //
 //  Created by Kyle Parker on 3/2/25.
@@ -11,9 +11,9 @@ import Foundation
 import HorizonCalendar
 import SwiftUI
 
-// MARK: - SwiftUIWeekViewViewController
+// MARK: - SwiftUIFlexWeekViewController
 
-final class SwiftUIWeekViewViewController: UIViewController, DemoViewController {
+final class SwiftUIFlexWeekViewController: UIViewController, DemoViewController {
     // MARK: Lifecycle
 
     init(monthsLayout _: MonthsLayout) {
@@ -55,9 +55,9 @@ final class SwiftUIWeekViewViewController: UIViewController, DemoViewController 
     }
 }
 
-// MARK: - SwiftUIWeekViewDemo
+// MARK: - SwiftUIFlexWeekDemo
 
-struct SwiftUIWeekViewDemo: View {
+struct SwiftUIFlexWeekDemo: View {
     // MARK: - Lifecycle
 
     init(calendar: Calendar, monthsLayout: MonthsLayout) {
@@ -81,7 +81,6 @@ struct SwiftUIWeekViewDemo: View {
     // MARK: Internal
 
     @State private var showErrorMessage: Bool = false
-    @Environment(\.window) var window: UIWindow?
 
     var body: some View {
         ZStack {
@@ -93,8 +92,8 @@ struct SwiftUIWeekViewDemo: View {
                 proxy: calendarViewProxy
             )
 
-            .interMonthSpacing((window?.windowScene?.screen.bounds.height ?? 400) - 100)
-            .verticalDayMargin((window?.windowScene?.screen.bounds.height ?? 400) - 100)
+            .interMonthSpacing(28)
+            .verticalDayMargin(28)
             .horizontalDayMargin(10)
             .monthHeaders { month in
                 let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
@@ -185,11 +184,5 @@ struct SwiftUIWeekViewDemo: View {
         } else {
             false
         }
-    }
-}
-
-extension EnvironmentValues {
-    var window: UIWindow? {
-        UIApplication.shared.windows.first { $0.isKeyWindow }
     }
 }
