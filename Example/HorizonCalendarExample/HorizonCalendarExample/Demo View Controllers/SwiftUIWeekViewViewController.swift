@@ -1,17 +1,19 @@
 //
-//  SwiftUIDisabledDayDemoViewController.swift
+//  SwiftUIDataSupportWeekView.swift
 //  HorizonCalendarExample
 //
-//  Created by Kyle Parker on 3/1/25.
+//  Created by main on 3/2/25.
 //  Copyright © 2025 Airbnb. All rights reserved.
 //
+
+import Foundation
 
 import HorizonCalendar
 import SwiftUI
 
-// MARK: - SwiftUIDisabledDayDemoViewController
+// MARK: - SwiftUIWeekViewViewController
 
-final class SwiftUIDisabledDayDemoViewController: UIViewController, DemoViewController {
+final class SwiftUIWeekViewViewController: UIViewController, DemoViewController {
     // MARK: Lifecycle
 
     init(monthsLayout: MonthsLayout) {
@@ -50,76 +52,9 @@ final class SwiftUIDisabledDayDemoViewController: UIViewController, DemoViewCont
     }
 }
 
-// MARK: - SwiftUIDisabledDayDemo
+// MARK: - SwiftUIWeekViewDemo
 
-struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
-    func isEnabled(_ day: HorizonCalendar.DayComponents) -> Bool {
-        let dateComponents = day.components
-        guard let date = calendar.date(from: dateComponents) else {
-            return true
-        }
-
-        let calendar = Calendar.current
-        let year = dateComponents.year ?? 0
-        let mth = dateComponents.month ?? 0
-        let day = dateComponents.day ?? 0
-
-        // Disable the 18th
-        if day == 18 {
-            return false
-        }
-
-        /// Disable each Friday in Jan.
-        if mth == 1 && calendar.component(.weekday, from: date) == 6 {
-            return false
-        }
-
-        // Disable the first week in Feb. every 4 years
-        if mth == 2 && (year % 4 == 0) && day <= 7 {
-            return false
-        }
-
-        // Disable the second week in March (per day, not cal week)
-        if mth == 3 && (8...14).contains(day) {
-            return false
-        }
-
-        // Disable May 5th - 10th
-        if mth == 5 && (5...10).contains(day) {
-            return false
-        }
-
-        // Disable Multiples of 9 in sep
-        if mth == 9 && day.isMultiple(of: 9) {
-            return false
-        }
-
-        // Disable halloween
-        if mth == 10 && day == 31 {
-            return false
-        }
-
-        // Disable week around thanksgiving
-        if mth == 11 && (day >= 22 && day <= 30) {
-            return false
-        }
-
-        let federalHolidays: [Date] = [
-            Calendar.current.date(from: DateComponents(year: year, month: 1, day: 1))!,
-            Calendar.current.date(from: DateComponents(year: year, month: 7, day: 4))!,
-            Calendar.current.date(from: DateComponents(year: year, month: 12, day: 25))!
-        ]
-
-        if federalHolidays.contains(where: { Calendar.current.isDate($0, inSameDayAs: date) }) {
-            return false
-        }
-
-        return true
-    }
-
-    func isEnabled(_ date: Date) -> Bool {
-        return isEnabled(DayComponents(date: date))
-    }
+struct SwiftUIWeekViewDemo: View {
 
     // MARK: - Lifecycle
 
@@ -229,7 +164,6 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
               })
 
             .onAppear {
-                Day.availabilityProvider = self
               calendarViewProxy.scrollToDay(
                 containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
                 scrollPosition: .centered,
@@ -241,35 +175,10 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
             }
 
             .frame(maxWidth: 375, maxHeight: .infinity)
-
-            if showErrorMessage {
-                overlayView
-                    .transition(.opacity)
-                    .animation(.easeInOut, value: showErrorMessage)
-            }
         }
     }
 
     // MARK: Private
-
-    // MARK: Views
-    private var overlayView: some View {
-        VStack {
-            Color.black.opacity(0.5)
-                .edgesIgnoringSafeArea(.all)
-                .overlay(
-                    Text("Unfornately, these dates are unavailable:\n\(getInvalidDatesString())")
-                        .foregroundColor(.white)
-                        .font(.system(size: 25))
-                        .padding()
-                )
-            Spacer()
-        }
-        .onTapGesture {
-            self.showErrorMessage = false
-            self.invalidDates = []
-        }
-    }
 
     private let calendar: Calendar
     private let monthsLayout: MonthsLayout
@@ -310,16 +219,5 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
         } else {
             return false
         }
-    }
-
-    private func getInvalidDatesString() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, MMMM dd, yyyy"
-
-        let formattedDates = invalidDates.sorted().enumerated().map { index, date in
-            return "\(index + 1)) \(dateFormatter.string(from: date))"
-        }
-
-        return formattedDates.joined(separator: "\n")
     }
 }

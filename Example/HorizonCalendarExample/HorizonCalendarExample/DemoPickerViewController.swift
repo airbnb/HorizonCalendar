@@ -70,6 +70,7 @@ final class DemoPickerViewController: UIViewController {
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
       ("Weekday Only Calendar", WeekdayOnlyDemoViewController.self),
       ("SwiftUI Disabled Day", SwiftUIDisabledDayDemoViewController.self),
+      ("SwiftUI Week View", SwiftUIWeekViewViewController.self),
     ]
 
   private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] =
