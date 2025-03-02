@@ -36,7 +36,7 @@ final class SwiftUIWeekViewViewController: UIViewController, DemoViewController 
       title = "SwiftUI Disabled Day"
 
       let hostingController = UIHostingController(
-        rootView: SwiftUIDisabledDayDemo(calendar: calendar, monthsLayout: monthsLayout))
+        rootView: SwiftUIWeekViewDemo(calendar: calendar, monthsLayout: monthsLayout))
       addChild(hostingController)
 
       view.addSubview(hostingController.view)
@@ -124,43 +124,35 @@ struct SwiftUIWeekViewDemo: View {
             }
 
             .onDaySelection { day in
-                invalidDates = DayRangeSelectionHelper.updateDayRange(
+                DayRangeSelectionHelper.updateDayRange(
                 afterTapSelectionOf: day,
                 existingDayRange: &selectedDayRange)
-
-                showErrorMessage = invalidDates != []
             }
 
             .onMultipleDaySelectionDrag(
               began: { day in
-                  invalidDates = DayRangeSelectionHelper.updateDayRange(
+                  DayRangeSelectionHelper.updateDayRange(
                   afterDragSelectionOf: day,
                   existingDayRange: &selectedDayRange,
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .began,
                   calendar: calendar)
-
-                  showErrorMessage = invalidDates != []
               },
               changed: { day in
-                  invalidDates =  DayRangeSelectionHelper.updateDayRange(
+                  DayRangeSelectionHelper.updateDayRange(
                   afterDragSelectionOf: day,
                   existingDayRange: &selectedDayRange,
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .changed,
                   calendar: calendar)
-
-                  showErrorMessage = invalidDates != []
               },
               ended: { day in
-                  invalidDates = DayRangeSelectionHelper.updateDayRange(
+                  DayRangeSelectionHelper.updateDayRange(
                   afterDragSelectionOf: day,
                   existingDayRange: &selectedDayRange,
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .ended,
                   calendar: calendar)
-
-                  showErrorMessage = invalidDates != []
               })
 
             .onAppear {
@@ -171,7 +163,7 @@ struct SwiftUIWeekViewDemo: View {
             }
 
             .onDisappear {
-                Day.availabilityProvider = nil
+                
             }
 
             .frame(maxWidth: 375, maxHeight: .infinity)
@@ -187,8 +179,6 @@ struct SwiftUIWeekViewDemo: View {
     private var dateToolTip: Date?
 
     private let monthDateFormatter: DateFormatter
-
-    @State private var invalidDates: Set<Date> = []
 
     @State private var dayDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
