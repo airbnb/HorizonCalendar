@@ -17,59 +17,58 @@ import Foundation
 
 // MARK: - DayComponents
 
+public protocol DayComponentsProtocol: Hashable {
+    var month: MonthComponents { get }
+    var day: Int { get }
+}
+
 /// Represents the components of a day. This type is created internally, then vended to you via the public API. All
 /// `DayComponents` instances that are vended to you are created using the `Calendar` instance that you
 /// provide when initializing your
 /// `CalendarView`.
-public struct DayComponents: Hashable {
+public struct DayComponents: DayComponentsProtocol {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
-
-  init(month: MonthComponents, day: Int) {
-    self.month = month
-    self.day = day
-  }
+    init(month: MonthComponents, day: Int) {
+        self.month = month
+        self.day = day
+    }
 
     public init(date: Date) {
         let comps = Calendar.current.dateComponents([.era, .year, .month, .day], from: date)
-        self.month = Month(era: comps.era!,
-                           year: comps.year!,
-                           month: comps.month!,
-                           isInGregorianCalendar: Calendar.current.identifier == .gregorian)
-        self.day = comps.day!
+        month = Month(era: comps.era!,
+                      year: comps.year!,
+                      month: comps.month!,
+                      isInGregorianCalendar: Calendar.current.identifier == .gregorian)
+        day = comps.day!
     }
 
-  // MARK: Public
+    // MARK: Public
 
-  public let month: MonthComponents
-  public let day: Int
+    public let month: MonthComponents
+    public let day: Int
 
-  public var components: DateComponents {
-    DateComponents(era: month.era, year: month.year, month: month.month, day: day)
-  }
-
+    public var components: DateComponents {
+        DateComponents(era: month.era, year: month.year, month: month.month, day: day)
+    }
 }
 
 // MARK: CustomStringConvertible
 
 extension DayComponents: CustomStringConvertible {
-
-  public var description: String {
-    let yearDescription = String(format: "%04d", month.year)
-    let monthDescription = String(format: "%02d", month.month)
-    let dayDescription = String(format: "%02d", day)
-    return "\(yearDescription)-\(monthDescription)-\(dayDescription)"
-  }
-
+    public var description: String {
+        let yearDescription = String(format: "%04d", month.year)
+        let monthDescription = String(format: "%02d", month.month)
+        let dayDescription = String(format: "%02d", day)
+        return "\(yearDescription)-\(monthDescription)-\(dayDescription)"
+    }
 }
 
 // MARK: Comparable
 
 extension DayComponents: Comparable {
-
-  public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
-    guard lhs.month == rhs.month else { return lhs.month < rhs.month }
-    return lhs.day < rhs.day
-  }
-
+    public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
+        guard lhs.month == rhs.month else { return lhs.month < rhs.month }
+        return lhs.day < rhs.day
+    }
 }
