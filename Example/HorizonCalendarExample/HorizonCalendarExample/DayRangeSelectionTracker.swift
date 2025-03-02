@@ -36,7 +36,6 @@ enum DayRangeSelectionHelper {
         let endDate = calendar.date(from: newRange!.upperBound.components)!
         
         while currentDate <= endDate {
-            print(currentDate) // Print the current date
             let isEnabled = Day.availabilityProvider?.isEnabled(currentDate) ?? true
             
             if !isEnabled {
@@ -54,7 +53,6 @@ enum DayRangeSelectionHelper {
         existingDayRange: inout DayComponentsRange?) -> Set<Date>
     {
         if (day.isEnabled) {
-            print("Enabled", day)
             if
                 let _existingDayRange = existingDayRange,
                 _existingDayRange.lowerBound == _existingDayRange.upperBound,
@@ -71,8 +69,6 @@ enum DayRangeSelectionHelper {
             } else {
                 existingDayRange = day...day
             }
-        } else {
-            print("Disabled", day)
         }
         
         return []
