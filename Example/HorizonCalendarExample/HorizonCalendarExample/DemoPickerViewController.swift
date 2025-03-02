@@ -68,6 +68,7 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
+      ("SwiftUI Disabled Day", SwiftUIDisabledDayDemoViewController.self),
     ]
 
   private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] =
