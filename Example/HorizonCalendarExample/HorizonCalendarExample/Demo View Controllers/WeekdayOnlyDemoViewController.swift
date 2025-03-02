@@ -191,7 +191,7 @@ struct WeekdayOnlyDemoView: View {
     return [selectedStartDate...selectedEndDate]
   }
 
-  private func isDaySelected(_ day: DayComponents) -> Bool {
+  private func isDaySelected(_ day: Day) -> Bool {
     if let selectedDayRange {
       return day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
     } else {
