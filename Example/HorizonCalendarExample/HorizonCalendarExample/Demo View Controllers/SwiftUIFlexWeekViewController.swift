@@ -128,16 +128,13 @@ struct SwiftUIFlexWeekDemo: View {
             }
 
             .onDaySelection { day in
-                DayRangeSelectionHelper.updateDayRange(
-                    afterTapSelectionOf: day,
-                    existingDayRange: &selectedDayRange
-                )
+                selectedDayRange = day...day
             }
             .onAppear {
                 calendarViewProxy.scrollToDay(
                     containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
                     scrollPosition: .centered,
-                    animated: false
+                    animated: true
                 )
             }
             .frame(maxWidth: 375, maxHeight: .infinity)
