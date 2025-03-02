@@ -22,7 +22,7 @@ public protocol DayAvailabilityProvider {
     func isEnabled(_ day: Date) -> Bool
 }
 
-public protocol DayProtcol: Hashable {
+public protocol DayProtcol: Hashable, Comparable {
     static var availabilityProvider: DayAvailabilityProvider? { get set }
 
     var components: DateComponents { get }
@@ -67,16 +67,35 @@ public struct Day: DayProtcol {
     }
 }
 
-extension Day: Comparable {
-    public static func < (lhs: Day, rhs: Day) -> Bool {
+// Implement Comparable
+public extension Day {
+    static func < (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents < rhs._dayComponents
     }
 
-    public static func > (lhs: Day, rhs: Day) -> Bool {
+    static func > (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents > rhs._dayComponents
     }
 
-    public static func == (lhs: Day, rhs: Day) -> Bool {
+    static func == (lhs: Day, rhs: Day) -> Bool {
         lhs._dayComponents == rhs._dayComponents
+    }
+
+    static func >= (lhs: Day, rhs: Day) -> Bool {
+        lhs == rhs || lhs > rhs
+    }
+
+    static func <= (lhs: Day, rhs: Day) -> Bool {
+        lhs == rhs || lhs < rhs
+    }
+}
+
+/// Explicitly implement Hashable
+public extension Day {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(day)
+        hasher.combine(month)
+        hasher.combine(isEnabled)
+        hasher.combine(components)
     }
 }
