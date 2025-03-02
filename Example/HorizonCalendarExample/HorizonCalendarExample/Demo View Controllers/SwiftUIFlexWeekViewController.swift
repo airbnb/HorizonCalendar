@@ -81,6 +81,7 @@ struct SwiftUIFlexWeekDemo: View {
     // MARK: Internal
     
     @State var overlaidItemLocations: Set<OverlaidItemLocation> = []
+    @State var selectedDate: Date = Date()
 
     var body: some View {
         ZStack {
@@ -129,17 +130,25 @@ struct SwiftUIFlexWeekDemo: View {
 
             .onDaySelection { day in
                 selectedDayRange = day...day
-                overlaidItemLocations = [.day(containingDate: calendar.date(from: day.components)!)]
+                selectedDate = calendar.date(from: day.components)!
+                overlaidItemLocations = [.day(containingDate: selectedDate)]
                 lineSpacing = 100
+                
             }
             
             .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
                 
-              return TooltipView.calendarItemModel(
-                invariantViewProperties: .init(),
-                content: .init(
-                    frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
-                    text: "Selected Day"))
+                let screenWidth = UIScreen.main.bounds.width
+                let yValue = overlayLayoutContext.overlaidItemFrame.origin.y
+                let frame = CGRect(x: 0, y: yValue, width: screenWidth, height: 100)
+                
+                return SelectedDayView.calendarItemModel(
+                    invariantViewProperties: .init(),
+                    content: SelectedDayView.Content(
+                        frameOfTooltippedItem: frame,
+                        text: dayDateFormatter.string(from: selectedDate),
+                        notes: "None")
+                    )
             }
             
             .onAppear {
