@@ -32,13 +32,13 @@ public enum MonthsLayout: Hashable {
 
   // MARK: Public
 
-  public static var vertical: MonthsLayout {
-    .vertical(options: .init())
-  }
+    public static var vertical: MonthsLayout {
+        .vertical(options: .init())
+    }
 
-  public static var horizontal: MonthsLayout {
-    .horizontal(options: .init())
-  }
+    public static var horizontal: MonthsLayout {
+        .horizontal(options: .init())
+    }
 
   // MARK: Internal
 

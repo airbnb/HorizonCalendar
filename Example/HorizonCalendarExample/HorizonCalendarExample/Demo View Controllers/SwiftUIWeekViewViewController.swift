@@ -17,7 +17,9 @@ final class SwiftUIWeekViewViewController: UIViewController, DemoViewController 
     // MARK: Lifecycle
 
     init(monthsLayout: MonthsLayout) {
-      self.monthsLayout = monthsLayout
+        self.monthsLayout = MonthsLayout.vertical(options: .init(pinDaysOfWeekToTop: true,
+                                                                 alwaysShowCompleteBoundaryMonths: true,
+                                                                 scrollsToFirstMonthOnStatusBarTap: true))
       super.init(nibName: nil, bundle: nil)
     }
 
@@ -33,7 +35,7 @@ final class SwiftUIWeekViewViewController: UIViewController, DemoViewController 
     override func viewDidLoad() {
       super.viewDidLoad()
 
-      title = "SwiftUI Disabled Day"
+      title = "SwiftUI Week View"
 
       let hostingController = UIHostingController(
         rootView: SwiftUIWeekViewDemo(calendar: calendar, monthsLayout: monthsLayout))
@@ -59,20 +61,20 @@ struct SwiftUIWeekViewDemo: View {
     // MARK: - Lifecycle
 
     init(calendar: Calendar, monthsLayout: MonthsLayout) {
-      self.calendar = calendar
-      self.monthsLayout = monthsLayout
-
-      let startDate = calendar.date(from: DateComponents(year: 2025, month: 01, day: 01))!
-      let endDate = calendar.date(from: DateComponents(year: 2035, month: 12, day: 31))!
-      visibleDateRange = startDate...endDate
-
-      monthDateFormatter = DateFormatter()
-      monthDateFormatter.calendar = calendar
-      monthDateFormatter.locale = calendar.locale
-      monthDateFormatter.dateFormat = DateFormatter.dateFormat(
-        fromTemplate: "MMMM yyyy",
-        options: 0,
-        locale: calendar.locale ?? Locale.current)
+        self.calendar = calendar
+        self.monthsLayout = monthsLayout
+        
+        let startDate = calendar.date(from: DateComponents(year: 2025, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2035, month: 12, day: 31))!
+        visibleDateRange = startDate...endDate
+        
+        monthDateFormatter = DateFormatter()
+        monthDateFormatter.calendar = calendar
+        monthDateFormatter.locale = calendar.locale
+        monthDateFormatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "MMMM yyyy",
+            options: 0,
+            locale: calendar.locale ?? Locale.current)
     }
 
     // MARK: Internal
@@ -89,8 +91,9 @@ struct SwiftUIWeekViewDemo: View {
             proxy: calendarViewProxy)
 
             .interMonthSpacing(24)
-            .verticalDayMargin(8)
+            .verticalDayMargin(24)
             .horizontalDayMargin(8)
+            
 
             .monthHeaders { month in
               let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
@@ -128,32 +131,6 @@ struct SwiftUIWeekViewDemo: View {
                 afterTapSelectionOf: day,
                 existingDayRange: &selectedDayRange)
             }
-
-            .onMultipleDaySelectionDrag(
-              began: { day in
-                  DayRangeSelectionHelper.updateDayRange(
-                  afterDragSelectionOf: day,
-                  existingDayRange: &selectedDayRange,
-                  initialDayRange: &selectedDayRangeAtStartOfDrag,
-                  state: .began,
-                  calendar: calendar)
-              },
-              changed: { day in
-                  DayRangeSelectionHelper.updateDayRange(
-                  afterDragSelectionOf: day,
-                  existingDayRange: &selectedDayRange,
-                  initialDayRange: &selectedDayRangeAtStartOfDrag,
-                  state: .changed,
-                  calendar: calendar)
-              },
-              ended: { day in
-                  DayRangeSelectionHelper.updateDayRange(
-                  afterDragSelectionOf: day,
-                  existingDayRange: &selectedDayRange,
-                  initialDayRange: &selectedDayRangeAtStartOfDrag,
-                  state: .ended,
-                  calendar: calendar)
-              })
 
             .onAppear {
               calendarViewProxy.scrollToDay(
