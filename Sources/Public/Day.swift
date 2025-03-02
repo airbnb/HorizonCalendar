@@ -17,53 +17,85 @@ import Foundation
 
 // MARK: - Day
 
-typealias Day = DayComponents
-
-// MARK: - DayComponents
-
-/// Represents the components of a day. This type is created internally, then vended to you via the public API. All `DayComponents`
-/// instances that are vended to you are created using the `Calendar` instance that you provide when initializing your
-/// `CalendarView`.
-public struct DayComponents: Hashable {
-
-  // MARK: Lifecycle
-
-  init(month: MonthComponents, day: Int) {
-    self.month = month
-    self.day = day
-  }
-
-  // MARK: Public
-
-  public let month: MonthComponents
-  public let day: Int
-
-  public var components: DateComponents {
-    DateComponents(era: month.era, year: month.year, month: month.month, day: day)
-  }
-
+public protocol DayAvailabilityProvider {
+    func isEnabled(_ day: DayComponents) -> Bool
+    func isEnabled(_ day: Date) -> Bool
 }
 
-// MARK: CustomStringConvertible
+public protocol DayProtcol: Hashable, Comparable {
+    static var availabilityProvider: DayAvailabilityProvider? { get set }
 
-extension DayComponents: CustomStringConvertible {
+    var components: DateComponents { get }
 
-  public var description: String {
-    let yearDescription = String(format: "%04d", month.year)
-    let monthDescription = String(format: "%02d", month.month)
-    let dayDescription = String(format: "%02d", day)
-    return "\(yearDescription)-\(monthDescription)-\(dayDescription)"
-  }
+    var month: MonthComponents { get }
 
+    var day: Int { get }
+
+    var isEnabled: Bool { get }
 }
 
-// MARK: Comparable
+/// Represents the day, including availability. Backwards compatible with prior versions of Day aliasing to
+/// DayComponents.
+public struct Day: DayProtcol {
+    // MARK: - Private
 
-extension DayComponents: Comparable {
+    private let _dayComponents: DayComponents
 
-  public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
-    guard lhs.month == rhs.month else { return lhs.month < rhs.month }
-    return lhs.day < rhs.day
-  }
+    // MARK: - Public
 
+    // Reference to the availability provider
+    public static var availabilityProvider: DayAvailabilityProvider?
+
+    /// Forwarding to support existing codebase
+    public var components: DateComponents {
+        _dayComponents.components
+    }
+
+    public var month: MonthComponents {
+        _dayComponents.month
+    }
+
+    public var day: Int {
+        _dayComponents.day
+    }
+
+    public var isEnabled: Bool
+
+    init(month: MonthComponents, day: Int) {
+        _dayComponents = DayComponents(month: month, day: day)
+        isEnabled = Day.availabilityProvider?.isEnabled(_dayComponents) ?? true
+    }
+}
+
+// Implement Comparable
+public extension Day {
+    static func < (lhs: Day, rhs: Day) -> Bool {
+        lhs._dayComponents < rhs._dayComponents
+    }
+
+    static func > (lhs: Day, rhs: Day) -> Bool {
+        lhs._dayComponents > rhs._dayComponents
+    }
+
+    static func == (lhs: Day, rhs: Day) -> Bool {
+        lhs._dayComponents == rhs._dayComponents
+    }
+
+    static func >= (lhs: Day, rhs: Day) -> Bool {
+        lhs == rhs || lhs > rhs
+    }
+
+    static func <= (lhs: Day, rhs: Day) -> Bool {
+        lhs == rhs || lhs < rhs
+    }
+}
+
+/// Explicitly implement Hashable
+public extension Day {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(day)
+        hasher.combine(month)
+        hasher.combine(isEnabled)
+        hasher.combine(components)
+    }
 }
