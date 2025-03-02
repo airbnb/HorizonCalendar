@@ -23,6 +23,7 @@ public enum DayRangeSelectionHelper {
     ///   - dayRange: Current range selected by user
     ///   - calendar: The calendar to calculate dates with
     /// - Returns: A set of blacked out dates
+    @discardableResult
     public static func getInvalidDateSet(_ day: Day,
                                          _ dayRange: DayComponentsRange?,
                                          _ calendar: Calendar) -> Set<Date> {
@@ -57,6 +58,7 @@ public enum DayRangeSelectionHelper {
     ///   - afterTapSelectionOf: The day selected by the user
     ///   - existingDayRange: The range to be updated
     /// - Returns: The set of invalid dates. Empty represents no invalid dates.
+    @discardableResult
     public static func updateDayRange(afterTapSelectionOf day: Day,
                                       existingDayRange: inout DayComponentsRange?) -> Set<Date> {
         if day.isEnabled {
