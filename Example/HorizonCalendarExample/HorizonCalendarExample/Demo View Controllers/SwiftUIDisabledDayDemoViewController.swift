@@ -58,71 +58,70 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
         guard let date = calendar.date(from: dateComponents) else {
             return true
         }
-        
+
         let calendar = Calendar.current
         let yr = dateComponents.year ?? 0
         let mth = dateComponents.month ?? 0
         let day = dateComponents.day ?? 0
-        
+
         // Disable the 18th
         if (day == 18) {
             return false
         }
-        
+
         /// Disable each Friday in Jan.
         if mth == 1 && calendar.component(.weekday, from: date) == 6 {
             return false
         }
-        
+
         // Disable the first week in Feb. every 4 years
         if mth == 2 && (yr % 4 == 0) && day <= 7 {
             return false
         }
-        
+
         // Disable the second week in March (per day, not cal week)
         if mth == 3 && (8...14).contains(day) {
             return false
         }
-        
+
         // Disable May 5th - 10th
         if mth == 5 && (5...10).contains(day) {
             return false
         }
-        
+
         // Disable Multiples of 9 in sep
         if mth == 9 && day.isMultiple(of: 9) {
             return false
         }
-        
+
         // Disable halloween
         if mth == 10 && day == 31 {
             return false
         }
-        
+
         // Disable week around thanksgiving
         if mth == 11 && (day >= 22 && day <= 30) {
             return false
         }
-        
+
         let federalHolidays: [Date] = [
             Calendar.current.date(from: DateComponents(year: yr, month: 1, day: 1))!,
             Calendar.current.date(from: DateComponents(year: yr, month: 7, day: 4))!,
             Calendar.current.date(from: DateComponents(year: yr, month: 12, day: 25))!
         ]
-        
+
         if federalHolidays.contains(where: { Calendar.current.isDate($0, inSameDayAs: date) }) {
             return false
         }
-        
+
         return true
     }
-    
+
     func isEnabled(_ date: Date) -> Bool {
         return isEnabled(DayComponents(date: date))
     }
-    
-    
-    // MARK: Lifecycle
+
+    // MARK: - Lifecycle
 
     init(calendar: Calendar, monthsLayout: MonthsLayout) {
       self.calendar = calendar
@@ -142,7 +141,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
     }
 
     // MARK: Internal
-    
+
     @State private var showErrorMessage: Bool = false
 
     var body: some View {
@@ -193,7 +192,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
                 invalidDates = DayRangeSelectionHelper.updateDayRange(
                 afterTapSelectionOf: day,
                 existingDayRange: &selectedDayRange)
-                
+
                 showErrorMessage = invalidDates != []
             }
 
@@ -205,7 +204,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .began,
                   calendar: calendar)
-                  
+
                   showErrorMessage = invalidDates != []
               },
               changed: { day in
@@ -215,7 +214,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .changed,
                   calendar: calendar)
-                  
+
                   showErrorMessage = invalidDates != []
               },
               ended: { day in
@@ -225,7 +224,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
                   initialDayRange: &selectedDayRangeAtStartOfDrag,
                   state: .ended,
                   calendar: calendar)
-                  
+
                   showErrorMessage = invalidDates != []
               })
 
@@ -236,13 +235,13 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
                 scrollPosition: .centered,
                 animated: false)
             }
-            
+
             .onDisappear {
                 Day.availabilityProvider = nil
             }
 
             .frame(maxWidth: 375, maxHeight: .infinity)
-            
+
             if showErrorMessage {
                 overlayView
                     .transition(.opacity)
@@ -252,7 +251,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
     }
 
     // MARK: Private
-    
+
     // MARK: Views
     private var overlayView: some View {
         VStack {
@@ -275,13 +274,13 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
     private let calendar: Calendar
     private let monthsLayout: MonthsLayout
     private let visibleDateRange: ClosedRange<Date>
-    
+
     private var dateToolTip: Date?
 
     private let monthDateFormatter: DateFormatter
-    
+
     @State private var invalidDates: Set<Date> = []
-    
+
     @State private var dayDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar.current
@@ -312,7 +311,7 @@ struct SwiftUIDisabledDayDemo: View, DayAvailabilityProvider {
             return false
         }
     }
-    
+
     private func getInvalidDatesString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE, MMMM dd, yyyy"
