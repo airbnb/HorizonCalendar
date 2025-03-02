@@ -36,10 +36,10 @@ final class SwiftUIFlexWeekViewController: UIViewController, DemoViewController 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "SwiftUI Week View"
+        title = "SwiftUI Flexible Week View"
 
         let hostingController = UIHostingController(
-            rootView: SwiftUIWeekViewDemo(calendar: calendar, monthsLayout: monthsLayout))
+            rootView: SwiftUIFlexWeekDemo(calendar: calendar, monthsLayout: monthsLayout))
         addChild(hostingController)
 
         view.addSubview(hostingController.view)
