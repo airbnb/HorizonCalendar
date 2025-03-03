@@ -68,6 +68,8 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
+            ("Notes", NotesCalendarViewController.self),
+
     ]
 
   private let horizontalDemoDestinations: [(name: String, destinationType: DemoViewController.Type)] =
@@ -80,6 +82,8 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
+            ("Notes", NotesCalendarViewController.self),
+
     ]
 
   private lazy var tableView: UITableView = {
