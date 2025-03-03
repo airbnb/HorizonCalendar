@@ -150,7 +150,7 @@ struct SwiftUIFlexWeekDemo: View {
                         notes: "None", scrollToSelectedDate: {
                             calendarViewProxy.scrollToDay(
                                 containing: selectedDate,
-                                scrollPosition: .firstFullyVisiblePosition(padding: 150),
+                                scrollPosition: .lastFullyVisiblePosition(padding: 50),
                                 animated: false
                             )
                         })

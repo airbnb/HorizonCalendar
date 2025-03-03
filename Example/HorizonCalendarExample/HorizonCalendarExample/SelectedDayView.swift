@@ -45,7 +45,7 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         notes.layer.borderColor = invariantViewProperties.borderColor.cgColor
         notes.layer.borderWidth = 1
         notes.layer.cornerRadius = 6
-        notes.backgroundColor = invariantViewProperties.backgroundColor
+        notes.backgroundColor = invariantViewProperties.borderColor.withAlphaComponent(0.1)
 
         super.init(frame: .zero)
 
@@ -94,15 +94,6 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
                              width: dateLabel.frame.width,
                              height: backgroundView.frame.height - dateLabelHeight - buffer * 3
         )
-        notes.backgroundColor = .red
-        
-        dateLabel.backgroundColor = .cyan
-        
-        backgroundView.backgroundColor = .yellow
-        
-        print("notes isUserInteractionEnabled: ", notes.isUserInteractionEnabled)
-        print("bgView isUserInteractionEnabled: ", backgroundView.isUserInteractionEnabled)
-        print("super isUserInteractionEnabled: ", super.isUserInteractionEnabled)
         
         backgroundView.addSubview(dateLabel)
         backgroundView.addSubview(notes)
