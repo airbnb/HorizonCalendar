@@ -48,7 +48,7 @@ final class SwiftUIFlexWeekViewController: UIViewController, DemoViewController 
             hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
         hostingController.didMove(toParent: self)
@@ -80,7 +80,8 @@ struct SwiftUIFlexWeekDemo: View {
 
     // MARK: Internal
 
-    @State private var showErrorMessage: Bool = false
+    @State var overlaidItemLocations: Set<OverlaidItemLocation> = []
+    @State var selectedDate: Date = .init()
 
     var body: some View {
         ZStack {
@@ -92,8 +93,8 @@ struct SwiftUIFlexWeekDemo: View {
                 proxy: calendarViewProxy
             )
 
-            .interMonthSpacing(28)
-            .verticalDayMargin(28)
+            .interMonthSpacing(24)
+            .verticalDayMargin(lineSpacing)
             .horizontalDayMargin(10)
             .monthHeaders { month in
                 let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
@@ -128,16 +129,39 @@ struct SwiftUIFlexWeekDemo: View {
             }
 
             .onDaySelection { day in
-                DayRangeSelectionHelper.updateDayRange(
-                    afterTapSelectionOf: day,
-                    existingDayRange: &selectedDayRange
+                selectedDayRange = day ... day
+                selectedDate = calendar.date(from: day.components)!
+                overlaidItemLocations = [.day(containingDate: selectedDate)]
+                lineSpacing = 100
+            }
+
+            .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
+
+                let screenWidth = UIScreen.main.bounds.width
+                let yValue = overlayLayoutContext.overlaidItemFrame.origin.y
+                let frame = CGRect(x: 0, y: yValue, width: screenWidth, height: 100)
+
+                return SelectedDayView.calendarItemModel(
+                    invariantViewProperties: .init(),
+                    content: SelectedDayView.Content(
+                        frameOfTooltippedItem: frame,
+                        text: dayDateFormatter.string(from: selectedDate),
+                        notes: "None", scrollToSelectedDate: {
+                            calendarViewProxy.scrollToDay(
+                                containing: selectedDate,
+                                scrollPosition: .lastFullyVisiblePosition(padding: 50),
+                                animated: false
+                            )
+                        }
+                    )
                 )
             }
+
             .onAppear {
                 calendarViewProxy.scrollToDay(
                     containing: calendar.date(from: DateComponents(year: 2025, month: 04, day: 01))!,
-                    scrollPosition: .centered,
-                    animated: false
+                    scrollPosition: .firstFullyVisiblePosition(padding: 50),
+                    animated: true
                 )
             }
             .frame(maxWidth: 375, maxHeight: .infinity)
@@ -170,6 +194,9 @@ struct SwiftUIFlexWeekDemo: View {
 
     @State private var selectedDayRange: DayComponentsRange?
     @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
+
+    @State private var showErrorMessage: Bool = false
+    @State private var lineSpacing: CGFloat = 28
 
     private var selectedDateRanges: Set<ClosedRange<Date>> {
         guard let selectedDayRange else { return [] }
