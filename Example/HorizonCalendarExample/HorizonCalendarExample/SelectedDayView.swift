@@ -35,7 +35,7 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         dateLabel.textAlignment = invariantViewProperties.textAlignment
         dateLabel.lineBreakMode = .byTruncatingTail
         dateLabel.textColor = invariantViewProperties.textColor
-        
+
         notes = UITextField()
         notes.font = invariantViewProperties.font
         notes.textColor = invariantViewProperties.textColor
@@ -45,7 +45,8 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         notes.layer.borderColor = invariantViewProperties.borderColor.cgColor
         notes.layer.borderWidth = 1
         notes.layer.cornerRadius = 6
-        notes.backgroundColor = invariantViewProperties.borderColor.withAlphaComponent(0.1)
+        notes.backgroundColor = invariantViewProperties.borderColor.withAlphaComponent(0.1
+        )
 
         super.init(frame: .zero)
 
@@ -69,9 +70,9 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
 
         let backgroundSize = CGSize(width: frameOfTooltippedItem.width,
                                     height: frameOfTooltippedItem.height)
-        
+
         let dateLabelHeight: CGFloat = 20
-        
+
         let buffer: CGFloat = 5
 
         let proposedFrame = CGRect(
@@ -82,28 +83,26 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         )
 
         backgroundView.frame = proposedFrame
-        
+
         dateLabel.frame = CGRect(x: buffer,
                                  y: buffer,
                                  width: backgroundView.frame.width - 10,
-                                 height: dateLabelHeight
-        )
-        
+                                 height: dateLabelHeight)
+
         notes.frame = CGRect(x: 5,
                              y: buffer * 2 + dateLabelHeight,
                              width: dateLabel.frame.width,
-                             height: backgroundView.frame.height - dateLabelHeight - buffer * 3
-        )
-        
+                             height: backgroundView.frame.height - dateLabelHeight - buffer * 3)
+
         backgroundView.addSubview(dateLabel)
         backgroundView.addSubview(notes)
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+    override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
         resignFirstResponder()
     }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+
+    func textFieldDidBeginEditing(_: UITextField) {
         scrollToSelectedDate?()
     }
 
@@ -111,7 +110,7 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
+
     // MARK: Fileprivate
 
     fileprivate var frameOfTooltippedItem: CGRect? {
@@ -125,7 +124,7 @@ final class SelectedDayView: UIView, UITextFieldDelegate {
         get { dateLabel.text ?? "" }
         set { dateLabel.text = newValue }
     }
-    
+
     fileprivate var fieldTextContent: String {
         get { notes.text ?? "" }
         set { notes.text = newValue }
@@ -152,11 +151,11 @@ extension SelectedDayView: CalendarItemViewRepresentable {
 
     struct Content: Equatable {
         static func == (lhs: SelectedDayView.Content, rhs: SelectedDayView.Content) -> Bool {
-            return lhs.frameOfTooltippedItem == rhs.frameOfTooltippedItem &&
-                   lhs.text == rhs.text &&
-                   lhs.notes == rhs.notes
+            lhs.frameOfTooltippedItem == rhs.frameOfTooltippedItem &&
+                lhs.text == rhs.text &&
+                lhs.notes == rhs.notes
         }
-        
+
         let frameOfTooltippedItem: CGRect?
         let text: String
         let notes: String?
