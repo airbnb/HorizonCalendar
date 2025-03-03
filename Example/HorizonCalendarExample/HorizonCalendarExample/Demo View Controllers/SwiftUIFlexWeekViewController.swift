@@ -147,7 +147,13 @@ struct SwiftUIFlexWeekDemo: View {
                     content: SelectedDayView.Content(
                         frameOfTooltippedItem: frame,
                         text: dayDateFormatter.string(from: selectedDate),
-                        notes: "None")
+                        notes: "None", scrollToSelectedDate: {
+                            calendarViewProxy.scrollToDay(
+                                containing: selectedDate,
+                                scrollPosition: .firstFullyVisiblePosition(padding: 150),
+                                animated: false
+                            )
+                        })
                     )
             }
             

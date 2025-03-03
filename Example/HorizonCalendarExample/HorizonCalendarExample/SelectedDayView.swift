@@ -1,4 +1,5 @@
 // Created by Bryan Keller on 6/15/20.
+// Edited by Kyle Parker on 03/02/25
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +18,9 @@ import HorizonCalendar
 import SwiftUICore
 import UIKit
 
-// MARK: - TooltipView
+// MARK: - SelectedDayView
 
-final class SelectedDayView: UIView {
+final class SelectedDayView: UIView, UITextFieldDelegate {
     // MARK: Lifecycle
 
     fileprivate init(invariantViewProperties: InvariantViewProperties) {
@@ -45,14 +46,11 @@ final class SelectedDayView: UIView {
         notes.layer.borderWidth = 1
         notes.layer.cornerRadius = 6
         notes.backgroundColor = invariantViewProperties.backgroundColor
-        
 
         super.init(frame: .zero)
 
-        isUserInteractionEnabled = false
+        notes.delegate = self
         addSubview(backgroundView)
-        addSubview(dateLabel)
-        addSubview(notes)
     }
 
     @available(*, unavailable)
@@ -68,32 +66,61 @@ final class SelectedDayView: UIView {
         guard let frameOfTooltippedItem else { return }
 
         dateLabel.sizeToFit()
-        let labelSize = CGSize(
-            width: max(dateLabel.bounds.size.width, bounds.width),
-            height: dateLabel.bounds.size.height
-        )
 
-        let backgroundSize = CGSize(width: labelSize.width, height: labelSize.height)
+        let backgroundSize = CGSize(width: frameOfTooltippedItem.width,
+                                    height: frameOfTooltippedItem.height)
+        
+        let dateLabelHeight: CGFloat = 20
+        
+        let buffer: CGFloat = 5
 
         let proposedFrame = CGRect(
             x: frameOfTooltippedItem.minX,
-            y: frameOfTooltippedItem.minY - backgroundSize.height,
-            width: frameOfTooltippedItem.width,
-            height: frameOfTooltippedItem.height
+            y: frameOfTooltippedItem.minY - backgroundSize.height * 1.1,
+            width: backgroundSize.width - 60,
+            height: backgroundSize.height
         )
 
-        let frame: CGRect = if proposedFrame.maxX > bounds.width {
-            proposedFrame.applying(.init(translationX: bounds.width - proposedFrame.maxX, y: 0))
-        } else if proposedFrame.minX < 0 {
-            proposedFrame.applying(.init(translationX: -proposedFrame.minX, y: 0))
-        } else {
-            proposedFrame
-        }
-
-        backgroundView.frame = frame
-        dateLabel.center = backgroundView.center
+        backgroundView.frame = proposedFrame
+        
+        dateLabel.frame = CGRect(x: buffer,
+                                 y: buffer,
+                                 width: backgroundView.frame.width - 10,
+                                 height: dateLabelHeight
+        )
+        
+        notes.frame = CGRect(x: 5,
+                             y: buffer * 2 + dateLabelHeight,
+                             width: dateLabel.frame.width,
+                             height: backgroundView.frame.height - dateLabelHeight - buffer * 3
+        )
+        notes.backgroundColor = .red
+        
+        dateLabel.backgroundColor = .cyan
+        
+        backgroundView.backgroundColor = .yellow
+        
+        print("notes isUserInteractionEnabled: ", notes.isUserInteractionEnabled)
+        print("bgView isUserInteractionEnabled: ", backgroundView.isUserInteractionEnabled)
+        print("super isUserInteractionEnabled: ", super.isUserInteractionEnabled)
+        
+        backgroundView.addSubview(dateLabel)
+        backgroundView.addSubview(notes)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        scrollToSelectedDate?()
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     // MARK: Fileprivate
 
     fileprivate var frameOfTooltippedItem: CGRect? {
@@ -118,6 +145,7 @@ final class SelectedDayView: UIView {
     private let backgroundView: UIView
     private let dateLabel: UILabel
     private let notes: UITextField
+    private var scrollToSelectedDate: (() -> Void)?
 }
 
 // MARK: CalendarItemViewRepresentable
@@ -132,9 +160,16 @@ extension SelectedDayView: CalendarItemViewRepresentable {
     }
 
     struct Content: Equatable {
+        static func == (lhs: SelectedDayView.Content, rhs: SelectedDayView.Content) -> Bool {
+            return lhs.frameOfTooltippedItem == rhs.frameOfTooltippedItem &&
+                   lhs.text == rhs.text &&
+                   lhs.notes == rhs.notes
+        }
+        
         let frameOfTooltippedItem: CGRect?
         let text: String
         let notes: String?
+        let scrollToSelectedDate: (() -> Void)?
     }
 
     static func makeView(
@@ -148,5 +183,6 @@ extension SelectedDayView: CalendarItemViewRepresentable {
         view.frameOfTooltippedItem = content.frameOfTooltippedItem
         view.dateText = content.text
         view.fieldTextContent = content.notes ?? ""
+        view.scrollToSelectedDate = content.scrollToSelectedDate
     }
 }
