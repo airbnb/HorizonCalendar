@@ -99,3 +99,10 @@ public extension Day {
         hasher.combine(components)
     }
 }
+
+// Allows the tests to pass
+extension Day: CustomStringConvertible {
+    public var description: String {
+        return _dayComponents.description
+    }
+}
