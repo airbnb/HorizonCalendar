@@ -99,7 +99,7 @@ public final class CalendarViewContent {
     ///   - width: The width allocated for week numbers.
     /// - Returns: A copy of this `CalendarViewContent` instance with week number settings updated.
     public func showWeekNumbers(_ show: Bool, textColor: UIColor = .gray, width: CGFloat = 25) -> CalendarViewContent {
-        var content = self
+        let content = self
         content.showWeekNumbers = show
         content.weekNumberTextColor = textColor
         content.weekNumberWidth = width
