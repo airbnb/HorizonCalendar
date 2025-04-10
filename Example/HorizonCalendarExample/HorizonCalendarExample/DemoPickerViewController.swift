@@ -68,7 +68,7 @@ final class DemoPickerViewController: UIViewController {
       ("Month Grid Background", MonthBackgroundDemoViewController.self),
       ("SwiftUI Day and Month View", SwiftUIItemModelsDemoViewController.self),
       ("SwiftUI Screen", SwiftUIScreenDemoViewController.self),
-      ("WeekdayView", WeekNumberDemoViewController.self),
+      ("Week Number View", WeekNumberDemoViewController.self),
       ("Weekday Only Calendar", WeekdayOnlyDemoViewController.self),
       ("SwiftUI Disabled Day", SwiftUIDisabledDayDemoViewController.self),
       ("SwiftUI Week View", SwiftUIWeekViewViewController.self),
