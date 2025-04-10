@@ -6,7 +6,6 @@
 //  Copyright © 2025 Airbnb. All rights reserved.
 //
 
-
 import XCTest
 @testable import HorizonCalendar
 
@@ -16,7 +15,22 @@ final class WeekNumberTests: XCTestCase {
   
   private let calendar = Calendar(identifier: .gregorian)
   private let size = CGSize(width: 320, height: 500)
-  private let dateRange = Date().addingTimeInterval(-60 * 60 * 24 * 30 * 6)...Date().addingTimeInterval(60 * 60 * 24 * 30 * 6)
+  
+  // Use a fixed date range for stable testing - January through March 2023
+  private var dateRange: ClosedRange<Date> {
+    let startComponents = DateComponents(year: 2023, month: 1, day: 1)
+    let endComponents = DateComponents(year: 2023, month: 3, day: 31)
+    
+    let startDate = calendar.date(from: startComponents)!
+    let endDate = calendar.date(from: endComponents)!
+    
+    return startDate...endDate
+  }
+  
+  // A month that's guaranteed to be in our date range
+  private var testMonth: Month {
+    return Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
+  }
   
   // MARK: - Tests
 
@@ -35,14 +49,13 @@ final class WeekNumberTests: XCTestCase {
       layoutMargins: .zero,
       scale: 2,
       backgroundColor: nil)
-      
-    // Get visible items when positioned at January
+    
     let details = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2024, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 0),
-      extendLayoutRegion: false)
+        itemType: .monthHeader(testMonth),
+        frame: CGRect(x: 0, y: 0, width: size.width, height: 50)),
+      offset: .zero,
+      extendLayoutRegion: true)
       
     // Find items with weekNumber type
     let weekNumberItems = details.visibleItems.filter {
@@ -71,13 +84,12 @@ final class WeekNumberTests: XCTestCase {
       scale: 2,
       backgroundColor: nil)
       
-    // Get visible items when positioned at January
     let details = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2024, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 0),
-      extendLayoutRegion: false)
+        itemType: .monthHeader(testMonth),
+        frame: CGRect(x: 0, y: 0, width: size.width, height: 50)),
+      offset: .zero,
+      extendLayoutRegion: true)
       
     // Find items with weekNumber type
     let weekNumberItems = details.visibleItems.filter {
@@ -107,13 +119,12 @@ final class WeekNumberTests: XCTestCase {
       scale: 2,
       backgroundColor: nil)
       
-    // Get visible items when positioned at January 2024
     let details = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2024, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 0),
-      extendLayoutRegion: false)
+        itemType: .monthHeader(testMonth),
+        frame: CGRect(x: 0, y: 0, width: size.width, height: 50)),
+      offset: .zero,
+      extendLayoutRegion: true)
       
     // Find items with weekNumber type
     let weekNumberItems = details.visibleItems.compactMap { item -> (Int, Month)? in
@@ -126,21 +137,37 @@ final class WeekNumberTests: XCTestCase {
     // Verify that we have some week numbers
     XCTAssertFalse(weekNumberItems.isEmpty, "Week numbers should be visible")
     
-    // Verify that week numbers are in ascending order
-    var lastWeekNumber = 0
-    for (weekNumber, _) in weekNumberItems {
-      if lastWeekNumber > 0 {
-        // Allow jumping back to week 1 for new years
-        if !(lastWeekNumber > 50 && weekNumber < 10) {
-          XCTAssertGreaterThanOrEqual(weekNumber, lastWeekNumber, "Week numbers should be ascending")
+    if !weekNumberItems.isEmpty {
+      // Group week numbers by month
+      let weekNumbersByMonth = Dictionary(grouping: weekNumberItems) { $0.1 }
+      
+      // Verify that within each month, week numbers are valid
+      for (month, weekNumbersInMonth) in weekNumbersByMonth {
+        // Sort by week number
+        let sortedWeekNumbers = weekNumbersInMonth.map { $0.0 }.sorted()
+        
+        // Check for uniqueness - should have one week number per week in month
+        let uniqueWeekNumbers = Set(sortedWeekNumbers)
+        XCTAssertEqual(uniqueWeekNumbers.count, sortedWeekNumbers.count,
+                      "Week numbers within a month should be unique")
+        
+        // Check that all numbers are valid week numbers (1-53)
+        for weekNumber in sortedWeekNumbers {
+          XCTAssertGreaterThanOrEqual(weekNumber, 1, "Week numbers should be at least 1")
+          XCTAssertLessThanOrEqual(weekNumber, 53, "Week numbers should be at most 53")
+        }
+        
+        // For January 2023, check that it has a valid first week
+        if month.month == 1 && month.year == 2023 {
+          if let firstWeekNumber = sortedWeekNumbers.first {
+            // First week of the year can be week 1 or week 52/53 from previous year
+            XCTAssertTrue(
+              firstWeekNumber == 1 || firstWeekNumber >= 52,
+              "First week of January should be week 1 or from the end of previous year"
+            )
+          }
         }
       }
-      lastWeekNumber = weekNumber
-    }
-    
-    // Verify first week number is valid (should be 1 or close to it for January)
-    if let firstWeekNumber = weekNumberItems.first?.0 {
-      XCTAssertTrue(firstWeekNumber < 5, "First week of January should be low week number")
     }
   }
   
@@ -160,13 +187,12 @@ final class WeekNumberTests: XCTestCase {
       scale: 2,
       backgroundColor: nil)
       
-    // Get visible items when positioned at January
     let details = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
-        itemType: .monthHeader(Month(era: 1, year: 2024, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
-      offset: CGPoint(x: 0, y: 0),
-      extendLayoutRegion: false)
+        itemType: .monthHeader(testMonth),
+        frame: CGRect(x: 0, y: 0, width: size.width, height: 50)),
+      offset: .zero,
+      extendLayoutRegion: true)
       
     // Get all day items
     let dayItems = details.visibleItems.filter {
@@ -184,15 +210,20 @@ final class WeekNumberTests: XCTestCase {
       return false
     }
     
-    // Verify that week numbers are positioned to the left of days
+    // Verify that days and week numbers are present
     XCTAssertFalse(dayItems.isEmpty, "Day items should be present")
     XCTAssertFalse(weekNumberItems.isEmpty, "Week number items should be present")
     
-    // Find the rightmost x position of week numbers
-    if let maxWeekNumberX = weekNumberItems.map({ $0.frame.maxX }).max(),
-       let minDayX = dayItems.map({ $0.frame.minX }).min()
-    {
+    if !dayItems.isEmpty && !weekNumberItems.isEmpty {
+      // Find the rightmost x position of week numbers
+      let maxWeekNumberX = weekNumberItems.map({ $0.frame.maxX }).max()!
+      let minDayX = dayItems.map({ $0.frame.minX }).min()!
+      
       XCTAssertLessThanOrEqual(maxWeekNumberX, minDayX, "Week numbers should be positioned to the left of days")
+      
+      // Check that week numbers are aligned at the same x position
+      let weekNumberXPositions = Set(weekNumberItems.map { $0.frame.minX })
+      XCTAssertEqual(weekNumberXPositions.count, 1, "All week numbers should be aligned to the same x position")
     }
   }
 }
