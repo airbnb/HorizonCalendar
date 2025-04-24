@@ -145,7 +145,7 @@ extension DemoPickerViewController: UITableViewDelegate {
           options: VerticalMonthsLayoutOptions(
             pinDaysOfWeekToTop: false,
             alwaysShowCompleteBoundaryMonths: false,
-            scrollsToFirstMonthOnStatusBarTap: false))
+            scrollsToFirstMonthOnStatusBarTap: nil))
         : .horizontal(
           options: HorizontalMonthsLayoutOptions(
             maximumFullyVisibleMonths: 1.5,

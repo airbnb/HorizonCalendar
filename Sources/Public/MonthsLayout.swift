@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import CoreGraphics
+import Foundation
 
 // MARK: - MonthsLayout
 
@@ -74,10 +75,10 @@ public enum MonthsLayout: Hashable {
     return true
   }
 
-  var scrollsToFirstMonthOnStatusBarTap: Bool {
+    var scrollsToFirstMonthOnStatusBarTap: Date? {
     switch self {
     case .vertical(let options): return options.scrollsToFirstMonthOnStatusBarTap
-    case .horizontal: return false
+    case .horizontal: return nil
     }
   }
 }
@@ -101,7 +102,7 @@ public struct VerticalMonthsLayoutOptions: Hashable {
   public init(
     pinDaysOfWeekToTop: Bool = false,
     alwaysShowCompleteBoundaryMonths: Bool = true,
-    scrollsToFirstMonthOnStatusBarTap: Bool = false)
+    scrollsToFirstMonthOnStatusBarTap: Date? = nil)
   {
     self.pinDaysOfWeekToTop = pinDaysOfWeekToTop
     self.alwaysShowCompleteBoundaryMonths = alwaysShowCompleteBoundaryMonths
@@ -118,7 +119,7 @@ public struct VerticalMonthsLayoutOptions: Hashable {
   public let alwaysShowCompleteBoundaryMonths: Bool
 
   /// Whether the calendar should scroll to the first month when the system status bar is tapped.
-  public let scrollsToFirstMonthOnStatusBarTap: Bool
+    public let scrollsToFirstMonthOnStatusBarTap: Date?
 
 }
 

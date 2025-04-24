@@ -1376,7 +1376,7 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
   func scrollViewShouldScrollToTop(_: UIScrollView) -> Bool {
     guard let calendarView else { return false }
 
-    if calendarView.content.monthsLayout.scrollsToFirstMonthOnStatusBarTap {
+    if calendarView.content.monthsLayout.scrollsToFirstMonthOnStatusBarTap != nil {
       let firstMonth = calendarView.content.monthRange.lowerBound
       let firstDate = calendarView.calendar.firstDate(of: firstMonth)
       calendarView.scroll(
