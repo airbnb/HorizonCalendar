@@ -28,7 +28,7 @@ public struct DayComponents: Hashable {
 
   // MARK: Lifecycle
 
-  init(month: MonthComponents, day: Int) {
+  public init(month: MonthComponents, day: Int) {
     self.month = month
     self.day = day
   }
