@@ -28,7 +28,7 @@ public struct MonthComponents: Hashable {
 
   // MARK: Lifecycle
 
-  init(era: Int, year: Int, month: Int, isInGregorianCalendar: Bool) {
+public init(era: Int, year: Int, month: Int, isInGregorianCalendar: Bool) {
     self.era = era
     self.year = year
     self.month = month
