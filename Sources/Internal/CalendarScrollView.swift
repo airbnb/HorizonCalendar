@@ -21,7 +21,7 @@ import UIKit
 ///   - The main thing this prevents is the situation where the view hierarchy is traversed to find a scroll view, and attempts are made to
 ///     change that scroll view's `contentInsetAdjustmentBehavior`.
 /// - Customizes the accessibility elements of the scroll view
-final public class CalendarScrollView: UIScrollView {
+public class CalendarScrollView: UIScrollView {
 
   // MARK: Lifecycle
 
@@ -38,18 +38,18 @@ final public class CalendarScrollView: UIScrollView {
 
   var cachedAccessibilityElements: [Any]?
 
-  override var contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior {
+  public override var contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior {
     didSet {
       super.contentInsetAdjustmentBehavior = .never
     }
   }
 
-  override var isAccessibilityElement: Bool {
+public override var isAccessibilityElement: Bool {
     get { false }
     set { }
   }
 
-  override var accessibilityElements: [Any]? {
+    public override var accessibilityElements: [Any]? {
     get {
       guard let itemViews = subviews as? [ItemView] else {
         fatalError("Only `ItemView`s can be used as subviews of the scroll view.")
