@@ -21,7 +21,7 @@ import UIKit
 ///   - The main thing this prevents is the situation where the view hierarchy is traversed to find a scroll view, and attempts are made to
 ///     change that scroll view's `contentInsetAdjustmentBehavior`.
 /// - Customizes the accessibility elements of the scroll view
-final class CalendarScrollView: UIScrollView {
+final public class CalendarScrollView: UIScrollView {
 
   // MARK: Lifecycle
 
