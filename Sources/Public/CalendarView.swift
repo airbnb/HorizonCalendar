@@ -940,7 +940,6 @@ public final class CalendarView: UIView {
 
   private func maintainScrollPositionAfterBoundsOrMarginsChange() {
     guard
-      !scrollView.isDragging,
       let framesForVisibleMonths = visibleItemsDetails?.framesForVisibleMonths,
       let firstVisibleMonth = visibleMonthRange?.lowerBound,
       let frameOfFirstVisibleMonth = framesForVisibleMonths[firstVisibleMonth]
