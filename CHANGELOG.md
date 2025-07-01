@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a screen-pixel alignment issue
 - Fixed a performance issue caused by month headers recalculating their size too often
 - Fixed a performance issue caused by the item models for day ranges and month backgrounds not being cached
+- Fixed an issue that could cause the calendar to appear blank after rotating the device
 
 ### Changed
 - Rewrote accessibility code to avoid posting notifications, which causes poor Voice Over performance and odd focus bugs
