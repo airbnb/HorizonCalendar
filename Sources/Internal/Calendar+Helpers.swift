@@ -78,7 +78,7 @@ extension Calendar {
       year: component(.year, from: date),
       month: component(.month, from: date),
       isInGregorianCalendar: identifier == .gregorian)
-    return Day(month: month, day: component(.day, from: date))
+      return Day(month: month, day: component(.day, from: date))
   }
 
   func startDate(of day: Day) -> Date {

@@ -79,6 +79,17 @@ public final class CalendarViewProxy: ObservableObject {
       scrollPosition: scrollPosition,
       animated: animated)
   }
+  /// Scrolls the calendar to show today's date.
+  ///
+  /// If the calendar has a non-zero frame, this function will scroll to today immediately. Otherwise the scroll-to-day
+  /// action will be queued and executed once the calendar has a non-zero frame.
+  ///
+  /// - Parameters:
+  ///   - scrollPosition: The final position at which today should be situated in the scroll view.
+  ///   - animated: Whether the scroll should be animated (from the current position).
+  public func scrollToToday(scrollPosition: CalendarViewScrollPosition = .centered, animated: Bool = true) {
+        calendarView.scrollToToday(scrollPosition: scrollPosition, animated: animated)
+  }
 
   // MARK: Internal
 

@@ -102,8 +102,7 @@ extension DayRangeIndicatorView: CalendarItemViewRepresentable {
 
   static func makeView(
     withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> DayRangeIndicatorView
-  {
+    -> DayRangeIndicatorView {
     DayRangeIndicatorView(indicatorColor: invariantViewProperties.indicatorColor)
   }
 

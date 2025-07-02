@@ -18,7 +18,7 @@ import SwiftUI
 
 // MARK: - SwiftUIScreenDemoViewController
 
-final class SwiftUIScreenDemoViewController: UIViewController, DemoViewController {
+final class WeekdayOnlyDemoViewController: UIViewController, DemoViewController {
 
   // MARK: Lifecycle
 
@@ -39,10 +39,10 @@ final class SwiftUIScreenDemoViewController: UIViewController, DemoViewControlle
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    title = "SwiftUI Screen"
+    title = "Weekday Only Calendar"
 
     let hostingController = UIHostingController(
-      rootView: SwiftUIScreenDemo(calendar: calendar, monthsLayout: monthsLayout))
+      rootView: WeekdayOnlyDemoView(calendar: calendar, monthsLayout: monthsLayout))
     addChild(hostingController)
 
     view.addSubview(hostingController.view)
@@ -59,15 +59,16 @@ final class SwiftUIScreenDemoViewController: UIViewController, DemoViewControlle
 
 }
 
-// MARK: - SwiftUIScreenDemo
+// MARK: - WeekdayOnlyDemoView
 
-struct SwiftUIScreenDemo: View {
+struct WeekdayOnlyDemoView: View {
 
   // MARK: Lifecycle
 
   init(calendar: Calendar, monthsLayout: MonthsLayout) {
     self.calendar = calendar
     self.monthsLayout = monthsLayout
+      
 
     let startDate = calendar.date(from: DateComponents(year: 2023, month: 01, day: 01))!
     let endDate = calendar.date(from: DateComponents(year: 2026, month: 12, day: 31))!
@@ -90,7 +91,8 @@ struct SwiftUIScreenDemo: View {
       visibleDateRange: visibleDateRange,
       monthsLayout: monthsLayout,
       dataDependency: selectedDayRange,
-      proxy: calendarViewProxy)
+      proxy: calendarViewProxy,
+      visibleWeekdays: Set(2...6))
 
       .interMonthSpacing(24)
       .verticalDayMargin(8)
@@ -116,7 +118,7 @@ struct SwiftUIScreenDemo: View {
       }
 
       .days { day in
-          SwiftUIDayView(day: day, isSelected: isDaySelected(day))
+        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
       }
 
       .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
@@ -201,9 +203,9 @@ struct SwiftUIScreenDemo: View {
 
 // MARK: - SwiftUIScreenDemo_Previews
 
-struct SwiftUIScreenDemo_Previews: PreviewProvider {
+struct WeekdayOnlyDemoViewController_Previews: PreviewProvider {
   static var previews: some View {
-    SwiftUIScreenDemo(calendar: Calendar.current, monthsLayout: .vertical)
-    SwiftUIScreenDemo(calendar: Calendar.current, monthsLayout: .horizontal)
+      WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .vertical)
+      WeekdayOnlyDemoView(calendar: Calendar.current, monthsLayout: .horizontal)
   }
 }
