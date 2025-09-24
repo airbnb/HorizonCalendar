@@ -21,7 +21,7 @@ typealias DayRange = DayComponentsRange
 
 // MARK: - DayComponentsRange
 
-public typealias DayComponentsRange = ClosedRange<DayComponents>
+public typealias DayComponentsRange = ClosedRange<Day>
 
 extension DayComponentsRange {
 

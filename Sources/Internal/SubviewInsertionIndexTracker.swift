@@ -43,7 +43,9 @@ final class SubviewInsertionIndexTracker {
       index = pinnedDayOfWeekItemsEndIndex
     case .pinnedDaysOfWeekRowSeparator:
       index = pinnedDaysOfWeekRowSeparatorEndIndex
-    }
+    case .weekNumber(weekNumber: _, month: _):
+        index = weekNumberItemsEndIndex  
+      }
 
     addValue(1, toItemTypesAffectedBy: itemType)
 
@@ -65,71 +67,87 @@ final class SubviewInsertionIndexTracker {
   private var pinnedDaysOfWeekRowBackgroundEndIndex = 0
   private var pinnedDayOfWeekItemsEndIndex = 0
   private var pinnedDaysOfWeekRowSeparatorEndIndex = 0
+  private var weekNumberItemsEndIndex = 0
 
-  private func addValue(_ value: Int, toItemTypesAffectedBy itemType: VisibleItem.ItemType) {
-    switch itemType {
-    case .monthBackground:
-      monthBackgroundItemsEndIndex += value
-      dayRangeItemsEndIndex += value
-      mainItemsEndIndex += value
-      daysOfWeekRowSeparatorItemsEndIndex += value
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
 
-    case .dayBackground:
-      dayBackgroundItemsEndIndex += value
-      dayRangeItemsEndIndex += value
-      mainItemsEndIndex += value
-      daysOfWeekRowSeparatorItemsEndIndex += value
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .dayRange:
-      dayRangeItemsEndIndex += value
-      mainItemsEndIndex += value
-      daysOfWeekRowSeparatorItemsEndIndex += value
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .layoutItemType:
-      mainItemsEndIndex += value
-      daysOfWeekRowSeparatorItemsEndIndex += value
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .daysOfWeekRowSeparator:
-      daysOfWeekRowSeparatorItemsEndIndex += value
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .overlayItem:
-      overlayItemsEndIndex += value
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .pinnedDaysOfWeekRowBackground:
-      pinnedDaysOfWeekRowBackgroundEndIndex += value
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .pinnedDayOfWeek:
-      pinnedDayOfWeekItemsEndIndex += value
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-
-    case .pinnedDaysOfWeekRowSeparator:
-      pinnedDaysOfWeekRowSeparatorEndIndex += value
-    }
-  }
+      
+      private func addValue(_ value: Int, toItemTypesAffectedBy itemType: VisibleItem.ItemType) {
+        switch itemType {
+        case .monthBackground:
+          monthBackgroundItemsEndIndex += value
+          dayBackgroundItemsEndIndex += value
+          dayRangeItemsEndIndex += value
+          mainItemsEndIndex += value
+          daysOfWeekRowSeparatorItemsEndIndex += value
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .dayBackground:
+          dayBackgroundItemsEndIndex += value
+          dayRangeItemsEndIndex += value
+          mainItemsEndIndex += value
+          daysOfWeekRowSeparatorItemsEndIndex += value
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .dayRange:
+          dayRangeItemsEndIndex += value
+          mainItemsEndIndex += value
+          daysOfWeekRowSeparatorItemsEndIndex += value
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .layoutItemType:
+          mainItemsEndIndex += value
+          daysOfWeekRowSeparatorItemsEndIndex += value
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .daysOfWeekRowSeparator:
+          daysOfWeekRowSeparatorItemsEndIndex += value
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .overlayItem:
+          overlayItemsEndIndex += value
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .weekNumber(weekNumber: _, month: _):
+          weekNumberItemsEndIndex += value
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .pinnedDaysOfWeekRowBackground:
+          pinnedDaysOfWeekRowBackgroundEndIndex += value
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .pinnedDayOfWeek:
+          pinnedDayOfWeekItemsEndIndex += value
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+          
+        case .pinnedDaysOfWeekRowSeparator:
+          pinnedDaysOfWeekRowSeparatorEndIndex += value
+        }
+      }
 
 }

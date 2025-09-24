@@ -66,7 +66,7 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
       .dayItemProvider { [calendar, selectedDate] day in
         let date = calendar.date(from: day.components)
         let isSelected = date == selectedDate
-        return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+          return SwiftUIDayView(day: day, isSelected: isSelected).calendarItemModel
       }
   }
 

@@ -47,6 +47,7 @@ public final class CalendarView: UIView {
     content = initialContent
     super.init(frame: .zero)
     commonInit()
+      
   }
 
   required init?(coder: NSCoder) {
@@ -62,7 +63,7 @@ public final class CalendarView: UIView {
   /// A closure (that is retained) that is invoked whenever a day is selected. It is the responsibility of your feature code to decide what to
   /// do with each day. For example, you might store the most recent day in a selected day property, then read that property in your
   /// `dayItemProvider` closure to add specific "selected" styling to a particular day view.
-  public var daySelectionHandler: ((DayComponents) -> Void)?
+  public var daySelectionHandler: ((Day) -> Void)?
 
   /// A closure (that is retained) that is invoked inside `scrollViewDidScroll(_:)`
   public var didScroll: ((_ visibleDayRange: DayComponentsRange, _ isUserDragging: Bool) -> Void)?
@@ -77,7 +78,7 @@ public final class CalendarView: UIView {
   /// followed by a drag / pan. As the gesture crosses over more days in the calendar, this handler will be invoked with each new day. It
   /// is the responsibility of your feature code to decide what to do with this stream of days. For example, you might convert them to
   /// `Date` instances and use them as input to the `dayRangeItemProvider`.
-  public var multiDaySelectionDragHandler: ((DayComponents, UIGestureRecognizer.State) -> Void)? {
+  public var multiDaySelectionDragHandler: ((Day, UIGestureRecognizer.State) -> Void)? {
     didSet {
       configureMultiDaySelectionPanGestureRecognizer()
     }
@@ -114,7 +115,7 @@ public final class CalendarView: UIView {
         right: max(newValue.right, 0))
     }
   }
-
+    
   /// `CalendarView` only supports positive values for `directionalLayoutMargins`. Negative values will be changed to
   /// `0`.
   public override var directionalLayoutMargins: NSDirectionalEdgeInsets {
@@ -183,6 +184,17 @@ public final class CalendarView: UIView {
     let extendLayoutRegion = UIAccessibility.isVoiceOverRunning && initialItemViewWasFocused
 
     _layoutSubviews(extendLayoutRegion: extendLayoutRegion)
+  }
+  /// Scrolls the calendar to show today's date.
+  ///
+  /// If the calendar has a non-zero frame, this function will scroll to today immediately. Otherwise the scroll-to-day
+  /// action will be queued and executed once the calendar has a non-zero frame.
+  ///
+  /// - Parameters:
+  ///   - scrollPosition: The final position at which today should be situated in the scroll view.
+  ///   - animated: Whether the scroll should be animated (from the current position).
+  public func scrollToToday(scrollPosition: CalendarViewScrollPosition = .centered, animated: Bool = true) {
+        scroll(toDayContaining: Date(), scrollPosition: scrollPosition, animated: animated)
   }
 
   /// Sets the content of the `CalendarView`, causing it to re-render, with no animation.
