@@ -68,11 +68,19 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
 
   public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
     // `_UIHostingView`'s `isUserInteractionEnabled` is not affected by the `allowsHitTesting`
-    // modifier. Its first subview's `isUserInteractionEnabled` _does_ appear to be affected by the
+    // modifier.
+    // Prior to iOS 26, the first subview `isUserInteractionEnabled` _does_ appear to be affected by the
     // `allowsHitTesting` modifier, enabling us to properly ignore touch handling.
+    // Starting with iOS 26, we can check the first sublayer's `allowHitTesting` property.
     if
       let firstSubview = hostingControllerView.subviews.first,
       !firstSubview.isUserInteractionEnabled
+    {
+      return false
+    } else if
+      let firstSublayer = hostingControllerView.layer.sublayers?.first,
+      let allowsHitTesting = firstSublayer.value(forKey: "allowsHitTesting") as? Bool,
+      !allowsHitTesting
     {
       return false
     } else {
