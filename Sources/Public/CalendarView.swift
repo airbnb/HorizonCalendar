@@ -532,6 +532,13 @@ public final class CalendarView: UIView {
     return false
   }()
 
+  /// Checks if DisplayLink animations should be disabled for testing purposes.
+  /// Set the environment variable `HORIZON_CALENDAR_DISABLE_DISPLAY_LINK=true` to disable
+  /// DisplayLink animations during accessibility testing or other UI tests.
+  private var shouldDisableDisplayLink: Bool {
+    ProcessInfo.processInfo.environment["HORIZON_CALENDAR_DISABLE_DISPLAY_LINK"] == "true"
+  }
+
   private var initialItemViewWasFocused = false {
     didSet {
       guard initialItemViewWasFocused != oldValue else { return }
@@ -833,6 +840,15 @@ public final class CalendarView: UIView {
   }
 
   private func startScrollingTowardTargetItem() {
+    // Skip DisplayLink setup if test mode is enabled
+    guard !shouldDisableDisplayLink else {
+      // Perform immediate scroll without animation when DisplayLink is disabled
+      if let scrollToItemContext {
+        finalizeScrollingTowardItem(for: scrollToItemContext)
+      }
+      return
+    }
+
     let scrollToItemDisplayLink = CADisplayLink(
       target: self,
       selector: #selector(scrollToItemDisplayLinkFired))
@@ -1040,6 +1056,9 @@ public final class CalendarView: UIView {
   private func updateAutoScrollingState(gestureRecognizer: UIGestureRecognizer) {
     func enableAutoScroll(offset: CGFloat) {
       autoScrollOffset = offset
+
+      // Skip DisplayLink setup if test mode is enabled
+      guard !shouldDisableDisplayLink else { return }
 
       if autoScrollDisplayLink == nil {
         let autoScrollDisplayLink = CADisplayLink(
