@@ -65,6 +65,8 @@ Features:
       - [Adding a day range indicator](#adding-a-day-range-indicator)
       - [Adding grid lines](#adding-grid-lines)
     - [Responding to day selection](#responding-to-day-selection)
+- [Testing](#testing)
+  - [Accessibility Testing](#accessibility-testing)
 - [Technical Details](#technical-details)
 - [Contributions](#contributions)
 - [Authors](#authors)
@@ -742,6 +744,46 @@ If you're building a date picker, you'll most likely need to respond to the user
 After building and running the app, tapping days should cause them to turn blue:
 
 <img width="250" alt="Day Selection Screenshot" src="Docs/Images/tutorial_day_selection.png">
+
+## Testing
+
+### Accessibility Testing
+
+If you're using accessibility testing frameworks like GTXiLib or performing automated UI testing, you may encounter issues with `CalendarView`'s DisplayLink 
+animations. To disable DisplayLink during tests, set the `HORIZON_CALENDAR_DISABLE_DISPLAY_LINK` environment variable to `true`.
+
+#### XCTest
+
+Add the environment variable to your test scheme:
+
+1. Edit your test scheme in Xcode
+2. Go to Test → Arguments → Environment Variables
+3. Add `HORIZON_CALENDAR_DISABLE_DISPLAY_LINK` = `true`
+
+Or set it programmatically in your test setup:
+```swift
+override func setUp() {
+  super.setUp()
+  setenv("HORIZON_CALENDAR_DISABLE_DISPLAY_LINK", "true", 1)
+}
+```
+
+#### Launch Arguments
+
+When launching your app for testing, pass the environment variable:
+```swift
+let app = XCUIApplication()
+app.launchEnvironment = ["HORIZON_CALENDAR_DISABLE_DISPLAY_LINK": "true"]
+app.launch()
+```
+
+#### Why This Helps
+
+CalendarView uses `CADisplayLink` for smooth scroll animations. During accessibility testing, DisplayLink callbacks can fire before the view hierarchy is fully 
+initialized, causing crashes. Disabling DisplayLink in test mode prevents these crashes while still allowing you to test the calendar's accessibility features.
+
+**Note:** When DisplayLink is disabled, scroll animations will complete immediately without animation. This is expected behavior in test mode and doesn't affect the 
+calendar's functionality or accessibility testing.
 
 ## Technical Details
 If you'd like to learn about how `HorizonCalendar` was implemented, check out the [Technical Details](Docs/TECHNICAL_DETAILS.md) document. It provides an overview of `HorizonCalendar`'s architecture, along with information about why it's not implemented using `UICollectionView`. 
