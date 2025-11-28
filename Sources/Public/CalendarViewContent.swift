@@ -23,6 +23,7 @@ import UIKit
 /// range to display, and a months layout to indicate whether months should be laid out vertically or horizontally. All other properties
 /// have default values.
 public final class CalendarViewContent {
+    public var visibleWeekdays: Set<Int>
 
   // MARK: Lifecycle
 
@@ -37,8 +38,10 @@ public final class CalendarViewContent {
   public init(
     calendar: Calendar = Calendar.current,
     visibleDateRange: ClosedRange<Date>,
-    monthsLayout: MonthsLayout)
+    monthsLayout: MonthsLayout,
+    visibleWeekdays: Set<Int>? = nil)
   {
+      self.visibleWeekdays = visibleWeekdays ?? Set<Int>(1...7)
     self.calendar = calendar
     monthRange = MonthRange(containing: visibleDateRange, in: calendar)
     self.monthsLayout = monthsLayout
@@ -65,6 +68,7 @@ public final class CalendarViewContent {
     dayOfWeekItemProvider = defaultDayOfWeekItemProvider
     dayItemProvider = defaultDayItemProvider
   }
+    
 
   // MARK: Public
 
@@ -87,6 +91,28 @@ public final class CalendarViewContent {
       validAspectRatioRange.upperBound)
     return self
   }
+    /// Configures whether week numbers should be displayed.
+    ///
+    /// - Parameters:
+    ///   - show: Whether to show week numbers to the left of each week.
+    ///   - textColor: The text color of the week numbers.
+    ///   - width: The width allocated for week numbers.
+    /// - Returns: A copy of this `CalendarViewContent` instance with week number settings updated.
+    public func showWeekNumbers(_ show: Bool, textColor: UIColor = .gray, width: CGFloat = 25) -> CalendarViewContent {
+        var content = self
+        content.showWeekNumbers = show
+        content.weekNumberTextColor = textColor
+        content.weekNumberWidth = width
+        
+        // If we're showing week numbers, make sure there's enough left margin
+        if show {
+            var updatedInsets = content.monthDayInsets
+            updatedInsets.leading = max(updatedInsets.leading, width + 5)
+            content.monthDayInsets = updatedInsets
+        }
+        
+        return content
+    }
 
   /// Configures the aspect ratio of each day of the week.
   ///
@@ -242,28 +268,40 @@ public final class CalendarViewContent {
   /// or background, by including it in the view that your `CalendarItemModel` creates.
   ///
   /// If you don't configure your own day item provider via this function, or if the `dayItemProvider` closure
-  /// returns nil, then a default day item provider will be used.
+  /// returns nil, then a default day item provider will be used. If a day is invalid, an emptyDayView is provided.
+  ///
   ///
   /// - Parameters:
   ///   - dayItemProvider: A closure (that is retained) that returns a `CalendarItemModel` representing a single day
   ///   in the calendar.
   ///   - day: The `Day` for which to provide a day item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day item provider.
-  public func dayItemProvider(
-    _ dayItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
-    -> CalendarViewContent
-  {
-    self.dayItemProvider = { [defaultDayItemProvider] day in
-      guard let itemModel = dayItemProvider(day) else {
-        // If the caller returned nil, fall back to the default item provider
-        return defaultDayItemProvider(day)
+    public func dayItemProvider(
+        _ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
+        -> CalendarViewContent
+      {
+        self.dayItemProvider = { [calendar, visibleWeekdays, defaultDayItemProvider] day in
+          // Get weekday for the current day
+          let date = calendar.date(from: day.components)!
+          let weekday = calendar.component(.weekday, from: date)
+          
+          // Return empty view for invisible weekdays
+          guard visibleWeekdays.contains(weekday) else {
+            return EmptyDayView.calendarItemModel(
+              invariantViewProperties: .standard,
+              content: .init())
+          }
+          
+          // Use provided or default provider for visible days
+          guard let itemModel = dayItemProvider(day) else {
+            return defaultDayItemProvider(day)
+          }
+          
+          return itemModel
+        }
+        
+        return self
       }
-
-      return itemModel
-    }
-
-    return self
-  }
 
   /// Configures the day background item provider.
   ///
@@ -279,7 +317,7 @@ public final class CalendarViewContent {
   ///   - day: The `Day` for which to provide a day background item.
   /// - Returns: A mutated `CalendarViewContent` instance with a new day background item provider.
   public func dayBackgroundItemProvider(
-    _ dayBackgroundItemProvider: @escaping (_ day: DayComponents) -> AnyCalendarItemModel?)
+    _ dayBackgroundItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?)
     -> CalendarViewContent
   {
     self.dayBackgroundItemProvider = dayBackgroundItemProvider
@@ -374,6 +412,7 @@ public final class CalendarViewContent {
   }
 
   // MARK: Internal
+    
 
   let calendar: Calendar
   let dayRange: DayRange
@@ -387,6 +426,7 @@ public final class CalendarViewContent {
   private(set) var verticalDayMargin: CGFloat = 0
   private(set) var horizontalDayMargin: CGFloat = 0
   private(set) var daysOfTheWeekRowSeparatorOptions: DaysOfTheWeekRowSeparatorOptions?
+    
 
   private(set) var monthHeaderItemProvider: (Month) -> AnyCalendarItemModel
   private(set) var dayOfWeekItemProvider: (
@@ -402,7 +442,12 @@ public final class CalendarViewContent {
   private(set) var overlaidItemLocationsAndItemProvider: (
     overlaidItemLocations: Set<OverlaidItemLocation>,
     overlayItemProvider: (OverlayLayoutContext) -> AnyCalendarItemModel)?
+  private(set) var showWeekNumbers: Bool = false
+  private(set) var weekNumberTextColor: UIColor = .gray
+  private(set) var weekNumberWidth: CGFloat = 25
 
+    
+    
   // MARK: Private
 
   /// The default `monthHeaderItemProvider` if no provider has been configured,
@@ -465,4 +510,34 @@ public final class CalendarViewContent {
     return dayDateFormatter
   }()
 
+}
+
+
+final class EmptyDayView: UIView, CalendarItemViewRepresentable {
+    static func setContent(_ content: Content, on view: EmptyDayView) {
+        
+    }
+    
+  
+  struct InvariantViewProperties: Hashable {
+    static let standard = InvariantViewProperties()
+  }
+  
+  struct Content: Hashable { }
+  
+  static func makeView(withInvariantViewProperties: InvariantViewProperties) -> EmptyDayView {
+    EmptyDayView()
+  }
+  
+  func setContent(_ content: Content, animated: Bool) { }
+  
+  init() {
+    super.init(frame: .zero)
+    isUserInteractionEnabled = false
+    isHidden = true
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 }

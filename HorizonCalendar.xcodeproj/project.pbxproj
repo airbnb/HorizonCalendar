@@ -3,23 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */; };
+		645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */; };
 		9321957E26EEB44C0001C7E9 /* DayOfWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */; };
 		9321958026EEB6330001C7E9 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321957F26EEB6330001C7E9 /* Shape.swift */; };
 		9321958226EEB6AB0001C7E9 /* DrawingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */; };
 		9321958426EEB97F0001C7E9 /* MonthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */; };
-		9325F43825C1054600E3BFB8 /* PaginationHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9325F43725C1054600E3BFB8 /* PaginationHelpersTests.swift */; };
-		932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */; };
 		932FC00E26ED5191005E39A6 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FC00D26ED5191005E39A6 /* DayView.swift */; };
 		933992992736562D00C80380 /* DoubleLayoutPassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */; };
 		938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */; };
 		938DA41124BEFFCB008A3B47 /* AnyCalendarItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 938DA41024BEFFCB008A3B47 /* AnyCalendarItemModel.swift */; };
 		9391F15625C097DF001D14A2 /* PaginationHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9391F15525C097DF001D14A2 /* PaginationHelpers.swift */; };
-		9396F3CC2483261B008AD306 /* HorizonCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9396F3C22483261B008AD306 /* HorizonCalendar.framework */; };
 		9396F3DD24832715008AD306 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9396F3DC24832715008AD306 /* README.md */; };
 		9396F3DF248327C2008AD306 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9396F3DE248327C2008AD306 /* LICENSE */; };
 		939E692424837E0300A8BCC7 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E691724837E0200A8BCC7 /* CalendarView.swift */; };
@@ -43,22 +40,13 @@
 		939E694224846EB400A8BCC7 /* DayRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694124846EB400A8BCC7 /* DayRange.swift */; };
 		939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */; };
 		939E694624847BA300A8BCC7 /* DayOfWeekPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */; };
-		939E69582484B21400A8BCC7 /* FrameProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */; };
-		939E69592484B21700A8BCC7 /* LayoutItemTypeEnumeratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694C2484B14400A8BCC7 /* LayoutItemTypeEnumeratorTests.swift */; };
-		939E695A2484B21E00A8BCC7 /* ScreenPixelAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694B2484B14400A8BCC7 /* ScreenPixelAlignmentTests.swift */; };
-		939E695B2484B22200A8BCC7 /* ScrollMetricsMutatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694E2484B14500A8BCC7 /* ScrollMetricsMutatorTests.swift */; };
-		939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */; };
-		939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939E69492484B14400A8BCC7 /* MonthTests.swift */; };
-		93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */; };
 		93A361F4248332AE00E6544A /* ScreenPixelAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */; };
 		93E24A70249D915900B856F7 /* CONTRIBUTING.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A56249D915900B856F7 /* CONTRIBUTING.md */; };
 		93E24A71249D915900B856F7 /* TECHNICAL_DETAILS.md in Resources */ = {isa = PBXBuildFile; fileRef = 93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */; };
-		93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */; };
-		93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */; };
-		93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */; };
-		93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */; };
+		AA79A7F52D7508B600C07DD0 /* HorizonCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9396F3C22483261B008AD306 /* HorizonCalendar.framework */; };
+		AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BD612D73A7FF0076E283 /* DayComponents.swift */; };
+		AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */; };
 		FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */; };
-		FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */; };
 		FD2C7DC52922C75800B54C1D /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = FD2C7DC42922C75700B54C1D /* CHANGELOG.md */; };
 		FD33BADE2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */; };
 		FD3D9B6128ED2C1500CC6D62 /* UIView+NoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */; };
@@ -77,7 +65,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9396F3CD2483261B008AD306 /* PBXContainerItemProxy */ = {
+		AA79A7F62D7508B600C07DD0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9396F3B92483261B008AD306 /* Project object */;
 			proxyType = 1;
@@ -87,13 +75,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentTests.swift; sourceTree = "<group>"; };
+		645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekNumberView.swift; sourceTree = "<group>"; };
 		9321957D26EEB44C0001C7E9 /* DayOfWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekView.swift; sourceTree = "<group>"; };
 		9321957F26EEB6330001C7E9 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		9321958126EEB6AB0001C7E9 /* DrawingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingConfig.swift; sourceTree = "<group>"; };
 		9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHeaderView.swift; sourceTree = "<group>"; };
-		9325F43725C1054600E3BFB8 /* PaginationHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationHelpersTests.swift; sourceTree = "<group>"; };
-		932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMonthsLayoutOptionsTests.swift; sourceTree = "<group>"; };
 		932FC00D26ED5191005E39A6 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		933992982736562C00C80380 /* DoubleLayoutPassHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleLayoutPassHelpers.swift; sourceTree = "<group>"; };
 		938DA40E24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarItemViewRepresentable.swift; sourceTree = "<group>"; };
@@ -101,8 +87,6 @@
 		9391F15525C097DF001D14A2 /* PaginationHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationHelpers.swift; sourceTree = "<group>"; };
 		9396F3C22483261B008AD306 /* HorizonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HorizonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9396F3C62483261B008AD306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9396F3CB2483261B008AD306 /* HorizonCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HorizonCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9396F3D22483261B008AD306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9396F3DC24832715008AD306 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9396F3DE248327C2008AD306 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		939E691724837E0200A8BCC7 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -126,22 +110,13 @@
 		939E694124846EB400A8BCC7 /* DayRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRange.swift; sourceTree = "<group>"; };
 		939E69432484784D00A8BCC7 /* Calendar+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Helpers.swift"; sourceTree = "<group>"; };
 		939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPosition.swift; sourceTree = "<group>"; };
-		939E69492484B14400A8BCC7 /* MonthTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
-		939E694B2484B14400A8BCC7 /* ScreenPixelAlignmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignmentTests.swift; sourceTree = "<group>"; };
-		939E694C2484B14400A8BCC7 /* LayoutItemTypeEnumeratorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutItemTypeEnumeratorTests.swift; sourceTree = "<group>"; };
-		939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibleItemsProviderTests.swift; sourceTree = "<group>"; };
-		939E694E2484B14500A8BCC7 /* ScrollMetricsMutatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollMetricsMutatorTests.swift; sourceTree = "<group>"; };
-		939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameProviderTests.swift; sourceTree = "<group>"; };
-		93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewReuseManagerTests.swift; sourceTree = "<group>"; };
 		93A361F3248332AE00E6544A /* ScreenPixelAlignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenPixelAlignment.swift; sourceTree = "<group>"; };
 		93E24A56249D915900B856F7 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		93E24A57249D915900B856F7 /* TECHNICAL_DETAILS.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TECHNICAL_DETAILS.md; sourceTree = "<group>"; };
-		93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHelperTests.swift; sourceTree = "<group>"; };
-		93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHelperTests.swift; sourceTree = "<group>"; };
-		93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekPositionTests.swift; sourceTree = "<group>"; };
-		93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthRowTests.swift; sourceTree = "<group>"; };
+		AA79A7F12D7508B600C07DD0 /* HorizonCalendarTests [Rec].xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HorizonCalendarTests [Rec].xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA92BD612D73A7FF0076E283 /* DayComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayComponents.swift; sourceTree = "<group>"; };
+		AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRangeSelectionHelper.swift; sourceTree = "<group>"; };
 		FD05F0D42A1F1AB300E6ACB0 /* CalendarViewProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewProxy.swift; sourceTree = "<group>"; };
-		FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubviewsManagerTests.swift; sourceTree = "<group>"; };
 		FD2C7DC42922C75700B54C1D /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		FD33BADD2A7249D600C1DA27 /* CGFloat+MaxLayoutValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+MaxLayoutValue.swift"; sourceTree = "<group>"; };
 		FD3D9B6028ED2C1500CC6D62 /* UIView+NoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NoAnimation.swift"; sourceTree = "<group>"; };
@@ -159,6 +134,10 @@
 		FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA79A7F22D7508B600C07DD0 /* HorizonCalendarTests [Rec] */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "HorizonCalendarTests [Rec]"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		9396F3BF2483261B008AD306 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -167,11 +146,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9396F3C82483261B008AD306 /* Frameworks */ = {
+		AA79A7EE2D7508B600C07DD0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9396F3CC2483261B008AD306 /* HorizonCalendar.framework in Frameworks */,
+				AA79A7F52D7508B600C07DD0 /* HorizonCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +167,7 @@
 				9321958326EEB97F0001C7E9 /* MonthHeaderView.swift */,
 				9321957F26EEB6330001C7E9 /* Shape.swift */,
 				FDE2893B28F8A6D50020EBF1 /* SwiftUIWrapperView.swift */,
+				645FFEFD2D73AF53002EE721 /* WeekNumberView.swift */,
 			);
 			path = ItemViews;
 			sourceTree = "<group>";
@@ -201,7 +181,7 @@
 				9396F3DE248327C2008AD306 /* LICENSE */,
 				9396F3C62483261B008AD306 /* Info.plist */,
 				9396F3C42483261B008AD306 /* Sources */,
-				9396F3CF2483261B008AD306 /* Tests */,
+				AA79A7F22D7508B600C07DD0 /* HorizonCalendarTests [Rec] */,
 				9396F3C32483261B008AD306 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -210,7 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				9396F3C22483261B008AD306 /* HorizonCalendar.framework */,
-				9396F3CB2483261B008AD306 /* HorizonCalendarTests.xctest */,
+				AA79A7F12D7508B600C07DD0 /* HorizonCalendarTests [Rec].xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -222,29 +202,6 @@
 				9396F3E12483285D008AD306 /* Internal */,
 			);
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		9396F3CF2483261B008AD306 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				93FA64ED248D7B0100A8B7B1 /* DayHelperTests.swift */,
-				93FA64EF248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift */,
-				939E694F2484B14500A8BCC7 /* FrameProviderTests.swift */,
-				932E24132558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift */,
-				93A0062B24F206BE00F667A3 /* ItemViewReuseManagerTests.swift */,
-				939E694C2484B14400A8BCC7 /* LayoutItemTypeEnumeratorTests.swift */,
-				93FA64EB248CDD3E00A8B7B1 /* MonthHelperTests.swift */,
-				93FA64F1248D93EA00A8B7B1 /* MonthRowTests.swift */,
-				939E69492484B14400A8BCC7 /* MonthTests.swift */,
-				9325F43725C1054600E3BFB8 /* PaginationHelpersTests.swift */,
-				939E694B2484B14400A8BCC7 /* ScreenPixelAlignmentTests.swift */,
-				939E694E2484B14500A8BCC7 /* ScrollMetricsMutatorTests.swift */,
-				FD264F86294B260B00B13C97 /* SubviewsManagerTests.swift */,
-				939E694D2484B14400A8BCC7 /* VisibleItemsProviderTests.swift */,
-				9396F3D22483261B008AD306 /* Info.plist */,
-				086333AE2AB8D34700CC6125 /* CalendarContentTests.swift */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		9396F3E024832857008AD306 /* Public */ = {
@@ -260,10 +217,12 @@
 				FD6E1D192991C50100B480A6 /* CalendarViewRepresentable.swift */,
 				939E693324837E8700A8BCC7 /* CalendarViewScrollPosition.swift */,
 				939E693F24846A8C00A8BCC7 /* Day.swift */,
+				AA92BD612D73A7FF0076E283 /* DayComponents.swift */,
 				FD6E1CF5298D94DC00B480A6 /* DaysOfTheWeekRowSeparatorOptions.swift */,
 				939E694524847BA300A8BCC7 /* DayOfWeekPosition.swift */,
 				939E694124846EB400A8BCC7 /* DayRange.swift */,
 				FD6E1CF9298D94DC00B480A6 /* DayRangeLayoutContext.swift */,
+				AA92BDA22D7418470076E283 /* DayRangeSelectionHelper.swift */,
 				939E693D24846A6600A8BCC7 /* Month.swift */,
 				939E693424837E8700A8BCC7 /* MonthsLayout.swift */,
 				FD6E1CF7298D94DC00B480A6 /* MonthLayoutContext.swift */,
@@ -341,22 +300,27 @@
 			productReference = 9396F3C22483261B008AD306 /* HorizonCalendar.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		9396F3CA2483261B008AD306 /* HorizonCalendarTests */ = {
+		AA79A7F02D7508B600C07DD0 /* HorizonCalendarTests [Rec] */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9396F3D92483261B008AD306 /* Build configuration list for PBXNativeTarget "HorizonCalendarTests" */;
+			buildConfigurationList = AA79A7F82D7508B600C07DD0 /* Build configuration list for PBXNativeTarget "HorizonCalendarTests [Rec]" */;
 			buildPhases = (
-				9396F3C72483261B008AD306 /* Sources */,
-				9396F3C82483261B008AD306 /* Frameworks */,
-				9396F3C92483261B008AD306 /* Resources */,
+				AA79A7ED2D7508B600C07DD0 /* Sources */,
+				AA79A7EE2D7508B600C07DD0 /* Frameworks */,
+				AA79A7EF2D7508B600C07DD0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				9396F3CE2483261B008AD306 /* PBXTargetDependency */,
+				AA79A7F72D7508B600C07DD0 /* PBXTargetDependency */,
 			);
-			name = HorizonCalendarTests;
-			productName = HorizonCalendarTests;
-			productReference = 9396F3CB2483261B008AD306 /* HorizonCalendarTests.xctest */;
+			fileSystemSynchronizedGroups = (
+				AA79A7F22D7508B600C07DD0 /* HorizonCalendarTests [Rec] */,
+			);
+			name = "HorizonCalendarTests [Rec]";
+			packageProductDependencies = (
+			);
+			productName = "HorizonCalendarTests [Rec]";
+			productReference = AA79A7F12D7508B600C07DD0 /* HorizonCalendarTests [Rec].xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -365,7 +329,7 @@
 		9396F3B92483261B008AD306 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Airbnb;
 				TargetAttributes = {
@@ -373,8 +337,8 @@
 						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
 					};
-					9396F3CA2483261B008AD306 = {
-						CreatedOnToolsVersion = 11.5;
+					AA79A7F02D7508B600C07DD0 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -392,7 +356,7 @@
 			projectRoot = "";
 			targets = (
 				9396F3C12483261B008AD306 /* HorizonCalendar */,
-				9396F3CA2483261B008AD306 /* HorizonCalendarTests */,
+				AA79A7F02D7508B600C07DD0 /* HorizonCalendarTests [Rec] */,
 			);
 		};
 /* End PBXProject section */
@@ -410,7 +374,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9396F3C92483261B008AD306 /* Resources */ = {
+		AA79A7EF2D7508B600C07DD0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -433,6 +397,8 @@
 				939E692724837E0300A8BCC7 /* VisibleItemsProvider.swift in Sources */,
 				939E693024837E0300A8BCC7 /* FrameProvider.swift in Sources */,
 				939E693724837E8700A8BCC7 /* CalendarItemModel.swift in Sources */,
+				645FFEFE2D73AF53002EE721 /* WeekNumberView.swift in Sources */,
+				AA92BDA32D7418470076E283 /* DayRangeSelectionHelper.swift in Sources */,
 				938DA40F24BEEB1A008A3B47 /* CalendarItemViewRepresentable.swift in Sources */,
 				9321958026EEB6330001C7E9 /* Shape.swift in Sources */,
 				939E692924837E0300A8BCC7 /* VisibleItem.swift in Sources */,
@@ -463,6 +429,7 @@
 				939E692624837E0300A8BCC7 /* ScrollMetricsMutator.swift in Sources */,
 				939E694224846EB400A8BCC7 /* DayRange.swift in Sources */,
 				939E69442484784D00A8BCC7 /* Calendar+Helpers.swift in Sources */,
+				AA92BD622D73A7FF0076E283 /* DayComponents.swift in Sources */,
 				FD05F0D52A1F1AB300E6ACB0 /* CalendarViewProxy.swift in Sources */,
 				FD6E1CFC298D94DC00B480A6 /* MonthLayoutContext.swift in Sources */,
 				939E692824837E0300A8BCC7 /* ItemView.swift in Sources */,
@@ -473,35 +440,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9396F3C72483261B008AD306 /* Sources */ = {
+		AA79A7ED2D7508B600C07DD0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				939E69582484B21400A8BCC7 /* FrameProviderTests.swift in Sources */,
-				93FA64EC248CDD3E00A8B7B1 /* MonthHelperTests.swift in Sources */,
-				93FA64F0248D84FE00A8B7B1 /* DayOfWeekPositionTests.swift in Sources */,
-				939E695D2484B22A00A8BCC7 /* MonthTests.swift in Sources */,
-				939E695A2484B21E00A8BCC7 /* ScreenPixelAlignmentTests.swift in Sources */,
-				93FA64EE248D7B0100A8B7B1 /* DayHelperTests.swift in Sources */,
-				939E695B2484B22200A8BCC7 /* ScrollMetricsMutatorTests.swift in Sources */,
-				939E695C2484B22600A8BCC7 /* VisibleItemsProviderTests.swift in Sources */,
-				93A0062C24F206BE00F667A3 /* ItemViewReuseManagerTests.swift in Sources */,
-				086333B02AB8D36900CC6125 /* CalendarContentTests.swift in Sources */,
-				939E69592484B21700A8BCC7 /* LayoutItemTypeEnumeratorTests.swift in Sources */,
-				93FA64F2248D93EA00A8B7B1 /* MonthRowTests.swift in Sources */,
-				932E24142558DF6E001648D2 /* HorizontalMonthsLayoutOptionsTests.swift in Sources */,
-				FD264F87294B260B00B13C97 /* SubviewsManagerTests.swift in Sources */,
-				9325F43825C1054600E3BFB8 /* PaginationHelpersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9396F3CE2483261B008AD306 /* PBXTargetDependency */ = {
+		AA79A7F72D7508B600C07DD0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9396F3C12483261B008AD306 /* HorizonCalendar */;
-			targetProxy = 9396F3CD2483261B008AD306 /* PBXContainerItemProxy */;
+			targetProxy = AA79A7F62D7508B600C07DD0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -697,41 +649,44 @@
 			};
 			name = Release;
 		};
-		9396F3DA2483261B008AD306 /* Debug */ = {
+		AA79A7F92D7508B600C07DD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Q5SGQT2R4;
-				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendarTests;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.airbnb.HorizonCalendar.HorizonCalendarTests--Rec-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		9396F3DB2483261B008AD306 /* Release */ = {
+		AA79A7FA2D7508B600C07DD0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Q5SGQT2R4;
-				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.HorizonCalendarTests;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.airbnb.HorizonCalendar.HorizonCalendarTests--Rec-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -758,11 +713,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9396F3D92483261B008AD306 /* Build configuration list for PBXNativeTarget "HorizonCalendarTests" */ = {
+		AA79A7F82D7508B600C07DD0 /* Build configuration list for PBXNativeTarget "HorizonCalendarTests [Rec]" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9396F3DA2483261B008AD306 /* Debug */,
-				9396F3DB2483261B008AD306 /* Release */,
+				AA79A7F92D7508B600C07DD0 /* Debug */,
+				AA79A7FA2D7508B600C07DD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

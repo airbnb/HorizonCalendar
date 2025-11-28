@@ -16,14 +16,14 @@
 import HorizonCalendar
 import UIKit
 
-final class DayRangeSelectionDemoViewController: BaseDemoViewController {
+final class WeekNumberDemoViewController: BaseDemoViewController {
 
   // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    title = "Day Range Selection"
+    title = "Week Numbers showing"
 
     calendarView.daySelectionHandler = { [weak self] day in
       guard let self else { return }
@@ -69,12 +69,11 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
       calendar: calendar,
       visibleDateRange: startDate...endDate,
       monthsLayout: monthsLayout)
-      
 
       .interMonthSpacing(24)
       .verticalDayMargin(8)
       .horizontalDayMargin(8)
-      
+      .showWeekNumbers(true, textColor: .systemBlue, width: 30)
 
       .dayItemProvider { [calendar, dayDateFormatter] day in
         var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
@@ -115,3 +114,4 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
   private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
 
 }
+
