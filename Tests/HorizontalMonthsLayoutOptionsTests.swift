@@ -23,11 +23,13 @@ final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 0) == 100,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 10) == 90,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
   }
 
   func testMonthWidthOneAndAHalfVisibleMonths() {
@@ -35,11 +37,13 @@ final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
 
     XCTAssert(
       options.monthWidth(calendarWidth: 120, interMonthSpacing: 0) == 80,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
 
     XCTAssert(
       options.monthWidth(calendarWidth: 120, interMonthSpacing: 10) == 70,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
   }
 
   func testMonthWidthFourVisibleMonths() {
@@ -47,11 +51,13 @@ final class HorizontalMonthsLayoutOptionsTests: XCTestCase {
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 0) == 25,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
 
     XCTAssert(
       options.monthWidth(calendarWidth: 100, interMonthSpacing: 10) == 15,
-      "Incorrect month width")
+      "Incorrect month width"
+    )
   }
 
 }

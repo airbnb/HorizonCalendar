@@ -42,15 +42,17 @@ public struct MonthLayoutContext: Hashable {
   /// coordinate system of this.
   public let bounds: CGRect
 
-  public static func == (lhs: MonthLayoutContext, rhs: MonthLayoutContext) -> Bool {
+  public static func ==(lhs: MonthLayoutContext, rhs: MonthLayoutContext) -> Bool {
     lhs.month == rhs.month &&
       lhs.monthHeaderFrame == rhs.monthHeaderFrame &&
       lhs.dayOfWeekPositionsAndFrames.elementsEqual(
         rhs.dayOfWeekPositionsAndFrames,
-        by: { $0.dayOfWeekPosition == $1.dayOfWeekPosition && $0.frame == $1.frame }) &&
+        by: { $0.dayOfWeekPosition == $1.dayOfWeekPosition && $0.frame == $1.frame }
+      ) &&
       lhs.daysAndFrames.elementsEqual(
         rhs.daysAndFrames,
-        by: { $0.day == $1.day && $0.frame == $0.frame }) &&
+        by: { $0.day == $1.day && $0.frame == $0.frame }
+      ) &&
       lhs.bounds == rhs.bounds
   }
 

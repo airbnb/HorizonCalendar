@@ -42,7 +42,8 @@ final class SwiftUIScreenDemoViewController: UIViewController, DemoViewControlle
     title = "SwiftUI Screen"
 
     let hostingController = UIHostingController(
-      rootView: SwiftUIScreenDemo(calendar: calendar, monthsLayout: monthsLayout))
+      rootView: SwiftUIScreenDemo(calendar: calendar, monthsLayout: monthsLayout)
+    )
     addChild(hostingController)
 
     view.addSubview(hostingController.view)
@@ -79,7 +80,8 @@ struct SwiftUIScreenDemo: View {
     monthDateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "MMMM yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: calendar.locale ?? Locale.current
+    )
   }
 
   // MARK: Internal
@@ -90,97 +92,104 @@ struct SwiftUIScreenDemo: View {
       visibleDateRange: visibleDateRange,
       monthsLayout: monthsLayout,
       dataDependency: selectedDayRange,
-      proxy: calendarViewProxy)
+      proxy: calendarViewProxy
+    )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
-
-      .monthHeaders { month in
-        let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
-        Group {
-          if case .vertical = monthsLayout {
-            HStack {
-              Text(monthHeaderText)
-                .font(.title2)
-              Spacer()
-            }
-            .padding()
-          } else {
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+    .monthHeaders { month in
+      let monthHeaderText = monthDateFormatter.string(from: calendar.date(from: month.components)!)
+      Group {
+        if case .vertical = monthsLayout {
+          HStack {
             Text(monthHeaderText)
               .font(.title2)
-              .padding()
+            Spacer()
           }
+          .padding()
+        } else {
+          Text(monthHeaderText)
+            .font(.title2)
+            .padding()
         }
-        .accessibilityAddTraits(.isHeader)
       }
+      .accessibilityAddTraits(.isHeader)
+    }
 
-      .days { day in
-        SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
-      }
+    .days { day in
+      SwiftUIDayView(dayNumber: day.day, isSelected: isDaySelected(day))
+    }
 
-      .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
-        let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
-        // UIKit view
-        return DayRangeIndicatorView.calendarItemModel(
-          invariantViewProperties: .init(),
-          content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight))
-      }
+    .dayRangeItemProvider(for: selectedDateRanges) { dayRangeLayoutContext in
+      let framesOfDaysToHighlight = dayRangeLayoutContext.daysAndFrames.map { $0.frame }
+      // UIKit view
+      return DayRangeIndicatorView.calendarItemModel(
+        invariantViewProperties: .init(),
+        content: .init(framesOfDaysToHighlight: framesOfDaysToHighlight)
+      )
+    }
 
-      .onDaySelection { day in
+    .onDaySelection { day in
+      DayRangeSelectionHelper.updateDayRange(
+        afterTapSelectionOf: day,
+        existingDayRange: &selectedDayRange
+      )
+    }
+
+    .onMultipleDaySelectionDrag(
+      began: { day in
         DayRangeSelectionHelper.updateDayRange(
-          afterTapSelectionOf: day,
-          existingDayRange: &selectedDayRange)
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .began,
+          calendar: calendar
+        )
+      },
+      changed: { day in
+        DayRangeSelectionHelper.updateDayRange(
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .changed,
+          calendar: calendar
+        )
+      },
+      ended: { day in
+        DayRangeSelectionHelper.updateDayRange(
+          afterDragSelectionOf: day,
+          existingDayRange: &selectedDayRange,
+          initialDayRange: &selectedDayRangeAtStartOfDrag,
+          state: .ended,
+          calendar: calendar
+        )
       }
+    )
 
-      .onMultipleDaySelectionDrag(
-        began: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .began,
-            calendar: calendar)
-        },
-        changed: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .changed,
-            calendar: calendar)
-        },
-        ended: { day in
-          DayRangeSelectionHelper.updateDayRange(
-            afterDragSelectionOf: day,
-            existingDayRange: &selectedDayRange,
-            initialDayRange: &selectedDayRangeAtStartOfDrag,
-            state: .ended,
-            calendar: calendar)
-        })
+    .onAppear {
+      calendarViewProxy.scrollToDay(
+        containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
+        scrollPosition: .centered,
+        animated: false
+      )
+    }
 
-      .onAppear {
-        calendarViewProxy.scrollToDay(
-          containing: calendar.date(from: DateComponents(year: 2023, month: 07, day: 19))!,
-          scrollPosition: .centered,
-          animated: false)
-      }
-
-      .frame(maxWidth: 375, maxHeight: .infinity)
+    .frame(maxWidth: 375, maxHeight: .infinity)
   }
 
   // MARK: Private
+
+  @StateObject private var calendarViewProxy = CalendarViewProxy()
+
+  @State private var selectedDayRange: DayComponentsRange?
+  @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
 
   private let calendar: Calendar
   private let monthsLayout: MonthsLayout
   private let visibleDateRange: ClosedRange<Date>
 
   private let monthDateFormatter: DateFormatter
-
-  @StateObject private var calendarViewProxy = CalendarViewProxy()
-
-  @State private var selectedDayRange: DayComponentsRange?
-  @State private var selectedDayRangeAtStartOfDrag: DayComponentsRange?
 
   private var selectedDateRanges: Set<ClosedRange<Date>> {
     guard let selectedDayRange else { return [] }

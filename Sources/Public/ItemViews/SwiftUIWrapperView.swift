@@ -96,13 +96,13 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
   public override func systemLayoutSizeFitting(
     _ targetSize: CGSize,
     withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
-    verticalFittingPriority: UILayoutPriority)
-    -> CGSize
-  {
+    verticalFittingPriority: UILayoutPriority
+  ) -> CGSize {
     hostingControllerView.systemLayoutSizeFitting(
       targetSize,
       withHorizontalFittingPriority: horizontalFittingPriority,
-      verticalFittingPriority: verticalFittingPriority)
+      verticalFittingPriority: verticalFittingPriority
+    )
   }
 
   // MARK: Fileprivate
@@ -122,8 +122,8 @@ public final class SwiftUIWrapperView<Content: View>: UIView {
     hostingController.view
   }
 
-  // This allows touches to be passed to `ItemView` even if the SwiftUI `View` has a gesture
-  // recognizer.
+  /// This allows touches to be passed to `ItemView` even if the SwiftUI `View` has a gesture
+  /// recognizer.
   private func configureGestureRecognizers() {
     for gestureRecognizer in hostingControllerView.gestureRecognizers ?? [] {
       gestureRecognizer.cancelsTouchesInView = false
@@ -147,7 +147,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Public
 
-    public static func == (_: InvariantViewProperties, _: InvariantViewProperties) -> Bool {
+    public static func ==(_: InvariantViewProperties, _: InvariantViewProperties) -> Bool {
       // Always true since two `SwiftUIWrapperView`'s with the same `Content` view are considered to
       // have the same "invariant view properties."
       true
@@ -172,7 +172,7 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
 
     // MARK: Public
 
-    public static func == (_: ContentAndID, _: ContentAndID) -> Bool {
+    public static func ==(_: ContentAndID, _: ContentAndID) -> Bool {
       false
     }
 
@@ -183,16 +183,15 @@ extension SwiftUIWrapperView: CalendarItemViewRepresentable {
   }
 
   public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> SwiftUIWrapperView<Content>
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> SwiftUIWrapperView<Content> {
     SwiftUIWrapperView<Content>(contentAndID: invariantViewProperties.initialContentAndID)
   }
 
   public static func setContent(
     _ contentAndID: ContentAndID,
-    on view: SwiftUIWrapperView<Content>)
-  {
+    on view: SwiftUIWrapperView<Content>
+  ) {
     view.contentAndID = contentAndID
   }
 

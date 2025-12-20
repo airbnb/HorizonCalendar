@@ -27,9 +27,8 @@ enum PaginationHelpers {
     toTargetOffset targetOffset: CGFloat,
     touchUpOffset: CGFloat,
     velocity: CGFloat,
-    pageSize: CGFloat)
-    -> CGFloat
-  {
+    pageSize: CGFloat
+  ) -> CGFloat {
     let closestTargetPageIndex = closestPageIndex(forOffset: targetOffset, pageSize: pageSize)
     let proposedFinalOffset = CGFloat(closestTargetPageIndex) * pageSize
 
@@ -48,9 +47,8 @@ enum PaginationHelpers {
     toPreviousPageIndex previousPageIndex: Int,
     targetOffset: CGFloat,
     velocity: CGFloat,
-    pageSize: CGFloat)
-    -> CGFloat
-  {
+    pageSize: CGFloat
+  ) -> CGFloat {
     let closestTargetPageIndex = closestPageIndex(forOffset: targetOffset, pageSize: pageSize)
 
     let pageIndex: Int

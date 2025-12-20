@@ -38,7 +38,8 @@ final class DemoPickerViewController: UIViewController {
       monthsLayoutPicker.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       monthsLayoutPicker.topAnchor.constraint(
         equalTo: view.layoutMarginsGuide.topAnchor,
-        constant: 8),
+        constant: 8
+      ),
 
       tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -96,7 +97,8 @@ final class DemoPickerViewController: UIViewController {
     segmentedControl.addTarget(
       self,
       action: #selector(monthsLayoutPickerValueChanged),
-      for: .valueChanged)
+      for: .valueChanged
+    )
     return segmentedControl
   }()
 
@@ -145,14 +147,21 @@ extension DemoPickerViewController: UITableViewDelegate {
           options: VerticalMonthsLayoutOptions(
             pinDaysOfWeekToTop: false,
             alwaysShowCompleteBoundaryMonths: false,
-            scrollsToFirstMonthOnStatusBarTap: false))
+            scrollsToFirstMonthOnStatusBarTap: false
+          )
+        )
         : .horizontal(
           options: HorizontalMonthsLayoutOptions(
             maximumFullyVisibleMonths: 1.5,
             scrollingBehavior: .paginatedScrolling(
               .init(
                 restingPosition: .atLeadingEdgeOfEachMonth,
-                restingAffinity: .atPositionsClosestToTargetOffset)))))
+                restingAffinity: .atPositionsClosestToTargetOffset
+              )
+            )
+          )
+        )
+    )
 
     navigationController?.pushViewController(demoViewController, animated: true)
   }

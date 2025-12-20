@@ -24,110 +24,132 @@ final class VisibleItemsProviderTests: XCTestCase {
 
   // MARK: Internal
 
-  // MARK: Initial anchor layout item tests
-
   func testVerticalInitialVisibleMonthHeader() {
     let monthHeaderItem1 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 100),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 100.0, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem2 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-03)), frame: (0.0, 335.5, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem3 = verticalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 400),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 443.0, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
   }
 
   func testVerticalPinnedDaysOfWeekInitialVisibleMonthHeader() {
     let monthHeaderItem1 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 190),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-02)), frame: (0.0, 225.5, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem2 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 200),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-03)), frame: (0.0, 341.5, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 04, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-04)), frame: (0.0, 313.5, 320.0, 100.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
   }
 
   func testVerticalPartialMonthVisibleMonthHeader() {
     let monthHeaderItem1 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 100),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-01)), frame: (0.0, 100.0, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem2 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 250),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-03)), frame: (0.0, 335.5, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem3 = verticalPartialMonthVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true),
       offset: CGPoint(x: 0, y: 400),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-06)), frame: (0.0, 443.0, 320.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
   }
 
   func testHorizontalInitialVisibleMonthHeader() {
     let monthHeaderItem1 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 11, isInGregorianCalendar: true),
       offset: CGPoint(x: 1000, y: 0),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem1.description == "[itemType: .layoutItemType(.monthHeader(2020-11)), frame: (1000.0, 50.0, 300.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem2 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 09, isInGregorianCalendar: true),
       offset: CGPoint(x: 800, y: 0),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       monthHeaderItem2.description == "[itemType: .layoutItemType(.monthHeader(2020-09)), frame: (820.0, 50.0, 300.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
 
     let monthHeaderItem3 = horizontalVisibleItemsProvider.anchorMonthHeaderItem(
       for: Month(era: 1, year: 2020, month: 10, isInGregorianCalendar: true),
       offset: CGPoint(x: 500, y: 0),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       monthHeaderItem3.description == "[itemType: .layoutItemType(.monthHeader(2020-10)), frame: (510.0, 50.0, 300.0, 50.0)]",
-      "Unexpected initial month header item.")
+      "Unexpected initial month header item."
+    )
   }
 
   func testVerticalInitialVisibleDay() {
@@ -136,68 +158,84 @@ final class VisibleItemsProviderTests: XCTestCase {
     let dayItem1 = verticalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 400),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem1.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 400.0, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem2 = verticalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 200),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem2.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 644.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem3 = verticalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 600),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 822.0, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
   }
 
   func testInitialVisiblePositionsNeedingCorrection() {
     let dayItem1 = verticalVisibleItemsProvider.anchorDayItem(
       for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
       offset: CGPoint(x: 0, y: 400),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem1.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (142.0, 535.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem2 = verticalVisibleItemsProvider.anchorDayItem(
       for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
       offset: CGPoint(x: 0, y: 200),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem2.description == "[itemType: .layoutItemType(.day(2020-12-31)), frame: (188.0, 644.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
       for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 31),
       offset: CGPoint(x: 0, y: 200),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-12-31)), frame: (188.0, 644.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem4 = horizontalVisibleItemsProvider.anchorDayItem(
       for: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 01),
       offset: CGPoint(x: 600, y: 0),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem4.description == "[itemType: .layoutItemType(.day(2020-01-01)), frame: (733.5, 183.0, 33.0, 33.0)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem5 = horizontalVisibleItemsProvider.anchorDayItem(
       for: Day(month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true), day: 28),
       offset: CGPoint(x: 100, y: 0),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem5.description == "[itemType: .layoutItemType(.day(2020-12-28)), frame: (168.0, 394.5, 33.0, 33.0)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
   }
 
   func testVerticalPinnedDaysOfWeekInitialVisibleDay() {
@@ -206,26 +244,32 @@ final class VisibleItemsProviderTests: XCTestCase {
     let dayItem1 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 0),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem1.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 35.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem2 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 100),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem2.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 544.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem3 = verticalPinnedDaysOfWeekVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 1000),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (50.5, 1240.0, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
   }
 
   func testVerticalPartialMonthInitialVisibleDay() {
@@ -234,26 +278,32 @@ final class VisibleItemsProviderTests: XCTestCase {
     let dayItem1 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 400),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem1.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 400.0, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem2 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 200),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem2.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 391.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem3 = verticalPartialMonthVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 600),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-01-28)), frame: (96.5, 791.5, 35.5, 35.5)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
   }
 
   func testHorizontalInitialVisibleDay() {
@@ -262,42 +312,49 @@ final class VisibleItemsProviderTests: XCTestCase {
     let dayItem1 = horizontalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 300, y: 0),
-      scrollPosition: .firstFullyVisiblePosition)
+      scrollPosition: .firstFullyVisiblePosition
+    )
     XCTAssert(
       dayItem1.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (300.0, 341.5, 33.0, 33.0)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem2 = horizontalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 500, y: 0),
-      scrollPosition: .lastFullyVisiblePosition)
+      scrollPosition: .lastFullyVisiblePosition
+    )
     XCTAssert(
       dayItem2.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (787.0, 341.5, 33.0, 33.0)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
 
     let dayItem3 = horizontalVisibleItemsProvider.anchorDayItem(
       for: day,
       offset: CGPoint(x: 0, y: 0),
-      scrollPosition: .centered)
+      scrollPosition: .centered
+    )
     XCTAssert(
       dayItem3.description == "[itemType: .layoutItemType(.day(2020-04-20)), frame: (143.5, 341.5, 33.0, 33.0)]",
-      "Unexpected initial day item.")
+      "Unexpected initial day item."
+    )
   }
-
-  // MARK: Scrolled to middle of content tests
 
   func testVisibleItemsContextAfterMetricsChange() {
     let anchorLayoutItem = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 200, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: 150),
-      extendLayoutRegion: false)
-      .centermostLayoutItem
+      extendLayoutRegion: false
+    )
+    .centermostLayoutItem
     let details = verticalShortDayAspectRatioVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
       offset: CGPoint(x: 0, y: 150),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-02-16), frame: (5.0, 165.0, 35.5, 18.0)]",
@@ -377,21 +434,25 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 35.5, 18.0)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
   }
 
   func testVerticalVisibleItemsContext() {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 03, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 200, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: 150),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-03-11), frame: (142.0, 391.5, 35.5, 35.5)]",
@@ -460,12 +521,14 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-03-11)), frame: (142.0, 391.5, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
@@ -475,9 +538,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
+        frame: CGRect(x: 0, y: 450, width: 320, height: 40)
+      ),
       offset: CGPoint(x: 0, y: 450),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-06-11), frame: (188.0, 585.5, 35.5, 35.5)]",
@@ -540,12 +605,14 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-06-24)), frame: (142.0, 697.0, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
@@ -555,9 +622,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 200, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 200, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: 150),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .daysOfWeekRowSeparator(2020-1), frame: (0.0, 314.5, 320.0, 1.0)]",
@@ -592,12 +661,14 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-01-29)), frame: (142.0, 391.5, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == 200, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
@@ -607,9 +678,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
-        frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
+        frame: CGRect(x: 250, y: 0, width: 300, height: 50)
+      ),
       offset: CGPoint(x: 100, y: 0),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-04-11), frame: (197.0, 185.5, 33.0, 33.0)]",
@@ -678,12 +751,14 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-05-10)), frame: (255.0, 238.5, 33.0, 33.0)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
@@ -693,9 +768,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 3000, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 3000, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: 150),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-05-11), frame: (50.5, 220.5, 35.5, 35.5)]",
@@ -758,26 +835,31 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-05-27)), frame: (142.0, 332.0, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(
       details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 2) == 3444.5,
-      "Unexpected content end offset.")
+      "Unexpected content end offset."
+    )
   }
 
   func testHorizontalLeadingMonthPartiallyClipped() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 2, isInGregorianCalendar: true)),
-        frame: CGRect(x: 315, y: 0, width: 300, height: 50)),
+        frame: CGRect(x: 315, y: 0, width: 300, height: 50)
+      ),
       offset: CGPoint(x: 295, y: 0),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-02-11), frame: (405.5, 238.5, 33.0, 33.0)]",
@@ -835,18 +917,19 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
   }
-
-  // MARK: Scrolled to content boundary tests
 
   func testBoundaryVerticalVisibleItemsContext() {
     let details = verticalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 0, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 0, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: -50),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-01-11), frame: (279.5, 191.5, 35.5, 35.5)]",
@@ -907,12 +990,14 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-01-08)), frame: (142.0, 191.5, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == 0, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
@@ -922,9 +1007,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 45, width: 320, height: 40)),
+        frame: CGRect(x: 0, y: 45, width: 320, height: 40)
+      ),
       offset: CGPoint(x: 0, y: 50),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-01-11), frame: (279.5, 180.5, 35.5, 35.5)]",
@@ -986,16 +1073,19 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-01-22)), frame: (142.0, 292.0, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(
       details.contentStartBoundary?.alignedToPixel(forScreenWithScale: 2) == 9.5,
-      "Unexpected content start offset.")
+      "Unexpected content start offset."
+    )
     XCTAssert(details.contentEndBoundary == nil, "Unexpected content end offset.")
   }
 
@@ -1003,9 +1093,11 @@ final class VisibleItemsProviderTests: XCTestCase {
     let details = verticalPartialMonthVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 690, width: 320, height: 50)),
+        frame: CGRect(x: 0, y: 690, width: 320, height: 50)
+      ),
       offset: CGPoint(x: 0, y: 690),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .daysOfWeekRowSeparator(2020-12), frame: (0.0, 854.5, 320.0, 1.0)]",
@@ -1023,27 +1115,32 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-12-01)), frame: (96.5, 875.5, 35.5, 35.5)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(
       details.contentEndBoundary?.alignedToPixel(forScreenWithScale: 3) == CGFloat(911.4285714285714)
         .alignedToPixel(forScreenWithScale: 3),
-      "Unexpected content end offset.")
+      "Unexpected content end offset."
+    )
   }
 
   func testBoundaryHorizontalVisibleItemsContext() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
-        frame: CGRect(x: 1200, y: 0, width: 300, height: 50)),
+        frame: CGRect(x: 1200, y: 0, width: 300, height: 50)
+      ),
       offset: CGPoint(x: 1000, y: 0),
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-11-11), frame: (1018.5, 235.5, 33.0, 33.0)]",
@@ -1108,26 +1205,28 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
 
     XCTAssert(
       details.centermostLayoutItem
         .description == "[itemType: .layoutItemType(.day(2020-11-14)), frame: (1147.0, 235.5, 33.0, 33.0)]",
-      "Unexpected centermost layout item.")
+      "Unexpected centermost layout item."
+    )
 
     XCTAssert(details.contentStartBoundary == nil, "Unexpected content start offset.")
     XCTAssert(details.contentEndBoundary == 1500, "Unexpected content end offset.")
   }
 
-  // MARK: Animated update pass tests
-
   func testVerticalVisibleItemsForAnimatedUpdatePass() {
     let details = verticalPinnedDaysOfWeekVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)),
-        frame: CGRect(x: 0, y: 450, width: 320, height: 40)),
+        frame: CGRect(x: 0, y: 450, width: 320, height: 40)
+      ),
       offset: CGPoint(x: 0, y: 450),
-      extendLayoutRegion: true)
+      extendLayoutRegion: true
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-04-19), frame: (5.0, -65.5, 35.5, 35.5)]",
@@ -1305,16 +1404,19 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
   }
 
   func testHorizontalVisibleItemsForAnimatedUpdatePass() {
     let details = horizontalVisibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: LayoutItem(
         itemType: .monthHeader(Month(era: 1, year: 2020, month: 05, isInGregorianCalendar: true)),
-        frame: CGRect(x: 250, y: 0, width: 300, height: 50)),
+        frame: CGRect(x: 250, y: 0, width: 300, height: 50)
+      ),
       offset: CGPoint(x: 100, y: 0),
-      extendLayoutRegion: true)
+      extendLayoutRegion: true
+    )
 
     let expectedVisibleItemDescriptions: Set<String> = [
       "[itemType: .dayBackground(2020-03-11), frame: (-246.5, 185.5, 33.0, 33.0)]",
@@ -1480,7 +1582,8 @@ final class VisibleItemsProviderTests: XCTestCase {
 
     XCTAssert(
       Set(details.visibleItems.map { $0.description }) == expectedVisibleItemDescriptions,
-      "Unexpected visible items.")
+      "Unexpected visible items."
+    )
   }
 
   // MARK: Private
@@ -1490,11 +1593,16 @@ final class VisibleItemsProviderTests: XCTestCase {
   private static let dateRange = ClosedRange(
     uncheckedBounds: (
       lower: calendar.startDate(
-        of: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 25)),
+        of: Day(month: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), day: 25)
+      ),
       upper: calendar.startDate(
         of: Day(
           month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
-          day: 01))))
+          day: 01
+        )
+      )
+    )
+  )
 
   private static let size = CGSize(width: 320, height: 480)
 
@@ -1504,11 +1612,14 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()))),
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())
+      )
+    ),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    backgroundColor: nil)
+    backgroundColor: nil
+  )
 
   private var verticalShortDayAspectRatioVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1516,13 +1627,16 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())))
-      .dayAspectRatio(0.5)
-      .dayOfWeekAspectRatio(0.5),
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions())
+      )
+    )
+    .dayAspectRatio(0.5)
+    .dayOfWeekAspectRatio(0.5),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    backgroundColor: nil)
+    backgroundColor: nil
+  )
 
   private var verticalPinnedDaysOfWeekVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1530,11 +1644,14 @@ final class VisibleItemsProviderTests: XCTestCase {
       fromBaseContent: CalendarViewContent(
         calendar: calendar,
         visibleDateRange: dateRange,
-        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)))),
+        monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true))
+      )
+    ),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    backgroundColor: nil)
+    backgroundColor: nil
+  )
 
   private var verticalPartialMonthVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1543,11 +1660,15 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .vertical(
-          options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)))),
+          options: VerticalMonthsLayoutOptions(alwaysShowCompleteBoundaryMonths: false)
+        )
+      )
+    ),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    backgroundColor: nil)
+    backgroundColor: nil
+  )
 
   private var horizontalVisibleItemsProvider = VisibleItemsProvider(
     calendar: calendar,
@@ -1556,11 +1677,15 @@ final class VisibleItemsProviderTests: XCTestCase {
         calendar: calendar,
         visibleDateRange: dateRange,
         monthsLayout: .horizontal(
-          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64 / 63)))),
+          options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 64 / 63)
+        )
+      )
+    ),
     size: size,
     layoutMargins: .zero,
     scale: 2,
-    backgroundColor: nil)
+    backgroundColor: nil
+  )
 
   private static func mockCalendarItemModel(height: CGFloat = 50) -> AnyCalendarItemModel {
     final class MockView: UIView, CalendarItemViewRepresentable {
@@ -1568,9 +1693,8 @@ final class VisibleItemsProviderTests: XCTestCase {
       typealias Height = CGFloat
 
       static func makeView(
-        withInvariantViewProperties height: Height)
-        -> MockView
-      {
+        withInvariantViewProperties height: Height
+      ) -> MockView {
         let view = MockView()
         let heightConstraint = view.heightAnchor.constraint(equalToConstant: height)
         heightConstraint.priority = .defaultLow
@@ -1584,9 +1708,8 @@ final class VisibleItemsProviderTests: XCTestCase {
   }
 
   private static func makeContent(
-    fromBaseContent baseContent: CalendarViewContent)
-    -> CalendarViewContent
-  {
+    fromBaseContent baseContent: CalendarViewContent
+  ) -> CalendarViewContent {
     baseContent
       .monthDayInsets(.init(top: 30, leading: 5, bottom: 0, trailing: 5))
       .interMonthSpacing(15)
@@ -1620,14 +1743,18 @@ final class VisibleItemsProviderTests: XCTestCase {
           calendar.date(from: DateComponents(year: 2020, month: 04, day: 30))!
             ...
             calendar.date(from: DateComponents(year: 2020, month: 05, day: 14))!,
-        ]) { _ in mockCalendarItemModel() }
+        ]
+      ) { _ in mockCalendarItemModel() }
       .overlayItemProvider(
         for: [
           .day(
-            containingDate: calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!),
+            containingDate: calendar.date(from: DateComponents(year: 2020, month: 01, day: 19))!
+          ),
           .monthHeader(
-            monthContainingDate: calendar.date(from: DateComponents(year: 2020, month: 11))!),
-        ]) { _ in mockCalendarItemModel() }
+            monthContainingDate: calendar.date(from: DateComponents(year: 2020, month: 11))!
+          ),
+        ]
+      ) { _ in mockCalendarItemModel() }
   }
 
 }
@@ -1664,6 +1791,7 @@ extension VisibleItem: CustomStringConvertible {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         itemLocationText = ".day(\(year)-\(month)-\(day))"
+
       case .monthHeader(let date):
         let year = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)

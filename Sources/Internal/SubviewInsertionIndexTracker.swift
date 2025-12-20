@@ -20,9 +20,8 @@ final class SubviewInsertionIndexTracker {
   // MARK: Internal
 
   func insertionIndex(
-    forSubviewWithCorrespondingItemType itemType: VisibleItem.ItemType)
-    -> Int
-  {
+    forSubviewWithCorrespondingItemType itemType: VisibleItem.ItemType
+  ) -> Int {
     let index: Int
     switch itemType {
     case .monthBackground:

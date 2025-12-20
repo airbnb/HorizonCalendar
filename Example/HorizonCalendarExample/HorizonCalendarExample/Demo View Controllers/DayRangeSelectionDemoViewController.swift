@@ -30,7 +30,8 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
 
       DayRangeSelectionHelper.updateDayRange(
         afterTapSelectionOf: day,
-        existingDayRange: &selectedDayRange)
+        existingDayRange: &selectedDayRange
+      )
 
       calendarView.setContent(makeContent())
     }
@@ -43,7 +44,8 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
         existingDayRange: &selectedDayRange,
         initialDayRange: &selectedDayRangeAtStartOfDrag,
         state: state,
-        calendar: calendar)
+        calendar: calendar
+      )
 
       calendarView.setContent(makeContent())
     }
@@ -68,43 +70,47 @@ final class DayRangeSelectionDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout
+    )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+    .dayItemProvider { [calendar, dayDateFormatter] day in
+      var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-
-        let isSelectedStyle: Bool
-        if let selectedDayRange {
-          isSelectedStyle = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
-        } else {
-          isSelectedStyle = false
-        }
-
-        if isSelectedStyle {
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .systemBackground
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = UIColor(.accentColor)
-        }
-
-        let date = calendar.date(from: day.components)
-
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          content: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
+      let isSelectedStyle: Bool
+      if let selectedDayRange {
+        isSelectedStyle = day == selectedDayRange.lowerBound || day == selectedDayRange.upperBound
+      } else {
+        isSelectedStyle = false
       }
 
-      .dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
-        DayRangeIndicatorView.calendarItemModel(
-          invariantViewProperties: .init(),
-          content: .init(
-            framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }))
+      if isSelectedStyle {
+        invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .systemBackground
+        invariantViewProperties.backgroundShapeDrawingConfig.borderColor = UIColor(.accentColor)
       }
+
+      let date = calendar.date(from: day.components)
+
+      return DayView.calendarItemModel(
+        invariantViewProperties: invariantViewProperties,
+        content: .init(
+          dayText: "\(day.day)",
+          accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+          accessibilityHint: nil
+        )
+      )
+    }
+
+    .dayRangeItemProvider(for: dateRanges) { dayRangeLayoutContext in
+      DayRangeIndicatorView.calendarItemModel(
+        invariantViewProperties: .init(),
+        content: .init(
+          framesOfDaysToHighlight: dayRangeLayoutContext.daysAndFrames.map { $0.frame }
+        )
+      )
+    }
   }
 
   // MARK: Private

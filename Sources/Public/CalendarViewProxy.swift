@@ -50,12 +50,13 @@ public final class CalendarViewProxy: ObservableObject {
   public func scrollToMonth(
     containing dateInTargetMonth: Date,
     scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     calendarView.scroll(
       toMonthContaining: dateInTargetMonth,
       scrollPosition: scrollPosition,
-      animated: animated)
+      animated: animated
+    )
   }
 
   /// Scrolls the calendar to the specified day with the specified position.
@@ -72,12 +73,13 @@ public final class CalendarViewProxy: ObservableObject {
   public func scrollToDay(
     containing dateInTargetDay: Date,
     scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     calendarView.scroll(
       toDayContaining: dateInTargetDay,
       scrollPosition: scrollPosition,
-      animated: animated)
+      animated: animated
+    )
   }
 
   // MARK: Internal

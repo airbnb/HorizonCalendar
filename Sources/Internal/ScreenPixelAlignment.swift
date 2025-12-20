@@ -41,7 +41,8 @@ extension CGRect {
       x: minX.alignedToPixel(forScreenWithScale: scale),
       y: minY.alignedToPixel(forScreenWithScale: scale),
       width: width.alignedToPixel(forScreenWithScale: scale),
-      height: height.alignedToPixel(forScreenWithScale: scale))
+      height: height.alignedToPixel(forScreenWithScale: scale)
+    )
   }
 
 }
@@ -52,7 +53,8 @@ extension CGPoint {
   func alignedToPixels(forScreenWithScale scale: CGFloat) -> CGPoint {
     CGPoint(
       x: x.alignedToPixel(forScreenWithScale: scale),
-      y: y.alignedToPixel(forScreenWithScale: scale))
+      y: y.alignedToPixel(forScreenWithScale: scale)
+    )
   }
 
 }

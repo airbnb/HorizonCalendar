@@ -31,7 +31,9 @@ extension MonthRange {
     self.init(
       uncheckedBounds: (
         lower: calendar.month(containing: dateRange.lowerBound),
-        upper: calendar.month(containing: dateRange.upperBound)))
+        upper: calendar.month(containing: dateRange.upperBound)
+      )
+    )
   }
 
 }

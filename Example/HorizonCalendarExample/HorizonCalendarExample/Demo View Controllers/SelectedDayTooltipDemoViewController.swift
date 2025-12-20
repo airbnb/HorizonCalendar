@@ -49,34 +49,38 @@ final class SelectedDayTooltipDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout
+    )
 
-      .interMonthSpacing(24)
+    .interMonthSpacing(24)
+    .dayItemProvider { [calendar, dayDateFormatter] day in
+      var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-
-        let date = calendar.date(from: day.components)
-        if date == selectedDate {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
-        }
-
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          content: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
+      let date = calendar.date(from: day.components)
+      if date == selectedDate {
+        invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+        invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
       }
 
-      .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
-        TooltipView.calendarItemModel(
-          invariantViewProperties: .init(),
-          content: .init(
-            frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
-            text: "Selected Day"))
-      }
+      return DayView.calendarItemModel(
+        invariantViewProperties: invariantViewProperties,
+        content: .init(
+          dayText: "\(day.day)",
+          accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+          accessibilityHint: nil
+        )
+      )
+    }
+
+    .overlayItemProvider(for: overlaidItemLocations) { overlayLayoutContext in
+      TooltipView.calendarItemModel(
+        invariantViewProperties: .init(),
+        content: .init(
+          frameOfTooltippedItem: overlayLayoutContext.overlaidItemFrame,
+          text: "Selected Day"
+        )
+      )
+    }
   }
 
   // MARK: Private

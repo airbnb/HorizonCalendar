@@ -30,28 +30,30 @@ final class PartialMonthVisibilityDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout
+    )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+    .dayItemProvider { [calendar, dayDateFormatter] day in
+      var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
 
-      .dayItemProvider { [calendar, dayDateFormatter] day in
-        var invariantViewProperties = DayView.InvariantViewProperties.baseInteractive
-
-        let date = calendar.date(from: day.components)
-        if date == selectedDate {
-          invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
-          invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
-        }
-
-        return DayView.calendarItemModel(
-          invariantViewProperties: invariantViewProperties,
-          content: .init(
-            dayText: "\(day.day)",
-            accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
-            accessibilityHint: nil))
+      let date = calendar.date(from: day.components)
+      if date == selectedDate {
+        invariantViewProperties.backgroundShapeDrawingConfig.borderColor = .blue
+        invariantViewProperties.backgroundShapeDrawingConfig.fillColor = .blue.withAlphaComponent(0.15)
       }
+
+      return DayView.calendarItemModel(
+        invariantViewProperties: invariantViewProperties,
+        content: .init(
+          dayText: "\(day.day)",
+          accessibilityLabel: date.map { dayDateFormatter.string(from: $0) },
+          accessibilityHint: nil
+        )
+      )
+    }
   }
 
   // MARK: Private

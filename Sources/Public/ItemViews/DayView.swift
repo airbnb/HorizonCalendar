@@ -89,7 +89,9 @@ public final class DayView: UIView {
         top: edgeInsets.top,
         left: edgeInsets.leading,
         bottom: edgeInsets.bottom,
-        right: edgeInsets.trailing))
+        right: edgeInsets.trailing
+      )
+    )
 
     let path: CGPath
     switch invariantViewProperties.shape {
@@ -110,7 +112,8 @@ public final class DayView: UIView {
       x: edgeInsets.leading,
       y: edgeInsets.top,
       width: insetBounds.width,
-      height: insetBounds.height)
+      height: insetBounds.height
+    )
   }
 
   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -203,9 +206,8 @@ extension DayView: UIPointerInteractionDelegate {
 
   public func pointerInteraction(
     _ interaction: UIPointerInteraction,
-    styleFor _: UIPointerRegion)
-    -> UIPointerStyle?
-  {
+    styleFor _: UIPointerRegion
+  ) -> UIPointerStyle? {
     guard let interactionView = interaction.view else { return nil }
 
     let previewParameters = UIPreviewParameters()
@@ -234,8 +236,8 @@ extension DayView {
     public init(
       dayText: String,
       accessibilityLabel: String?,
-      accessibilityHint: String?)
-    {
+      accessibilityHint: String?
+    ) {
       self.dayText = dayText
       self.accessibilityLabel = accessibilityLabel
       self.accessibilityHint = accessibilityHint
@@ -348,9 +350,8 @@ extension DayView {
 extension DayView: CalendarItemViewRepresentable {
 
   public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> DayView
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> DayView {
     DayView(invariantViewProperties: invariantViewProperties)
   }
 

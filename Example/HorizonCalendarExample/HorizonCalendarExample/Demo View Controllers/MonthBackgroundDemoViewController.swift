@@ -33,17 +33,18 @@ final class MonthBackgroundDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout
+    )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
-
-      .monthBackgroundItemProvider { monthLayoutContext in
-        MonthGridBackgroundView.calendarItemModel(
-          invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
-          content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame }))
-      }
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+    .monthBackgroundItemProvider { monthLayoutContext in
+      MonthGridBackgroundView.calendarItemModel(
+        invariantViewProperties: .init(horizontalDayMargin: 8, verticalDayMargin: 8),
+        content: .init(framesOfDays: monthLayoutContext.daysAndFrames.map { $0.frame })
+      )
+    }
   }
 
   // MARK: Private

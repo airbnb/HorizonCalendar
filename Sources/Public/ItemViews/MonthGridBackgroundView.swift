@@ -50,7 +50,8 @@ public final class MonthGridBackgroundView: UIView {
         x: dayFrame.minX - (invariantViewProperties.horizontalDayMargin / 2),
         y: dayFrame.minY - (invariantViewProperties.verticalDayMargin / 2),
         width: dayFrame.width + invariantViewProperties.horizontalDayMargin,
-        height: dayFrame.height + invariantViewProperties.verticalDayMargin)
+        height: dayFrame.height + invariantViewProperties.verticalDayMargin
+      )
       context?.stroke(gridRect)
     }
   }
@@ -87,8 +88,8 @@ extension MonthGridBackgroundView: CalendarItemViewRepresentable {
       lineWidth: CGFloat = 1,
       color: UIColor = .lightGray,
       horizontalDayMargin: CGFloat,
-      verticalDayMargin: CGFloat)
-    {
+      verticalDayMargin: CGFloat
+    ) {
       self.lineWidth = lineWidth
       self.color = color
       self.horizontalDayMargin = horizontalDayMargin
@@ -117,9 +118,8 @@ extension MonthGridBackgroundView: CalendarItemViewRepresentable {
   }
 
   public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> MonthGridBackgroundView
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> MonthGridBackgroundView {
     MonthGridBackgroundView(invariantViewProperties: invariantViewProperties)
   }
 

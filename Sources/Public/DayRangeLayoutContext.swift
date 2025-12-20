@@ -32,11 +32,12 @@ public struct DayRangeLayoutContext: Hashable {
   /// `daysAndFrames`.
   public let boundingUnionRectOfDayFrames: CGRect
 
-  public static func == (lhs: DayRangeLayoutContext, rhs: DayRangeLayoutContext) -> Bool {
+  public static func ==(lhs: DayRangeLayoutContext, rhs: DayRangeLayoutContext) -> Bool {
     lhs.dayRange == rhs.dayRange &&
       lhs.daysAndFrames.elementsEqual(
         rhs.daysAndFrames,
-        by: { $0.day == $1.day && $0.frame == $0.frame }) &&
+        by: { $0.day == $1.day && $0.frame == $0.frame }
+      ) &&
       lhs.boundingUnionRectOfDayFrames == rhs.boundingUnionRectOfDayFrames
   }
 

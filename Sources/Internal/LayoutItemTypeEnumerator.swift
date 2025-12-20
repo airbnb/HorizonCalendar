@@ -36,8 +36,8 @@ final class LayoutItemTypeEnumerator {
   func enumerateItemTypes(
     startingAt startingItemType: LayoutItem.ItemType,
     itemTypeHandlerLookingBackwards: (LayoutItem.ItemType, _ shouldStop: inout Bool) -> Void,
-    itemTypeHandlerLookingForwards: (LayoutItem.ItemType, _ shouldStop: inout Bool) -> Void)
-  {
+    itemTypeHandlerLookingForwards: (LayoutItem.ItemType, _ shouldStop: inout Bool) -> Void
+  ) {
     var currentItemType = previousItemType(from: startingItemType)
 
     var shouldStopLookingBackwards = false

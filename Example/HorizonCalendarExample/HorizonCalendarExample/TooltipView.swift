@@ -56,7 +56,8 @@ final class TooltipView: UIView {
     label.sizeToFit()
     let labelSize = CGSize(
       width: min(label.bounds.size.width, bounds.width),
-      height: label.bounds.size.height)
+      height: label.bounds.size.height
+    )
 
     let backgroundSize = CGSize(width: labelSize.width + 16, height: labelSize.height + 16)
 
@@ -64,7 +65,8 @@ final class TooltipView: UIView {
       x: frameOfTooltippedItem.midX - (backgroundSize.width / 2),
       y: frameOfTooltippedItem.minY - backgroundSize.height - 4,
       width: backgroundSize.width,
-      height: backgroundSize.height)
+      height: backgroundSize.height
+    )
 
     let frame: CGRect
     if proposedFrame.maxX > bounds.width {
@@ -118,9 +120,8 @@ extension TooltipView: CalendarItemViewRepresentable {
   }
 
   static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> TooltipView
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> TooltipView {
     TooltipView(invariantViewProperties: invariantViewProperties)
   }
 

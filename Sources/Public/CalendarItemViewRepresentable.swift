@@ -46,8 +46,8 @@ public protocol CalendarItemViewRepresentable {
   ///   - invariantViewProperties: An instance containing all of the immutable / initial setup values necessary to initialize the
   ///   view. Use this to configure appearance options that do not change based on the data in the `content`.
   static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> ViewType
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> ViewType
 
   /// Sets the content on your view. `CalendarView` invokes this whenever a view's data is stale and needs to be updated to
   /// reflect the data in a new content instance.
