@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/swift",
       "state" : {
-        "revision" : "b408d36b4f5e73ea75441fb9791b849b0a40f58b",
-        "version" : "1.0.5"
+        "revision" : "6c09dd57c2254b14bb48c15e209ed6e93058104f",
+        "version" : "1.2.0"
       }
     },
     {

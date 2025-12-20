@@ -10,7 +10,7 @@ let package = Package(
     .library(name: "HorizonCalendar", targets: ["HorizonCalendar"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/airbnb/swift", .upToNextMajor(from: "1.0.1")),
+    .package(url: "https://github.com/airbnb/swift", .upToNextMajor(from: "1.2.0")),
   ],
   targets: [
     .target(
