@@ -27,8 +27,8 @@ final class FrameProvider {
     content: CalendarViewContent,
     size: CGSize,
     layoutMargins: NSDirectionalEdgeInsets,
-    scale: CGFloat)
-  {
+    scale: CGFloat
+  ) {
     self.content = content
     self.size = size
     self.layoutMargins = layoutMargins
@@ -40,7 +40,8 @@ final class FrameProvider {
     case .horizontal(let options):
       monthWidth = options.monthWidth(
         calendarWidth: size.width,
-        interMonthSpacing: content.interMonthSpacing)
+        interMonthSpacing: content.interMonthSpacing
+      )
     }
 
     let insetWidth = monthWidth - content.monthDayInsets.leading - content.monthDayInsets.trailing
@@ -59,7 +60,8 @@ final class FrameProvider {
         "Calendar metrics and size resulted in a negative-or-zero size of (%@ points for each day. If ignored, this will cause incorrect / unexpected layouts.",
         log: .default,
         type: .debug,
-        daySize.debugDescription)
+        daySize.debugDescription
+      )
     }
   }
 
@@ -79,13 +81,10 @@ final class FrameProvider {
       content.monthDayInsets.bottom
   }
 
-  // MARK: Month locations
-
   func originOfMonth(
     containing layoutItem: LayoutItem,
-    monthHeaderHeight: CGFloat)
-    -> CGPoint
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGPoint {
     switch layoutItem.itemType {
     case .monthHeader:
       return layoutItem.frame.origin
@@ -103,7 +102,8 @@ final class FrameProvider {
       let y = minYOfMonth(
         containingDayItemWithFrame: layoutItem.frame,
         atRowInMonth: rowInMonth,
-        monthHeaderHeight: monthHeaderHeight)
+        monthHeaderHeight: monthHeaderHeight
+      )
       return CGPoint(x: x, y: y)
     }
   }
@@ -112,20 +112,21 @@ final class FrameProvider {
     _ month: Month,
     beforeMonthWithOrigin subsequentMonthOrigin: CGPoint,
     subsequentMonthHeaderHeight: CGFloat,
-    monthHeaderHeight: CGFloat)
-    -> CGPoint
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGPoint {
     switch monthsLayout {
     case .vertical:
       let monthHeight = heightOfMonth(month, monthHeaderHeight: monthHeaderHeight)
       return CGPoint(
         x: subsequentMonthOrigin.x,
-        y: subsequentMonthOrigin.y - content.interMonthSpacing - monthHeight)
+        y: subsequentMonthOrigin.y - content.interMonthSpacing - monthHeight
+      )
 
     case .horizontal:
       return CGPoint(
         x: subsequentMonthOrigin.x - content.interMonthSpacing - monthWidth,
-        y: subsequentMonthOrigin.y + subsequentMonthHeaderHeight - monthHeaderHeight)
+        y: subsequentMonthOrigin.y + subsequentMonthHeaderHeight - monthHeaderHeight
+      )
     }
   }
 
@@ -133,52 +134,49 @@ final class FrameProvider {
     _ month: Month,
     afterMonthWithOrigin previousMonthOrigin: CGPoint,
     previousMonthHeaderHeight: CGFloat,
-    monthHeaderHeight: CGFloat)
-    -> CGPoint
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGPoint {
     switch monthsLayout {
     case .vertical:
       let previousMonth = calendar.month(byAddingMonths: -1, to: month)
       let previousMonthHeight = heightOfMonth(
         previousMonth,
-        monthHeaderHeight: previousMonthHeaderHeight)
+        monthHeaderHeight: previousMonthHeaderHeight
+      )
       return CGPoint(
         x: previousMonthOrigin.x,
-        y: previousMonthOrigin.y + previousMonthHeight + content.interMonthSpacing)
+        y: previousMonthOrigin.y + previousMonthHeight + content.interMonthSpacing
+      )
 
     case .horizontal:
       return CGPoint(
         x: previousMonthOrigin.x + monthWidth + content.interMonthSpacing,
-        y: previousMonthOrigin.y + previousMonthHeaderHeight - monthHeaderHeight)
+        y: previousMonthOrigin.y + previousMonthHeaderHeight - monthHeaderHeight
+      )
     }
   }
 
   func frameOfMonth(
     _ month: Month,
     withOrigin monthOrigin: CGPoint,
-    monthHeaderHeight: CGFloat)
-    -> CGRect
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGRect {
     let monthHeight = heightOfMonth(month, monthHeaderHeight: monthHeaderHeight)
     return CGRect(origin: monthOrigin, size: CGSize(width: monthWidth, height: monthHeight))
   }
 
-  // MARK: Frames of core layout items
-
   func frameOfMonthHeader(
     inMonthWithOrigin monthOrigin: CGPoint,
-    monthHeaderHeight: CGFloat)
-    -> CGRect
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGRect {
     CGRect(origin: monthOrigin, size: CGSize(width: monthWidth, height: monthHeaderHeight))
   }
 
   func frameOfDayOfWeek(
     at dayOfWeekPosition: DayOfWeekPosition,
     inMonthWithOrigin monthOrigin: CGPoint,
-    monthHeaderHeight: CGFloat)
-    -> CGRect
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGRect {
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: monthOrigin.x)
     let y = monthOrigin.y + monthHeaderHeight + content.monthDayInsets.top
     return CGRect(origin: CGPoint(x: x, y: y), size: dayOfWeekSize)
@@ -187,9 +185,8 @@ final class FrameProvider {
   func frameOfDay(
     _ day: Day,
     inMonthWithOrigin monthOrigin: CGPoint,
-    monthHeaderHeight: CGFloat)
-    -> CGRect
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGRect {
     let date = calendar.startDate(of: day)
     let dayOfWeekPosition = calendar.dayOfWeekPosition(for: date)
     let rowInMonth = adjustedRowInMonth(for: day)
@@ -205,17 +202,16 @@ final class FrameProvider {
     return CGRect(origin: CGPoint(x: x, y: y), size: daySize)
   }
 
-  // A faster alternative to `frameOfDay(_:inMonthWithOrigin:)`, which uses the known frame of a
-  // previously-laid-out adjacent day in the same month to determine the new day's frame without
-  // needing to call `Calendar.rowInMonth(for:)` or create a `DayOfWeekPosition`. For
-  // example, if the frame of Sept 12 is known, we can derive the frame of Sept 11 and Sept 13.
+  /// A faster alternative to `frameOfDay(_:inMonthWithOrigin:)`, which uses the known frame of a
+  /// previously-laid-out adjacent day in the same month to determine the new day's frame without
+  /// needing to call `Calendar.rowInMonth(for:)` or create a `DayOfWeekPosition`. For
+  /// example, if the frame of Sept 12 is known, we can derive the frame of Sept 11 and Sept 13.
   func frameOfDay(
     _ day: Day,
     adjacentTo adjacentDay: Day,
     withFrame adjacentDayFrame: CGRect,
-    inMonthWithOrigin monthOrigin: CGPoint)
-    -> CGRect
-  {
+    inMonthWithOrigin monthOrigin: CGPoint
+  ) -> CGRect {
     let distanceFromAdjacentDay = day.day - adjacentDay.day
     guard
       day.month == adjacentDay.month,
@@ -235,7 +231,8 @@ final class FrameProvider {
       } else {
         origin = CGPoint(
           x: maxX,
-          y: adjacentDayFrame.minY - content.verticalDayMargin - daySize.height)
+          y: adjacentDayFrame.minY - content.verticalDayMargin - daySize.height
+        )
       }
     } else {
       let proposedX = adjacentDayFrame.maxX + content.horizontalDayMargin
@@ -249,13 +246,10 @@ final class FrameProvider {
     return CGRect(origin: origin, size: daySize)
   }
 
-  // MARK: Misc item frames
-
   func frameOfPinnedDayOfWeek(
     at dayOfWeekPosition: DayOfWeekPosition,
-    yContentOffset: CGFloat)
-    -> CGRect
-  {
+    yContentOffset: CGFloat
+  ) -> CGRect {
     let x = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: layoutMargins.leading)
     let y = layoutMargins.top + yContentOffset
     return CGRect(origin: CGPoint(x: x, y: y), size: dayOfWeekSize)
@@ -266,27 +260,27 @@ final class FrameProvider {
       x: layoutMargins.leading,
       y: layoutMargins.top + yContentOffset,
       width: monthWidth,
-      height: dayOfWeekSize.height)
+      height: dayOfWeekSize.height
+    )
   }
 
   func frameOfPinnedDaysOfWeekRowSeparator(
     yContentOffset: CGFloat,
-    separatorHeight: CGFloat)
-    -> CGRect
-  {
+    separatorHeight: CGFloat
+  ) -> CGRect {
     CGRect(
       x: layoutMargins.leading,
       y: layoutMargins.top + yContentOffset + dayOfWeekSize.height - separatorHeight,
       width: monthWidth,
-      height: separatorHeight)
+      height: separatorHeight
+    )
   }
 
   func frameOfDaysOfWeekRowSeparator(
     inMonthWithOrigin monthOrigin: CGPoint,
     separatorHeight: CGFloat,
-    monthHeaderHeight: CGFloat)
-    -> CGRect
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGRect {
     let y = monthOrigin.y +
       monthHeaderHeight +
       content.monthDayInsets.top +
@@ -295,8 +289,6 @@ final class FrameProvider {
     return CGRect(x: monthOrigin.x, y: y, width: monthWidth, height: separatorHeight)
   }
 
-  // MARK: Scroll-to-item Frames
-
   /// Returns translated item frames for the specified scroll offset and scroll position. Note that the returned frames may not be at valid
   /// resting positions. For example, someone could try to scroll the last day in the calendar to be at a vertically-centered scroll
   /// position, which would cause the calendar to be laid out in an over-scrolled position. The `VisibleItemsProvider` will detect
@@ -304,9 +296,8 @@ final class FrameProvider {
   func frameOfItem(
     withOriginalFrame originalFrame: CGRect,
     at scrollPosition: CalendarViewScrollPosition,
-    offset: CGPoint)
-    -> CGRect
-  {
+    offset: CGPoint
+  ) -> CGRect {
     switch content.monthsLayout {
     case .vertical(let options):
       let additionalOffset = (options.pinDaysOfWeekToTop ? dayOfWeekSize.height : 0)
@@ -328,7 +319,8 @@ final class FrameProvider {
         x: originalFrame.minX,
         y: y,
         width: originalFrame.width,
-        height: originalFrame.height)
+        height: originalFrame.height
+      )
 
     case .horizontal:
       let minX = offset.x
@@ -349,7 +341,8 @@ final class FrameProvider {
         x: x,
         y: originalFrame.minY,
         width: originalFrame.width,
-        height: originalFrame.height)
+        height: originalFrame.height
+      )
     }
   }
 
@@ -368,9 +361,8 @@ final class FrameProvider {
 
   private func minXOfItem(
     at dayOfWeekPosition: DayOfWeekPosition,
-    minXOfContainingRow: CGFloat)
-    -> CGFloat
-  {
+    minXOfContainingRow: CGFloat
+  ) -> CGFloat {
     let distanceFromMonthLeadingEdge = CGFloat(dayOfWeekPosition.rawValue - 1) *
       (daySize.width + content.horizontalDayMargin)
     return minXOfContainingRow + content.monthDayInsets.leading + distanceFromMonthLeadingEdge
@@ -378,9 +370,8 @@ final class FrameProvider {
 
   private func minXOfMonth(
     containingItemWithFrame itemFrame: CGRect,
-    at dayOfWeekPosition: DayOfWeekPosition)
-    -> CGFloat
-  {
+    at dayOfWeekPosition: DayOfWeekPosition
+  ) -> CGFloat {
     let distanceFromMinXOfMonth = minXOfItem(at: dayOfWeekPosition, minXOfContainingRow: 0)
     return itemFrame.minX - distanceFromMinXOfMonth
   }
@@ -388,9 +379,8 @@ final class FrameProvider {
   private func minYOfMonth(
     containingDayItemWithFrame dayItemFrame: CGRect,
     atRowInMonth rowInMonth: Int,
-    monthHeaderHeight: CGFloat)
-    -> CGFloat
-  {
+    monthHeaderHeight: CGFloat
+  ) -> CGFloat {
     dayItemFrame.minY -
       ((daySize.height + content.verticalDayMargin) * CGFloat(rowInMonth)) -
       heightOfDaysOfTheWeekRowInMonth() -
@@ -407,8 +397,8 @@ final class FrameProvider {
       content.monthDayInsets.bottom
   }
 
-  // Gets the row of a date in a particular month, taking into account whether the date is in a
-  // boundary month that's only showing some dates.
+  /// Gets the row of a date in a particular month, taking into account whether the date is in a
+  /// boundary month that's only showing some dates.
   private func adjustedRowInMonth(for day: Day) -> Int {
     guard day >= content.dayRange.lowerBound else {
       preconditionFailure("""
@@ -431,8 +421,8 @@ final class FrameProvider {
     return rowInMonth - missingRows
   }
 
-  // Gets the number of week rows in a particular month, taking into account whether the month is a
-  // boundary month that's only showing a subset of days.
+  /// Gets the number of week rows in a particular month, taking into account whether the month is a
+  /// boundary month that's only showing a subset of days.
   private func numberOfWeekRows(in month: Month) -> Int {
     let rowOfLastDateInMonth: Int
     if month == content.monthRange.lowerBound, month == content.monthRange.upperBound {
@@ -458,10 +448,10 @@ final class FrameProvider {
     return rowOfLastDateInMonth + 1
   }
 
-  // Gets the height of day content for a specified number of week rows, including the additional
-  // height for vertical day padding.
-  // For example, the returned height value for 5 week rows will be 5x the `daySize.height`, plus 4x
-  // the `content.verticalDayMargin`.
+  /// Gets the height of day content for a specified number of week rows, including the additional
+  /// height for vertical day padding.
+  /// For example, the returned height value for 5 week rows will be 5x the `daySize.height`, plus 4x
+  /// the `content.verticalDayMargin`.
   private func heightOfDayContent(forNumberOfWeekRows numberOfWeekRows: Int) -> CGFloat {
     guard numberOfWeekRows > 0 else {
       fatalError("Cannot calculate the height of day content if `numberOfWeekRows` is <= 0.")
@@ -470,9 +460,9 @@ final class FrameProvider {
       (CGFloat(numberOfWeekRows - 1) * content.verticalDayMargin)
   }
 
-  // Gets the height of the days of the week row, plus the padding between it and the first row of
-  // days in each month. The returned value will be `0` if
-  // `monthsLayout.pinDaysOfWeekToTop == true`.
+  /// Gets the height of the days of the week row, plus the padding between it and the first row of
+  /// days in each month. The returned value will be `0` if
+  /// `monthsLayout.pinDaysOfWeekToTop == true`.
   private func heightOfDaysOfTheWeekRowInMonth() -> CGFloat {
     monthsLayout.pinDaysOfWeekToTop ? 0 : (dayOfWeekSize.height + content.verticalDayMargin)
   }

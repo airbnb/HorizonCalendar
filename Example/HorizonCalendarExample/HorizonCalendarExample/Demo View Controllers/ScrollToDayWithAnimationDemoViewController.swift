@@ -31,7 +31,8 @@ final class ScrollToDayWithAnimationDemoViewController: BaseDemoViewController {
     calendarView.scroll(
       toDayContaining: july2020,
       scrollPosition: .centered,
-      animated: true)
+      animated: true
+    )
   }
 
   override func makeContent() -> CalendarViewContent {
@@ -41,8 +42,9 @@ final class ScrollToDayWithAnimationDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
-      .interMonthSpacing(24)
+      monthsLayout: monthsLayout
+    )
+    .interMonthSpacing(24)
   }
 
 }

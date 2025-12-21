@@ -22,36 +22,39 @@ final class MonthTests: XCTestCase {
 
   // MARK: Internal
 
-  // MARK: - Advancing Months Tests
-
   func testAdvancingByNothing() {
     let month = calendar.month(
       byAddingMonths: 0,
-      to: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true))
+      to: Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true)
+    )
     XCTAssert(month == Month(era: 1, year: 2020, month: 01, isInGregorianCalendar: true), "Expected 2020-01.")
   }
 
   func testAdvancingByLessThanOneYear() {
     let month1 = calendar.month(
       byAddingMonths: 4,
-      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true))
+      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)
+    )
     XCTAssert(month1 == Month(era: 1, year: 2020, month: 10, isInGregorianCalendar: true), "Expected 2020-10.")
 
     let month2 = calendar.month(
       byAddingMonths: -4,
-      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true))
+      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)
+    )
     XCTAssert(month2 == Month(era: 1, year: 2020, month: 02, isInGregorianCalendar: true), "Expected 2020-02.")
   }
 
   func testAdvancingByMoreThanOneYear() {
     let month1 = calendar.month(
       byAddingMonths: 16,
-      to: Month(era: 1, year: 2020, month: 08, isInGregorianCalendar: true))
+      to: Month(era: 1, year: 2020, month: 08, isInGregorianCalendar: true)
+    )
     XCTAssert(month1 == Month(era: 1, year: 2021, month: 12, isInGregorianCalendar: true), "Expected 2021-12.")
 
     let month2 = calendar.month(
       byAddingMonths: -25,
-      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true))
+      to: Month(era: 1, year: 2020, month: 06, isInGregorianCalendar: true)
+    )
     XCTAssert(month2 == Month(era: 1, year: 2018, month: 05, isInGregorianCalendar: true), "Expected 2018-05.")
   }
 

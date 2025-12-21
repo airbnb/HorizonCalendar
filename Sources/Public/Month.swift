@@ -26,15 +26,6 @@ typealias Month = MonthComponents
 /// initializing your `CalendarView`.
 public struct MonthComponents: Hashable {
 
-  // MARK: Lifecycle
-
-  init(era: Int, year: Int, month: Int, isInGregorianCalendar: Bool) {
-    self.era = era
-    self.year = year
-    self.month = month
-    self.isInGregorianCalendar = isInGregorianCalendar
-  }
-
   // MARK: Public
 
   public let era: Int
@@ -47,8 +38,8 @@ public struct MonthComponents: Hashable {
 
   // MARK: Internal
 
-  // In the Gregorian calendar, BCE years (era 0) get larger in descending order (10 BCE < 5 BCE).
-  // This property exists to facilitate an accurate `Comparable` implementation.
+  /// In the Gregorian calendar, BCE years (era 0) get larger in descending order (10 BCE < 5 BCE).
+  /// This property exists to facilitate an accurate `Comparable` implementation.
   let isInGregorianCalendar: Bool
 
 }
@@ -67,7 +58,7 @@ extension MonthComponents: CustomStringConvertible {
 
 extension MonthComponents: Comparable {
 
-  public static func < (lhs: MonthComponents, rhs: MonthComponents) -> Bool {
+  public static func <(lhs: MonthComponents, rhs: MonthComponents) -> Bool {
     guard lhs.era == rhs.era else { return lhs.era < rhs.era }
 
     let lhsCorrectedYear = lhs.isInGregorianCalendar && lhs.era == 0 ? -lhs.year : lhs.year

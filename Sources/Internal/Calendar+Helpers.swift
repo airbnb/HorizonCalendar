@@ -24,7 +24,8 @@ extension Calendar {
       era: component(.era, from: date),
       year: component(.year, from: date),
       month: component(.month, from: date),
-      isInGregorianCalendar: identifier == .gregorian)
+      isInGregorianCalendar: identifier == .gregorian
+    )
   }
 
   func firstDate(of month: Month) -> Date {
@@ -45,7 +46,8 @@ extension Calendar {
       era: month.era,
       year: month.year,
       month: month.month,
-      day: numberOfDaysInMonth)
+      day: numberOfDaysInMonth
+    )
     guard let lastDate = date(from: lastDateComponents) else {
       preconditionFailure("Failed to create a `Date` representing the last day of \(month).")
     }
@@ -58,7 +60,8 @@ extension Calendar {
       let firstDateOfNextMonth = date(
         byAdding: .month,
         value: numberOfMonths,
-        to: firstDate(of: month))
+        to: firstDate(of: month)
+      )
     else {
       preconditionFailure("Failed to advance \(month) by \(numberOfMonths) months.")
     }
@@ -77,7 +80,8 @@ extension Calendar {
       era: component(.era, from: date),
       year: component(.year, from: date),
       month: component(.month, from: date),
-      isInGregorianCalendar: identifier == .gregorian)
+      isInGregorianCalendar: identifier == .gregorian
+    )
     return Day(month: month, day: component(.day, from: date))
   }
 
@@ -124,8 +128,7 @@ extension Calendar {
   func weekdayIndex(for dayOfWeekPosition: DayOfWeekPosition) -> Int {
     let indexOfFirstWeekday = firstWeekday - 1
     let numberOfWeekdays = DayOfWeekPosition.numberOfPositions
-    let weekdayIndex = (indexOfFirstWeekday + (dayOfWeekPosition.rawValue - 1)) % numberOfWeekdays
-    return weekdayIndex
+    return (indexOfFirstWeekday + (dayOfWeekPosition.rawValue - 1)) % numberOfWeekdays
   }
 
 }
@@ -134,17 +137,19 @@ extension Calendar {
 
 extension Calendar {
 
-  // Some locales have a minimum number of days requirement for a date to be considered in the first
-  // week. To abstract away this complexity and simplify the layout of "weeks," we do all layout
-  // calculations based on a date's "row" in a month (which may or not map to a week, depending on
-  // the minimum days requirement for the first week in some locales).
+  /// Some locales have a minimum number of days requirement for a date to be considered in the first
+  /// week. To abstract away this complexity and simplify the layout of "weeks," we do all layout
+  /// calculations based on a date's "row" in a month (which may or not map to a week, depending on
+  /// the minimum days requirement for the first week in some locales).
   func rowInMonth(for date: Date) -> Int {
     let firstDateOfMonth = firstDate(
       of: Month(
         era: component(.era, from: date),
         year: component(.year, from: date),
         month: component(.month, from: date),
-        isInGregorianCalendar: identifier == .gregorian))
+        isInGregorianCalendar: identifier == .gregorian
+      )
+    )
 
     let numberOfPositions = DayOfWeekPosition.numberOfPositions
     let dayOfWeekPosition = dayOfWeekPosition(for: firstDateOfMonth)

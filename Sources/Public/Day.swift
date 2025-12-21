@@ -26,13 +26,6 @@ typealias Day = DayComponents
 /// `CalendarView`.
 public struct DayComponents: Hashable {
 
-  // MARK: Lifecycle
-
-  init(month: MonthComponents, day: Int) {
-    self.month = month
-    self.day = day
-  }
-
   // MARK: Public
 
   public let month: MonthComponents
@@ -61,7 +54,7 @@ extension DayComponents: CustomStringConvertible {
 
 extension DayComponents: Comparable {
 
-  public static func < (lhs: DayComponents, rhs: DayComponents) -> Bool {
+  public static func <(lhs: DayComponents, rhs: DayComponents) -> Bool {
     guard lhs.month == rhs.month else { return lhs.month < rhs.month }
     return lhs.day < rhs.day
   }

@@ -30,20 +30,22 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     verticalScrollMetricsMutator = ScrollMetricsMutator(
       scrollMetricsProvider: verticalScrollMetricsProvider,
-      scrollAxis: .vertical)
+      scrollAxis: .vertical
+    )
     verticalScrollMetricsMutator.setUpInitialMetricsIfNeeded()
     verticalScrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
-      viewportSize: initialSize)
+      viewportSize: initialSize
+    )
 
     horizontalScrollMetricsMutator = ScrollMetricsMutator(
       scrollMetricsProvider: horizontalScrollMetricsProvider,
-      scrollAxis: .horizontal)
+      scrollAxis: .horizontal
+    )
     horizontalScrollMetricsMutator.setUpInitialMetricsIfNeeded()
     horizontalScrollMetricsMutator.updateContentSizePerpendicularToScrollAxis(
-      viewportSize: initialSize)
+      viewportSize: initialSize
+    )
   }
-
-  // MARK: Boundary inset setting
 
   func testNoVerticalBoundariesVisible() {
     let initialOffset = verticalScrollMetricsProvider.offset(for: .vertical)
@@ -52,7 +54,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     verticalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: nil,
-      maximumScrollOffset: nil)
+      maximumScrollOffset: nil
+    )
 
     let finalOffset = verticalScrollMetricsProvider.offset(for: .vertical)
     let finalTopInset = verticalScrollMetricsProvider.startInset(for: .vertical)
@@ -61,10 +64,12 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     XCTAssert(initialOffset == finalOffset, "Offset changed despite no boundaries being visible.")
     XCTAssert(
       initialTopInset == finalTopInset,
-      "Top inset changed despite no boundaries being visible.")
+      "Top inset changed despite no boundaries being visible."
+    )
     XCTAssert(
       initialBottomInset == finalBottomInset,
-      "Bottom inset changed despite no boundaries being visible.")
+      "Bottom inset changed despite no boundaries being visible."
+    )
   }
 
   func testTopBoundaryBecomingVisible() {
@@ -74,7 +79,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let minimumScrollOffset = CGFloat(1000)
     verticalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: minimumScrollOffset,
-      maximumScrollOffset: nil)
+      maximumScrollOffset: nil
+    )
 
     let finalOffset = verticalScrollMetricsProvider.offset(for: .vertical)
     let finalTopInset = verticalScrollMetricsProvider.startInset(for: .vertical)
@@ -82,13 +88,16 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       finalTopInset == -minimumScrollOffset,
-      "Top inset does not equal the negated minimum scroll offset.")
+      "Top inset does not equal the negated minimum scroll offset."
+    )
     XCTAssert(
       initialBottomInset == finalBottomInset,
-      "Bottom inset should not change unless the maximum scroll offset is set.")
+      "Bottom inset should not change unless the maximum scroll offset is set."
+    )
   }
 
   func testBottomBoundaryBecomingVisible() {
@@ -98,7 +107,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let maximumScrollOffset = CGFloat(3000)
     verticalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: nil,
-      maximumScrollOffset: maximumScrollOffset)
+      maximumScrollOffset: maximumScrollOffset
+    )
 
     let finalOffset = verticalScrollMetricsProvider.offset(for: .vertical)
     let finalTopInset = verticalScrollMetricsProvider.startInset(for: .vertical)
@@ -109,13 +119,16 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       initialTopInset == finalTopInset,
-      "Top inset should not change unless the minimum scroll offset is set.")
+      "Top inset should not change unless the minimum scroll offset is set."
+    )
     XCTAssert(
       finalBottomInset == expectedBottomInset,
-      "Bottom inset does not equal the negated size minus maximum scroll offset.")
+      "Bottom inset does not equal the negated size minus maximum scroll offset."
+    )
   }
 
   func testTopAndBottomBoundaryBecomingVisible() {
@@ -125,7 +138,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let maximumScrollOffset = CGFloat(3000)
     verticalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: minimumScrollOffset,
-      maximumScrollOffset: maximumScrollOffset)
+      maximumScrollOffset: maximumScrollOffset
+    )
 
     let finalOffset = verticalScrollMetricsProvider.offset(for: .vertical)
     let finalTopInset = verticalScrollMetricsProvider.startInset(for: .vertical)
@@ -136,13 +150,16 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       finalTopInset == -minimumScrollOffset,
-      "Top inset does not equal the negated minimum scroll offset.")
+      "Top inset does not equal the negated minimum scroll offset."
+    )
     XCTAssert(
       finalBottomInset == expectedBottomInset,
-      "Bottom inset does not equal the negated size minus maximum scroll offset.")
+      "Bottom inset does not equal the negated size minus maximum scroll offset."
+    )
   }
 
   func testNoHorizontalBoundariesVisible() {
@@ -152,7 +169,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     horizontalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: nil,
-      maximumScrollOffset: nil)
+      maximumScrollOffset: nil
+    )
 
     let finalOffset = horizontalScrollMetricsProvider.offset(for: .horizontal)
     let finalLeftInset = horizontalScrollMetricsProvider.startInset(for: .horizontal)
@@ -161,10 +179,12 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     XCTAssert(initialOffset == finalOffset, "Offset changed despite no boundaries being visible.")
     XCTAssert(
       initialLeftInset == finalLeftInset,
-      "Left inset changed despite no boundaries being visible.")
+      "Left inset changed despite no boundaries being visible."
+    )
     XCTAssert(
       initialRightInset == finalRightInset,
-      "Right inset changed despite no boundaries being visible.")
+      "Right inset changed despite no boundaries being visible."
+    )
   }
 
   func testLeftBoundaryBecomingVisible() {
@@ -174,7 +194,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let minimumScrollOffset = CGFloat(1000)
     horizontalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: minimumScrollOffset,
-      maximumScrollOffset: nil)
+      maximumScrollOffset: nil
+    )
 
     let finalOffset = horizontalScrollMetricsProvider.offset(for: .horizontal)
     let finalLeftInset = horizontalScrollMetricsProvider.startInset(for: .horizontal)
@@ -182,13 +203,16 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       finalLeftInset == -minimumScrollOffset,
-      "Left inset does not equal the negated minimum scroll offset.")
+      "Left inset does not equal the negated minimum scroll offset."
+    )
     XCTAssert(
       initialRightInset == finalRightInset,
-      "Right inset should not change unless the maximum scroll offset is set.")
+      "Right inset should not change unless the maximum scroll offset is set."
+    )
   }
 
   func testRightBoundaryBecomingVisible() {
@@ -198,7 +222,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let maximumScrollOffset = CGFloat(3000)
     horizontalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: nil,
-      maximumScrollOffset: maximumScrollOffset)
+      maximumScrollOffset: maximumScrollOffset
+    )
 
     let finalOffset = horizontalScrollMetricsProvider.offset(for: .horizontal)
     let finalLeftInset = horizontalScrollMetricsProvider.startInset(for: .horizontal)
@@ -209,13 +234,16 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       initialLeftInset == finalLeftInset,
-      "Left inset should not change unless the minimum scroll offset is set.")
+      "Left inset should not change unless the minimum scroll offset is set."
+    )
     XCTAssert(
       finalRightInset == expectedRightInset,
-      "Right inset does not equal the negated size minus maximum scroll offset.")
+      "Right inset does not equal the negated size minus maximum scroll offset."
+    )
   }
 
   func testLeftAndRightBoundaryBecomingVisible() {
@@ -225,7 +253,8 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     let maximumScrollOffset = CGFloat(3000)
     horizontalScrollMetricsMutator.updateScrollBoundaries(
       minimumScrollOffset: minimumScrollOffset,
-      maximumScrollOffset: maximumScrollOffset)
+      maximumScrollOffset: maximumScrollOffset
+    )
 
     let finalOffset = horizontalScrollMetricsProvider.offset(for: .horizontal)
     let finalLeftInset = horizontalScrollMetricsProvider.startInset(for: .horizontal)
@@ -236,29 +265,32 @@ final class ScrollMetricsMutatorTests: XCTestCase {
 
     XCTAssert(
       initialOffset == finalOffset,
-      "Offset should not change when updating scroll boundaries.")
+      "Offset should not change when updating scroll boundaries."
+    )
     XCTAssert(
       finalLeftInset == -minimumScrollOffset,
-      "Left inset does not equal the negated minimum scroll offset.")
+      "Left inset does not equal the negated minimum scroll offset."
+    )
     XCTAssert(
       finalRightInset == expectedRightInset,
-      "Right inset does not equal the negated size minus maximum scroll offset.")
+      "Right inset does not equal the negated size minus maximum scroll offset."
+    )
   }
-
-  // MARK: Scroll position offsetting
 
   func testVerticalOffsetAdjustments() {
     let initialOffset = verticalScrollMetricsProvider.offset(for: .vertical)
     verticalScrollMetricsMutator.applyOffset(500)
     XCTAssert(
       initialOffset + 500 == verticalScrollMetricsProvider.offset(for: .vertical),
-      "Scroll offset does not equal the initial offset + 500.")
+      "Scroll offset does not equal the initial offset + 500."
+    )
 
     let initialOffset2 = verticalScrollMetricsProvider.offset(for: .vertical)
     verticalScrollMetricsMutator.applyOffset(-30)
     XCTAssert(
       initialOffset2 - 30 == verticalScrollMetricsProvider.offset(for: .vertical),
-      "Scroll offset does not equal the initial offset - 30.")
+      "Scroll offset does not equal the initial offset - 30."
+    )
   }
 
   func testHorizontalOffsetAdjustments() {
@@ -266,43 +298,47 @@ final class ScrollMetricsMutatorTests: XCTestCase {
     horizontalScrollMetricsMutator.applyOffset(25)
     XCTAssert(
       initialOffset + 25 == horizontalScrollMetricsProvider.offset(for: .horizontal),
-      "Scroll offset does not equal the initial offset + 25.")
+      "Scroll offset does not equal the initial offset + 25."
+    )
 
     let initialOffset2 = horizontalScrollMetricsProvider.offset(for: .horizontal)
     horizontalScrollMetricsMutator.applyOffset(-1000)
     XCTAssert(
       initialOffset2 - 1000 == horizontalScrollMetricsProvider.offset(for: .horizontal),
-      "Scroll offset does not equal the initial offset - 1000.")
+      "Scroll offset does not equal the initial offset - 1000."
+    )
   }
-
-  // MARK: Scroll Boundary Offsets
 
   func testVerticalMinimumScrollOffset() {
     verticalScrollMetricsProvider.setStartInset(to: 100, for: .vertical)
     XCTAssert(
       verticalScrollMetricsProvider.minimumOffset(for: .vertical) == -100,
-      "The minimum offset should equal the negated top inset.")
+      "The minimum offset should equal the negated top inset."
+    )
   }
 
   func testHorizontalMinimumScrollOffset() {
     horizontalScrollMetricsProvider.setStartInset(to: 300, for: .horizontal)
     XCTAssert(
       horizontalScrollMetricsProvider.minimumOffset(for: .horizontal) == -300,
-      "The minimum offset should equal the negated left inset.")
+      "The minimum offset should equal the negated left inset."
+    )
   }
 
   func testVerticalMaximumScrollOffset() {
     verticalScrollMetricsProvider.setEndInset(to: -50, for: .vertical)
     XCTAssert(
       verticalScrollMetricsProvider.maximumOffset(for: .vertical) == 9999999999470.0,
-      "The maximum offset should equal the content height plus bottom inset minus bounds height.")
+      "The maximum offset should equal the content height plus bottom inset minus bounds height."
+    )
   }
 
   func testHorizontalMaximumScrollOffset() {
     horizontalScrollMetricsProvider.setEndInset(to: -80, for: .horizontal)
     XCTAssert(
       horizontalScrollMetricsProvider.maximumOffset(for: .horizontal) == 9999999999600.0,
-      "The maximum offset should equal the content width plus right inset minus bounds width.")
+      "The maximum offset should equal the content width plus right inset minus bounds width."
+    )
   }
 
   // MARK: Private

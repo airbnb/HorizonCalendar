@@ -64,7 +64,9 @@ public final class DayOfWeekView: UIView {
         top: edgeInsets.top,
         left: edgeInsets.leading,
         bottom: edgeInsets.bottom,
-        right: edgeInsets.trailing))
+        right: edgeInsets.trailing
+      )
+    )
 
     let path: CGPath
     switch invariantViewProperties.shape {
@@ -72,7 +74,9 @@ public final class DayOfWeekView: UIView {
       path = UIBezierPath(
         ovalIn: CGRect(
           origin: CGPoint(x: edgeInsets.leading, y: edgeInsets.top),
-          size: insetBounds.size)).cgPath
+          size: insetBounds.size
+        )
+      ).cgPath
 
     case .rectangle(let cornerRadius):
       path = UIBezierPath(roundedRect: insetBounds, cornerRadius: cornerRadius).cgPath
@@ -84,7 +88,8 @@ public final class DayOfWeekView: UIView {
       x: edgeInsets.leading,
       y: edgeInsets.top,
       width: insetBounds.width,
-      height: insetBounds.height)
+      height: insetBounds.height
+    )
   }
 
   // MARK: Fileprivate
@@ -220,9 +225,8 @@ extension DayOfWeekView {
 extension DayOfWeekView: CalendarItemViewRepresentable {
 
   public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> DayOfWeekView
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> DayOfWeekView {
     DayOfWeekView(invariantViewProperties: invariantViewProperties)
   }
 

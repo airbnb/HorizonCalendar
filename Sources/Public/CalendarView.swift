@@ -111,7 +111,8 @@ public final class CalendarView: UIView {
         top: max(newValue.top, 0),
         left: max(newValue.left, 0),
         bottom: max(newValue.bottom, 0),
-        right: max(newValue.right, 0))
+        right: max(newValue.right, 0)
+      )
     }
   }
 
@@ -124,7 +125,8 @@ public final class CalendarView: UIView {
         top: max(newValue.top, 0),
         leading: max(newValue.leading, 0),
         bottom: max(newValue.bottom, 0),
-        trailing: max(newValue.trailing, 0))
+        trailing: max(newValue.trailing, 0)
+      )
     }
   }
 
@@ -320,8 +322,8 @@ public final class CalendarView: UIView {
   public func scroll(
     toMonthContaining dateInTargetMonth: Date,
     scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     let month = calendar.month(containing: dateInTargetMonth)
     guard content.monthRange.contains(month) else {
       assertionFailure("""
@@ -337,7 +339,8 @@ public final class CalendarView: UIView {
     scrollToItemContext = ScrollToItemContext(
       targetItem: .month(month),
       scrollPosition: scrollPosition,
-      animated: animated)
+      animated: animated
+    )
 
     if animated {
       startScrollingTowardTargetItem()
@@ -361,8 +364,8 @@ public final class CalendarView: UIView {
   public func scroll(
     toDayContaining dateInTargetDay: Date,
     scrollPosition: CalendarViewScrollPosition,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     let day = calendar.day(containing: dateInTargetDay)
     guard content.dayRange.contains(day) else {
       assertionFailure("""
@@ -378,7 +381,8 @@ public final class CalendarView: UIView {
     scrollToItemContext = ScrollToItemContext(
       targetItem: .day(day),
       scrollPosition: scrollPosition,
-      animated: animated)
+      animated: animated
+    )
 
     if animated {
       startScrollingTowardTargetItem()
@@ -409,7 +413,8 @@ public final class CalendarView: UIView {
   fileprivate lazy var multiDaySelectionLongPressGestureRecognizer: UILongPressGestureRecognizer = {
     let gestureRecognizer = UILongPressGestureRecognizer(
       target: self,
-      action: #selector(multiDaySelectionGestureRecognized(_:)))
+      action: #selector(multiDaySelectionGestureRecognized(_:))
+    )
     gestureRecognizer.allowableMovement = .greatestFiniteMagnitude
     gestureRecognizer.delegate = gestureRecognizerDelegate
     return gestureRecognizer
@@ -418,7 +423,8 @@ public final class CalendarView: UIView {
   fileprivate lazy var multiDaySelectionPanGestureRecognizer: UIPanGestureRecognizer = {
     let gestureRecognizer = UIPanGestureRecognizer(
       target: self,
-      action: #selector(multiDaySelectionGestureRecognized(_:)))
+      action: #selector(multiDaySelectionGestureRecognized(_:))
+    )
     gestureRecognizer.maximumNumberOfTouches = 1
     gestureRecognizer.maximumNumberOfTouches = 1
     gestureRecognizer.delegate = gestureRecognizerDelegate
@@ -435,12 +441,12 @@ public final class CalendarView: UIView {
     content.calendar
   }
 
-  // This hack is needed to prevent the scroll view from over-scrolling far past the content. This
-  // occurs in 2 scenarios:
-  // - On macOS if you scroll quickly toward a boundary
-  // - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
-  //
-  // https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
+  /// This hack is needed to prevent the scroll view from over-scrolling far past the content. This
+  /// occurs in 2 scenarios:
+  /// - On macOS if you scroll quickly toward a boundary
+  /// - On iOS if you scroll quickly toward a boundary and targetContentOffset is mutated
+  ///
+  /// https://openradar.appspot.com/radar?id=4966130615582720 demonstrates this issue on macOS.
   fileprivate func preventLargeOverScrollIfNeeded() {
     guard isRunningOnMac || content.monthsLayout.isPaginationEnabled else { return }
 
@@ -459,24 +465,28 @@ public final class CalendarView: UIView {
       case .vertical:
         newOffset = CGPoint(
           x: scrollView.contentOffset.x,
-          y: scrollView.minimumOffset(for: scrollAxis))
+          y: scrollView.minimumOffset(for: scrollAxis)
+        )
 
       case .horizontal:
         newOffset = CGPoint(
           x: scrollView.minimumOffset(for: scrollAxis),
-          y: scrollView.contentOffset.y)
+          y: scrollView.contentOffset.y
+        )
       }
     } else if offset > scrollView.maximumOffset(for: scrollAxis) + boundsSize {
       switch scrollAxis {
       case .vertical:
         newOffset = CGPoint(
           x: scrollView.contentOffset.x,
-          y: scrollView.maximumOffset(for: scrollAxis))
+          y: scrollView.maximumOffset(for: scrollAxis)
+        )
 
       case .horizontal:
         newOffset = CGPoint(
           x: scrollView.maximumOffset(for: scrollAxis),
-          y: scrollView.contentOffset.y)
+          y: scrollView.contentOffset.y
+        )
       }
     } else {
       newOffset = nil
@@ -520,8 +530,8 @@ public final class CalendarView: UIView {
   private lazy var scrollViewDelegate = ScrollViewDelegate(calendarView: self)
   private lazy var gestureRecognizerDelegate = GestureRecognizerDelegate(calendarView: self)
 
-  // Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
-  // and `preventLargeOverScrollIfNeeded` for more context.
+  /// Necessary to work around a `UIScrollView` behavior difference on Mac. See `scrollViewDidScroll`
+  /// and `preventLargeOverScrollIfNeeded` for more context.
   private lazy var isRunningOnMac: Bool = {
     if #available(iOS 13.0, *) {
       if ProcessInfo.processInfo.isMacCatalystApp {
@@ -574,14 +584,16 @@ public final class CalendarView: UIView {
       if scrollAxis != previousScrollMetricsMutator.scrollAxis {
         scrollMetricsMutator = ScrollMetricsMutator(
           scrollMetricsProvider: scrollView,
-          scrollAxis: scrollAxis)
+          scrollAxis: scrollAxis
+        )
       } else {
         scrollMetricsMutator = previousScrollMetricsMutator
       }
     } else {
       scrollMetricsMutator = ScrollMetricsMutator(
         scrollMetricsProvider: scrollView,
-        scrollAxis: scrollAxis)
+        scrollAxis: scrollAxis
+      )
     }
 
     _scrollMetricsMutator = scrollMetricsMutator
@@ -605,7 +617,8 @@ public final class CalendarView: UIView {
         size: bounds.size,
         layoutMargins: directionalLayoutMargins,
         scale: scale,
-        backgroundColor: backgroundColor)
+        backgroundColor: backgroundColor
+      )
       _visibleItemsProvider = visibleItemsProvider
       return visibleItemsProvider
     }
@@ -651,30 +664,34 @@ public final class CalendarView: UIView {
       self,
       selector: #selector(accessibilityElementFocused(_:)),
       name: UIAccessibility.elementFocusedNotification,
-      object: nil)
+      object: nil
+    )
 
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(setNeedsLayout),
       name: UIAccessibility.voiceOverStatusDidChangeNotification,
-      object: nil)
+      object: nil
+    )
   }
 
   private func anchorLayoutItem(
     for scrollToItemContext: ScrollToItemContext,
-    visibleItemsProvider: VisibleItemsProvider)
-    -> LayoutItem
-  {
+    visibleItemsProvider: VisibleItemsProvider
+  ) -> LayoutItem {
     let offset: CGPoint
     switch scrollMetricsMutator.scrollAxis {
     case .vertical:
       offset = CGPoint(
         x: scrollView.contentOffset.x + directionalLayoutMargins.leading,
-        y: scrollView.contentOffset.y)
+        y: scrollView.contentOffset.y
+      )
+
     case .horizontal:
       offset = CGPoint(
         x: scrollView.contentOffset.x,
-        y: scrollView.contentOffset.y + directionalLayoutMargins.top)
+        y: scrollView.contentOffset.y + directionalLayoutMargins.top
+      )
     }
 
     switch scrollToItemContext.targetItem {
@@ -682,19 +699,21 @@ public final class CalendarView: UIView {
       return visibleItemsProvider.anchorMonthHeaderItem(
         for: month,
         offset: offset,
-        scrollPosition: scrollToItemContext.scrollPosition)
+        scrollPosition: scrollToItemContext.scrollPosition
+      )
+
     case .day(let day):
       return visibleItemsProvider.anchorDayItem(
         for: day,
         offset: offset,
-        scrollPosition: scrollToItemContext.scrollPosition)
+        scrollPosition: scrollToItemContext.scrollPosition
+      )
     }
   }
 
   private func positionRelativeToVisibleBounds(
-    for targetItem: ScrollToItemContext.TargetItem)
-    -> ScrollToItemContext.PositionRelativeToVisibleBounds?
-  {
+    for targetItem: ScrollToItemContext.TargetItem
+  ) -> ScrollToItemContext.PositionRelativeToVisibleBounds? {
     guard let visibleItemsDetails else { return nil }
 
     switch targetItem {
@@ -724,7 +743,7 @@ public final class CalendarView: UIView {
     }
   }
 
-  // This exists so that we can force a layout ourselves in preparation for an animated update.
+  /// This exists so that we can force a layout ourselves in preparation for an animated update.
   private func _layoutSubviews(extendLayoutRegion: Bool) {
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.setUpInitialMetricsIfNeeded()
@@ -735,7 +754,8 @@ public final class CalendarView: UIView {
     if let scrollToItemContext, !scrollToItemContext.animated {
       anchorLayoutItem = self.anchorLayoutItem(
         for: scrollToItemContext,
-        visibleItemsProvider: visibleItemsProvider)
+        visibleItemsProvider: visibleItemsProvider
+      )
       // Clear the `scrollToItemContext` once we use it. This could happen over the course of
       // several layout pass attempts since `isReadyForLayout` might be false initially.
       self.scrollToItemContext = nil
@@ -745,16 +765,19 @@ public final class CalendarView: UIView {
       let initialScrollToItemContext = ScrollToItemContext(
         targetItem: .month(content.monthRange.lowerBound),
         scrollPosition: .firstFullyVisiblePosition,
-        animated: false)
+        animated: false
+      )
       anchorLayoutItem = self.anchorLayoutItem(
         for: initialScrollToItemContext,
-        visibleItemsProvider: visibleItemsProvider)
+        visibleItemsProvider: visibleItemsProvider
+      )
     }
 
     let currentVisibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorLayoutItem,
       offset: scrollView.contentOffset,
-      extendLayoutRegion: extendLayoutRegion)
+      extendLayoutRegion: extendLayoutRegion
+    )
     self.anchorLayoutItem = currentVisibleItemsDetails.centermostLayoutItem
 
     updateVisibleViews(withVisibleItems: currentVisibleItemsDetails.visibleItems)
@@ -770,7 +793,8 @@ public final class CalendarView: UIView {
     scrollView.performWithoutNotifyingDelegate {
       scrollMetricsMutator.updateScrollBoundaries(
         minimumScrollOffset: minimumScrollOffset,
-        maximumScrollOffset: maximumScrollOffset)
+        maximumScrollOffset: maximumScrollOffset
+      )
     }
 
     scrollView.cachedAccessibilityElements = nil
@@ -782,13 +806,15 @@ public final class CalendarView: UIView {
 
     let contexts = reuseManager.reusedViewContexts(
       visibleItems: visibleItems,
-      reuseUnusedViews: !UIAccessibility.isVoiceOverRunning)
+      reuseUnusedViews: !UIAccessibility.isVoiceOverRunning
+    )
 
     for context in contexts {
       UIView.conditionallyPerformWithoutAnimation(when: !context.isReusedViewSameAsPreviousView) {
         if context.view.superview == nil {
           let insertionIndex = subviewInsertionIndexTracker.insertionIndex(
-            forSubviewWithCorrespondingItemType: context.visibleItem.itemType)
+            forSubviewWithCorrespondingItemType: context.visibleItem.itemType
+          )
           scrollView.insertSubview(context.view, at: insertionIndex)
         }
 
@@ -851,7 +877,8 @@ public final class CalendarView: UIView {
 
     let scrollToItemDisplayLink = CADisplayLink(
       target: self,
-      selector: #selector(scrollToItemDisplayLinkFired))
+      selector: #selector(scrollToItemDisplayLinkFired)
+    )
 
     scrollToItemAnimationStartTime = CACurrentMediaTime()
 
@@ -860,7 +887,8 @@ public final class CalendarView: UIView {
       scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
         minimum: 80,
         maximum: 120,
-        preferred: 120)
+        preferred: 120
+      )
       #endif
     }
 
@@ -872,7 +900,8 @@ public final class CalendarView: UIView {
     self.scrollToItemContext = ScrollToItemContext(
       targetItem: scrollToItemContext.targetItem,
       scrollPosition: scrollToItemContext.scrollPosition,
-      animated: false)
+      animated: false
+    )
   }
 
   @objc
@@ -889,7 +918,8 @@ public final class CalendarView: UIView {
 
     guard scrollToItemContext.animated else {
       preconditionFailure(
-        "The scroll-to-item animation display link fired despite no animation being needed.")
+        "The scroll-to-item animation display link fired despite no animation being needed."
+      )
     }
 
     guard isReadyForLayout else { return }
@@ -912,14 +942,17 @@ public final class CalendarView: UIView {
       case .vertical:
         targetPosition = anchorLayoutItem(
           for: scrollToItemContext,
-          visibleItemsProvider: visibleItemsProvider)
-          .frame.minY
+          visibleItemsProvider: visibleItemsProvider
+        )
+        .frame.minY
         currentPosition = frame.minY
+
       case .horizontal:
         targetPosition = anchorLayoutItem(
           for: scrollToItemContext,
-          visibleItemsProvider: visibleItemsProvider)
-          .frame.minX
+          visibleItemsProvider: visibleItemsProvider
+        )
+        .frame.minX
         currentPosition = frame.minX
       }
       let distanceToTargetPosition = currentPosition - targetPosition
@@ -969,6 +1002,7 @@ public final class CalendarView: UIView {
       paddingFromFirstEdge = frameOfFirstVisibleMonth.minY -
         scrollView.contentOffset.y -
         (visibleItemsDetails?.heightOfPinnedContent ?? 0)
+
     case .horizontal:
       paddingFromFirstEdge = frameOfFirstVisibleMonth.minX - scrollView.contentOffset.x
     }
@@ -985,12 +1019,14 @@ public final class CalendarView: UIView {
       scrollToItemContext = ScrollToItemContext(
         targetItem: existingScrollToItemContext.targetItem,
         scrollPosition: scrollPosition,
-        animated: false)
+        animated: false
+      )
     } else {
       scrollToItemContext = ScrollToItemContext(
         targetItem: .month(firstVisibleMonth),
         scrollPosition: .firstFullyVisiblePosition(padding: paddingFromFirstEdge),
-        animated: false)
+        animated: false
+      )
     }
   }
 
@@ -1063,7 +1099,8 @@ public final class CalendarView: UIView {
       if autoScrollDisplayLink == nil {
         let autoScrollDisplayLink = CADisplayLink(
           target: self,
-          selector: #selector(autoScrollDisplayLinkFired))
+          selector: #selector(autoScrollDisplayLinkFired)
+        )
         autoScrollDisplayLink.add(to: .main, forMode: .common)
         self.autoScrollDisplayLink = autoScrollDisplayLink
       }
@@ -1127,8 +1164,8 @@ public final class CalendarView: UIView {
 
 extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
 
-  // This is where we perform our width-dependent height calculation. See `DoubleLayoutPassHelpers`
-  // for more details about why this is needed and how it works.
+  /// This is where we perform our width-dependent height calculation. See `DoubleLayoutPassHelpers`
+  /// for more details about why this is needed and how it works.
   func intrinsicContentSize(forHorizontallyInsetWidth width: CGFloat) -> CGSize {
     let calendarWidth = width + layoutMargins.left + layoutMargins.right
     let calendarHeight: CGFloat
@@ -1144,19 +1181,23 @@ extension CalendarView: WidthDependentIntrinsicContentHeightProviding {
       size: CGSize(width: calendarWidth, height: calendarHeight),
       layoutMargins: directionalLayoutMargins,
       scale: scale,
-      backgroundColor: backgroundColor)
+      backgroundColor: backgroundColor
+    )
 
     let anchorMonthHeaderLayoutItem = anchorLayoutItem(
       for: .init(
         targetItem: .month(content.monthRange.lowerBound),
         scrollPosition: .firstFullyVisiblePosition,
-        animated: false),
-      visibleItemsProvider: visibleItemsProvider)
+        animated: false
+      ),
+      visibleItemsProvider: visibleItemsProvider
+    )
 
     let visibleItemsDetails = visibleItemsProvider.detailsForVisibleItems(
       surroundingPreviouslyVisibleLayoutItem: anchorMonthHeaderLayoutItem,
       offset: scrollView.contentOffset,
-      extendLayoutRegion: false)
+      extendLayoutRegion: false
+    )
 
     return CGSize(width: UIView.noIntrinsicMetric, height: visibleItemsDetails.intrinsicHeight)
   }
@@ -1183,8 +1224,9 @@ extension CalendarView {
       let numberOfVisibleMonths = calendar.dateComponents(
         [.month],
         from: firstVisibleMonthDate,
-        to: lastVisibleMonthDate)
-        .month
+        to: lastVisibleMonthDate
+      )
+      .month
     else {
       return false
     }
@@ -1197,7 +1239,8 @@ extension CalendarView {
         era: lastVisibleMonth.era,
         year: lastVisibleMonth.year,
         month: lastVisibleMonth.month - numberOfVisibleMonths,
-        isInGregorianCalendar: lastVisibleMonth.isInGregorianCalendar)
+        isInGregorianCalendar: lastVisibleMonth.isInGregorianCalendar
+      )
       scrollPosition = .lastFullyVisiblePosition
 
     case (.down, .vertical), (.left, .horizontal):
@@ -1205,7 +1248,8 @@ extension CalendarView {
         era: firstVisibleMonth.era,
         year: firstVisibleMonth.year,
         month: firstVisibleMonth.month + numberOfVisibleMonths,
-        isInGregorianCalendar: firstVisibleMonth.isInGregorianCalendar)
+        isInGregorianCalendar: firstVisibleMonth.isInGregorianCalendar
+      )
       scrollPosition = .firstFullyVisiblePosition
 
     default:
@@ -1257,14 +1301,17 @@ extension CalendarView {
         x: 0,
         y: layoutMargins.top,
         width: bounds.width,
-        height: bounds.height - layoutMargins.top - layoutMargins.bottom)
+        height: bounds.height - layoutMargins.top - layoutMargins.bottom
+      )
       isElementFullyVisible = verticalBounds.contains(viewFrameInCalendarView)
+
     case .horizontal:
       let horizontalBounds = CGRect(
         x: layoutMargins.left,
         y: 0,
         width: bounds.width - layoutMargins.left - layoutMargins.right,
-        height: bounds.height)
+        height: bounds.height
+      )
       isElementFullyVisible = horizontalBounds.contains(viewFrameInCalendarView)
     }
 
@@ -1277,9 +1324,11 @@ extension CalendarView {
       case .monthHeader(let month):
         let dateInTargetMonth = calendar.firstDate(of: month)
         scroll(toMonthContaining: dateInTargetMonth, scrollPosition: .centered, animated: false)
+
       case .day(let day):
         let dateInTargetDay = calendar.startDate(of: day)
         scroll(toDayContaining: dateInTargetDay, scrollPosition: .centered, animated: false)
+
       default:
         break
       }
@@ -1324,8 +1373,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
   func scrollViewDidEndDragging(
     _: UIScrollView,
-    willDecelerate decelerate: Bool)
-  {
+    willDecelerate decelerate: Bool
+  ) {
     guard let calendarView, let visibleDayRange = calendarView.visibleDayRange else { return }
     calendarView.didEndDragging?(visibleDayRange, decelerate)
   }
@@ -1346,17 +1395,19 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
     let pageSize = options.pageSize(
       calendarWidth: calendarView.bounds.width,
-      interMonthSpacing: calendarView.content.interMonthSpacing)
+      interMonthSpacing: calendarView.content.interMonthSpacing
+    )
     calendarView.previousPageIndex = PaginationHelpers.closestPageIndex(
       forOffset: scrollView.contentOffset.x,
-      pageSize: pageSize)
+      pageSize: pageSize
+    )
   }
 
   func scrollViewWillEndDragging(
     _ scrollView: UIScrollView,
     withVelocity velocity: CGPoint,
-    targetContentOffset: UnsafeMutablePointer<CGPoint>)
-  {
+    targetContentOffset: UnsafeMutablePointer<CGPoint>
+  ) {
     guard
       let calendarView,
       case .horizontal(let options) = calendarView.content.monthsLayout,
@@ -1367,7 +1418,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
     let pageSize = options.pageSize(
       calendarWidth: calendarView.bounds.width,
-      interMonthSpacing: calendarView.content.interMonthSpacing)
+      interMonthSpacing: calendarView.content.interMonthSpacing
+    )
 
     switch paginationConfiguration.restingAffinity {
     case .atPositionsAdjacentToPrevious:
@@ -1380,14 +1432,16 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
         toPreviousPageIndex: previousPageIndex,
         targetOffset: targetContentOffset.pointee.x,
         velocity: velocity.x,
-        pageSize: pageSize)
+        pageSize: pageSize
+      )
 
     case .atPositionsClosestToTargetOffset:
       targetContentOffset.pointee.x = PaginationHelpers.closestPageOffset(
         toTargetOffset: targetContentOffset.pointee.x,
         touchUpOffset: scrollView.contentOffset.x,
         velocity: velocity.x,
-        pageSize: pageSize)
+        pageSize: pageSize
+      )
     }
   }
 
@@ -1400,7 +1454,8 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
       calendarView.scroll(
         toMonthContaining: firstDate,
         scrollPosition: .firstFullyVisiblePosition(padding: 0),
-        animated: true)
+        animated: true
+      )
     }
 
     return false
@@ -1428,9 +1483,8 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
 
   func gestureRecognizer(
     _ gestureRecognizer: UIGestureRecognizer,
-    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
-    -> Bool
-  {
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+  ) -> Bool {
     guard let calendarView else { return false }
 
     let isGestureRecognizerMultiSelectGesture =
@@ -1438,11 +1492,9 @@ private final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDele
       gestureRecognizer === calendarView.multiDaySelectionPanGestureRecognizer
     let isOtherGestureRecognizerScrollViewPanGesture =
       otherGestureRecognizer === calendarView.scrollView.panGestureRecognizer
-    let isMultiSelectingAndScrolling =
-      isGestureRecognizerMultiSelectGesture &&
+    return isGestureRecognizerMultiSelectGesture &&
       isOtherGestureRecognizerScrollViewPanGesture &&
       gestureRecognizer.state == .changed
-    return isMultiSelectingAndScrolling
   }
 
   // MARK: Private

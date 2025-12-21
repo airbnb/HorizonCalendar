@@ -19,8 +19,8 @@ extension UIView {
 
   static func conditionallyPerformWithoutAnimation(
     when condition: Bool,
-    _ actions: () -> Void)
-  {
+    _ actions: () -> Void
+  ) {
     if condition {
       UIView.performWithoutAnimation(actions)
     } else {

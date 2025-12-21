@@ -47,8 +47,8 @@ final class VisibleItem {
 
   // MARK: Private
 
-  // Performance optimization - storing this separately speeds up the `Hashable` implementation,
-  // which is frequently invoked by the `ItemViewReuseManager`'s `Set` operations.
+  /// Performance optimization - storing this separately speeds up the `Hashable` implementation,
+  /// which is frequently invoked by the `ItemViewReuseManager`'s `Set` operations.
   private let cachedHashValue: Int
 
 }
@@ -57,7 +57,7 @@ final class VisibleItem {
 
 extension VisibleItem: Equatable {
 
-  static func == (lhs: VisibleItem, rhs: VisibleItem) -> Bool {
+  static func ==(lhs: VisibleItem, rhs: VisibleItem) -> Bool {
     lhs.calendarItemModel._itemViewDifferentiator == rhs.calendarItemModel._itemViewDifferentiator &&
       lhs.itemType == rhs.itemType
   }

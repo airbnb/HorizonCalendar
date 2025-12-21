@@ -11,25 +11,27 @@ final class CalendarContentTests: XCTestCase {
   func testCanReturnNilFromCalendarContentClosures() {
     _ = CalendarViewContent(
       visibleDateRange: Date.distantPast...Date.distantFuture,
-      monthsLayout: .vertical)
-      .monthHeaderItemProvider { _ in
-        nil
-      }
-      .dayOfWeekItemProvider { _, _ in
-        nil
-      }
-      .dayItemProvider { _ in
-        nil
-      }
-      .dayBackgroundItemProvider { _ in
-        nil
-      }
+      monthsLayout: .vertical
+    )
+    .monthHeaderItemProvider { _ in
+      nil
+    }
+    .dayOfWeekItemProvider { _, _ in
+      nil
+    }
+    .dayItemProvider { _ in
+      nil
+    }
+    .dayBackgroundItemProvider { _ in
+      nil
+    }
   }
 
   func testNilDayItemUsesDefaultValue() {
     let content = CalendarViewContent(
       visibleDateRange: Date.distantPast...Date.distantFuture,
-      monthsLayout: .vertical)
+      monthsLayout: .vertical
+    )
 
     let day = Day(month: Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true), day: 1)
     let defaultDayItem = content.dayItemProvider(day)
@@ -43,7 +45,8 @@ final class CalendarContentTests: XCTestCase {
   func testNilDayOfWeekItemUsesDefaultValue() {
     let content = CalendarViewContent(
       visibleDateRange: Date.distantPast...Date.distantFuture,
-      monthsLayout: .vertical)
+      monthsLayout: .vertical
+    )
 
     let month = Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
     let defaultDayOfWeekItem = content.dayOfWeekItemProvider(month, 1)
@@ -57,7 +60,8 @@ final class CalendarContentTests: XCTestCase {
   func testNilMonthHeaderItemUsesDefaultValue() {
     let content = CalendarViewContent(
       visibleDateRange: Date.distantPast...Date.distantFuture,
-      monthsLayout: .vertical)
+      monthsLayout: .vertical
+    )
 
     let month = Month(era: 1, year: 2023, month: 1, isInGregorianCalendar: true)
     let defaultMonthHeaderItem = content.monthHeaderItemProvider(month)
@@ -76,15 +80,15 @@ final class CalendarContentTests: XCTestCase {
 /// and can be abstracted behind a single protocol
 protocol CalendarContentConfigurable {
   func monthHeaderItemProvider(
-    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?)
-    -> Self
+    _ monthHeaderItemProvider: @escaping (_ month: Month) -> AnyCalendarItemModel?
+  ) -> Self
 
   func dayOfWeekItemProvider(
     _ dayOfWeekItemProvider: @escaping (
       _ month: Month?,
-      _ weekdayIndex: Int)
-      -> AnyCalendarItemModel?)
-    -> Self
+      _ weekdayIndex: Int
+    ) -> AnyCalendarItemModel?
+  ) -> Self
 
   func dayItemProvider(_ dayItemProvider: @escaping (_ day: Day) -> AnyCalendarItemModel?) -> Self
 }

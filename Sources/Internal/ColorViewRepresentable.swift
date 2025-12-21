@@ -18,9 +18,8 @@ import UIKit
 enum ColorViewRepresentable: CalendarItemViewRepresentable {
 
   static func makeView(
-    withInvariantViewProperties invariantViewProperties: UIColor)
-    -> UIView
-  {
+    withInvariantViewProperties invariantViewProperties: UIColor
+  ) -> UIView {
     let view = UIView()
     view.backgroundColor = invariantViewProperties
     return view

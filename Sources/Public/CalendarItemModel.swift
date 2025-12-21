@@ -25,9 +25,7 @@ import UIKit
 ///
 /// `CalendarItemModel` is generic over a `ViewRepresentable`, a type that can create and update the represented view.
 /// See the documentation for `CalendarItemViewRepresentable` for more details.
-public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
-  ViewRepresentable: CalendarItemViewRepresentable
-{
+public struct CalendarItemModel<ViewRepresentable: CalendarItemViewRepresentable>: AnyCalendarItemModel {
 
   // MARK: Lifecycle
 
@@ -43,11 +41,12 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
   ///   the dynamic, data-driven parts of the view.
   public init(
     invariantViewProperties: ViewRepresentable.InvariantViewProperties,
-    content: ViewRepresentable.Content)
-  {
+    content: ViewRepresentable.Content
+  ) {
     _itemViewDifferentiator = _CalendarItemViewDifferentiator(
       viewType: ObjectIdentifier(ViewRepresentable.self),
-      invariantViewProperties: invariantViewProperties)
+      invariantViewProperties: invariantViewProperties
+    )
 
     self.invariantViewProperties = invariantViewProperties
     self.content = content
@@ -75,7 +74,8 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
     guard let other = other as? Self else {
       let selfTypeDescription = String(reflecting: Self.self)
       preconditionFailure(
-        "Failed to convert the calendar item model to an instance of \(selfTypeDescription).")
+        "Failed to convert the calendar item model to an instance of \(selfTypeDescription)."
+      )
     }
 
     return content == other.content
@@ -87,7 +87,7 @@ public struct CalendarItemModel<ViewRepresentable>: AnyCalendarItemModel where
 
   private let invariantViewProperties: ViewRepresentable.InvariantViewProperties
 
-  // This is only mutable because we need to update the ID for `SwiftUIWrapperView`'s content.
+  /// This is only mutable because we need to update the ID for `SwiftUIWrapperView`'s content.
   private var content: ViewRepresentable.Content?
 
 }
@@ -106,7 +106,8 @@ extension CalendarItemModel where ViewRepresentable.Content == Never {
   public init(invariantViewProperties: ViewRepresentable.InvariantViewProperties) {
     _itemViewDifferentiator = _CalendarItemViewDifferentiator(
       viewType: ObjectIdentifier(ViewRepresentable.self),
-      invariantViewProperties: invariantViewProperties)
+      invariantViewProperties: invariantViewProperties
+    )
 
     self.invariantViewProperties = invariantViewProperties
     content = nil
@@ -129,9 +130,8 @@ extension CalendarItemViewRepresentable {
   ///   the dynamic, data-driven parts of the view.
   public static func calendarItemModel(
     invariantViewProperties: InvariantViewProperties,
-    content: Content)
-    -> CalendarItemModel<Self>
-  {
+    content: Content
+  ) -> CalendarItemModel<Self> {
     CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties, content: content)
   }
 
@@ -150,9 +150,8 @@ extension CalendarItemViewRepresentable where Content == Never {
   ///   For example, you might pass a type that contains properties to configure a `UILabel`'s `textAlignment`, `textColor`,
   ///   and `font`, assuming none of those values change in response to `content` updates.
   public static func calendarItemModel(
-    invariantViewProperties: InvariantViewProperties)
-    -> CalendarItemModel<Self>
-  {
+    invariantViewProperties: InvariantViewProperties
+  ) -> CalendarItemModel<Self> {
     CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties)
   }
 
@@ -171,7 +170,8 @@ extension View {
     let contentAndID = SwiftUIWrapperView.ContentAndID(content: self, id: 0)
     return CalendarItemModel<SwiftUIWrapperView<Self>>(
       invariantViewProperties: .init(initialContentAndID: contentAndID),
-      content: contentAndID)
+      content: contentAndID
+    )
   }
 
 }

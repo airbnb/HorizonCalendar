@@ -17,8 +17,8 @@ import CoreGraphics
 
 extension CGFloat {
 
-  // Used to work around "... returned inf for an intrinsicContentSize dimension. Using 2.5e+07
-  // instead."
+  /// Used to work around "... returned inf for an intrinsicContentSize dimension. Using 2.5e+07
+  /// instead."
   static let maxLayoutValue: CGFloat = 2.5E07
 
 }

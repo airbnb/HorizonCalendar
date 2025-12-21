@@ -23,8 +23,8 @@ public struct DrawingConfig: Hashable {
   public init(
     fillColor: UIColor = .clear,
     borderColor: UIColor = .clear,
-    borderWidth: CGFloat = 1)
-  {
+    borderWidth: CGFloat = 1
+  ) {
     self.fillColor = fillColor
     self.borderColor = borderColor
     self.borderWidth = borderWidth

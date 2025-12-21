@@ -44,7 +44,8 @@ class BaseDemoViewController: UIViewController, DemoViewController {
     dateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "EEEE, MMM d, yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: calendar.locale ?? Locale.current
+    )
     return dateFormatter
   }()
 
@@ -62,13 +63,16 @@ class BaseDemoViewController: UIViewController, DemoViewController {
         calendarView.topAnchor.constraint(equalTo: view.topAnchor),
         calendarView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         calendarView.leadingAnchor.constraint(
-          greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
+          greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor
+        ),
         calendarView.trailingAnchor.constraint(
-          lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
+          lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor
+        ),
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         calendarView.widthAnchor.constraint(lessThanOrEqualToConstant: 375),
         calendarView.widthAnchor.constraint(equalToConstant: 375).prioritize(at: .defaultLow),
       ])
+
     case .horizontal:
       NSLayoutConstraint.activate([
         calendarView.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),

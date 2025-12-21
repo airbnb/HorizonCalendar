@@ -31,7 +31,9 @@ extension DayComponentsRange {
     self.init(
       uncheckedBounds: (
         lower: calendar.day(containing: dateRange.lowerBound),
-        upper: calendar.day(containing: dateRange.upperBound)))
+        upper: calendar.day(containing: dateRange.upperBound)
+      )
+    )
   }
 
 }

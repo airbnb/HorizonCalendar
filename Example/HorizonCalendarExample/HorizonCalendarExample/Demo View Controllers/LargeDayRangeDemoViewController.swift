@@ -41,7 +41,8 @@ final class LargeDayRangeDemoViewController: BaseDemoViewController {
     calendarView.scroll(
       toMonthContaining: january1500CE,
       scrollPosition: .firstFullyVisiblePosition(padding: padding),
-      animated: false)
+      animated: false
+    )
 
     didScrollToInitialMonth = true
   }
@@ -53,8 +54,9 @@ final class LargeDayRangeDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
-      .interMonthSpacing(24)
+      monthsLayout: monthsLayout
+    )
+    .interMonthSpacing(24)
   }
 
   // MARK: Private

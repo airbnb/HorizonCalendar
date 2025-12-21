@@ -170,9 +170,8 @@ extension MonthHeaderView {
 extension MonthHeaderView: CalendarItemViewRepresentable {
 
   public static func makeView(
-    withInvariantViewProperties invariantViewProperties: InvariantViewProperties)
-    -> MonthHeaderView
-  {
+    withInvariantViewProperties invariantViewProperties: InvariantViewProperties
+  ) -> MonthHeaderView {
     MonthHeaderView(invariantViewProperties: invariantViewProperties)
   }
 

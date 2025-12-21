@@ -35,40 +35,52 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       calendar: calendar,
       monthsLayout: .vertical(options: VerticalMonthsLayoutOptions()),
       monthRange: monthRange,
-      dayRange: dayRange)
+      dayRange: dayRange
+    )
     verticalPinnedDaysOfWeekItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: .vertical(options: VerticalMonthsLayoutOptions(pinDaysOfWeekToTop: true)),
       monthRange: monthRange,
-      dayRange: dayRange)
+      dayRange: dayRange
+    )
     horizontalItemTypeEnumerator = LayoutItemTypeEnumerator(
       calendar: calendar,
       monthsLayout: .horizontal(
-        options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 305 / 300)),
+        options: HorizontalMonthsLayoutOptions(maximumFullyVisibleMonths: 305 / 300)
+      ),
       monthRange: monthRange,
-      dayRange: dayRange)
+      dayRange: dayRange
+    )
 
     expectedItemTypeStackBackwards = [
       .dayOfWeekInMonth(
         position: .last,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
-        position: .sixth, month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        position: .sixth,
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .fifth,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .fourth,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .third,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .second,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .first,
-        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)
+      ),
       .monthHeader(Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true)),
       .day(calendar.day(byAddingDays: -1, to: startDay)),
       .day(calendar.day(byAddingDays: -2, to: startDay)),
@@ -126,25 +138,32 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
       .monthHeader(Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
       .dayOfWeekInMonth(
         position: .first,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .second,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .third,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .fourth,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .fifth,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .sixth,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .dayOfWeekInMonth(
         position: .last,
-        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)),
+        month: Month(era: 1, year: 2021, month: 01, isInGregorianCalendar: true)
+      ),
       .day(calendar.day(byAddingDays: 31, to: startDay)),
       .day(calendar.day(byAddingDays: 32, to: startDay)),
       .day(calendar.day(byAddingDays: 33, to: startDay)),
@@ -175,7 +194,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
         let expectedItemType = expectedItemTypeStackBackwards.remove(at: 0)
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackBackwards.isEmpty
       },
@@ -183,10 +203,12 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
         let expectedItemType = expectedItemTypeStackForwards.remove(at: 0)
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackForwards.isEmpty
-      })
+      }
+    )
   }
 
   func testEnumeratingVerticalPinnedDaysOfWeekItemsBackwards() {
@@ -201,7 +223,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
 
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackBackwards.isEmpty
       },
@@ -214,10 +237,12 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
 
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackForwards.isEmpty
-      })
+      }
+    )
   }
 
   func testEnumeratingHorizontalItemsBackwards() {
@@ -227,7 +252,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
         let expectedItemType = expectedItemTypeStackBackwards.remove(at: 0)
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackBackwards.isEmpty
       },
@@ -235,10 +261,12 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
         let expectedItemType = expectedItemTypeStackForwards.remove(at: 0)
         XCTAssert(
           itemType == expectedItemType,
-          "Unexpected item type encountered while enumerating.")
+          "Unexpected item type encountered while enumerating."
+        )
 
         shouldStop = expectedItemTypeStackForwards.isEmpty
-      })
+      }
+    )
   }
 
   // MARK: Private
@@ -246,7 +274,8 @@ final class LayoutItemTypeEnumeratorTests: XCTestCase {
   private let calendar = Calendar(identifier: .gregorian)
   private let startDay = Day(
     month: Month(era: 1, year: 2020, month: 12, isInGregorianCalendar: true),
-    day: 1)
+    day: 1
+  )
 
   // swiftlint:disable implicitly_unwrapped_optional
 

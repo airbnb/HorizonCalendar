@@ -49,15 +49,15 @@ extension CalendarView {
 
   public override func setContentHuggingPriority(
     _ priority: UILayoutPriority,
-    for axis: NSLayoutConstraint.Axis)
-  {
+    for axis: NSLayoutConstraint.Axis
+  ) {
     doubleLayoutPassSizingLabel.setContentHuggingPriority(priority, for: axis)
   }
 
   public override func setContentCompressionResistancePriority(
     _ priority: UILayoutPriority,
-    for axis: NSLayoutConstraint.Axis)
-  {
+    for axis: NSLayoutConstraint.Axis
+  ) {
     doubleLayoutPassSizingLabel.setContentCompressionResistancePriority(priority, for: axis)
   }
 
@@ -71,9 +71,11 @@ extension CalendarView {
     doubleLayoutPassSizingLabel.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       doubleLayoutPassSizingLabel.leadingAnchor.constraint(
-        equalTo: layoutMarginsGuide.leadingAnchor),
+        equalTo: layoutMarginsGuide.leadingAnchor
+      ),
       doubleLayoutPassSizingLabel.trailingAnchor.constraint(
-        equalTo: layoutMarginsGuide.trailingAnchor),
+        equalTo: layoutMarginsGuide.trailingAnchor
+      ),
       doubleLayoutPassSizingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
       doubleLayoutPassSizingLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
     ])
@@ -116,7 +118,8 @@ final class DoubleLayoutPassSizingLabel: UILabel {
   override var intrinsicContentSize: CGSize {
     guard let provider else {
       preconditionFailure(
-        "The sizing label's `provider` should not be `nil` for the duration of the its life")
+        "The sizing label's `provider` should not be `nil` for the duration of the its life"
+      )
     }
     if preferredMaxLayoutWidth == 0 {
       return super.intrinsicContentSize

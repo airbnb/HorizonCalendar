@@ -35,7 +35,8 @@ public struct DaysOfTheWeekRowSeparatorOptions: Hashable {
   @available(iOS 13.0, *)
   public static var systemStyleSeparator = DaysOfTheWeekRowSeparatorOptions(
     height: 1,
-    color: .separator)
+    color: .separator
+  )
 
   /// The height of the separator in points.
   public var height: CGFloat

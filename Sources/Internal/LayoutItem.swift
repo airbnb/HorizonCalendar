@@ -49,7 +49,7 @@ extension LayoutItem {
 
 extension LayoutItem.ItemType: Comparable {
 
-  static func < (lhs: LayoutItem.ItemType, rhs: LayoutItem.ItemType) -> Bool {
+  static func <(lhs: LayoutItem.ItemType, rhs: LayoutItem.ItemType) -> Bool {
     switch (lhs, rhs) {
     case (.monthHeader(let lhsMonth), .monthHeader(let rhsMonth)):
       return lhsMonth < rhsMonth
@@ -57,16 +57,15 @@ extension LayoutItem.ItemType: Comparable {
       return lhsMonth <= rhsMonth
     case (.monthHeader(let lhsMonth), .day(let rhsDay)):
       return lhsMonth <= rhsDay.month
-
     case (
       .dayOfWeekInMonth(let lhsPosition, let lhsMonth),
-      .dayOfWeekInMonth(let rhsPosition, let rhsMonth)):
+      .dayOfWeekInMonth(let rhsPosition, let rhsMonth)
+    ):
       return lhsMonth < rhsMonth || (lhsMonth == rhsMonth && lhsPosition < rhsPosition)
     case (.dayOfWeekInMonth(_, let lhsMonth), .monthHeader(let rhsMonth)):
       return lhsMonth < rhsMonth
     case (.dayOfWeekInMonth(_, let lhsMonth), .day(let rhsDay)):
       return lhsMonth <= rhsDay.month
-
     case (.day(let lhsDay), .day(let rhsDay)):
       return lhsDay < rhsDay
     case (.day(let lhsDay), .monthHeader(let rhsMonth)):

@@ -41,7 +41,7 @@ public enum DayOfWeekPosition: Int, CaseIterable, Hashable {
 
 extension DayOfWeekPosition: Comparable {
 
-  public static func < (lhs: DayOfWeekPosition, rhs: DayOfWeekPosition) -> Bool {
+  public static func <(lhs: DayOfWeekPosition, rhs: DayOfWeekPosition) -> Bool {
     lhs.rawValue < rhs.rawValue
   }
 

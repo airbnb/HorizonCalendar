@@ -43,31 +43,31 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
     return CalendarViewContent(
       calendar: calendar,
       visibleDateRange: startDate...endDate,
-      monthsLayout: monthsLayout)
+      monthsLayout: monthsLayout
+    )
 
-      .interMonthSpacing(24)
-      .verticalDayMargin(8)
-      .horizontalDayMargin(8)
-
-      .monthHeaderItemProvider { [calendar, monthDateFormatter] month in
-        guard let firstDateInMonth = calendar.date(from: month.components) else {
-          preconditionFailure("Could not find a date corresponding to the month \(month).")
-        }
-        let monthText = monthDateFormatter.string(from: firstDateInMonth)
-        return HStack {
-          Text(monthText).font(.headline)
-          Spacer()
-        }
-        .padding(.vertical)
-        .accessibilityAddTraits(.isHeader)
-        .calendarItemModel
+    .interMonthSpacing(24)
+    .verticalDayMargin(8)
+    .horizontalDayMargin(8)
+    .monthHeaderItemProvider { [calendar, monthDateFormatter] month in
+      guard let firstDateInMonth = calendar.date(from: month.components) else {
+        preconditionFailure("Could not find a date corresponding to the month \(month).")
       }
-
-      .dayItemProvider { [calendar, selectedDate] day in
-        let date = calendar.date(from: day.components)
-        let isSelected = date == selectedDate
-        return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+      let monthText = monthDateFormatter.string(from: firstDateInMonth)
+      return HStack {
+        Text(monthText).font(.headline)
+        Spacer()
       }
+      .padding(.vertical)
+      .accessibilityAddTraits(.isHeader)
+      .calendarItemModel
+    }
+
+    .dayItemProvider { [calendar, selectedDate] day in
+      let date = calendar.date(from: day.components)
+      let isSelected = date == selectedDate
+      return SwiftUIDayView(dayNumber: day.day, isSelected: isSelected).calendarItemModel
+    }
   }
 
   // MARK: Private
@@ -79,7 +79,8 @@ final class SwiftUIItemModelsDemoViewController: BaseDemoViewController {
     dateFormatter.dateFormat = DateFormatter.dateFormat(
       fromTemplate: "MMMM yyyy",
       options: 0,
-      locale: calendar.locale ?? Locale.current)
+      locale: calendar.locale ?? Locale.current
+    )
     return dateFormatter
   }()
 
