@@ -1227,10 +1227,13 @@ final class VisibleItemsProvider {
     case .vertical:
       if
         let contentStartBoundary = context.contentStartBoundary,
-        contentStartBoundary >= bounds.minY || context.contentEndBoundary != nil
+        contentStartBoundary >= bounds.minY ||
+        (context.contentEndBoundary != nil &&
+          ((context.contentEndBoundary! + layoutMargins.bottom) -
+          (contentStartBoundary - layoutMargins.top)) <= bounds.height)
       {
-        // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
-        // `bounds.height` and can simply adjust based on the `minimumScrollOffset`.
+        // If the `maximumScrollOffset` is also non-nil and the content is smaller than
+        // `bounds.height`, we can simply adjust based on the `minimumScrollOffset`.
         return proposedFrame.applying(
           .init(translationX: 0, y: bounds.minY - contentStartBoundary + layoutMargins.top)
         )
@@ -1248,10 +1251,13 @@ final class VisibleItemsProvider {
     case .horizontal:
       if
         let contentStartBoundary = context.contentStartBoundary,
-        contentStartBoundary >= bounds.minX || context.contentEndBoundary != nil
+        contentStartBoundary >= bounds.minX ||
+        (context.contentEndBoundary != nil &&
+          ((context.contentEndBoundary! + layoutMargins.trailing) -
+          (contentStartBoundary - layoutMargins.leading)) <= bounds.width)
       {
-        // If the `maximumScrollOffset` is also non-nil, then we know the content is smaller than
-        // `bounds.width` and can simply adjust based on the `minimumScrollOffset`.
+        // If the `maximumScrollOffset` is also non-nil and the content is smaller than
+        // `bounds.width`, can simply adjust based on the `minimumScrollOffset`.
         return proposedFrame.applying(
           .init(translationX: bounds.minX - contentStartBoundary + layoutMargins.leading, y: 0)
         )
