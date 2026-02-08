@@ -796,12 +796,12 @@ As a rule of thumb, if you're proposing an API-breaking change or a change to ex
 ## Authors
 Bryan Keller
 - https://github.com/bryankeller
-- https://twitter.com/BKyourway19
+- [https://x.com/blk19_](https://x.com/blk19_)
 
 ## Maintainers
 Bryan Keller
 - https://github.com/bryankeller
-- https://x.com/blk19_
+- [https://x.com/blk19_](https://x.com/blk19_)
 
 Bryn Bodayle
 - https://github.com/brynbodayle
