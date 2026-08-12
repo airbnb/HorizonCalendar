@@ -51,9 +51,9 @@ final class CalendarScrollView: UIScrollView {
 
   override var accessibilityElements: [Any]? {
     get {
-      guard let itemViews = subviews as? [ItemView] else {
-        fatalError("Only `ItemView`s can be used as subviews of the scroll view.")
-      }
+      // UIKit can add subviews of its own - on iOS 27 it adds `_UITouchPassthroughView`s - so we
+      // filter to the item views rather than requiring that every subview is one.
+      let itemViews = subviews.compactMap { $0 as? ItemView }
       cachedAccessibilityElements = cachedAccessibilityElements ?? itemViews
         .filter {
           switch $0.itemType {
