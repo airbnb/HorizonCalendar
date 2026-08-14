@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added ability to disable `DisplayLink` animations for test purposes (to prevent crashes) with an environment variable.
 
 ### Fixed
+- Fixed `MonthGridBackgroundView` initializer and `framesOfDays` being inaccessible outside the defining file, which blocked the SwiftUI `UIViewRepresentable` usage shown in the README
 - Fixed an issue that could cause accessibility focus to shift unexpectedly
 - Fixed a screen-pixel alignment issue
 - Fixed a performance issue caused by month headers recalculating their size too often
