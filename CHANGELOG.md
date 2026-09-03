@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue that could cause the calendar to appear blank after rotating the device
 - Fixed an issue with touch handling on iOS 26
 - Fixed a crash when accessibility is enabled on iOS 27, caused by assuming that every subview of the calendar's scroll view is an item view
+- Fixed a crash when setting content that trims the start of the visible date range to a day that's just below the top edge of an already-scrolled calendar
 
 ### Changed
 - Rewrote accessibility code to avoid posting notifications, which causes poor Voice Over performance and odd focus bugs
