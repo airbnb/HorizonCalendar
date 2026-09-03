@@ -226,23 +226,13 @@ public final class CalendarView: UIView {
       scrollToItemContext = nil
     }
 
-    let isAnchorLayoutItemValid: Bool
-    switch anchorLayoutItem?.itemType {
-    case .monthHeader(let month):
-      isAnchorLayoutItemValid = content.monthRange.contains(month)
-    case .dayOfWeekInMonth(_, let month):
-      isAnchorLayoutItemValid = content.monthRange.contains(month)
-    case .day(let day):
-      isAnchorLayoutItemValid = content.dayRange.contains(day)
-    case .none:
-      isAnchorLayoutItemValid = false
-    }
-
-    if isAnchorLayoutItemValid {
+    if anchorLayoutItem?.isValidInContent(in: content) ?? false {
       // If we have a valid `anchorLayoutItem`, change it to be the topmost item. Normally, the
       // `anchorLayoutItem` is the centermost item, but when our content changes, it can make the
       // transition look better if our layout reference point is at the top of the screen.
-      anchorLayoutItem = visibleItemsDetails?.firstLayoutItem ?? anchorLayoutItem
+      if visibleItemsDetails?.firstLayoutItem?.isValidInContent(in: content) ?? false {
+        anchorLayoutItem = visibleItemsDetails?.firstLayoutItem ?? anchorLayoutItem
+      }
     } else {
       // If the `anchorLayoutItem` is no longer valid (due to it no longer being in the visible day
       // range), set it to nil. This will force us to find a new `anchorLayoutItem`.
@@ -1465,6 +1455,21 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 
   private weak var calendarView: CalendarView?
 
+}
+
+// MARK: LayoutItem + Valid In Content
+
+extension LayoutItem {
+  fileprivate func isValidInContent(in content: CalendarViewContent) -> Bool {
+    switch itemType {
+    case .monthHeader(let month):
+      content.monthRange.contains(month)
+    case .dayOfWeekInMonth(_, let month):
+      content.monthRange.contains(month)
+    case .day(let day):
+      content.dayRange.contains(day)
+    }
+  }
 }
 
 // MARK: - GestureRecognizerDelegate
