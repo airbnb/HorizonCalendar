@@ -22,7 +22,7 @@ public final class MonthGridBackgroundView: UIView {
 
   // MARK: Lifecycle
 
-  fileprivate init(invariantViewProperties: InvariantViewProperties) {
+  public init(invariantViewProperties: InvariantViewProperties) {
     self.invariantViewProperties = invariantViewProperties
     super.init(frame: .zero)
     backgroundColor = .clear
@@ -61,9 +61,7 @@ public final class MonthGridBackgroundView: UIView {
     setNeedsDisplay()
   }
 
-  // MARK: Fileprivate
-
-  fileprivate var framesOfDays = [CGRect]() {
+  public var framesOfDays = [CGRect]() {
     didSet {
       guard framesOfDays != oldValue else { return }
       setNeedsDisplay()
