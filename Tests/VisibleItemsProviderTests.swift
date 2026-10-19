@@ -20,6 +20,7 @@ import XCTest
 
 /// To print out a set of expected item descriptions, copy and paste the output of:
 /// `po print(details.visibleItems.map { "\"\($0.description)\",\n" }.sorted().joined())`
+@MainActor
 final class VisibleItemsProviderTests: XCTestCase {
 
   // MARK: Internal

@@ -128,7 +128,7 @@ extension CalendarItemViewRepresentable {
   ///   and `font`, assuming none of those values change in response to `content` updates.
   ///   - content: A type containing all of the variable data necessary to update an instance of `ViewType`. Use this to specify
   ///   the dynamic, data-driven parts of the view.
-  public static func calendarItemModel(
+  public nonisolated static func calendarItemModel(
     invariantViewProperties: InvariantViewProperties,
     content: Content
   ) -> CalendarItemModel<Self> {
@@ -149,7 +149,7 @@ extension CalendarItemViewRepresentable where Content == Never {
   ///   initialize a `ViewType`. Use this to configure appearance options that do not change based on the data in the `content`.
   ///   For example, you might pass a type that contains properties to configure a `UILabel`'s `textAlignment`, `textColor`,
   ///   and `font`, assuming none of those values change in response to `content` updates.
-  public static func calendarItemModel(
+  public nonisolated static func calendarItemModel(
     invariantViewProperties: InvariantViewProperties
   ) -> CalendarItemModel<Self> {
     CalendarItemModel<Self>(invariantViewProperties: invariantViewProperties)

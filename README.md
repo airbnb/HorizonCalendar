@@ -343,6 +343,8 @@ Let's start by customizing the view used for each day:
 
   `CalendarItemViewRepresentable` also requires us to implement a `static` `setContent` function, which should update all data-dependent properties (like the day text) on the provided view.
 
+  `CalendarItemViewRepresentable` is isolated to the main actor, where UIKit views are created and updated. Its `calendarItemModel(...)` factories are nonisolated, so item-provider closures can construct models without a main-actor annotation.
+
   Now that we have a type conforming to `CalendarItemViewRepresentable`, we can use it to create a `CalendarItemModel` to return from the day item model provider:
 
   ```swift
