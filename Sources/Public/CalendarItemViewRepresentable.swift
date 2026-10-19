@@ -20,6 +20,7 @@ import UIKit
 /// A protocol to which types that can create and update views displayed in `CalendarView` must conform. By conforming to this
 /// protocol, `CalendarView` is able to treat each view it displays as a function of its `invariantViewProperties` and its
 /// `content`, simplifying the initialization and state updating of views.
+@MainActor
 public protocol CalendarItemViewRepresentable {
 
   /// The type of view that this `CalendarItemViewRepresentable` can create and update.

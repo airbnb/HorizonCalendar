@@ -18,6 +18,7 @@ import UIKit
 // MARK: - VisibleItemsProvider
 
 /// Provides details about the current set of visible items.
+@MainActor
 final class VisibleItemsProvider {
 
   // MARK: Lifecycle

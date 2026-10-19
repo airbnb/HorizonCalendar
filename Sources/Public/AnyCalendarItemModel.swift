@@ -31,11 +31,13 @@ public protocol AnyCalendarItemModel {
   /// Builds an instance of `ViewType` by invoking its initializer with `invariantViewProperties`.
   ///
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
+  @MainActor
   func _makeView() -> UIView
 
   /// Updates the content on an instance of `ViewType` by invoking `setContent`.
   ///
   /// - Note: There is no reason to invoke this function from your feature code; it should only be invoked internally.
+  @MainActor
   func _setContent(onViewOfSameType view: UIView)
 
   /// Compares the contents of two `CalendarItemModel`s for equality.
