@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rewrote accessibility code to avoid posting notifications, which causes poor Voice Over performance and odd focus bugs
 - Rewrote `ItemViewReuseManager` to perform fewer set operations, improving CPU usage by ~15% when scrolling quickly on an iPhone XR
 - Updated how we embed SwiftUI views to improve scroll performance by ~35% when scrolling quickly
+- Raised the minimum supported iOS version from 12 to 15 to match the Xcode 27 deployment-target range.
 
 ## [v2.0.0](https://github.com/airbnb/HorizonCalendar/compare/v1.16.0...v2.0.0) - 2023-12-19
 
